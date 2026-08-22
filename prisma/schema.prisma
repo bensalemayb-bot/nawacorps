@@ -1,0 +1,11 @@
+// Bloc B1 : fondations uniquement. Aucun modele — les modeles sont le bloc B2.
+// L'URL de connexion vit dans prisma.config.ts (impose par Prisma 7, cf. P1012).
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
