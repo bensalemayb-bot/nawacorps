@@ -5,6 +5,7 @@
 // obligatoire : le selecteur closeMenu d Interactions.tsx passe de
 // `[href^="#"]` a `[href*="#"]`, sinon le menu ne se refermerait plus.
 export default function MenuOverlay() {
+  // volontaire — next/link casserait les reveals (Interactions ne tourne qu'une fois), voir décision B7
   return (
     <div className="menu" id="menu" aria-hidden="true">
       <nav>

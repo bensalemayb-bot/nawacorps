@@ -8,6 +8,7 @@
 // legales. Sur / le comportement est inchange : meme document, donc ancre
 // interne sans rechargement.
 export default function Nav() {
+  // volontaire — next/link casserait les reveals (Interactions ne tourne qu'une fois), voir décision B7
   return (
     <nav className="nav" id="nav">
       <a className="wordmark" href="/#top">Binacore<sup>GE</sup></a>

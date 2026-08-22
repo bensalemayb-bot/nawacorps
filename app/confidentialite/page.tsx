@@ -17,6 +17,7 @@ export const metadata: Metadata = {
 };
 
 export default function Confidentialite() {
+  // volontaire — next/link casserait les reveals (Interactions ne tourne qu'une fois), voir décision B7
   return (
     <section>
       <div className="wrap">

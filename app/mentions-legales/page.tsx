@@ -27,6 +27,7 @@ export const metadata: Metadata = {
 };
 
 export default function MentionsLegales() {
+  // volontaire — next/link casserait les reveals (Interactions ne tourne qu'une fois), voir décision B7
   return (
     <section>
       <div className="wrap">
