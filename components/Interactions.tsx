@@ -16,15 +16,19 @@ declare global {
  * Les comparateurs .ba et le carrousel #car2 ne sont plus geres ici depuis B5 :
  * components/ui/feature-carousel.tsx les porte lui-meme.
  *
- * Zero match encore tolere sur :
- *  - `footer.contact h2` — la section contact arrive au bloc suivant ;
- *  - `[data-scale]` — la maquette le posait sur .stack, que le composant du
- *    carrousel ne rend pas (ecart signale en B5).
+ * Zero match encore tolere sur `[data-scale]` : la maquette le posait sur
+ * .stack, que le composant du carrousel ne rend pas (ecart signale en B5).
+ * `footer.contact h2` a trouve sa cible depuis B7.
  *
  * Adaptations signalees, sans changement de comportement au runtime :
  *  - garde window.__bncInit en tete d'effet (cf. commentaire ci-dessous) ;
  *  - annotations de type (querySelectorAll<HTMLElement>, `as HTMLElement`) ;
- *  - String(...) sur deux affectations que JS coercait implicitement.
+ *  - String(...) sur deux affectations que JS coercait implicitement ;
+ *  - closeMenu cible `.menu a[href*="#"]` la ou la maquette ecrivait
+ *    `[href^="#"]`. Depuis B7 le site a plusieurs pages : les liens du menu
+ *    sont `/#ancre`, que `^=` ne matchait plus — le menu ne se serait plus
+ *    referme au clic. `*=` matche exactement les memes 5 liens, .m-foot ne
+ *    contenant que wa.me et mailto:, sans `#`.
  */
 export default function Interactions() {
   useEffect(() => {
@@ -139,7 +143,7 @@ export default function Interactions() {
       var open = docEl.classList.toggle("menu-open");
       burger.setAttribute("aria-expanded", open ? "true" : "false");
     });
-    document.querySelectorAll('.menu a[href^="#"]').forEach(function (a) { a.addEventListener("click", closeMenu); });
+    document.querySelectorAll('.menu a[href*="#"]').forEach(function (a) { a.addEventListener("click", closeMenu); });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
 
     /* ---------- scroll inertiel + marquee ---------- */

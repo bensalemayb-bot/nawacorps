@@ -1,8 +1,12 @@
 import CarteDuStudio from "@/components/CarteDuStudio";
+import Faq from "@/components/Faq";
+import FooterContact from "@/components/FooterContact";
 import Hero from "@/components/Hero";
+import Methode from "@/components/Methode";
 import Offres from "@/components/Offres";
 import ServicesRows from "@/components/ServicesRows";
 import Strip from "@/components/Strip";
+import Studio from "@/components/Studio";
 import Travaux from "@/components/Travaux";
 
 /**
@@ -16,6 +20,7 @@ import Travaux from "@/components/Travaux";
  *    Dockerfile n'en a aucune — le build de production echouerait.
  *
  * Cout assume : la page d'accueil perd l'optimisation statique.
+ * Les deux pages legales, elles, ne lisent rien et restent statiques.
  */
 export const dynamic = "force-dynamic";
 
@@ -28,6 +33,10 @@ export default function Home() {
       <ServicesRows />
       <Offres />
       <CarteDuStudio />
+      <Methode />
+      <Studio />
+      <Faq />
+      <FooterContact />
     </>
   );
 }
