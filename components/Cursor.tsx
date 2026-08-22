@@ -1,5 +1,7 @@
-// TODO curseur personnalise — reference/binacore.html ligne 691
-// Bloc B3 : coquille vide, aucun rendu. L'implementation vient d'un bloc ulterieur.
+// Curseur personnalise — reference/binacore.html ligne 691, copie verbatim.
+// Positionne par Interactions.tsx via #cursor.
 export default function Cursor() {
-  return null;
+  return (
+    <div className="cursor" id="cursor" aria-hidden="true"><span className="cl">‹ ›</span></div>
+  );
 }

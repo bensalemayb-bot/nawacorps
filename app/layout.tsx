@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
 import { Hanken_Grotesk, Instrument_Serif } from "next/font/google";
+import Cursor from "@/components/Cursor";
+import Interactions from "@/components/Interactions";
+import Loader from "@/components/Loader";
+import MenuOverlay from "@/components/MenuOverlay";
+import Nav from "@/components/Nav";
 import "./globals.css";
 import "./binacore.css";
 import "./fonts.css";
@@ -33,8 +38,18 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="fr" className={`${hanken.variable} ${instrument.variable}`}>
       <body>
+        {/* Ordre du <body> de reference/binacore.html (lignes 683-723).
+            CRITIQUE : grain, loader, cursor, nav et menu restent HORS de
+            #smoothWrap > #smooth. Le scroll inertiel applique un translate3d
+            sur #smooth, et un ancetre transforme cree un bloc conteneur qui
+            casse position:fixed — nav et loader defileraient avec la page. */}
         <div className="grain" aria-hidden="true"></div>
-        {children}
+        <Loader />
+        <Cursor />
+        <Nav />
+        <MenuOverlay />
+        <Interactions />
+        <div id="smoothWrap"><div id="smooth">{children}</div></div>
       </body>
     </html>
   );
