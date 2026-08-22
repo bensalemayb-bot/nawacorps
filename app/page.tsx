@@ -1,25 +1,33 @@
+import CarteDuStudio from "@/components/CarteDuStudio";
 import Hero from "@/components/Hero";
+import Offres from "@/components/Offres";
+import ServicesRows from "@/components/ServicesRows";
+import Strip from "@/components/Strip";
 import Travaux from "@/components/Travaux";
+
+/**
+ * Rendu a chaque requete, volontairement.
+ *
+ * Offres et CarteDuStudio sont des Server Components async qui lisent Postgres.
+ * Sans ce force-dynamic, Next prerendrait la page au build :
+ *  - les prix seraient figes au moment du build, alors que tout l'interet du
+ *    bloc est que le site lise la base ;
+ *  - et surtout `next build` reclamerait une base, or l'etage builder du
+ *    Dockerfile n'en a aucune — le build de production echouerait.
+ *
+ * Cout assume : la page d'accueil perd l'optimisation statique.
+ */
+export const dynamic = "force-dynamic";
 
 export default function Home() {
   return (
     <>
       <Hero />
       <Travaux />
-
-      {/* ================= TEMP — A RETIRER EN B6 =================
-          Bloc de hauteur provisoire. Il garde la page assez longue pour que le
-          scroll inertiel (translate3d sur #smooth) et les reveals restent
-          observables tant que les sections Services / Offres / Methode / Studio
-          / FAQ / Contact n'existent pas. Remplace par ces sections en B6. */}
-      <section data-temp style={{ minHeight: "150vh" }}>
-        <div className="wrap">
-          <p className="lede" data-reveal>
-            TEMP — bloc de hauteur provisoire pour tester le scroll inertiel et
-            les reveals. Retire au bloc B6.
-          </p>
-        </div>
-      </section>
+      <Strip />
+      <ServicesRows />
+      <Offres />
+      <CarteDuStudio />
     </>
   );
 }

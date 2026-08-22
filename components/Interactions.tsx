@@ -13,8 +13,13 @@ declare global {
  * La logique et son ORDRE sont conserves a l'identique : un seul effet, pas de
  * useState, pas de decoupage en hooks.
  *
- * Zero match tolere partout ou les elements arrivent aux blocs suivants :
- * h2.t (B6), [data-scale], [data-row], .ba, #car2, .strip .tk (B5).
+ * Les comparateurs .ba et le carrousel #car2 ne sont plus geres ici depuis B5 :
+ * components/ui/feature-carousel.tsx les porte lui-meme.
+ *
+ * Zero match encore tolere sur :
+ *  - `footer.contact h2` — la section contact arrive au bloc suivant ;
+ *  - `[data-scale]` — la maquette le posait sur .stack, que le composant du
+ *    carrousel ne rend pas (ecart signale en B5).
  *
  * Adaptations signalees, sans changement de comportement au runtime :
  *  - garde window.__bncInit en tete d'effet (cf. commentaire ci-dessous) ;
