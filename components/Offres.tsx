@@ -77,9 +77,11 @@ const EDITORIAL: Record<string, Editorial> = {
   },
 };
 
-// Seul CTA de devis present dans la maquette (ligne 1060), repris verbatim.
+// CTA de devis de la maquette (ligne 1060). Le libelle est verbatim ; le ?text=
+// est adapte a cette ligne. La maquette contient un seul CTA de devis, ecrit
+// pour le menu du studio (« pour un support »), que CarteDuStudio conserve.
 const DEVIS_HREF =
-  "https://wa.me/41760000000?text=Bonjour%2C%20j%27aimerais%20un%20devis%20pour%20un%20support.";
+  "https://wa.me/41760000000?text=Bonjour%2C%20j%27aimerais%20un%20devis%20pour%20un%20site%20sur%20mesure.";
 const DEVIS_LABEL = "Demander un devis →";
 
 export default async function Offres() {
