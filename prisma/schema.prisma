@@ -1,5 +1,6 @@
-// Bloc B1 : fondations uniquement. Aucun modele — les modeles sont le bloc B2.
-// L'URL de connexion vit dans prisma.config.ts (impose par Prisma 7, cf. P1012).
+// Enveloppe v7 etablie au bloc B1 : provider "prisma-client", output hors de app/,
+// URL de connexion dans prisma.config.ts (imposee par Prisma 7, cf. P1012).
+// Modeles ajoutes au bloc B2.
 
 generator client {
   provider = "prisma-client"
@@ -8,4 +9,65 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+}
+
+enum PriceType {
+  FIXED
+  FROM
+  QUOTE
+}
+
+enum LeadSource {
+  FORM
+  CHATBOT
+  WHATSAPP
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUOTED
+  WON
+  LOST
+}
+
+model Service {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  name        String
+  description String
+  category    String
+  priceType   PriceType
+  priceCents  Int?
+  priceFrom   Boolean   @default(false)
+  isMonthly   Boolean   @default(false)
+  visible     Boolean   @default(true)
+  sortOrder   Int       @default(0)
+}
+
+model Lead {
+  id            String        @id @default(cuid())
+  name          String
+  phone         String
+  email         String?
+  commerceName  String?
+  commerceType  String?
+  source        LeadSource
+  status        LeadStatus    @default(NEW)
+  score         Int           @default(0)
+  needSummary   String?
+  notes         String?
+  conversation  Conversation?
+  createdAt     DateTime      @default(now())
+}
+
+model Conversation {
+  id        String   @id @default(cuid())
+  lead      Lead?    @relation(fields: [leadId], references: [id])
+  leadId    String?  @unique
+  messages  Json
+  summary   String?
+  extracted Json?
+  ipHash    String
+  createdAt DateTime @default(now())
 }
