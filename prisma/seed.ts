@@ -19,7 +19,7 @@ const services: ServiceSeed[] = [
   {
     slug: "la-carte",
     name: "La Carte",
-    description: "Menu repensé, prêt à imprimer, avec sa version en ligne",
+    description: "Votre menu repensé, prêt à imprimer, avec sa version en ligne.",
     category: "principal",
     priceType: "FIXED",
     priceCents: 45000,
@@ -30,7 +30,7 @@ const services: ServiceSeed[] = [
   {
     slug: "le-site",
     name: "Le Site",
-    description: "Site vitrine one-page, mobile d'abord, clés en main",
+    description: "Un site vitrine pensé mobile d'abord, mis en ligne clés en main.",
     category: "principal",
     priceType: "FIXED",
     priceCents: 195000,
@@ -41,7 +41,7 @@ const services: ServiceSeed[] = [
   {
     slug: "pack-complet",
     name: "Le Pack Complet",
-    description: "Carte + site + fiche Google + photos, une seule livraison",
+    description: "Toute votre présence remise à niveau, en une seule livraison.",
     category: "principal",
     priceType: "FIXED",
     priceCents: 290000,
@@ -62,7 +62,7 @@ const services: ServiceSeed[] = [
   },
   {
     slug: "affiche-evenement",
-    name: "Affiche d'événement",
+    name: "Affiche d'événement — soirée, brunch, happy hour",
     description: "Soirée, brunch, happy hour — prête à imprimer",
     category: "annee",
     priceType: "FROM",
@@ -84,7 +84,7 @@ const services: ServiceSeed[] = [
   },
   {
     slug: "bons-cadeaux",
-    name: "Bons cadeaux",
+    name: "Bons cadeaux — Noël, Saint-Valentin",
     description: "Noël, Saint-Valentin",
     category: "annee",
     priceType: "FROM",
@@ -95,7 +95,7 @@ const services: ServiceSeed[] = [
   },
   {
     slug: "chevalets",
-    name: "Chevalets de table",
+    name: "Chevalets de table — carte, QR & wifi",
     description: "Carte, QR & wifi sur table",
     category: "annee",
     priceType: "FIXED",
@@ -106,7 +106,7 @@ const services: ServiceSeed[] = [
   },
   {
     slug: "sticker-avis",
-    name: "Sticker vitrine « Avis Google »",
+    name: "Sticker vitrine « Avis Google » + QR",
     description: "QR direct vers votre fiche, 30 secondes",
     category: "annee",
     priceType: "FIXED",
@@ -117,7 +117,7 @@ const services: ServiceSeed[] = [
   },
   {
     slug: "traduction",
-    name: "Traduction de carte FR/EN",
+    name: "Traduction de carte FR / EN",
     description: "Genève est une ville de passage",
     category: "annee",
     priceType: "FROM",
@@ -139,7 +139,7 @@ const services: ServiceSeed[] = [
   },
   {
     slug: "reseaux-sociaux",
-    name: "Réseaux sociaux",
+    name: "Réseaux sociaux — 8 à 12 posts par mois",
     description: "8 à 12 publications par mois, préparées et programmées",
     category: "continu",
     priceType: "FIXED",
@@ -150,7 +150,7 @@ const services: ServiceSeed[] = [
   },
   {
     slug: "hebergement",
-    name: "Hébergement & mises à jour",
+    name: "Hébergement & mises à jour du site",
     description: "Vous ne touchez à rien",
     category: "continu",
     priceType: "FIXED",
@@ -161,7 +161,7 @@ const services: ServiceSeed[] = [
   },
   {
     slug: "pack-saisonnier",
-    name: "Pack saisonnier",
+    name: "Pack saisonnier — affiche + posts + carte à jour",
     description: "Affiche + posts + carte à jour — terrasse, Escalade, Noël",
     category: "saison",
     priceType: "FIXED",
