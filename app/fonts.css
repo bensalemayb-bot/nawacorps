@@ -1,0 +1,8 @@
+/* Adaptation du :root de binacore.css, par surcharge — le fichier porte n'est jamais
+   modifie. Les noms --sans / --serif consommes par tout le CSS restent inchanges ;
+   seules les familles litterales sont remplacees par les variables next/font, qui
+   pointent vers les fichiers self-hostes. Doit etre importe APRES binacore.css. */
+:root{
+  --sans: var(--font-hanken), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --serif: var(--font-instrument), Georgia, "Times New Roman", serif;
+}
