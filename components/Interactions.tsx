@@ -204,132 +204,13 @@ export default function Interactions() {
       });
     });
 
-    /* ---------- comparateurs avant / apres (multi) ---------- */
-    var firstBA: { el: HTMLElement; setPos: (p: number) => void; busy: () => boolean } | null = null;
-    document.querySelectorAll<HTMLElement>(".ba").forEach(function (el, k) {
-      var handle = el.querySelector<HTMLElement>(".ba-handle")!;
-      var pos = 50, dragging = false;
-      function setPos(p: number) {
-        pos = Math.max(2, Math.min(98, p));
-        el.style.setProperty("--x", pos + "%");
-        handle.setAttribute("aria-valuenow", String(Math.round(pos)));
-      }
-      setPos(50);
-      function fromX(x: number) {
-        var r = el.getBoundingClientRect();
-        setPos(((x - r.left) / r.width) * 100);
-      }
-      el.addEventListener("pointerdown", function (e) {
-        e.stopPropagation();
-        dragging = true; el.setPointerCapture(e.pointerId); fromX(e.clientX);
-      });
-      el.addEventListener("pointermove", function (e) { if (dragging) fromX(e.clientX); });
-      el.addEventListener("pointerup", function () { dragging = false; });
-      el.addEventListener("pointercancel", function () { dragging = false; });
-      handle.addEventListener("keydown", function (e) {
-        if (e.key === "ArrowLeft") { setPos(pos - 4); e.preventDefault(); }
-        if (e.key === "ArrowRight") { setPos(pos + 4); e.preventDefault(); }
-      });
-      if (cursor) {
-        el.addEventListener("pointerenter", function () { cursor!.classList.add("drag"); cursor!.classList.remove("grow"); });
-        el.addEventListener("pointerleave", function () { cursor!.classList.remove("drag"); });
-      }
-      if (k === 0) firstBA = { el: el, setPos: setPos, busy: function () { return dragging; } };
-    });
-
-    /* teaser sur le premier comparateur */
-    if (firstBA && !reduced && "IntersectionObserver" in window) {
-      var ba = firstBA as { el: HTMLElement; setPos: (p: number) => void; busy: () => boolean };
-      var teased = false;
-      var io2 = new IntersectionObserver(function (es) {
-        es.forEach(function (e) {
-          if (e.isIntersecting && !teased) {
-            teased = true;
-            var t0: number | null = null;
-            function anim(ts: number) {
-              if (!t0) t0 = ts;
-              var kk = (ts - t0) / 1400;
-              if (kk >= 1 || ba.busy()) { ba.setPos(50); return; }
-              var ease = 0.5 - 0.5 * Math.cos(kk * Math.PI * 2);
-              ba.setPos(50 + Math.sin(kk * Math.PI * 2) * 12 * (1 - kk * 0.4) * ease * 2);
-              requestAnimationFrame(anim);
-            }
-            requestAnimationFrame(anim);
-            io2.unobserve(ba.el);
-          }
-        });
-      }, { threshold: 0.5 });
-      io2.observe(ba.el);
-    }
-
-    /* ---------- carrousel chips + pile ---------- */
-    var car2 = document.getElementById("car2");
-    if (car2) {
-      var chips = Array.prototype.slice.call(car2.querySelectorAll(".chip"));
-      var cards = Array.prototype.slice.call(car2.querySelectorAll(".pcard"));
-      var idxEl = document.getElementById("carIdx") as HTMLElement;
-      var descEl = document.getElementById("carDesc") as HTMLElement;
-      var LEN = cards.length, IH = 62, idx = 0;
-      var labels = ["La carte", "Le site", "La carte de visite", "L'affiche", "La fidélité"];
-      var descs = [
-        "Une carte plastifiée des années 2000 devient un objet qu'on a envie de lire — et sa version en ligne.",
-        "D'une page « optimisée Internet Explorer » à un one-page rapide, pensé pour le téléphone.",
-        "Fini la carte Word centrée : 85 × 55 recto-verso, un papier qui donne confiance.",
-        "La même soirée, sans WordArt : une affiche qu'on remarque et qu'on garde.",
-        "La carte à tampons repensée : dix cafés, un vrai design, zéro case au stylo."
-      ];
-      function norm(d: number) {
-        var w = ((d % LEN) + LEN) % LEN;
-        if (w > LEN / 2) w -= LEN;
-        return w;
-      }
-      function pad3(n: number) { var s = String(n); while (s.length < 3) s = "0" + s; return s; }
-      function apply() {
-        chips.forEach(function (c: any, i: number) {
-          var w = norm(i - idx);
-          var prev = c._w === undefined ? w : c._w;
-          var jump = Math.abs(w - prev) > LEN / 2;
-          if (jump) c.style.transition = "none";
-          c.style.transform = "translateY(" + w * IH + "px)";
-          c.style.opacity = String(1 - Math.abs(w) * 0.22);
-          c.classList.toggle("on", w === 0);
-          if (jump) { void c.offsetWidth; c.style.transition = ""; }
-          c._w = w;
-        });
-        cards.forEach(function (card: any, i: number) {
-          var w = norm(i - idx);
-          card.setAttribute("data-status", w === 0 ? "active" : (w === -1 ? "prev" : (w === 1 ? "next" : "hidden")));
-        });
-        idxEl.textContent = pad3(idx + 1) + " · " + labels[idx];
-        descEl.style.opacity = "0";
-        setTimeout(function () { descEl.textContent = descs[idx]; descEl.style.opacity = "1"; }, 200);
-      }
-      function goTo(i: number) { idx = ((i % LEN) + LEN) % LEN; apply(); hold(); }
-      chips.forEach(function (c: any) { c.addEventListener("click", function () { goTo(parseInt(c.getAttribute("data-i"), 10)); }); });
-      document.getElementById("c2Prev")!.addEventListener("click", function () { goTo(idx - 1); });
-      document.getElementById("c2Next")!.addEventListener("click", function () { goTo(idx + 1); });
-      document.getElementById("car2Toggle")!.addEventListener("click", function () { car2!.classList.toggle("collapsed"); });
-
-      /* autoplay avec pauses intelligentes */
-      var hovering = false, held = 0, inView = true;
-      function hold() { held = Date.now() + 8000; }
-      car2.addEventListener("mouseenter", function () { hovering = true; });
-      car2.addEventListener("mouseleave", function () { hovering = false; });
-      car2.addEventListener("pointerdown", function () { hold(); }, true);
-      if ("IntersectionObserver" in window) {
-        new IntersectionObserver(function (es) {
-          es.forEach(function (e) { inView = e.isIntersecting; });
-        }, { threshold: 0.3 }).observe(car2);
-      }
-      if (!reduced) {
-        setInterval(function () {
-          if (hovering || document.hidden || !inView || Date.now() < held || docEl.classList.contains("menu-open")) return;
-          idx = (idx + 1) % LEN; apply();
-        }, 4200);
-      }
-      apply();
-      descEl.style.opacity = "1";
-    }
+    /* ---------- comparateurs .ba + carrousel car2 ----------
+       Blocs RETIRES au bloc B5 : geres par components/ui/feature-carousel.tsx.
+       Le composant React rend id="car2" mais aucun des ids que ce code
+       attendait (chipList, stack, carIdx, carDesc, c2Prev, c2Next, car2Toggle).
+       Les conserver provoquait une TypeError sur null.addEventListener, en plus
+       de handlers concurrents sur les .ba et un autoplay duplique.
+       Le composant gere lui-meme la classe drag du curseur, via globalCursor(). */
   }, []);
 
   return null;
