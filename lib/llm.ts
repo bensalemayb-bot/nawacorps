@@ -22,18 +22,22 @@
 // MODELE EPINGLE — releve du 2026-08-23 (bloc B9).
 //
 // GET /v1beta/models donnait gemini-3.7-flash comme "flash" le plus recent
-// (version 3.7-flash-08-2026, stable, aucun gemini-4 publie). Il a ete ecarte
-// sur mesure, pas sur impression :
+// (version 3.7-flash-08-2026, stable, aucun gemini-4 publie). Ecarte sur
+// mesure, pas sur impression :
 //
 //   gemini-3.7-flash   503 200 503 200 503 200 503 429   ->  3/8 en 200
 //   gemini-3.6-flash   200 200 200 200 200 200           ->  6/6 en 200
+//   gemini-2.5-flash   200 200 200 200 200 200           ->  6/6 en 200
 //
 // Google repondait « This model is currently experiencing high demand » sur
-// les 503, et un 429 de quota gratuit sur le dernier appel. A ce taux, le bot
-// renverrait ses visiteurs vers le formulaire six fois sur dix.
+// les 503. A ce taux, le bot renverrait ses visiteurs vers le formulaire six
+// fois sur dix.
 //
-// gemini-3.6-flash : version 3.6-flash-07-2026, un cran en arriere, memes
-// limites de contexte, meme famille, meme palier gratuit.
+// RETENU : gemini-2.5-flash. gemini-3.6-flash etait le choix initial, tout
+// aussi disponible, mais son quota gratuit — 20 requetes par JOUR et PAR
+// MODELE — avait ete epuise par les sondages de fiabilite. Le quota etant
+// compte par modele, basculer sur 2.5 rendait un budget neuf le jour meme.
+// A reconsiderer : 3.6 est plus recent, et rien d autre ne les separait.
 //
 // AVANT TOUT CHANGEMENT DE MODELE : RE-SONDER. Les taux ci-dessus sont dates
 // et ne valent que pour le 2026-08-23 ; la congestion se deplace. Refaire la
@@ -48,7 +52,18 @@
 //    consommant du quota — et le 429 ci-dessus montre que le quota est fini.
 //    On echangerait une panne visible contre une lenteur et une facture.
 // ---------------------------------------------------------------------------
-const MODEL = "gemini-3.6-flash";
+const MODEL = "gemini-2.5-flash";
+
+// LE REGLAGE DE REFLEXION SUIT LE MODELE — les deux generations ne parlent pas
+// la meme langue, et se tromper coute un 400 sec :
+//   Gemini 2.5  -> thinkingConfig { thinkingBudget: n }
+//                  « thinkingLevel is not supported for this model »
+//   Gemini 3.x  -> thinkingConfig { thinkingLevel: "low" | ... }
+//                  thinkingBudget y est ACCEPTE puis IGNORE, ce qui est pire
+//                  qu un refus : 128 et -1 laissaient tous deux 284+ tokens de
+//                  reflexion, donc la troncature passait inapercue.
+// Changer MODEL sans changer cette constante casse la route.
+const THINKING_CONFIG = { thinkingBudget: 0 };
 
 const ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models";
 const TIMEOUT_MS = 15_000;
@@ -98,19 +113,14 @@ export async function askLlm(system: string, messages: ChatMessage[]): Promise<L
         })),
         generationConfig: {
           maxOutputTokens: MAX_OUTPUT_TOKENS,
-          // La famille Gemini 3 raisonne avant de repondre, et ces tokens de
-          // reflexion se PRELEVENT sur maxOutputTokens. Mesure du 2026-08-23,
-          // sans ce reglage : thoughtsTokenCount 287, candidatesTokenCount 9,
+          // Ces modeles raisonnent avant de repondre, et les tokens de reflexion
+          // se PRELEVENT sur maxOutputTokens. Mesure du 2026-08-23 sans ce
+          // reglage : thoughtsTokenCount 287, candidatesTokenCount 9,
           // finishReason MAX_TOKENS — il sortait un fragment de son propre
-          // raisonnement, pas une phrase.
-          // Avec thinkingLevel "low" : reflexion 0, finishReason STOP, les 300
-          // tokens vont a la reponse visible.
-          //
-          // C est bien thinkingLevel et non thinkingBudget : ce dernier est le
-          // parametre de Gemini 2.5, ignore par la famille 3.x (mesure : 128 et
-          // -1 laissent tous deux 284+ tokens de reflexion). Et thinkingBudget
-          // a 0 est refuse en 400 par ce modele.
-          thinkingConfig: { thinkingLevel: "low" },
+          // raisonnement au lieu d une phrase. Avec : reflexion 0, STOP, et les
+          // 300 tokens vont a la reponse visible.
+          // La forme du reglage depend du modele : voir THINKING_CONFIG.
+          thinkingConfig: THINKING_CONFIG,
         },
       }),
     });
