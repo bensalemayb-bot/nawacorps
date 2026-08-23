@@ -71,3 +71,17 @@ model Conversation {
   ipHash    String
   createdAt DateTime @default(now())
 }
+
+// Bloc B8 : limitation de debit du formulaire de contact.
+// Une ligne = une tentative acceptee. Le comptage se fait sur une fenetre
+// glissante (ipHash + action + createdAt), d ou l index composite.
+// Jamais d IP en clair : ipHash est un sha256(ip + IP_HASH_SALT), coherent
+// avec Conversation.ipHash pose au bloc B2.
+model RateLimit {
+  id        String   @id @default(cuid())
+  ipHash    String
+  action    String
+  createdAt DateTime @default(now())
+
+  @@index([ipHash, action, createdAt])
+}

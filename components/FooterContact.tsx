@@ -1,3 +1,5 @@
+import ContactForm from "@/components/ContactForm";
+
 // Footer Contact — reference/binacore.html lignes 1136-1153, copie verbatim.
 //
 // Rendu DANS #smoothWrap > #smooth, comme la maquette (le footer y est ferme
@@ -8,12 +10,17 @@
 // lignes par Interactions.tsx, dont le selecteur `h2.t, footer.contact h2`
 // trouve enfin sa seconde cible.
 //
-// SEULE ADDITION EDITORIALE DU BLOC, signalee : les deux liens .lnk de la
-// bande .legal vers les pages legales. Zero CSS nouveau — .legal impose deja
-// la casse et la couleur, `a{color:inherit}` et .lnk::after en currentColor
-// font le reste. Ce sont des <a> nus, pas des next/link : une navigation
-// client-side ne rejouerait pas Interactions, et les [data-reveal] de la page
-// d arrivee resteraient a opacity:0.
+// DEUX ADDITIONS EDITORIALES, toutes deux signalees :
+//
+//  B7 — les deux liens .lnk de la bande .legal vers les pages legales. Zero
+//  CSS nouveau : .legal impose deja la casse et la couleur, `a{color:inherit}`
+//  et .lnk::after en currentColor font le reste. Ce sont des <a> nus, pas des
+//  next/link : une navigation client-side ne rejouerait pas Interactions, et
+//  les [data-reveal] de la page d arrivee resteraient a opacity:0.
+//
+//  B8 — « ou par écrit » et <ContactForm />, sous la c-row. La maquette n a
+//  pas de formulaire ; celui-ci s ajoute aux deux CTA WhatsApp/e-mail, qui ne
+//  bougent pas. binacore.css reste intouche.
 export default function FooterContact() {
   return (
     <footer className="contact green" id="contact">
@@ -23,6 +30,14 @@ export default function FooterContact() {
         <div className="c-row" data-reveal>
           <a className="btn" href="https://wa.me/41760000000?text=Bonjour%2C%20parlons%20de%20mon%20commerce." target="_blank" rel="noopener">Écrire sur WhatsApp <span className="ar">→</span></a>
           <a className="btn btn-line" href="mailto:hello@binacore.ch">hello@binacore.ch</a>
+        </div>
+
+        {/* ADDITION EDITORIALE B8, signalee : la maquette n a pas de formulaire.
+            Les deux CTA ci-dessus sont inchanges — le formulaire s ajoute a cote
+            d eux, il ne les remplace pas. */}
+        <div data-reveal>
+          <p className="meta" style={{ marginTop: 34 }}>ou par écrit</p>
+          <ContactForm />
         </div>
         <div className="c-cols" data-reveal>
           <span>Genève, Suisse</span>
