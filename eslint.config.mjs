@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // source de verite en lecture seule, jamais du code de projet — voir décision B7
+    "reference/**",
   ]),
 
   // EXCEPTION CIBLEE — une seule regle, quatre fichiers. Jamais globale : la
@@ -26,6 +28,24 @@ const eslintConfig = defineConfig([
     rules: {
       // volontaire — next/link casserait les reveals (Interactions ne tourne qu'une fois), voir décision B7
       "@next/next/no-html-link-for-pages": "off",
+    },
+  },
+
+  {
+    files: ["components/Interactions.tsx"],
+    rules: {
+      // volontaire — portage verbatim du <script> de la maquette, aucune réécriture permise, voir décision B4
+      "no-var": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+    },
+  },
+
+  {
+    files: ["components/ui/feature-carousel.tsx"],
+    rules: {
+      // volontaire — copie à l'octet près, aucun commentaire ne peut y être ajouté, voir décision B5
+      "react-hooks/refs": "off",
+      "react-hooks/set-state-in-effect": "off",
     },
   },
 ]);

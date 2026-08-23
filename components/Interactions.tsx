@@ -31,6 +31,7 @@ declare global {
  *    contenant que wa.me et mailto:, sans `#`.
  */
 export default function Interactions() {
+  // volontaire — portage verbatim du <script> de la maquette, aucune réécriture permise, voir décision B4
   useEffect(() => {
     /* ---------- ADAPTATION SIGNALEE : garde d'initialisation unique ----------
        Cet effet n'a volontairement pas de fonction de nettoyage : la contrainte
