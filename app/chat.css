@@ -1,0 +1,186 @@
+/* ==========================================================================
+   Chatbot de qualification — bloc B9.
+
+   FICHIER NEUF. binacore.css est le portage de la maquette et reste intouche :
+   le widget n existe pas dans la maquette, son style vit donc a part.
+
+   Aucune couleur en dur : tout vient des variables posees par binacore.css
+   (--pine, --bone, --brass, --sans...). Panneau pin, bulles os, accents laiton.
+
+   z-index 95 : au-dessus du grain (90) et de la nav (80), mais sous le loader
+   (130) et le curseur (140) — l intro doit continuer a tout recouvrir, et le
+   curseur a passer par-dessus.
+
+   Le widget est monte HORS de #smoothWrap (layout.tsx). Un ancetre transforme
+   creerait un bloc conteneur et casserait position:fixed : le widget
+   defilerait avec la page. Meme regle que nav/loader/cursor, decision B4.
+   ========================================================================== */
+
+.chat-fab {
+  position: fixed;
+  left: var(--pad);
+  bottom: 22px;
+  z-index: 95;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7em;
+  max-width: calc(100vw - 2 * var(--pad));
+  padding: 0.9em 1.4em;
+  border: 1px solid var(--pine);
+  border-radius: 999px;
+  background: var(--pine);
+  color: var(--bone);
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(23, 22, 19, 0.18);
+  transition: transform 0.3s var(--ease), background 0.3s var(--ease);
+}
+.chat-fab:hover { transform: translateY(-2px); }
+.chat-fab .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--brass-l);
+  flex: none;
+}
+
+.chat-panel {
+  position: fixed;
+  left: var(--pad);
+  bottom: 22px;
+  z-index: 95;
+  display: flex;
+  flex-direction: column;
+  width: min(380px, calc(100vw - 2 * var(--pad)));
+  max-height: min(620px, calc(100vh - 44px));
+  border-radius: var(--r);
+  overflow: hidden;
+  background: var(--pine);
+  color: var(--bone);
+  font-family: var(--sans);
+  box-shadow: 0 24px 60px rgba(23, 22, 19, 0.32);
+}
+
+.chat-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--line-g);
+}
+.chat-head b { font-weight: 600; font-size: 0.92rem; letter-spacing: -0.01em; }
+.chat-head span { display: block; font-size: 0.68rem; color: var(--muted-g); font-weight: 500; }
+.chat-close {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--line-g);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--bone);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.25s var(--ease);
+}
+.chat-close:hover { background: var(--pine-2); }
+
+.chat-note {
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--line-g);
+  font-size: 0.68rem;
+  line-height: 1.5;
+  color: var(--muted-g);
+}
+.chat-note a { color: var(--brass-l); }
+
+.chat-log {
+  flex: 1;
+  min-height: 140px;
+  overflow-y: auto;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chat-msg {
+  max-width: 86%;
+  padding: 0.7em 0.95em;
+  border-radius: 12px;
+  font-size: 0.86rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.chat-msg.bot { align-self: flex-start; background: var(--bone); color: var(--ink); }
+.chat-msg.user { align-self: flex-end; background: var(--pine-2); color: var(--bone); border: 1px solid var(--line-g); }
+
+.chat-typing { align-self: flex-start; display: inline-flex; gap: 4px; padding: 0.8em 0.95em; }
+.chat-typing i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--brass-l);
+  animation: chat-blink 1.2s infinite ease-in-out;
+}
+.chat-typing i:nth-child(2) { animation-delay: 0.18s; }
+.chat-typing i:nth-child(3) { animation-delay: 0.36s; }
+@keyframes chat-blink { 0%, 60%, 100% { opacity: 0.25; } 30% { opacity: 1; } }
+
+.chat-alert {
+  margin: 0 18px 14px;
+  padding: 0.8em 0.95em;
+  border: 1px solid var(--brass);
+  border-radius: 10px;
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: var(--bone);
+}
+.chat-alert a { color: var(--brass-l); font-weight: 600; }
+
+.chat-form {
+  display: flex;
+  gap: 8px;
+  padding: 14px 18px;
+  border-top: 1px solid var(--line-g);
+}
+.chat-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.75em 0.95em;
+  border: 1px solid var(--line-g);
+  border-radius: 999px;
+  background: var(--pine-2);
+  color: var(--bone);
+  font-family: var(--sans);
+  font-size: 0.85rem;
+}
+.chat-form input::placeholder { color: var(--muted-g); }
+.chat-form input:disabled { opacity: 0.55; }
+.chat-form button {
+  flex: none;
+  padding: 0.75em 1.1em;
+  border: 1px solid var(--bone);
+  border-radius: 999px;
+  background: var(--bone);
+  color: var(--pine);
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.25s var(--ease), color 0.25s var(--ease);
+}
+.chat-form button:hover:not(:disabled) { background: transparent; color: var(--bone); }
+.chat-form button:disabled { opacity: 0.5; cursor: default; }
+
+@media (prefers-reduced-motion: reduce) {
+  .chat-fab { transition: none; }
+  .chat-fab:hover { transform: none; }
+  .chat-typing i { animation: none; opacity: 0.6; }
+}

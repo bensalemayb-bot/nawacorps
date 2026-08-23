@@ -24,6 +24,7 @@ const eslintConfig = defineConfig([
       "components/MenuOverlay.tsx",
       "app/mentions-legales/page.tsx",
       "app/confidentialite/page.tsx",
+      "components/ChatWidget.tsx",
     ],
     rules: {
       // volontaire — next/link casserait les reveals (Interactions ne tourne qu'une fois), voir décision B7

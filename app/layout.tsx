@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Hanken_Grotesk, Instrument_Serif } from "next/font/google";
+import ChatWidget from "@/components/ChatWidget";
 import Cursor from "@/components/Cursor";
 import Interactions from "@/components/Interactions";
 import Loader from "@/components/Loader";
@@ -7,6 +8,7 @@ import MenuOverlay from "@/components/MenuOverlay";
 import Nav from "@/components/Nav";
 import "./globals.css";
 import "./binacore.css";
+import "./chat.css";
 import "./fonts.css";
 
 // Poids statiques, volontairement pas la police variable : la maquette charge
@@ -49,6 +51,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Nav />
         <MenuOverlay />
         <Interactions />
+        {/* ChatWidget est en position:fixed — il reste HORS du wrapper,
+            pour la meme raison que nav/loader/cursor ci-dessus. */}
+        <ChatWidget />
         <div id="smoothWrap"><div id="smooth">{children}</div></div>
       </body>
     </html>
