@@ -33,11 +33,27 @@
 // les 503. A ce taux, le bot renverrait ses visiteurs vers le formulaire six
 // fois sur dix.
 //
-// RETENU : gemini-2.5-flash. gemini-3.6-flash etait le choix initial, tout
-// aussi disponible, mais son quota gratuit — 20 requetes par JOUR et PAR
-// MODELE — avait ete epuise par les sondages de fiabilite. Le quota etant
-// compte par modele, basculer sur 2.5 rendait un budget neuf le jour meme.
-// A reconsiderer : 3.6 est plus recent, et rien d autre ne les separait.
+// RETENU : gemini-3.5-flash, sur un critere de COMPORTEMENT et pas seulement
+// de disponibilite. Question « c est combien la carte ? », meme prompt, meme
+// catalogue injecte depuis Postgres :
+//
+//   gemini-3.5-flash        « Notre formule La Carte est à 450.– »
+//   gemini-3.5-flash-lite   « La carte est à 450.– chez Nawa Corps »
+//   gemini-2.5-flash        « Je suis là pour votre projet de commerce » (esquive)
+//
+// gemini-2.5-flash applique le deroule imposé si strictement qu il classe
+// une question tarifaire sur son propre catalogue en « hors sujet ». Le
+// garde-fou tient — il n invente jamais de prix — mais il refuse aussi ceux
+// qu il a le droit de donner, ce qui vide de son sens l injection des prix
+// depuis la base. La famille 3.x n a pas ce travers.
+//
+// A RETENIR : le quota se compte PAR MODELE — 20 requetes par jour chacun.
+// Si le repli formulaire se declenche en boucle avec un 429 dans le journal,
+// ce n est pas la cle qui est morte : c est ce modele-la qui a epuise sa
+// journee. Basculer sur un autre modele rend un budget neuf immediatement.
+// Corollaire de diagnostic : une sonde a deux tokens peut repondre 200
+// pendant que la route, qui envoie 1900 caracteres de prompt, prend un 429.
+// Toujours sonder avec le prompt complet.
 //
 // AVANT TOUT CHANGEMENT DE MODELE : RE-SONDER. Les taux ci-dessus sont dates
 // et ne valent que pour le 2026-08-23 ; la congestion se deplace. Refaire la
@@ -52,7 +68,7 @@
 //    consommant du quota — et le 429 ci-dessus montre que le quota est fini.
 //    On echangerait une panne visible contre une lenteur et une facture.
 // ---------------------------------------------------------------------------
-const MODEL = "gemini-2.5-flash";
+const MODEL = "gemini-3.5-flash";
 
 // LE REGLAGE DE REFLEXION SUIT LE MODELE — les deux generations ne parlent pas
 // la meme langue, et se tromper coute un 400 sec :
@@ -63,11 +79,25 @@ const MODEL = "gemini-2.5-flash";
 //                  qu un refus : 128 et -1 laissaient tous deux 284+ tokens de
 //                  reflexion, donc la troncature passait inapercue.
 // Changer MODEL sans changer cette constante casse la route.
-const THINKING_CONFIG = { thinkingBudget: 0 };
+const THINKING_CONFIG = { thinkingLevel: "low" };
 
 const ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models";
 const TIMEOUT_MS = 15_000;
-const MAX_OUTPUT_TOKENS = 300;
+// ECART SIGNALE : la spec du bloc B9 disait 300. Ce plafond ne borne pas la
+// reponse, il borne REFLEXION + reponse, et sur Gemini 3.x la reflexion ne
+// peut pas etre coupee — thinkingLevel "off" est refuse en 400, et "low"
+// consomme encore ~250 a 290 tokens sur un tour difficile. Mesure du
+// 2026-08-23 sur le tour de recapitulation, meme prompt :
+//
+//   300  -> finish MAX_TOKENS | pensee 284 | sortie  12   phrase coupee net
+//   800  -> finish STOP       | pensee 248 | sortie  68   recapitulatif entier
+//   1200 -> finish STOP       | pensee 294 | sortie  61   idem
+//
+// L intention de la spec — des reponses courtes — est tenue : le modele sort
+// 61 a 68 tokens, soit cinq fois moins que les 300 d origine. Desserrer le
+// plafond ne rallonge pas les reponses, il laisse la place a une reflexion que
+// le modele fait de toute facon.
+const MAX_OUTPUT_TOKENS = 800;
 
 export type ChatRole = "user" | "assistant";
 export type ChatMessage = { role: ChatRole; content: string };
