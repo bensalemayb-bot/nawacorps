@@ -22,6 +22,12 @@ type Message = { role: "user" | "assistant"; content: string };
 /** Le schema de la route plafonne le tableau envoye a 16 entrees. */
 const MAX_MESSAGES = 16;
 
+/** A partir de ce nombre de messages, le bouton « Terminer » apparait. */
+const SEUIL_BOUTON = 6;
+
+/** En dessous, un abandon ne vaut pas la peine d etre finalise. */
+const SEUIL_ABANDON = 4;
+
 const WA_LINK = "https://wa.me/41760000000";
 
 const ACCUEIL =
@@ -41,7 +47,18 @@ export default function ChatWidget() {
   const [saisie, setSaisie] = useState("");
   const [envoi, setEnvoi] = useState(false);
   const [replie, setReplie] = useState(false);
+  const [clos, setClos] = useState(false);
   const finRef = useRef<HTMLDivElement | null>(null);
+
+  // Garde anti-double-envoi. Un ref et non un etat : le gestionnaire
+  // pagehide lit sa valeur au moment ou il se declenche, pas celle capturee
+  // au dernier rendu. L idempotence serveur (sessionId unique) couvre ce que
+  // cette garde laisserait passer.
+  const finaliseRef = useRef(false);
+
+  // Meme raison : le gestionnaire pagehide est pose une fois et doit voir
+  // l historique a jour, pas celui du montage.
+  const messagesRef = useRef<Message[]>([]);
 
   // Le verrou se DEDUIT de l historique, il ne se stocke pas : un etat
   // parallele finirait par mentir sur le contenu de messages.
@@ -51,10 +68,53 @@ export default function ChatWidget() {
     finRef.current?.scrollIntoView({ block: "end" });
   }, [messages, envoi, replie, verrouille]);
 
+  useEffect(() => {
+    messagesRef.current = messages;
+  }, [messages]);
+
+  // ABANDON : l onglet se ferme, la page change. On n a plus le temps d un
+  // fetch — sendBeacon confie la requete au navigateur, qui la poste apres
+  // notre mort. pagehide et non beforeunload : beforeunload ne se declenche
+  // pas de facon fiable sur mobile, ou l onglet passe en arriere-plan.
+  useEffect(() => {
+    function surSortie() {
+      const suite = messagesRef.current;
+      if (finaliseRef.current || suite.length < SEUIL_ABANDON) return;
+      finaliseRef.current = true;
+      const corps = JSON.stringify({ sessionId, messages: suite, reason: "abandoned" });
+      navigator.sendBeacon("/api/chat/finalize", new Blob([corps], { type: "application/json" }));
+    }
+    window.addEventListener("pagehide", surSortie);
+    return () => window.removeEventListener("pagehide", surSortie);
+  }, [sessionId]);
+
+  // CLOTURE explicite. Plus fiable que de deviner, dans la reponse du bot,
+  // qu il vient de remercier : cette heuristique se trompe des que le
+  // modele reformule. Le visiteur decide, on n interprete pas.
+  async function terminer() {
+    if (finaliseRef.current || envoi) return;
+    finaliseRef.current = true;
+    setEnvoi(true);
+    try {
+      await fetch("/api/chat/finalize", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ sessionId, messages, reason: "completed" }),
+      });
+    } catch {
+      // Rien a dire au visiteur : sa conversation est soit enregistree, soit
+      // perdue cote reseau, et dans les deux cas le message de cloture est
+      // la reponse honnete — Ayoub a le formulaire et WhatsApp par ailleurs.
+    } finally {
+      setEnvoi(false);
+      setClos(true);
+    }
+  }
+
   async function envoyer(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const texte = saisie.trim();
-    if (!texte || envoi || verrouille) return;
+    if (!texte || envoi || verrouille || clos) return;
 
     const suite: Message[] = [...messages, { role: "user", content: texte }];
     setMessages(suite);
@@ -143,7 +203,21 @@ export default function ChatWidget() {
         </p>
       ) : null}
 
-      {verrouille ? (
+      {clos ? (
+        <p className="chat-alert" role="status">
+          C&apos;est noté — Ayoub revient vers vous sous 24 h.
+        </p>
+      ) : null}
+
+      {!clos && messages.length >= SEUIL_BOUTON ? (
+        <div className="chat-end">
+          <button type="button" onClick={terminer} disabled={envoi}>
+            Terminer la conversation
+          </button>
+        </div>
+      ) : null}
+
+      {verrouille && !clos ? (
         <p className="chat-alert" role="status">
           Conversation complète — la suite avec Ayoub directement sur{" "}
           <a href={WA_LINK} target="_blank" rel="noopener">WhatsApp</a>, ou par le{" "}
@@ -156,13 +230,13 @@ export default function ChatWidget() {
           type="text"
           value={saisie}
           onChange={(e) => setSaisie(e.target.value)}
-          placeholder={verrouille ? "Conversation terminée" : "Votre réponse…"}
+          placeholder={verrouille || clos ? "Conversation terminée" : "Votre réponse…"}
           aria-label="Votre message"
           maxLength={1500}
-          disabled={envoi || verrouille}
+          disabled={envoi || verrouille || clos}
           autoComplete="off"
         />
-        <button type="submit" disabled={envoi || verrouille || saisie.trim() === ""}>
+        <button type="submit" disabled={envoi || verrouille || clos || saisie.trim() === ""}>
           {envoi ? "…" : "Envoyer"}
         </button>
       </form>

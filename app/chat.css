@@ -144,6 +144,29 @@
 }
 .chat-alert a { color: var(--brass-l); font-weight: 600; }
 
+/* Cloture explicite — bloc B10. Volontairement discret : c est une sortie
+   offerte, pas un appel a l action. Il n emprunte donc ni .btn ni le bouton
+   plein de .chat-form. */
+.chat-end {
+  padding: 0 18px 12px;
+  text-align: center;
+}
+.chat-end button {
+  border: none;
+  background: transparent;
+  color: var(--muted-g);
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  transition: color 0.25s var(--ease);
+}
+.chat-end button:hover:not(:disabled) { color: var(--brass-l); }
+.chat-end button:disabled { opacity: 0.5; cursor: default; }
+
 .chat-form {
   display: flex;
   gap: 8px;

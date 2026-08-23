@@ -188,3 +188,90 @@ export async function askLlm(system: string, messages: ChatMessage[]): Promise<L
 
 /** Expose le modele retenu, pour les preuves et le journal. Jamais la cle. */
 export const LLM_MODEL = MODEL;
+
+// ---------------------------------------------------------------------------
+// EXTRACTION EN JSON — bloc B10.
+//
+// askLlm ci-dessus n est PAS touche : la conversation et l extraction ont des
+// contraintes opposees. L une doit rendre une phrase a un commercant, l autre
+// un objet machine ; l une tolere une reponse approximative, l autre est
+// inutilisable si elle n est pas parsable. Deux fonctions, deux contrats.
+//
+// responseMimeType "application/json" demande au modele de ne produire que du
+// JSON. Il n en fait pas une garantie : le JSON.parse reste sous try/catch, et
+// une sortie illisible devient { unavailable } comme le reste. L appelant du
+// bloc B10 enregistre alors la conversation avec extracted = null — les
+// messages du visiteur ne se perdent dans aucun scenario.
+//
+// 400 tokens suffisent : le schema attendu tient en une dizaine de champs.
+// Le modele et le reglage de reflexion sont ceux de MODEL / THINKING_CONFIG.
+// ---------------------------------------------------------------------------
+
+const MAX_OUTPUT_TOKENS_JSON = 400;
+
+export type LlmJsonResult = { unavailable: true; reason: string } | { data: unknown };
+
+function indisponibleJson(reason: string): LlmJsonResult {
+  console.warn(`[llm:json] indisponible — ${reason}`);
+  return { unavailable: true, reason };
+}
+
+export async function askLlmJson(system: string, messages: ChatMessage[]): Promise<LlmJsonResult> {
+  const key = process.env.GEMINI_API_KEY;
+  if (!key) return indisponibleJson("GEMINI_API_KEY absente");
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
+  try {
+    const res = await fetch(`${ENDPOINT}/${MODEL}:generateContent`, {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-goog-api-key": key },
+      signal: controller.signal,
+      cache: "no-store",
+      body: JSON.stringify({
+        system_instruction: { parts: [{ text: system }] },
+        contents: messages.map((m) => ({
+          role: m.role === "assistant" ? "model" : "user",
+          parts: [{ text: m.content }],
+        })),
+        generationConfig: {
+          responseMimeType: "application/json",
+          maxOutputTokens: MAX_OUTPUT_TOKENS_JSON,
+          thinkingConfig: THINKING_CONFIG,
+        },
+      }),
+    });
+
+    if (!res.ok) return indisponibleJson(`HTTP ${res.status}`);
+
+    const payload = (await res.json()) as GeminiResponse;
+
+    if (payload.promptFeedback?.blockReason) {
+      return indisponibleJson(`bloque en amont (${payload.promptFeedback.blockReason})`);
+    }
+
+    const candidat = payload.candidates?.[0];
+    if (!candidat) return indisponibleJson("aucun candidat");
+    if (candidat.finishReason === "SAFETY") return indisponibleJson("bloque par la securite");
+
+    const brut = (candidat.content?.parts ?? [])
+      .map((p) => p.text ?? "")
+      .join("")
+      .trim();
+
+    if (!brut) return indisponibleJson(`reponse vide (finishReason ${candidat.finishReason ?? "?"})`);
+
+    try {
+      return { data: JSON.parse(brut) };
+    } catch {
+      // On ne journalise pas `brut` : il contient les propos du visiteur.
+      return indisponibleJson(`JSON illisible (${brut.length} caracteres)`);
+    }
+  } catch (e) {
+    const nom = e instanceof Error ? e.name : "inconnue";
+    return indisponibleJson(nom === "AbortError" ? "delai de 15 s depasse" : `reseau (${nom})`);
+  } finally {
+    clearTimeout(timer);
+  }
+}
