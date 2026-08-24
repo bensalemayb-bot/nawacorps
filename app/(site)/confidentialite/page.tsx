@@ -13,7 +13,7 @@ import type { Metadata } from "next";
  * que de laisser croire a une collecte deja en place.
  */
 export const metadata: Metadata = {
-  title: "Confidentialité — Binacore",
+  title: "Confidentialité — Nawa Corps",
 };
 
 export default function Confidentialite() {
@@ -22,7 +22,7 @@ export default function Confidentialite() {
     <section>
       <div className="wrap">
         <div className="sec-head">
-          <span className="meta">Binacore · nLPD</span>
+          <span className="meta">Nawa Corps · nLPD</span>
         </div>
         <h2 className="t">Confidentialité</h2>
         <div className="studio-txt" style={{ marginTop: 40 }}>
@@ -36,7 +36,8 @@ export default function Confidentialite() {
           <p>Suisse.</p>
           <p>Pas de cookies publicitaires ni de traceurs tiers.</p>
           <p className="meta">Vos droits</p>
-          <p>Accès, rectification, suppression sur simple demande à hello@binacore.ch.</p>
+          {/* BR : adresse A CONFIRMER avant la mise en ligne. */}
+          <p>Accès, rectification, suppression sur simple demande à hello@nawacorps.ch.</p>
           <p className="meta" style={{ marginTop: 40 }}>Formulaire et assistant arrivent prochainement</p>
           <p style={{ marginTop: 40 }}><a className="lnk" href="/">← Retour au site</a></p>
         </div>

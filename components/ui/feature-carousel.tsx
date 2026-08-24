@@ -229,7 +229,7 @@ const SiteNew = () => (
 const CardNew = () => (
   <div className="bc-mini">
     <div className="bc bc-recto" aria-hidden="true">
-      <span className="wm">Binacore<sup>GE</sup></span>
+      <span className="wm">Nawa Corps</span>
       <span className="rl" />
       <span className="cp">Studio digital — Genève</span>
     </div>
@@ -239,8 +239,8 @@ const CardNew = () => (
       <div className="hr" />
       <div className="ct">
         <span><b>TÉL.</b> +41 76 000 00 00</span>
-        <span><b>MAIL</b> hello@binacore.ch</span>
-        <span><b>WEB</b> binacore.ch</span>
+        <span><b>MAIL</b> hello@nawacorps.ch</span>
+        <span><b>WEB</b> nawacorps.ch</span>
       </div>
       <span className="ge">Genève, Suisse</span>
     </div>

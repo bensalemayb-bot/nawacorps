@@ -23,7 +23,7 @@ import type { Metadata } from "next";
  * a confirmer et ne doivent jamais etre remplis par invention.
  */
 export const metadata: Metadata = {
-  title: "Mentions légales — Binacore",
+  title: "Mentions légales — Nawa Corps",
 };
 
 export default function MentionsLegales() {
@@ -32,16 +32,16 @@ export default function MentionsLegales() {
     <section>
       <div className="wrap">
         <div className="sec-head">
-          <span className="meta">Binacore</span>
+          <span className="meta">Nawa Corps</span>
         </div>
         <h2 className="t">Mentions légales</h2>
         <div className="studio-txt" style={{ marginTop: 40 }}>
           <p className="meta">Éditeur</p>
-          <p>Binacore, studio digital, Genève, Suisse, exploité par [PRÉNOM NOM — À COMPLÉTER]. Contact : hello@binacore.ch [à confirmer].</p>
+          <p>Nawa Corps, studio digital, Genève, Suisse, exploité par [PRÉNOM NOM — À COMPLÉTER]. Contact : hello@nawacorps.ch [à confirmer].</p>
           <p className="meta">Hébergement</p>
           <p>[Infomaniak, Suisse — à confirmer en B12]</p>
           <p className="meta">Propriété intellectuelle</p>
-          <p>Contenus et design © Binacore. Reproduction interdite sans accord.</p>
+          <p>Contenus et design © Nawa Corps. Reproduction interdite sans accord.</p>
           <p style={{ marginTop: 40 }}><a className="lnk" href="/">← Retour au site</a></p>
         </div>
       </div>

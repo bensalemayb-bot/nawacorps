@@ -16,7 +16,7 @@ import "./admin.css";
  * n y a aucune raison d exposer une administration a un moteur de recherche.
  */
 export const metadata: Metadata = {
-  title: "Administration — Binacore",
+  title: "Administration — Nawa Corps",
   robots: { index: false, follow: false },
 };
 

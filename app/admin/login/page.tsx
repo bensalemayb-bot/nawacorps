@@ -55,7 +55,7 @@ export default function PageConnexion() {
   return (
     <div className="admin-login">
       <h1>Administration</h1>
-      <p className="sous">Binacore — accès réservé</p>
+      <p className="sous">Nawa Corps — accès réservé</p>
       <form onSubmit={soumettre}>
         <label htmlFor="mdp">Mot de passe</label>
         <input

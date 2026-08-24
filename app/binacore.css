@@ -653,3 +653,56 @@ html.menu-open .nav-time,html.menu-open .nav-r a{opacity:0;pointer-events:none}
 .ofid .grid span{aspect-ratio:1;border:1px dashed #8b7a4d;display:flex;align-items:center;justify-content:center;
   font-family:"Comic Sans MS",cursive;color:#c22;font-size:.7rem;transform:rotate(-6deg)}
 .ofid .b{font-size:.56rem;font-style:italic;text-align:center}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BR — REBRANDING NAWA CORPS
+   Bloc AJOUTE en fin de fichier. Aucune regle d origine n est modifiee : tout
+   ce qui suit surcharge par cascade. Supprimer ce bloc entier rend la maquette
+   d avant, a l identique.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* --- Wordmark : le texte est devenu une image ---------------------------- */
+/* height fixe + width auto : c est le CSS qui decide de la taille rendue, les
+   attributs width/height de next/image ne servant qu a reserver le ratio.
+   24px et non 30 : le logo « principal » est un wordmark PLEIN, sans
+   monogramme ni seconde ligne. A 30px sa hauteur de capitale depassait d une
+   moitie celle du texte qu il remplace, et la nav basculait visuellement du
+   cote gauche. 24px rend une capitale de ~16px, proche des ~12px d avant sans
+   paraitre timide. */
+.wordmark img { display: block; height: 24px; width: auto; }
+
+/* MENU OUVERT — le fond passe au pin et le logo, en encre foncee, y
+   disparaitrait. La regle d origine ligne 414 eclaircissait le TEXTE par
+   `color`, ce qu une image ignore.
+   brightness(0) rend la silhouette entierement noire, invert(1) la retourne en
+   blanc : on obtient un aplat blanc de la forme exacte du logo. L accent laiton
+   du losange y passe aussi — c est le prix a payer, faute d une variante claire
+   a fond transparent parmi les huit fichiers. Le blanc sur pin reste la
+   solution la plus lisible et, surtout, elle garde LA MEME IMAGE : aucun saut
+   de largeur a l ouverture du menu. */
+html.menu-open .wordmark img { filter: brightness(0) invert(1); }
+
+/* --- Footer geant -------------------------------------------------------- */
+/* « BINACORE » debordait DEJA de 12,2 % et etait coupe par
+   .contact{overflow:hidden} : ce debordement est l effet editorial d origine,
+   pas un defaut. Mais BINACORE est un seul mot — il ne pouvait que deborder.
+   « NAWA CORPS » porte une ESPACE, donc un point de coupure : a taille egale il
+   passait a la ligne et le footer se cassait en deux.
+   nowrap lui rend le comportement d un mot unique ; 19vw cale le debordement a
+   11,5 %, mesure identique a 375, 768 et 1440 px (ratio glyphes/police constant
+   a 5,867). Ecart avec l origine : 0,7 point. */
+.giant { font-size: clamp(18vw, 19vw, 20vw); white-space: nowrap; }
+
+/* --- Slogan de marque ---------------------------------------------------- */
+/* UN SEUL endroit dans tout le site, en pied de page, juste avant la bande
+   legale. Il signe la marque sans se disputer l attention avec le hero, qui
+   porte deja sa propre promesse. Reprend la graisse et l espacement de .legal
+   pour se poser dans la meme famille typographique, en un cran plus clair. */
+.br-slogan {
+  padding: 0 var(--pad) 4px;
+  font-size: .72rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(241, 238, 230, .55);
+  text-align: center;
+}

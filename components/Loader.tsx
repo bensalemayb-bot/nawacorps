@@ -3,7 +3,7 @@
 export default function Loader() {
   return (
     <div className="loader" id="loader" aria-hidden="true">
-      <div className="lw"><span>Binacore<sup>GE</sup></span></div>
+      <div className="lw"><span>Nawa Corps</span></div>
       <span className="lmeta">Studio digital — Genève</span>
       <span className="pct" id="pct">0</span>
     </div>

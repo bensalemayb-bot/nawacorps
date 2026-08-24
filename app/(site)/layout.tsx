@@ -25,9 +25,9 @@ import Nav from "@/components/Nav";
  */
 
 export const metadata: Metadata = {
-  title: "Binacore — Studio digital, Genève",
+  title: "Nawa Corps — Studio digital, Genève",
   description:
-    "Binacore conçoit cartes, sites, affiches et réseaux sociaux pour les commerces genevois. Studio digital indépendant, Genève.",
+    "Nawa Corps conçoit cartes, sites, affiches et réseaux sociaux pour les commerces genevois. Studio digital indépendant, Genève.",
 };
 
 export default function SiteLayout({ children }: LayoutProps<"/">) {

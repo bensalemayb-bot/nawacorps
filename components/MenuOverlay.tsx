@@ -17,7 +17,8 @@ export default function MenuOverlay() {
       </nav>
       <div className="m-foot">
         <a href="https://wa.me/41760000000" target="_blank" rel="noopener">WhatsApp</a>
-        <a href="mailto:hello@binacore.ch">hello@binacore.ch</a>
+        {/* BR : adresse A CONFIRMER avant la mise en ligne. */}
+        <a href="mailto:hello@nawacorps.ch">hello@nawacorps.ch</a>
         <span>Genève, Suisse</span>
       </div>
     </div>

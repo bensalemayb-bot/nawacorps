@@ -22,7 +22,7 @@ export default function Faq() {
           </details>
           <details>
             <summary>Qui gère l&apos;hébergement et le nom de domaine ?<span className="pl2">+</span></summary>
-            <p className="a">Binacore. Domaine et hébergement de la première année sont compris dans Le Site, puis 49.–/mois pour l&apos;hébergement et les mises à jour. Le domaine reste à votre nom : il vous appartient.</p>
+            <p className="a">Nawa Corps. Domaine et hébergement de la première année sont compris dans Le Site, puis 49.–/mois pour l&apos;hébergement et les mises à jour. Le domaine reste à votre nom : il vous appartient.</p>
           </details>
           <details>
             <summary>Un prix change sur ma carte, je fais quoi ?<span className="pl2">+</span></summary>

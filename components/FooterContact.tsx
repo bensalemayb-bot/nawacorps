@@ -29,7 +29,8 @@ export default function FooterContact() {
         <h2 data-reveal style={{ marginTop: 26 }}>Donnons à votre commerce<br />la présence <span className="serif-i">qu&apos;il mérite.</span></h2>
         <div className="c-row" data-reveal>
           <a className="btn" href="https://wa.me/41760000000?text=Bonjour%2C%20parlons%20de%20mon%20commerce." target="_blank" rel="noopener">Écrire sur WhatsApp <span className="ar">→</span></a>
-          <a className="btn btn-line" href="mailto:hello@binacore.ch">hello@binacore.ch</a>
+          {/* BR : adresse A CONFIRMER avant la mise en ligne. */}
+          <a className="btn btn-line" href="mailto:hello@nawacorps.ch">hello@nawacorps.ch</a>
         </div>
 
         {/* ADDITION EDITORIALE B8, signalee : la maquette n a pas de formulaire.
@@ -43,10 +44,16 @@ export default function FooterContact() {
           <span>Genève, Suisse</span>
           <a className="lnk" href="tel:+41760000000">+41 76 000 00 00</a>
           <span>Lu–Sa · 9h–19h</span>
-          <span>© 2026 Binacore</span>
+          <span>© 2026 Nawa Corps</span>
         </div>
       </div>
-      <div className="giant" aria-hidden="true">BINACORE</div>
+      <div className="giant" aria-hidden="true">NAWA CORPS</div>
+      {/* BR — le slogan de marque, a UN SEUL endroit du site. Ici et pas dans
+          le hero : celui-ci porte deja sa promesse, « Une presence digitale a
+          la hauteur de votre commerce », et deux formules cote a cote se
+          seraient affaiblies l une l autre. En pied de page il signe, il ne
+          plaide pas. */}
+      <p className="br-slogan">L&apos;essentiel. Bien conçu.</p>
       <div className="legal">
         <span>Studio digital — Genève</span>
         <span>Cartes · Sites · Google</span>

@@ -12,7 +12,7 @@ export default function Studio() {
         <div className="studio-grid">
           <p className="studio-quote" data-reveal>« Vous parlez à celui qui <em>fait</em> le travail. »</p>
           <div className="studio-txt" data-reveal>
-            <p>Binacore est le studio d&apos;Ayoub, designer et développeur à Genève. Pas de commerciaux, pas de sous-traitance : la personne qui répond à votre message est celle qui dessine votre carte et construit votre site.</p>
+            <p>Nawa Corps est le studio d&apos;Ayoub, designer et développeur à Genève. Pas de commerciaux, pas de sous-traitance : la personne qui répond à votre message est celle qui dessine votre carte et construit votre site.</p>
             <p>Une structure légère, c&apos;est votre avantage — des décisions rapides, un prix juste, et un interlocuteur qui connaît votre commerce parce qu&apos;il y est venu.</p>
             <div className="facts">
               <div><b>Genève</b><span>Basé ici</span></div>

@@ -9,8 +9,8 @@ import { prisma } from "@/lib/prisma";
  * redeploiement — meme regle qu au bloc B6 pour les sections Offres et Carte
  * du studio.
  *
- * MARQUE : ce prompt dit « Nawa Corps ». Le reste du site affiche encore
- * « Binacore » — c est voulu, un bloc de rebranding global viendra.
+ * MARQUE : ce prompt disait deja « Nawa Corps » au bloc B9, avant le reste du
+ * site. Le bloc BR a aligne l ensemble : plus aucun ecart a signaler ici.
  *
  * Le texte entre les deux marqueurs est verbatim, y compris ses retours a la
  * ligne. Ne pas le reformuler : c est lui qui tient le bot.
