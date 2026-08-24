@@ -1,25 +1,48 @@
 /**
  * Acces au modele de langage.
  *
- * TOUTE la specificite Gemini est enfermee ici : forme des URL, en-tete
- * d authentification, nom des champs du corps, structure de la reponse.
- * Le reste du projet ne connait que `askLlm(system, messages)` et le type
- * LlmResult. Changer de fournisseur ne doit toucher que ce fichier.
+ * DEUX FOURNISSEURS, UN SEUL CONTRAT. Le reste du projet ne connait que
+ * `askLlm(system, messages)` / `askLlmJson(system, messages)` et les types
+ * LlmResult / LlmJsonResult. Quel fournisseur repond derriere — Gemini ou Groq
+ * — ne se lit nulle part ailleurs. C etait la promesse du bloc B9 ; B10b la met
+ * a l epreuve en ajoutant un second fournisseur sans qu une ligne d appelant
+ * bouge.
  *
- * CETTE FONCTION NE JETTE JAMAIS. Tout chemin degrade — cle absente, delai
- * depasse, HTTP non-2xx (quota Google 429 compris), aucun candidat, blocage
- * de securite — renvoie { unavailable: true }. L appelant decide quoi en
- * faire ; ici on ne casse rien.
+ * LE CHOIX SE LIT A CHAQUE APPEL, pas au chargement du module. Une constante
+ * figee au premier import obligerait a rebuilder pour basculer, et surtout
+ * empecherait une preuve d aller-retour entre les deux fournisseurs dans la
+ * meme session. ABSENT OU VIDE = gemini : le comportement d avant ce bloc.
  *
- * SECRET : la cle voyage dans l en-tete x-goog-api-key, jamais dans l URL.
- * Aucune journalisation ne la touche, et on ne remonte que des codes et des
- * motifs courts.
+ * CES FONCTIONS NE JETTENT JAMAIS, quel que soit le fournisseur. Tout chemin
+ * degrade — cle absente, delai depasse, HTTP non-2xx (429 de quota compris),
+ * reponse vide, JSON illisible — renvoie { unavailable: true, reason }.
+ * Cette uniformite EST la condition de l interchangeabilite : si Groq echouait
+ * autrement que Gemini, les appelants devraient savoir lequel repond, et le
+ * confinement ne vaudrait plus rien.
  *
- * Zero SDK, zero dependance : fetch natif.
+ * SECRET : la cle voyage dans un en-tete — x-goog-api-key cote Gemini,
+ * Authorization: Bearer cote Groq — jamais dans l URL. Aucune journalisation ne
+ * la touche : on ne remonte que des codes et des motifs courts.
+ *
+ * Zero SDK, zero dependance : fetch natif des deux cotes.
  */
 
+export type LlmProvider = "gemini" | "groq";
+
+/**
+ * Fournisseur actif. Toute valeur autre que "groq" — absente, vide, mal
+ * orthographiee — retombe sur gemini. Un aiguillage silencieux vaut mieux
+ * qu un throw : une faute de frappe dans .env ne doit pas eteindre le bot,
+ * elle doit le laisser sur le fournisseur d origine.
+ */
+function fournisseur(): LlmProvider {
+  return process.env.LLM_PROVIDER?.trim().toLowerCase() === "groq" ? "groq" : "gemini";
+}
+
+const TIMEOUT_MS = 15_000;
+
 // ---------------------------------------------------------------------------
-// MODELE EPINGLE — releve du 2026-08-23 (bloc B9).
+// MODELE GEMINI EPINGLE — releve du 2026-08-23 (bloc B9).
 //
 // GET /v1beta/models donnait gemini-3.7-flash comme "flash" le plus recent
 // (version 3.7-flash-08-2026, stable, aucun gemini-4 publie). Ecarte sur
@@ -68,7 +91,7 @@
 //    consommant du quota — et le 429 ci-dessus montre que le quota est fini.
 //    On echangerait une panne visible contre une lenteur et une facture.
 // ---------------------------------------------------------------------------
-const MODEL = "gemini-3.5-flash";
+const MODEL_GEMINI = "gemini-3.5-flash";
 
 // LE REGLAGE DE REFLEXION SUIT LE MODELE — les deux generations ne parlent pas
 // la meme langue, et se tromper coute un 400 sec :
@@ -78,11 +101,10 @@ const MODEL = "gemini-3.5-flash";
 //                  thinkingBudget y est ACCEPTE puis IGNORE, ce qui est pire
 //                  qu un refus : 128 et -1 laissaient tous deux 284+ tokens de
 //                  reflexion, donc la troncature passait inapercue.
-// Changer MODEL sans changer cette constante casse la route.
+// Changer MODEL_GEMINI sans changer cette constante casse la route.
 const THINKING_CONFIG = { thinkingLevel: "low" };
 
-const ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models";
-const TIMEOUT_MS = 15_000;
+const ENDPOINT_GEMINI = "https://generativelanguage.googleapis.com/v1beta/models";
 // ECART SIGNALE : la spec du bloc B9 disait 300. Ce plafond ne borne pas la
 // reponse, il borne REFLEXION + reponse, et sur Gemini 3.x la reflexion ne
 // peut pas etre coupee — thinkingLevel "off" est refuse en 400, et "low"
@@ -116,7 +138,7 @@ function indisponible(reason: string): LlmResult {
   return { unavailable: true, reason };
 }
 
-export async function askLlm(system: string, messages: ChatMessage[]): Promise<LlmResult> {
+async function askGemini(system: string, messages: ChatMessage[]): Promise<LlmResult> {
   const key = process.env.GEMINI_API_KEY;
   if (!key) return indisponible("GEMINI_API_KEY absente");
 
@@ -124,7 +146,7 @@ export async function askLlm(system: string, messages: ChatMessage[]): Promise<L
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
   try {
-    const res = await fetch(`${ENDPOINT}/${MODEL}:generateContent`, {
+    const res = await fetch(`${ENDPOINT_GEMINI}/${MODEL_GEMINI}:generateContent`, {
       method: "POST",
       headers: { "content-type": "application/json", "x-goog-api-key": key },
       signal: controller.signal,
@@ -186,9 +208,6 @@ export async function askLlm(system: string, messages: ChatMessage[]): Promise<L
   }
 }
 
-/** Expose le modele retenu, pour les preuves et le journal. Jamais la cle. */
-export const LLM_MODEL = MODEL;
-
 // ---------------------------------------------------------------------------
 // EXTRACTION EN JSON — bloc B10.
 //
@@ -216,7 +235,7 @@ function indisponibleJson(reason: string): LlmJsonResult {
   return { unavailable: true, reason };
 }
 
-export async function askLlmJson(system: string, messages: ChatMessage[]): Promise<LlmJsonResult> {
+async function askGeminiJson(system: string, messages: ChatMessage[]): Promise<LlmJsonResult> {
   const key = process.env.GEMINI_API_KEY;
   if (!key) return indisponibleJson("GEMINI_API_KEY absente");
 
@@ -224,7 +243,7 @@ export async function askLlmJson(system: string, messages: ChatMessage[]): Promi
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
   try {
-    const res = await fetch(`${ENDPOINT}/${MODEL}:generateContent`, {
+    const res = await fetch(`${ENDPOINT_GEMINI}/${MODEL_GEMINI}:generateContent`, {
       method: "POST",
       headers: { "content-type": "application/json", "x-goog-api-key": key },
       signal: controller.signal,
@@ -274,4 +293,206 @@ export async function askLlmJson(system: string, messages: ChatMessage[]): Promi
   } finally {
     clearTimeout(timer);
   }
+}
+
+// ---------------------------------------------------------------------------
+// GROQ — bloc B10b.
+//
+// API au format OpenAI : /chat/completions, un tableau `messages` ou le prompt
+// systeme est le premier element, et une reponse en `choices[0].message`.
+// Rien de propre a Groq au-dela de l URL, de l en-tete Bearer et du nom du
+// modele — c est precisement ce qui rend ce fournisseur peu couteux a ajouter.
+//
+// POURQUOI UN SECOND FOURNISSEUR : le quota gratuit Gemini se compte PAR
+// MODELE et PAR JOUR (20 requetes, cf. le releve B9 plus haut), ce qui suffit
+// a bloquer une session de tests. Groq ne remplace pas Gemini — il le double.
+// Les deux restent utilisables, et LLM_PROVIDER decide lequel repond.
+//
+// MODELE EPINGLE — releve du 2026-08-24 (bloc B10b).
+//
+// GET /openai/v1/models rendait 13 entrees. Ecartees sans mesure, faute d etre
+// des modeles de conversation : whisper-* (transcription), orpheus-* (synthese
+// vocale), llama-prompt-guard-2-* (classifieurs, 512 de contexte), allam-2-7b
+// (4096 de contexte). Ecartes aussi groq/compound et groq/compound-mini : ce
+// sont des systemes agentiques a outils integres, recherche web comprise — un
+// bot de qualification doit tenir dans son prompt et son catalogue, pas aller
+// chercher dehors.
+//
+// Restaient openai/gpt-oss-120b, openai/gpt-oss-20b, qwen/qwen3.6-27b.
+// RETENU : openai/gpt-oss-120b, le plus gros des trois, 131072 de contexte.
+//
+//   disponibilite   200 200 200 200 200 200   ->  6/6, 600 a 1060 ms
+//
+// COMPORTEMENT, meme critere qu au bloc B9 — question tarifaire sur son propre
+// catalogue, posee EN COURS de deroule et non au premier tour :
+//
+//   « La refonte de votre carte coute 450 CHF. Pour quand en avez-vous besoin ? »
+//
+// Prix exact du catalogue Postgres, une seule question, francais, deroule qui
+// avance. C est le niveau de gemini-3.5-flash, pas l esquive de gemini-2.5.
+//
+// PIEGE DE MESURE, a lire avant de re-sonder : la premiere sonde tirait les six
+// appels d affilee et rendait 5/6, le sixieme en 429. Ce n etait pas le modele
+// mais la limite TPM — TOKENS PAR MINUTE, 8000 en tier on_demand — qui compte
+// l entree PLUS les max_tokens RESERVES, soit ~1300 par appel ici. Six tirs
+// immediats la saturent ; espacer de 13 s donne 6/6.
+//
+//   Consequence en production : ~6 requetes par minute, tous visiteurs
+//   confondus. Au-dela, 429 — donc { unavailable } et repli formulaire, jamais
+//   d erreur nue. C est l inverse du quota Gemini : Gemini s epuise pour la
+//   JOURNEE, Groq se regule a la MINUTE et revient tout seul.
+//
+// A RETENIR : la premiere sonde m a fait accuser le modele d une esquive qui
+// etait la mienne. Je posais la question de prix au tout premier tour, la ou le
+// prompt impose « 1. Demande quel type de commerce » — le modele obeissait. Le
+// corollaire B9 « toujours sonder avec le prompt complet » en appelle un autre :
+// sonder aussi avec un HISTORIQUE plausible, sinon on mesure sa propre erreur.
+//
+// AVANT TOUT CHANGEMENT DE MODELE : RE-SONDER, six appels espaces, et remplacer
+// ce bloc par le nouveau releve avec sa date.
+// ---------------------------------------------------------------------------
+const MODEL_GROQ = "openai/gpt-oss-120b";
+
+const ENDPOINT_GROQ = "https://api.groq.com/openai/v1/chat/completions";
+
+// MODE JSON NATIF. response_format {type:"json_object"} contraint la sortie a
+// du JSON parsable — mais tous les modeles Groq ne l acceptent pas, et ceux
+// qui le refusent repondent 400, donc { unavailable } et une extraction perdue.
+// Ce drapeau est donc MESURE, pas suppose. Releve du 2026-08-24 sur
+// openai/gpt-oss-120b, prompt d extraction complet : HTTP 200, sortie
+// parsable, schema respecte (les dix champs, urgency et quality_score
+// compris). Le prompt d extraction contient deja le mot « JSON » —
+// « Reponds UNIQUEMENT avec un objet JSON » — ce que le mode json_object
+// des API au format OpenAI EXIGE : sans lui, la requete part en 400.
+// A false, on ne garde que la consigne-JSON deja presente dans le prompt
+// d extraction (« Reponds UNIQUEMENT avec un objet JSON ») ; le JSON.parse sous
+// try/catch couvre identiquement les deux cas, c est tout son interet.
+const GROQ_MODE_JSON = true;
+
+// Meme plafond que cote Gemini, pour une raison differente : Groq ne preleve
+// pas de tokens de reflexion sur ce budget, donc 800 y est confortable la ou
+// c etait juste necessaire cote Gemini. Garder le meme chiffre evite qu une
+// reponse change de longueur en changeant de fournisseur.
+const MAX_TOKENS_GROQ = 800;
+
+type GroqResponse = {
+  choices?: { message?: { content?: string }; finish_reason?: string }[];
+};
+
+/**
+ * Corps commun aux deux appels Groq. Le prompt systeme devient le premier
+ * message role "system" et l historique suit tel quel : les roles "user" et
+ * "assistant" de ChatMessage sont deja ceux du format OpenAI, aucune
+ * traduction n est necessaire — contrairement a Gemini, ou "assistant" doit
+ * devenir "model".
+ */
+function corpsGroq(system: string, messages: ChatMessage[], json: boolean) {
+  return JSON.stringify({
+    model: MODEL_GROQ,
+    messages: [{ role: "system", content: system }, ...messages],
+    max_tokens: MAX_TOKENS_GROQ,
+    ...(json ? { response_format: { type: "json_object" } } : {}),
+  });
+}
+
+/** En-tetes communs. La cle ne sort jamais d ici. */
+const entetesGroq = (key: string) => ({
+  "content-type": "application/json",
+  authorization: `Bearer ${key}`,
+});
+
+async function askGroq(system: string, messages: ChatMessage[]): Promise<LlmResult> {
+  const key = process.env.GROQ_API_KEY;
+  if (!key) return indisponible("GROQ_API_KEY absente");
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
+  try {
+    const res = await fetch(ENDPOINT_GROQ, {
+      method: "POST",
+      headers: entetesGroq(key),
+      signal: controller.signal,
+      // INDISPENSABLE, pour la meme raison que cote Gemini : Next instrumente
+      // fetch et met les reponses en cache. Sans cela, deux visiteurs qui
+      // ecrivent la meme phrase recoivent la meme reponse recyclee, et un
+      // incident passager se trouve fige et rejoue indefiniment.
+      cache: "no-store",
+      body: corpsGroq(system, messages, false),
+    });
+
+    // 429 = quota Groq epuise. Traite comme les autres : repli, jamais de throw.
+    if (!res.ok) return indisponible(`HTTP ${res.status}`);
+
+    const data = (await res.json()) as GroqResponse;
+    const choix = data.choices?.[0];
+    if (!choix) return indisponible("aucun choix");
+
+    const reply = (choix.message?.content ?? "").trim();
+    if (!reply) return indisponible(`reponse vide (finish_reason ${choix.finish_reason ?? "?"})`);
+
+    return { reply };
+  } catch (e) {
+    const nom = e instanceof Error ? e.name : "inconnue";
+    return indisponible(nom === "AbortError" ? "delai de 15 s depasse" : `reseau (${nom})`);
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function askGroqJson(system: string, messages: ChatMessage[]): Promise<LlmJsonResult> {
+  const key = process.env.GROQ_API_KEY;
+  if (!key) return indisponibleJson("GROQ_API_KEY absente");
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
+  try {
+    const res = await fetch(ENDPOINT_GROQ, {
+      method: "POST",
+      headers: entetesGroq(key),
+      signal: controller.signal,
+      cache: "no-store",
+      body: corpsGroq(system, messages, GROQ_MODE_JSON),
+    });
+
+    if (!res.ok) return indisponibleJson(`HTTP ${res.status}`);
+
+    const data = (await res.json()) as GroqResponse;
+    const choix = data.choices?.[0];
+    if (!choix) return indisponibleJson("aucun choix");
+
+    const brut = (choix.message?.content ?? "").trim();
+    if (!brut) return indisponibleJson(`reponse vide (finish_reason ${choix.finish_reason ?? "?"})`);
+
+    try {
+      return { data: JSON.parse(brut) };
+    } catch {
+      // On ne journalise pas `brut` : il contient les propos du visiteur.
+      return indisponibleJson(`JSON illisible (${brut.length} caracteres)`);
+    }
+  } catch (e) {
+    const nom = e instanceof Error ? e.name : "inconnue";
+    return indisponibleJson(nom === "AbortError" ? "delai de 15 s depasse" : `reseau (${nom})`);
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// ROUTAGE — le seul endroit du depot qui sait qu il existe deux fournisseurs.
+// Les signatures ne changent pas d un iota : c est tout l interet du bloc.
+// ---------------------------------------------------------------------------
+
+export function askLlm(system: string, messages: ChatMessage[]): Promise<LlmResult> {
+  return fournisseur() === "groq" ? askGroq(system, messages) : askGemini(system, messages);
+}
+
+export function askLlmJson(system: string, messages: ChatMessage[]): Promise<LlmJsonResult> {
+  return fournisseur() === "groq" ? askGroqJson(system, messages) : askGeminiJson(system, messages);
+}
+
+/** Expose le modele actif, pour les preuves et le journal. Jamais la cle. */
+export function llmModel(): string {
+  return fournisseur() === "groq" ? MODEL_GROQ : MODEL_GEMINI;
 }
