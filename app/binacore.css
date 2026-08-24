@@ -669,7 +669,23 @@ html.menu-open .nav-time,html.menu-open .nav-r a{opacity:0;pointer-events:none}
    moitie celle du texte qu il remplace, et la nav basculait visuellement du
    cote gauche. 24px rend une capitale de ~16px, proche des ~12px d avant sans
    paraitre timide. */
-.wordmark img { display: block; height: 24px; width: auto; }
+/* Verrouillage ICONE + NOM, celui de la marque : le N cercle a gauche du
+   wordmark, comme sur le logo horizontal officiel. Deux fichiers et non
+   l horizontal tel quel, pour ne pas trainer son slogan illisible a cette
+   taille — ainsi chaque element garde sa propre echelle.
+   L icone est un peu plus haute que le nom : sur le logo officiel le cercle
+   depasse nettement la hauteur de capitale, et l inverse donnerait un nom qui
+   ecrase son propre embleme. */
+/* justify-self:start, et NON display:inline-flex. .nav est une GRILLE, et la
+   specification BLOCKIFIE le display des enfants de grille : inline-flex y
+   devient flex, silencieusement. Le lien s etirait alors sur toute sa colonne
+   — 776px mesures pour 157px de contenu, soit une zone cliquable geante et
+   invisible en travers de la barre. Sur un enfant de grille, c est
+   justify-self qui decide de l alignement, et fit-content de la largeur. */
+.wordmark { display: flex; align-items: center; gap: 9px; justify-self: start; width: fit-content; }
+.wordmark img { display: block; width: auto; }
+.wordmark .wm-icone { height: 28px; }
+.wordmark .wm-nom { height: 17px; }
 
 /* MENU OUVERT — le fond passe au pin et le logo, en encre foncee, y
    disparaitrait. La regle d origine ligne 414 eclaircissait le TEXTE par
@@ -681,6 +697,19 @@ html.menu-open .nav-time,html.menu-open .nav-r a{opacity:0;pointer-events:none}
    solution la plus lisible et, surtout, elle garde LA MEME IMAGE : aucun saut
    de largeur a l ouverture du menu. */
 html.menu-open .wordmark img { filter: brightness(0) invert(1); }
+
+/* --- Ecran de chargement -------------------------------------------------- */
+/* .loader porte background:var(--pine) : l ecran est VERT. Le logo y est donc
+   blanchi par le meme filtre qu au menu ouvert, et non remplace par le fichier
+   fond-fonce — celui-ci embarque son propre rectangle plein, dont on verrait
+   les bords sur l aplat.
+   Le <span> reste : c est lui que l animation d origine fait monter
+   (translateY 120% -> 0). On ne fait que le passer en flex pour aligner les
+   deux images ; la transformation, elle, n est pas touchee. */
+.loader .lw span { display: flex; align-items: center; gap: 18px; }
+.loader .lw img { display: block; width: auto; filter: brightness(0) invert(1); }
+.loader .ld-icone { height: clamp(44px, 9vw, 72px); }
+.loader .ld-nom { height: clamp(26px, 5.4vw, 44px); }
 
 /* --- Footer geant -------------------------------------------------------- */
 /* « BINACORE » debordait DEJA de 12,2 % et etait coupe par

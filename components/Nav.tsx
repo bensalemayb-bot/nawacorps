@@ -21,16 +21,32 @@ import Image from "next/image";
 // 3.04, soit 211px contre 91px a hauteur egale. La nav aurait tressailli a
 // chaque clic sur le burger. Meme image, meme ratio, aucun decalage.
 //
-// LE LOGO « PRINCIPAL » ET NON « HORIZONTAL », arbitrage acte : l horizontal
-// embarque le slogan, qui a 30px de haut tombe a ~4px et ne se lit plus — une
-// bavure grise sous le wordmark. Le slogan a desormais sa place propre, en
-// pied de page. Voir livraison-br.txt.
+// LE VERROUILLAGE ICONE + NOM est celui de la marque elle-meme : le logo
+// horizontal officiel place le N cercle a gauche du wordmark. On le reproduit
+// en DEUX fichiers plutot qu en reprenant l horizontal tel quel, parce que
+// celui-ci embarque aussi le slogan — qui a cette hauteur tombe a ~4px et ne
+// se lit plus, une bavure grise sous le nom. En composant, chaque element
+// garde sa taille propre et reste net. Le slogan a sa place ailleurs, en pied
+// de page. Voir livraison-br.txt.
+//
+// L icone porte alt="" : elle ne dit rien que le wordmark ne dise deja, et un
+// lecteur d ecran annoncerait deux fois la meme marque. C est le nom qui porte
+// le texte alternatif.
 export default function Nav() {
   // volontaire — next/link casserait les reveals (Interactions ne tourne qu'une fois), voir décision B7
   return (
     <nav className="nav" id="nav">
       <a className="wordmark" href="/#top" aria-label="Nawa Corps — accueil">
         <Image
+          className="wm-icone"
+          src="/brand/nawa-corps-logo-iconique-transparent.png"
+          alt=""
+          width={230}
+          height={230}
+          priority
+        />
+        <Image
+          className="wm-nom"
           src="/brand/nawa-corps-logo-principal-transparent.png"
           alt="Nawa Corps"
           width={634}
