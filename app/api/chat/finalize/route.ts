@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { buildExtractPrompt } from "@/lib/extract-prompt";
+import { Prisma } from "@/lib/generated/prisma/client";
 import { clientIp, hashIp } from "@/lib/iphash";
 import { askLlmJson } from "@/lib/llm";
 import { prisma } from "@/lib/prisma";
@@ -64,6 +65,42 @@ const SchemaExtraction = z.object({
 
 const etoiles = (n: number) => "★".repeat(Math.max(1, Math.min(5, n)));
 
+/**
+ * Reponse du chemin « deja finalise ». STRICTEMENT identique a celle que rend
+ * le controle d idempotence en lecture (etape 2) : pour l appelant, se faire
+ * devancer par une requete concurrente et arriver apres coup sont le meme
+ * evenement, et doivent se raconter pareil.
+ */
+const reponseDoublon = () => NextResponse.json({ ok: true, duplicate: true }, { status: 200 });
+
+/**
+ * Execute une ecriture de finalisation en absorbant la collision d unicite.
+ * Rend true si l ecriture a eu lieu, false si une requete concurrente avait
+ * deja finalise cette session.
+ *
+ * POURQUOI CE FILET, alors que l etape 2 verifie deja l existence : cette
+ * verification est un lire-puis-ecrire. Entre les deux, une seconde requete
+ * portant le meme sessionId peut passer la meme lecture — toutes deux voient
+ * une base vide, toutes deux ecrivent. L index unique arbitre au dernier
+ * moment et fait echouer la perdante. Sans ce catch, elle rendait un 500 alors
+ * que la conversation, elle, etait bien enregistree par la gagnante.
+ *
+ * P2002 EST ATTRAPE LARGEMENT, sans filtrer sur le nom de la contrainte, et
+ * c est exact ici : les seuls uniques que ces ecritures peuvent violer sont
+ * Conversation.sessionId et Conversation.leadId — Lead n en porte aucun — et
+ * leadId est un cuid cree dans la meme transaction, donc jamais en collision.
+ * Tout P2002 qui s echappe d ici est un doublon de session.
+ */
+async function ecrireSansDoublon(ecriture: () => Promise<unknown>): Promise<boolean> {
+  try {
+    await ecriture();
+    return true;
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2002") return false;
+    throw e;
+  }
+}
+
 export async function POST(req: Request) {
   let brut: unknown;
   try {
@@ -98,7 +135,7 @@ export async function POST(req: Request) {
   //    d un onglet. La seconde tentative repart sans rien ecrire.
   const dejaVue = await prisma.conversation.findUnique({ where: { sessionId } });
   if (dejaVue) {
-    return NextResponse.json({ ok: true, duplicate: true }, { status: 200 });
+    return reponseDoublon();
   }
 
   // 3. Debit.
@@ -117,9 +154,12 @@ export async function POST(req: Request) {
 
   // 4bis. Modele muet ou illisible : on enregistre quand meme.
   if ("unavailable" in resultat) {
-    await prisma.conversation.create({
-      data: { sessionId, messages, summary: null, extracted: undefined, ipHash },
-    });
+    const ecrit = await ecrireSansDoublon(() =>
+      prisma.conversation.create({
+        data: { sessionId, messages, summary: null, extracted: undefined, ipHash },
+      }),
+    );
+    if (!ecrit) return reponseDoublon();
     try {
       await notifyTelegram("💬 Conversation non analysée (IA indispo) — à lire en base");
     } catch {
@@ -132,15 +172,18 @@ export async function POST(req: Request) {
   if (!extrait.success) {
     // Le modele a rendu du JSON, mais hors schema. Meme reflexe : on garde
     // tout, y compris le JSON brut, et on laisse un humain trancher.
-    await prisma.conversation.create({
-      data: {
-        sessionId,
-        messages,
-        summary: null,
-        extracted: resultat.data as object,
-        ipHash,
-      },
-    });
+    const ecrit = await ecrireSansDoublon(() =>
+      prisma.conversation.create({
+        data: {
+          sessionId,
+          messages,
+          summary: null,
+          extracted: resultat.data as object,
+          ipHash,
+        },
+      }),
+    );
+    if (!ecrit) return reponseDoublon();
     try {
       await notifyTelegram("💬 Conversation non analysée (IA indispo) — à lire en base");
     } catch {
@@ -154,37 +197,43 @@ export async function POST(req: Request) {
 
   // 5. Ecriture. Transaction : un Lead sans sa Conversation, ou l inverse,
   //    serait une demi-verite en base.
-  await prisma.$transaction(async (tx) => {
-    let leadId: string | null = null;
+  const ecrit = await ecrireSansDoublon(() =>
+    prisma.$transaction(async (tx) => {
+      let leadId: string | null = null;
 
-    if (avecCoordonnees) {
-      const lead = await tx.lead.create({
+      if (avecCoordonnees) {
+        const lead = await tx.lead.create({
+          data: {
+            name: d.name as string,
+            phone: d.phone as string,
+            email: d.email,
+            commerceName: d.commerce_name,
+            commerceType: d.commerce_type,
+            source: "CHATBOT",
+            status: "NEW",
+            score: d.quality_score,
+            needSummary: d.need_summary,
+          },
+        });
+        leadId = lead.id;
+      }
+
+      await tx.conversation.create({
         data: {
-          name: d.name as string,
-          phone: d.phone as string,
-          email: d.email,
-          commerceName: d.commerce_name,
-          commerceType: d.commerce_type,
-          source: "CHATBOT",
-          status: "NEW",
-          score: d.quality_score,
-          needSummary: d.need_summary,
+          sessionId,
+          messages,
+          summary: d.need_summary,
+          extracted: resultat.data as object,
+          ipHash,
+          leadId,
         },
       });
-      leadId = lead.id;
-    }
-
-    await tx.conversation.create({
-      data: {
-        sessionId,
-        messages,
-        summary: d.need_summary,
-        extracted: resultat.data as object,
-        ipHash,
-        leadId,
-      },
-    });
-  });
+    }),
+  );
+  // Devance par une requete concurrente : la transaction a fait un rollback
+  // complet, donc aucun Lead orphelin n a survecu. La gagnante a tout ecrit et
+  // c est elle qui notifie — on sort avant le Telegram pour ne pas doubler.
+  if (!ecrit) return reponseDoublon();
 
   // 6. Notification. APRES l ecriture et sous try/catch : acquis du bloc B8,
   //    une panne de Telegram ne peut pas annuler un lead.
