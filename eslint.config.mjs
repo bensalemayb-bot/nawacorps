@@ -22,8 +22,8 @@ const eslintConfig = defineConfig([
     files: [
       "components/Nav.tsx",
       "components/MenuOverlay.tsx",
-      "app/mentions-legales/page.tsx",
-      "app/confidentialite/page.tsx",
+      "app/(site)/mentions-legales/page.tsx",
+      "app/(site)/confidentialite/page.tsx",
       "components/ChatWidget.tsx",
     ],
     rules: {

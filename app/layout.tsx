@@ -1,15 +1,24 @@
-import type { Metadata } from "next";
 import { Hanken_Grotesk, Instrument_Serif } from "next/font/google";
-import ChatWidget from "@/components/ChatWidget";
-import Cursor from "@/components/Cursor";
-import Interactions from "@/components/Interactions";
-import Loader from "@/components/Loader";
-import MenuOverlay from "@/components/MenuOverlay";
-import Nav from "@/components/Nav";
 import "./globals.css";
 import "./binacore.css";
 import "./chat.css";
 import "./fonts.css";
+
+/**
+ * Layout RACINE — reduit au strict minimum au bloc B11.
+ *
+ * Il ne porte plus que ce qui doit valoir pour TOUTE l application, publique
+ * ou non : la balise html avec ses variables de police, le body, et les
+ * feuilles de style globales. Rien d autre.
+ *
+ * Le chrome public — loader, curseur, nav, menu, interactions, chatbot,
+ * scroll inertiel — est descendu dans app/(site)/layout.tsx. C est ce qui
+ * permet a /admin de n en heriter d AUCUN : un back-office n a que faire d un
+ * scroll inertiel ou d un assistant de qualification.
+ *
+ * Les metadata du site public ont suivi le chrome dans (site) : elles
+ * decrivent le studio, pas l administration.
+ */
 
 // Poids statiques, volontairement pas la police variable : la maquette charge
 // 300/400/500/600/700 via <link>, et font-weight:550 (10 occurrences) s'y resout
@@ -30,32 +39,10 @@ const instrument = Instrument_Serif({
   variable: "--font-instrument",
 });
 
-export const metadata: Metadata = {
-  title: "Binacore — Studio digital, Genève",
-  description:
-    "Binacore conçoit cartes, sites, affiches et réseaux sociaux pour les commerces genevois. Studio digital indépendant, Genève.",
-};
-
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="fr" className={`${hanken.variable} ${instrument.variable}`}>
-      <body>
-        {/* Ordre du <body> de reference/binacore.html (lignes 683-723).
-            CRITIQUE : grain, loader, cursor, nav et menu restent HORS de
-            #smoothWrap > #smooth. Le scroll inertiel applique un translate3d
-            sur #smooth, et un ancetre transforme cree un bloc conteneur qui
-            casse position:fixed — nav et loader defileraient avec la page. */}
-        <div className="grain" aria-hidden="true"></div>
-        <Loader />
-        <Cursor />
-        <Nav />
-        <MenuOverlay />
-        <Interactions />
-        {/* ChatWidget est en position:fixed — il reste HORS du wrapper,
-            pour la meme raison que nav/loader/cursor ci-dessus. */}
-        <ChatWidget />
-        <div id="smoothWrap"><div id="smooth">{children}</div></div>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
