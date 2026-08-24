@@ -155,7 +155,7 @@ export default async function PageAdmin() {
             <th>Nom</th>
             <th>Catégorie</th>
             <th>Type</th>
-            <th>Prix (centimes)</th>
+            <th>Prix (CHF)</th>
             <th>Visible</th>
             <th>Ordre</th>
             <th></th>

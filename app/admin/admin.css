@@ -63,11 +63,14 @@
   white-space: nowrap;
 }
 .admin-tableau tr:last-child td { border-bottom: none; }
-.admin-tableau .num { text-align: right; font-variant-numeric: tabular-nums; }
+/* nowrap : sans lui, le suffixe « .– » passe a la ligne sous le champ de prix
+   et se lit comme une coquille plutot que comme une unite. */
+.admin-tableau .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .admin-tableau .score { color: var(--brass); white-space: nowrap; letter-spacing: 1px; }
 .admin-tableau .date { white-space: nowrap; font-variant-numeric: tabular-nums; }
 .admin-tableau .besoin { max-width: 380px; }
 .admin-tableau .devis { color: rgba(18, 53, 43, .5); font-style: italic; }
+.admin-tableau .unite { margin-left: 4px; color: rgba(18, 53, 43, .55); }
 
 .admin a { color: var(--pine); text-decoration: underline; text-underline-offset: 2px; }
 .admin a:hover { color: var(--brass); }
@@ -82,7 +85,7 @@
   border-radius: 3px;
   padding: 4px 6px;
 }
-.admin input[type="number"] { width: 92px; text-align: right; }
+.admin input[type="number"] { width: 78px; text-align: right; }
 .admin input:disabled { opacity: .5; }
 
 .admin button {

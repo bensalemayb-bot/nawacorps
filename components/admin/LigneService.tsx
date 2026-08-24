@@ -18,6 +18,13 @@ import { useState } from "react";
  * priceType s affiche sans etre modifiable ici : le changer relevé d une
  * decision de catalogue, pas d un ajustement courant, et il commande la
  * coherence du prix.
+ *
+ * SAISIE EN FRANCS, STOCKAGE EN CENTIMES. La base garde des centimes — c est
+ * la bonne unite pour de l argent, elle evite les flottants. Mais personne ne
+ * pense en centimes : taper 45000 pour 450.– invite a la faute d un zero, et
+ * une faute d un zero, c est un prix multiplie ou divise par dix sur le site
+ * public. La conversion se fait donc ICI, au bord de l interface, et la valeur
+ * affichee est celle que le commercant a en tete.
  */
 
 type Service = {
@@ -30,8 +37,12 @@ type Service = {
   sortOrder: number;
 };
 
+/** Centimes -> francs, pour l affichage. 45000 -> "450" ; 4900 -> "49". */
+const enFrancs = (cents: number | null): string =>
+  cents === null ? "" : String(cents / 100);
+
 export default function LigneService({ service }: { service: Service }) {
-  const [prix, setPrix] = useState(service.priceCents ?? "");
+  const [prix, setPrix] = useState(enFrancs(service.priceCents));
   const [visible, setVisible] = useState(service.visible);
   const [ordre, setOrdre] = useState(service.sortOrder);
   const [etat, setEtat] = useState<"" | "ok" | "ko">("");
@@ -46,7 +57,9 @@ export default function LigneService({ service }: { service: Service }) {
       const corps: Record<string, unknown> = { visible, sortOrder: Number(ordre) };
       // On n envoie le prix que s il peut exister : sur devis, le serveur le
       // remettrait a null de toute facon.
-      if (!surDevis) corps.priceCents = prix === "" ? null : Number(prix);
+      // Math.round APRES la multiplication : 49.9 * 100 vaut 4989.999... en
+      // flottant, et un troncage rendrait 4989 au lieu de 4990.
+      if (!surDevis) corps.priceCents = prix === "" ? null : Math.round(Number(prix) * 100);
 
       const res = await fetch(`/api/admin/services/${service.id}`, {
         method: "PATCH",
@@ -70,15 +83,18 @@ export default function LigneService({ service }: { service: Service }) {
         {surDevis ? (
           <span className="devis">sur devis</span>
         ) : (
-          <input
-            type="number"
-            min={0}
-            step={100}
-            value={prix}
-            onChange={(e) => setPrix(e.target.value)}
-            disabled={envoi}
-            aria-label={`Prix en centimes de ${service.name}`}
-          />
+          <>
+            <input
+              type="number"
+              min={0}
+              step={1}
+              value={prix}
+              onChange={(e) => setPrix(e.target.value)}
+              disabled={envoi}
+              aria-label={`Prix en francs de ${service.name}`}
+            />
+            <span className="unite">.–</span>
+          </>
         )}
       </td>
       <td>
