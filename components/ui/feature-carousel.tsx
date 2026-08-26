@@ -498,21 +498,44 @@ export function FeatureCarousel({ items = ITEMS }: { items?: CarouselItem[] }) {
 
       {/* pile de cartes */}
       <div className="car2-right">
-        <div className="stack">
-          {items.map((item, i) => {
-            const w = normDist(i, idx, LEN);
-            const status =
-              w === 0 ? "active" : w === -1 ? "prev" : w === 1 ? "next" : "hidden";
-            return (
-              <div key={item.id} className="pcard" data-status={status}>
-                <BeforeAfter
-                  before={item.before}
-                  after={item.after}
-                  teaser={i === 0}
-                />
-              </div>
-            );
-          })}
+        {/* .car2-scene enveloppe la pile ET les fleches : c'est ce qui permet
+            aux fleches de se centrer sur la CARTE. Posees dans .car2-right,
+            elles se seraient centrees sur le panneau entier, .car2-meta
+            comprise, donc visiblement trop bas. */}
+        <div className="car2-scene">
+          <div className="stack">
+            {items.map((item, i) => {
+              const w = normDist(i, idx, LEN);
+              const status =
+                w === 0 ? "active" : w === -1 ? "prev" : w === 1 ? "next" : "hidden";
+              return (
+                <div key={item.id} className="pcard" data-status={status}>
+                  <BeforeAfter
+                    before={item.before}
+                    after={item.after}
+                    teaser={i === 0}
+                  />
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="car2-nav">
+            <button
+              className="car-btn prev"
+              aria-label="Projet précédent"
+              onClick={() => goTo(idx - 1)}
+            >
+              ←
+            </button>
+            <button
+              className="car-btn next"
+              aria-label="Projet suivant"
+              onClick={() => goTo(idx + 1)}
+            >
+              →
+            </button>
+          </div>
         </div>
 
         <div className="car2-meta">
@@ -522,10 +545,6 @@ export function FeatureCarousel({ items = ITEMS }: { items?: CarouselItem[] }) {
           <p className="car2-desc" style={{ opacity: descVisible ? 1 : 0 }}>
             {desc}
           </p>
-          <div className="car2-nav">
-            <button className="car-btn" aria-label="Projet précédent" onClick={() => goTo(idx - 1)}>←</button>
-            <button className="car-btn" aria-label="Projet suivant" onClick={() => goTo(idx + 1)}>→</button>
-          </div>
         </div>
       </div>
     </div>

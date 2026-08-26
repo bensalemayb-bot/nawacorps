@@ -571,14 +571,30 @@ html.menu-open .nav-time,html.menu-open .nav-r a{opacity:0;pointer-events:none}
 .car2-right{flex:1;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;
   padding:clamp(22px,4vw,54px);
   background:radial-gradient(700px 420px at 80% 0%, rgba(169,138,69,.08), transparent 60%),var(--bone-2)}
-.stack{position:relative;width:min(460px,100%);aspect-ratio:4/5;max-height:560px}
+/* La scene : elle porte la pile ET les fleches, pour que celles-ci se centrent
+   sur la CARTE et non sur le panneau entier (qui inclut .car2-meta dessous,
+   ce qui les descendrait sous le vrai milieu). */
+.car2-scene{position:relative;width:100%;display:flex;align-items:center;justify-content:center}
+/* Retrecie volontairement : c'est ce retrait qui degage la place ou les cartes
+   precedente et suivante viennent depasser. A 100%, elles etaient rognees par
+   l'overflow:hidden de .car2. */
+/* 66% et pas davantage. Condition de non-rognage, pour un decalage d et une
+   echelle s : largeurCarte / largeurPanneau <= 0.5 / (d + s/2).
+   Ici 0.5 / (0.34 + 0.41) = 0.667. Au-dela, la carte laterale sort du cadre et
+   l'overflow:hidden de .car2 la tranche net. */
+.stack{position:relative;width:min(440px,66%);aspect-ratio:4/5;max-height:560px}
 .pcard{position:absolute;inset:0;border-radius:22px;overflow:hidden;
   border:1px solid var(--line);background:var(--bone-2);
   box-shadow:0 30px 70px rgba(18,26,18,.18);will-change:transform;
   transition:transform .7s cubic-bezier(.3,1.22,.5,1),opacity .5s,filter .5s}
 .pcard[data-status="active"]{transform:none;opacity:1;z-index:20}
-.pcard[data-status="prev"]{transform:translateX(-11%) scale(.86) rotate(-3deg);opacity:.35;z-index:10;filter:blur(2px) saturate(.7);pointer-events:none}
-.pcard[data-status="next"]{transform:translateX(11%) scale(.86) rotate(3deg);opacity:.35;z-index:10;filter:blur(2px) saturate(.7);pointer-events:none}
+/* 34% de decalage pour 82% d'echelle : le bord de la carte laterale ressort
+   alors de ~25% de sa largeur au-dela de la carte active. A 11%/86%, le
+   depassement n'etait que de ~4% — les deux voisines existaient bien, mais
+   restaient cachees DERRIERE l'active. Opacite et flou relaches d'autant :
+   il faut qu'on lise l'image, pas seulement qu'on devine une forme. */
+.pcard[data-status="prev"]{transform:translateX(-34%) scale(.82) rotate(-2.5deg);opacity:.5;z-index:10;filter:blur(1.4px) saturate(.75);pointer-events:none}
+.pcard[data-status="next"]{transform:translateX(34%) scale(.82) rotate(2.5deg);opacity:.5;z-index:10;filter:blur(1.4px) saturate(.75);pointer-events:none}
 .pcard[data-status="hidden"]{transform:scale(.72);opacity:0;z-index:0;pointer-events:none}
 .ba.fill{position:absolute;inset:0;aspect-ratio:auto;max-height:none;border-radius:0;box-shadow:none}
 .ba.fill .ba-layer{padding:clamp(12px,3vw,30px)}
@@ -592,8 +608,25 @@ html.menu-open .nav-time,html.menu-open .nav-r a{opacity:0;pointer-events:none}
 .idx-chip{font-size:.62rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;
   border:1px solid var(--line);border-radius:999px;padding:.6em 1.1em;color:var(--ink);background:var(--bone);white-space:nowrap}
 .car2-desc{flex:1;min-width:200px;font-size:.9rem;color:var(--muted);line-height:1.5;transition:opacity .25s}
-.car2-nav{display:flex;gap:8px;margin-left:auto}
-.car2-nav .car-btn{width:42px;height:42px;font-size:.95rem}
+/* Fleches : une de chaque cote, a mi-hauteur de la carte.
+   Le conteneur couvre toute la scene mais laisse passer le pointeur — sinon il
+   masquerait la poignee du comparateur avant/apres, qui se glisse justement au
+   milieu de la carte. Seuls les deux boutons captent le clic. */
+.car2-nav{position:absolute;inset:0;z-index:30;pointer-events:none;margin:0}
+.car2-nav .car-btn{
+  position:absolute;top:50%;
+  /* `translate` est une propriete distincte de `transform` : le centrage
+     survit donc au :hover et a toute transformation ulterieure. */
+  translate:0 -50%;
+  pointer-events:auto;
+  width:52px;height:52px;font-size:1.02rem;
+  background:rgba(250,248,242,.86);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  box-shadow:0 6px 22px rgba(18,26,18,.12);
+}
+.car2-nav .car-btn.prev{left:0}
+.car2-nav .car-btn.next{right:0}
+.car2-nav .car-btn:hover{background:var(--ink);color:var(--bone)}
 @media(max-width:900px){
   .car2{flex-direction:column;min-height:0}
   .car2-left{width:100%;height:190px}
@@ -602,8 +635,14 @@ html.menu-open .nav-time,html.menu-open .nav-r a{opacity:0;pointer-events:none}
   .car2-list .chip{margin-top:-24px;height:48px}
   .car2-toggle{display:none}
   .car2-right{padding:22px 16px 26px}
-  .stack{max-height:none}
-  .car2-nav{margin-left:0}
+  /* Sur telephone on relache le decalage plutot que de retrecir la carte :
+     a 66% d'un panneau deja etroit, l'active deviendrait illisible. Avec
+     d=0.26 et s=0.84, la limite remonte a 0.5/(0.26+0.42) = 0.735, donc 70%
+     passe sans rognage — et la carte gagne en surface. */
+  .stack{width:min(440px,70%);max-height:none}
+  .pcard[data-status="prev"]{transform:translateX(-26%) scale(.84) rotate(-2deg)}
+  .pcard[data-status="next"]{transform:translateX(26%) scale(.84) rotate(2deg)}
+  .car2-nav .car-btn{width:44px;height:44px;font-size:.92rem}
 }
 
 /* ----- mockups AVANT ----- */
