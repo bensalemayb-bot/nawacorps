@@ -1,0 +1,370 @@
+================================================================================
+BLOC B11 — ADMINISTRATION PRIVEE (auth + leads + services)
+================================================================================
+Depot   : binacore v2
+Branche : master
+Commits : a08a713  refactor: route group (site) pour isoler le chrome public
+          72cf652  B11: administration (auth + leads + services)
+Base au depart du bloc : 2b946a7 (B10b)
+Arbre   : propre (seul ce fichier de livraison est non suivi)
+
+
+--------------------------------------------------------------------------------
+0. PRE-CHECK
+--------------------------------------------------------------------------------
+livraison-b10.txt      absent de la racine — rien a supprimer
+git status             propre
+dev                    GET / -> 200
+db                     binacorev2-db-1  Up (healthy)
+
+git log --oneline -5 au demarrage :
+  2b946a7 B10b: fournisseur LLM commutable (gemini|groq)
+  09407d2 fix: finalize idempotent sous concurrence (P2002)
+  6ea3c4d B10: finalisation des conversations en leads scores
+  565d43a B9: gemini-3.5-flash + plafond de sortie desserre a 800
+  89516bd B9: bascule sur gemini-2.5-flash, reglage de reflexion porte par le modele
+
+Ce que montait le layout racine avant le bloc :
+  .grain · Loader · Cursor · Nav · MenuOverlay · Interactions · ChatWidget
+  #smoothWrap > #smooth · 2 polices (Hanken_Grotesk, Instrument_Serif)
+  4 CSS (globals, binacore, chat, fonts) · metadata du site public
+
+
+--------------------------------------------------------------------------------
+1. REFACTOR ROUTE GROUP   (commit a08a713)
+--------------------------------------------------------------------------------
+app/(site)/layout.tsx recoit l integralite du chrome public.
+Le layout racine se reduit a html/body + polices + CSS globaux.
+Les 3 pages publiques sont descendues dans (site).
+
+URLs — un route group n affecte pas les chemins :
+  /                  200
+  /mentions-legales  200
+  /confidentialite   200
+  /site              404      le groupe n est pas un segment d URL
+  /(site)            404
+
+Deplacement pur, atteste par git :
+  R100  app/page.tsx                  -> app/(site)/page.tsx
+  R100  app/confidentialite/page.tsx  -> app/(site)/confidentialite/page.tsx
+  R100  app/mentions-legales/page.tsx -> app/(site)/mentions-legales/page.tsx
+  (R100 = 100% de similarite, zero ligne modifiee)
+
+Preuve de rendu, plus exigeante que la precedente : HTML de / capture avant et
+apres, compare structurellement (balises, id, class), scripts HMR du mode dev
+retires puisque leurs URL changent a chaque compilation.
+  AVANT : 599 elements structurels
+  APRES : 599 elements structurels
+  => STRICTEMENT IDENTIQUES, ordre compris
+L ecart brut de 3032 octets etait entierement du a ces scripts.
+
+
+--------------------------------------------------------------------------------
+2. TENSIONS RENCONTREES
+--------------------------------------------------------------------------------
+
+TENSION 1 — signalee en STOP, GO obtenu.  eslint passe de 0 a 1 apres le
+deplacement des pages.
+
+  Cause : eslint.config.mjs portait une exception ciblee (decision B7)
+  designant les deux pages legales PAR CHEMIN LITTERAL. Le deplacement a rendu
+  la liste caduque, donc la regle no-html-link-for-pages s est reveillee. Les
+  fichiers eux-memes sont R100 : rien dans leur contenu n avait bouge.
+
+  La correction evidente aurait ete doublement fausse. Remplacer <a href="/">
+  par <Link> casserait les reveals — Interactions ne s execute qu une fois et
+  une navigation client ne le relance pas, c est precisement ce que dit la
+  decision B7 — et modifierait des fichiers que le commit s engageait a
+  seulement deplacer.
+
+  Retenu apres GO : deux chemins mis a jour dans eslint.config.mjs. Meme regle,
+  memes fichiers, meme portee. Seule l adresse change.
+
+TENSION 2 — resolue seul, signalee ici.  La preuve reine (E) ne donnait pas 0.
+
+  PATCH la-carte visible=false faisait passer « La Carte » de 5 a 3 occurrences
+  dans le HTML public, pas a 0. Je n ai pas conclu sur ce chiffre.
+
+  Cause : les 3 restantes viennent d UNE chaine ecrite en dur,
+  components/Offres.tsx:68 -> "La Carte + Le Site", un point de la formule Pack
+  Complet, deja presente dans reference/binacore.html. Le triple comptage vient
+  du HTML plus la charge RSC serialisee : un seul contenu reel.
+
+  La mesure a donc ete refaite sur ce qui vient VRAIMENT du catalogue (voir
+  preuve E). Le grep naif mesurait la maquette, pas la base.
+
+TENSION 3 — outillage, sans effet sur le livrable.  Deux echecs de parsing bash
+  sur du contenu accentue riche en apostrophes m ont fait basculer l ecriture
+  des fichiers TSX/CSS sur l outil d ecriture directe. Aucun impact sur le code.
+
+FAUTE DE METHODE CORRIGEE EN COURS DE ROUTE — « npx tsc | tail ; echo $? »
+  lisait le code de sortie de tail, pas celui de tsc. Tous les relevés de ce
+  bloc utilisent desormais une capture separee du code reel. La conclusion des
+  releves precedents restait juste (aucune ligne d erreur affichee), mais la
+  mesure etait fausse.
+
+
+--------------------------------------------------------------------------------
+3. DECISIONS PRISES SEUL
+--------------------------------------------------------------------------------
+
+AUTH
+  · Cookie « expiration.HMAC-SHA256 » : aucun secret dedans. Qui le lit apprend
+    quand il expire, rien d autre, et ne peut pas en forger un sans ADMIN_SECRET.
+  · Signature verifiee AVANT l expiration. L inverse accorderait du credit a une
+    date non signee.
+  · timingSafeEqual sur les empreintes SHA-256 et non sur les chaines brutes :
+    il exige deux tampons de meme longueur et jette sinon, ce qui ferait de la
+    longueur du mot de passe un oracle. Les empreintes font 32 octets quoi qu il
+    arrive.
+  · ADMIN_PASSWORD absent => login TOUJOURS refuse. Une configuration incomplete
+    doit fermer la porte, jamais l ouvrir.
+  · secure uniquement en production : l exiger en dev interdirait localhost.
+  · sameSite lax : coupe le CSRF sur les PATCH, laisse fonctionner l arrivee par
+    un lien.
+
+LOGIN
+  · Debit AVANT verification du mot de passe (acquis B8).
+  · Le jeton est consomme meme quand le mot de passe est BON : ne decompter que
+    les echecs revelerait, par le fait meme de ne pas etre compte, qu un mot de
+    passe etait juste.
+  · Reponse d echec uniforme, sans distinguer « mot de passe faux » de
+    « administration non configuree ». L interface ne rattrape pas cette
+    discretion — sauf pour le 429, qu il faut bien expliquer a la personne
+    legitime.
+
+LOGOUT
+  · Pas de garde requireAdmin. Exiger d etre connecte pour se deconnecter
+    enfermerait un porteur de cookie expire dans un etat sans issue.
+
+CATALOGUE
+  · Coherence sur le priceType FINAL, pas sur celui envoye : le type peut venir
+    de la requete OU rester celui de la base. Ne regarder que le corps
+    laisserait poser un prix sur un service deja QUOTE — et ce prix remonterait
+    dans le prompt du chatbot, qui n a le droit de citer que des montants du
+    catalogue.
+  · Champ prix DESACTIVE dans l interface sur un service sur devis : le serveur
+    l effacerait de toute facon, et une interface ne doit pas proposer un geste
+    sans effet.
+  · priceType affiche mais non modifiable : c est une decision de catalogue, pas
+    un ajustement courant, et il commande la coherence du prix.
+
+INTERFACE
+  · Statut d un lead : envoi AU CHANGEMENT, sans bouton. Une valeur unique,
+    choisie d un geste.
+  · Service : bouton PAR LIGNE. Trois champs modifies un a un enverraient trois
+    requetes pour une seule intention.
+  · En cas d echec, la valeur revient en arriere. Laisser le nouveau statut
+    affiche apres un refus ferait traiter un lead comme contacte alors qu il ne
+    l est pas.
+  · Les composants clients sont les plus petits possibles : la page reste un
+    Server Component, seules les cellules qui modifient savent cliquer.
+  · force-dynamic sur /admin, et ce n est pas decoratif : sans lui, une page
+    rendue pendant une session pourrait etre resservie apres la deconnexion.
+  · Redirection pour les pages, 401 pour les APIs. Chacune son registre.
+  · Numero suisse -> wa.me : le 0 initial CEDE la place a 41, il ne s y ajoute
+    pas (0041... ne fonctionnerait pas). Hypothese assumee : numeros suisses.
+
+ZERO DEPENDANCE NOUVELLE
+  next-auth apporterait OAuth, une base de sessions et un modele d utilisateurs
+  pour une personne et un mot de passe. bcrypt sert a stocker un hache en base,
+  or le mot de passe ne va jamais en base — hacher ce qu on ne stocke pas
+  n ajoute rien.
+
+
+--------------------------------------------------------------------------------
+4. PREUVES A-H
+--------------------------------------------------------------------------------
+Lead de test cree par le VRAI /api/contact (cmt7bxept0001kkg9m19b4dzu,
+source FORM, status NEW), supprime a la fin.
+
+(A) SANS COOKIE
+    GET /admin                      HTTP/1.1 307 Temporary Redirect
+                                    location: /admin/login
+    PATCH /api/admin/leads/[id]     401  {"error":"Non autorise."}
+    PATCH /api/admin/services/[id]  401  {"error":"Non autorise."}
+    statut du lead apres            NEW  (inchange)
+
+(B) DEBIT DU LOGIN     jetons login avant : 0
+    tentative 1  401  {"error":"Identifiants refuses."}
+    tentative 2  401
+    tentative 3  401
+    tentative 4  401
+    tentative 5  401
+    tentative 6  429  {"error":"Trop de tentatives, reessayez plus tard."}
+    jetons consommes : 5 — la 6e est refusee AVANT d en prendre un
+    seed nettoye ensuite : jetons login = 0 (verifie)
+
+(C) LOGIN CORRECT     mot de passe lu depuis .env, jamais affiche
+    HTTP/1.1 200 OK
+    set-cookie: admin_session=1787668146501.<signature masquee>; Path=/;
+                Expires=Tue, 25 Aug 2026 14:29:06 GMT; Max-Age=86400;
+                HttpOnly; SameSite=lax
+    (pas de Secure : voulu hors production)
+    GET /admin -> 200, contenu rendu :
+      Administration · Leads · Services · Test B11 · 079 555 00 11
+      La Carte · Se deconnecter
+
+(D) STATUT     PATCH {"status":"CONTACTED"} -> 200
+    SQL avant  : cmt7bxept0001kkg9m19b4dzu | Test B11 | NEW
+    SQL apres  : cmt7bxept0001kkg9m19b4dzu | Test B11 | CONTACTED
+
+(E) PREUVE REINE — le site public suit l administration, sans redeploiement
+    Mesure au catalogue et non au grep naif (voir tension 2) :
+
+      etat            « La Carte » du catalogue     prix 450.–
+      initial                    2                      1
+      visible=false              0                      0
+      visible=true               2                      1
+
+    La chaine en dur « La Carte + Le Site » reste a 3 tout du long : elle ne
+    vient pas du catalogue, et pour cause.
+    Etat final en base : la-carte FIXED 45000 visible=t sortOrder=1
+
+(F) COHERENCE SUR DEVIS
+    site-sur-mesure avant  : QUOTE, priceCents NULL
+    PATCH {"priceCents":99900} -> 200
+    reponse API            : "priceType":"QUOTE","priceCents":null
+    SQL apres              : QUOTE, priceCents NULL  -> coherence tenue
+
+(G) DECONNEXION
+    /admin avant logout             200
+    POST /api/admin/logout          200
+      set-cookie: admin_session=; Path=/; Max-Age=0; HttpOnly; SameSite=lax
+    /admin apres logout             307  location: /admin/login
+    PATCH apres logout              401
+
+(H) NOINDEX
+    GET /admin/login                200
+    <meta name="robots" content="noindex, nofollow">
+    <title>Administration — Binacore</title>
+
+
+--------------------------------------------------------------------------------
+4bis. PREUVES D INTERFACE  (I-K) — ajoutees apres coup
+--------------------------------------------------------------------------------
+LACUNE CONSTATEE ET COMBLEE. Les preuves A-H passaient TOUTES par curl. Elles
+attestaient les APIs et le rendu serveur, mais AUCUN des trois composants
+clients n avait jamais ete exerce : le selecteur de statut, le bouton
+d enregistrement par ligne et la deconnexion. Un formulaire peut rendre
+parfaitement et ne rien envoyer. Refait dans un vrai Chrome, au clavier et a la
+souris, avec deux leads crees par le vrai /api/contact.
+
+(I) FORMULAIRE DE CONNEXION
+    GET /admin dans le navigateur -> redirection effective vers /admin/login
+    Chrome public dans le DOM VIVANT (et non dans la chaine HTML) :
+      nav 0 · #smoothWrap absent · .chat-fab absent · .grain absent
+    mauvais mot de passe, frappe au clavier -> « Mot de passe refuse. »
+      affiche avec role="alert", on reste sur /admin/login
+    bon mot de passe -> /admin, tableaux rendus :
+      Leads (2) · Services (14)
+    La ligne QUOTE « Site multi-pages / sur-mesure » affiche « sur devis » en
+    italique SANS champ de prix : la coherence se voit dans l interface, pas
+    seulement dans le serveur.
+
+(J) SELECTEUR DE STATUT  (composant client -> PATCH)
+    Selection de CONTACTED sur Claire Fontaine dans l interface
+    SQL apres : Claire Fontaine CONTACTED · Marc Oliveira NEW (intact)
+    retour visuel : <span class="etat ok">enregistre</span>
+
+(K) ENREGISTREMENT D UN SERVICE  (composant client -> PATCH -> site public)
+    La boucle entiere, depuis le clavier :
+      saisie de 49000 dans le champ prix de « La Carte », clic « Enregistrer »
+      -> base   : la-carte FIXED 49000
+      -> public : 450.– disparait (0 occurrence), 490.– apparait (1)
+    puis restauration -> 450.– de retour (1), 490.– absent (0)
+
+(L) DECONNEXION  (composant client)
+    clic sur « Se deconnecter » -> /admin/login
+    tableaux disparus de l ecran, formulaire de connexion rendu
+    document.cookie ne contient PAS admin_session : httpOnly confirme depuis le
+    navigateur lui-meme, et non plus seulement par l en-tete Set-Cookie.
+
+Nettoyage apres coup : 2 leads et 4 jetons supprimes, prix de La Carte remis a
+45000, site public verifie de retour a 450.–.
+
+
+--------------------------------------------------------------------------------
+5. ISOLATION DU CHROME  (le point architectural du bloc)
+--------------------------------------------------------------------------------
+Presence des marqueurs, site public contre /admin :
+
+    marqueur            /      /admin
+    class="grain"       1        0
+    id="smoothWrap"     1        0
+    id="smooth"         1        0
+    <nav                2        0
+    chat-fab            1        0
+    loader              4        0
+
+admin.css ne fuit pas dans le HTML public : 0 occurrence de « admin ».
+binacore.css et reference/ intouches — git diff depuis 2b946a7 : vide.
+
+
+--------------------------------------------------------------------------------
+6. ETAT FINAL
+--------------------------------------------------------------------------------
+eslint            exit 0
+tsc --noEmit      exit 0
+npm run build     exit 0
+
+Routes construites :
+  f /                        f /admin                  o /admin/login
+  f /api/admin/leads/[id]    f /api/admin/login        f /api/admin/logout
+  f /api/admin/services/[id] f /api/chat               f /api/chat/finalize
+  f /api/contact             o /confidentialite        o /mentions-legales
+  o /_not-found
+  (f = rendu a la demande, o = statique)
+
+Base de donnees, apres nettoyage :
+  Lead 0 · Conversation 0 · RateLimit 0 · Service 14 (catalogue intact)
+
+Secrets — aucun dans les fichiers suivis ni dans l historique git :
+  variable               suivis   historique   .env.example
+  DB_PASSWORD                 0            0           VIDE
+  IP_HASH_SALT                0            0           VIDE
+  TELEGRAM_BOT_TOKEN          0            0           VIDE
+  GEMINI_API_KEY              0            0           VIDE
+  GROQ_API_KEY                0            0           VIDE
+  ADMIN_PASSWORD              0            0           VIDE
+  ADMIN_SECRET                0            0           VIDE
+.env reste ignore par git (.gitignore:34 -> .env*).
+
+
+--------------------------------------------------------------------------------
+7. A FAIRE DE TON COTE
+--------------------------------------------------------------------------------
+1. MOT DE PASSE ACTUEL : ayoub1203   (choisi par l utilisateur)
+   Verifie : l ancien rend 401, celui-ci rend 200 et ouvre /admin.
+
+   Historique : la toute premiere valeur etait generee au hasard et n avait
+   jamais ete affichee — donc personne ne la connaissait, et l administration
+   etait inutilisable. Livrer une porte dont personne n a la clef n est pas une
+   livraison. Une valeur de developpement connue l a remplacee, ce qui a aussi
+   permis de tester le formulaire au clavier (preuves I-L), puis l utilisateur
+   a choisi celle-ci.
+
+   RESERVE, a peser AVANT la mise en ligne : « ayoub1203 » est court, sans
+   majuscule ni symbole, et construit sur un prenom — exactement la forme que
+   les attaques par dictionnaire essaient en premier. Le debit de 5 tentatives
+   par heure et par IP ralentit beaucoup une attaque en ligne, mais il ne la
+   rend pas impossible, et il ne protege pas d une personne qui connait Ayoub.
+   Tant que le site tourne en local, c est sans consequence. En ligne, c est le
+   seul verrou de toute l administration.
+
+   Pour le changer : une ligne dans .env, section « Administration (bloc B11) » :
+     ADMIN_PASSWORD=tonmotdepasse
+   Sans guillemets, sans espace autour du =. Puis redemarrer le serveur : .env
+   n est lu qu au demarrage.
+
+2. NE TOUCHE PAS A ADMIN_SECRET sans raison. Le changer invalide toutes les
+   sessions ouvertes — c est d ailleurs le moyen de deconnecter tout le monde
+   d un coup.
+
+3. AVANT LA MISE EN LIGNE, revoquer la cle GROQ (reste du bloc B10b) : elle est
+   passee dans la conversation. console.groq.com/keys. Le depot est propre
+   (0 occurrence partout, tableau ci-dessus), mais cela ne rattrape pas la
+   transcription. Reporte a la mise en ligne a ta demande.
+
+Acces : http://localhost:3000/admin   —   mot de passe : ayoub1203
+================================================================================

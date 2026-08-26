@@ -1,0 +1,357 @@
+================================================================================
+BLOC BR — REBRANDING NAWA CORPS
+================================================================================
+Depot   : binacore v2
+Branche : master
+Commits : b42fd8f  BR: rebranding Nawa Corps (visible uniquement)
+          6027c4c  BR: logo icone + nom dans la nav et sur l ecran de chargement
+Base    : 9016062  fix(admin): prix saisis en francs, plus en centimes
+Arbre   : propre (seuls les deux fichiers de livraison sont non suivis)
+Slogan  : « L'essentiel. Bien conçu. »
+
+
+--------------------------------------------------------------------------------
+0. LOCALISATION DES LOGOS
+--------------------------------------------------------------------------------
+CHEMIN TROUVE : C:/Users/bensa/OneDrive/Desktop/binacore v2/logo nawa
+(a la racine du projet ; ni Bureau, ni Telechargements)
+
+Contenu au depart : 10 PNG, soit les 8 attendus PLUS deux copies surnumeraires.
+
+  favicon-512.png                                  85 975
+  favicon-64.png                                    4 149
+  nawa-corps-icone-simple-transparent.png          21 485
+  nawa-corps-logo-avec-slogan-transparent.png     113 957
+  nawa-corps-logo-fond-fonce-transparent.png      164 115
+  nawa-corps-logo-horizontal-transparent.png      129 727
+  nawa-corps-logo-horizontal-transparent (1).png  129 727   <- surnumeraire
+  nawa-corps-logo-horizontal-transparent (2).png  129 727   <- surnumeraire
+  nawa-corps-logo-iconique-transparent.png         59 204
+  nawa-corps-logo-principal-transparent.png        73 882
+
+AUCUN RENOMMAGE. La consigne prevoyait de renommer un suffixe « (1) » vers le
+nom attendu — mais ce nom EXISTAIT DEJA, et renommer l aurait ecrase. Verifie
+avant de trancher, empreintes SHA-256 des trois variantes horizontales :
+
+  0b78ae9d3d8447c73e60aa2e94a69909f60d1208b5dc29e34474d20e13c2b550  (canonique)
+  0b78ae9d3d8447c73e60aa2e94a69909f60d1208b5dc29e34474d20e13c2b550  (1)
+  0b78ae9d3d8447c73e60aa2e94a69909f60d1208b5dc29e34474d20e13c2b550  (2)
+
+Identiques au bit pres : de purs doublons de telechargement, ecartes sans
+aucune perte de contenu. AUCUN FICHIER NE MANQUAIT, donc pas de STOP.
+
+Les 8 attendus sont DEPLACES (et non copies) vers reference/brand/, puis
+copies vers public/brand/. Le dossier « logo nawa », vide, est supprime.
+
+reference/brand/ — dimensions lues dans l en-tete PNG :
+
+  fichier                                        largeur hauteur ratio
+  favicon-512.png                                    512     512  1.00
+  favicon-64.png                                      64      64  1.00
+  nawa-corps-icone-simple-transparent.png            126     163  0.77
+  nawa-corps-logo-avec-slogan-transparent.png        625     152  4.11
+  nawa-corps-logo-fond-fonce-transparent.png         730     240  3.04
+  nawa-corps-logo-horizontal-transparent.png         681     168  4.05
+  nawa-corps-logo-iconique-transparent.png           230     230  1.00
+  nawa-corps-logo-principal-transparent.png          634      90  7.04
+
+INCIDENT MINEUR, resolu : rmdir a d abord echoue en « Device or resource busy ».
+Cause trouvee et non contournee — j avais fait cd DANS ce dossier pour calculer
+les empreintes, et mon propre shell l y retenait. Sorti, puis supprime.
+
+
+--------------------------------------------------------------------------------
+1. PRE-CHECK
+--------------------------------------------------------------------------------
+git propre        oui (seul livraison-b11.txt non suivi)
+dev               / · /mentions-legales · /confidentialite · /admin/login = 200
+reference/brand/  8 PNG apres l etape 0
+
+PREMIER PASSAGE : ABORT. reference/brand/ n existait pas, et la recherche large
+ne trouvait AUCUN fichier .png dans tout le projet. La cartographie a tout de
+meme ete produite — lecture seule, rien de perdu — puis l etape 0 a debloque.
+
+
+--------------------------------------------------------------------------------
+2. CARTOGRAPHIE ET TRAITEMENT — 53 occurrences
+--------------------------------------------------------------------------------
+
+### REMPLACEES — texte vu par un humain (19)
+
+  app/(site)/layout.tsx:28              title -> « Nawa Corps — Studio digital, Genève »
+  app/(site)/layout.tsx:30              description
+  app/(site)/mentions-legales:26        title
+  app/(site)/mentions-legales:35        <span class="meta">
+  app/(site)/mentions-legales:40        Editeur + e-mail
+  app/(site)/mentions-legales:44        © Nawa Corps
+  app/(site)/confidentialite:16         title
+  app/(site)/confidentialite:25         <span class="meta"> · nLPD
+  app/(site)/confidentialite:39         e-mail
+  app/admin/layout.tsx:19               title
+  app/admin/login/page.tsx:58           « Nawa Corps — accès réservé »
+  components/Nav.tsx:14                 wordmark texte -> LOGO (voir section 3)
+  components/Loader.tsx:6               « Binacore^GE » -> « Nawa Corps »
+  components/FooterContact.tsx:32       e-mail
+  components/FooterContact.tsx:46       © 2026 Nawa Corps
+  components/FooterContact.tsx:49       geant « BINACORE » -> « NAWA CORPS »
+  components/Studio.tsx:15              « Nawa Corps est le studio d'Ayoub… »
+  components/Faq.tsx:25                 « Nawa Corps. Domaine et hébergement… »
+  components/MenuOverlay.tsx:20         e-mail
+  components/ui/feature-carousel.tsx:232  wm -> « Nawa Corps »
+  components/ui/feature-carousel.tsx:242  MAIL -> hello@nawacorps.ch
+  components/ui/feature-carousel.tsx:243  WEB  -> nawacorps.ch
+
+  Plus lib/chat-prompt.ts:13 — COMMENTAIRE seul. Verifie : le prompt du bot
+  disait DEJA « Nawa Corps » depuis B9. Seule la note annoncant « un bloc de
+  rebranding global viendra » est mise a jour, ce bloc ayant eu lieu.
+
+### INTOUCHEES ET JUSTIFIEES (34)
+
+  18  renvois « reference/binacore.html lignes N » dans les en-tetes de
+      composants. Les reecrire rendrait les references FAUSSES : le fichier
+      d archive s appelle bien binacore.html et ne sera pas renomme.
+
+  14  le nom du fichier app/binacore.css et ses imports. C est un identifiant
+      technique, au meme titre que le nom de la base ou des containers. Le
+      renommer, c est du risque sans contrepartie — regle de perimetre.
+
+   2  commentaires internes de feature-carousel.tsx (lignes 3 et 186). Ta
+      consigne : « UNIQUEMENT les 3 chaines visibles », « aucun commentaire ».
+      Ils sont invisibles pour un utilisateur.
+
+  Egalement intouches : reference/ (archive historique), les commits passes,
+  le nom npm, les containers Docker, la base, les slugs de services.
+
+
+--------------------------------------------------------------------------------
+3. ARBITRAGES SOUMIS — les trois ont recu un GO
+--------------------------------------------------------------------------------
+
+### 3.1 LOGO DE LA NAV : « principal » et non « horizontal »
+
+La sp&ecirc;c demandait l horizontal. Implemente, puis CAPTURE : a 30px de haut, la
+ligne de slogan qu il embarque tombe a ~4px et devient une bavure grise sous le
+wordmark. Illisible, et donc du bruit plutot qu une information.
+
+RETENU : nawa-corps-logo-principal-transparent.png (634x90), wordmark plein,
+tout est lisible, accent laiton du losange preserve.
+
+HAUTEUR 24px ET NON 30. Le principal n a ni monogramme ni seconde ligne : a
+30px sa hauteur de capitale depassait d une moitie celle du texte remplace
+(1.05rem), et la nav basculait visuellement a gauche. A 24px la capitale fait
+~16px, contre ~12px avant — present sans etre envahissant.
+
+### 3.2 MENU OUVERT : un filtre, pas un second fichier
+
+LE PROBLEME. binacore.css ligne 414 posait
+`html.menu-open .wordmark{color:var(--bone)}` : a l ouverture du menu le fond
+passe au pin et le wordmark s eclaircissait pour rester lisible. UNE IMAGE
+N OBEIT PAS A `color`. Sans traitement, le logo en encre foncee disparaissait
+sur le pin.
+
+CE QUI A ETE ECARTE : basculer vers nawa-corps-logo-fond-fonce (le seul des
+huit qui soit clair sur fond sombre). Ses ratios different — 3.04 contre 7.04
+pour le principal — soit 91px contre 211px a hauteur egale. La nav aurait
+tressailli a CHAQUE clic sur le burger.
+
+RETENU : la MEME image, eclaircie par `filter: brightness(0) invert(1)` sous
+html.menu-open. brightness(0) rend la silhouette noire, invert(1) la retourne
+en blanc : un aplat blanc de la forme exacte du logo.
+
+  Mesure des deux etats : 169px de large, 24px de haut. IDENTIQUES.
+  Aucun decalage de mise en page.
+
+Le prix a payer, signale : l accent laiton du losange passe au blanc lui aussi.
+Faute d une variante claire a fond transparent parmi les huit fichiers, c est
+le compromis le plus propre. Une neuvieme variante « tout blanc sur
+transparent » le reglerait proprement, si tu veux la produire un jour.
+
+### 3.3 FOOTER GEANT : nowrap + 19vw
+
+ENQUETE PLUTOT QUE SUPPOSITION. Premiere mesure : « NAWA CORPS » passait a
+DEUX lignes. Avant de corriger, j ai verifie ce que faisait « BINACORE » :
+
+  BINACORE a 25vw    ->  depassait DEJA de 12,2 %, coupe par overflow:hidden
+
+Le debordement n est donc PAS un defaut a corriger : c est l effet editorial
+d origine, le mot saigne hors cadre. Mais BINACORE est UN SEUL MOT — il ne
+pouvait que deborder. « NAWA CORPS » porte une ESPACE, donc un point de
+coupure : au lieu de saigner, il passait a la ligne et cassait le footer en
+deux.
+
+RETENU : white-space:nowrap, qui lui rend le comportement d un mot unique, et
+19vw qui cale le debordement au niveau d origine. Mesure au Range (et non au
+scrollWidth, qui ne descend jamais sous la largeur du conteneur et faussait le
+releve a 375px) :
+
+  largeur          375px     768px    1440px
+  NAWA CORPS 19vw  +11,5 %  +11,5 %  +11,5 %     une seule ligne
+  BINACORE   25vw  +12,2 %  +12,2 %  +12,2 %     (origine)
+
+  ratio glyphes/police : 5,867 aux trois largeurs — donc invariant
+
+Ecart avec l origine : 0,7 point. Invisible a l oeil.
+
+L ALTERNATIVE STRICTE, soumise : 16,9vw sans nowrap. Le mot tenait dans le
+cadre — mais l effet de debordement disparaissait et le footer changeait
+d allure. nowrap depasse ta consigne « uniquement la taille de police », d ou
+l arbitrage.
+
+BINACORE.CSS : 53 insertions, ZERO SUPPRESSION, verifie par git diff. Tout
+tient dans un bloc /* BR */ ajoute en fin de fichier. Le supprimer rend la
+maquette d avant, a l identique.
+
+### 3.4 SLOGAN : sous le wordmark du footer
+
+RETENU : un <p class="br-slogan"> entre le geant et la bande legale.
+
+Pas dans le hero : celui-ci porte deja sa promesse — « Une presence digitale a
+la hauteur de votre commerce » — et deux formules cote a cote se seraient
+affaiblies l une l autre. En pied de page, le slogan SIGNE ; dans le hero, il
+aurait plaide une seconde fois.
+
+Consequence du choix 3.1 : le logo principal ne portant pas le slogan, cet
+emplacement est le SEUL du site ou il apparait. Cohérent avec « un seul
+endroit sobre ».
+
+
+### 3.5 REPRISE APRES RETOUR — commit 6027c4c
+
+Deux demandes apres la premiere livraison, toutes deux traitees.
+
+ECRAN DE CHARGEMENT. Il affichait encore « Nawa Corps » en TEXTE. .loader porte
+background:var(--pine) : l ecran est VERT — c est bien pour cela que le logo
+n y avait pas encore sa place, en encre foncee il y serait invisible.
+
+  Retenu : le logo, blanchi par le meme filtre qu au menu ouvert. Pas le
+  fichier fond-fonce, dont le rectangle plein laisserait voir ses bords sur
+  l aplat pin.
+
+  LES IMAGES RESTENT DANS LE <span>. C est lui que l animation d origine fait
+  monter (translateY 120% -> 0, ligne 341). Les en sortir aurait casse l entree
+  du preloader. Le <span> passe en flex pour aligner les deux images ; la
+  transformation n est pas touchee.
+
+VERROUILLAGE ICONE + NOM, nav et loader. C est celui de la marque : le logo
+horizontal officiel place le N cercle a gauche du wordmark. Reproduit en DEUX
+fichiers — iconique + principal — plutot qu en reprenant l horizontal, qui
+traine le slogan illisible a cette taille.
+
+  nav     icone 28px  ·  nom 17px  ·  ecart 9px  ·  total 157px
+  loader  icone clamp(44,9vw,72)  ·  nom clamp(26,5.4vw,44)
+
+  L icone depasse le nom en hauteur, comme sur le logo officiel ou le cercle
+  domine la capitale. L inverse donnerait un nom qui ecrase son embleme.
+  L icone porte alt="" : un lecteur d ecran annoncerait sinon deux fois la
+  meme marque. C est le nom qui porte le texte alternatif.
+
+DEFAUT TROUVE EN CHEMIN, que seule la mesure revelait. Passe en display:flex,
+le lien .wordmark mesurait 776px pour 157px de contenu : .nav est une GRILLE,
+et un flex de niveau bloc s y etire sur toute sa colonne — une zone cliquable
+geante et invisible en travers de la barre.
+
+  display:inline-flex ne corrigeait rien, ET SILENCIEUSEMENT : la
+  specification BLOCKIFIE le display des enfants de grille, inline-flex y
+  redevient flex. La feuille disait inline-flex, le style calcule disait flex.
+  Sur un enfant de grille, c est justify-self qui aligne et fit-content qui
+  borne.
+
+  Apres correction : 157px, soit 28 + 9 + 120 exactement. Verifie dans les
+  deux etats — 157px avec et sans menu ouvert, les deux images blanchies
+  ensemble, aucun decalage.
+
+
+--------------------------------------------------------------------------------
+4. FEATURE-CAROUSEL — RUPTURE DE PARITE ASSUMEE
+--------------------------------------------------------------------------------
+GO explicite recu pour les 3 chaines VISIBLES uniquement :
+
+  ligne 232   <span className="wm">Nawa Corps</span>
+  ligne 242   <b>MAIL</b> hello@nawacorps.ch
+  ligne 243   <b>WEB</b> nawacorps.ch
+
+Aucun commentaire ajoute dans le composant. Les 2 commentaires existants
+mentionnant BINACORE (lignes 3 et 186) sont laisses tels quels.
+
+LA PARITE DE HASH AVEC reference/feature-carousel.tsx EST ROMPUE. Decision de
+projet actee : reference/ devient l ARCHIVE D ORIGINE, elle n est plus un
+miroir du code vivant. La regle B5 — « copie a l octet pres » — est CLOSE.
+
+
+--------------------------------------------------------------------------------
+5. FAVICON
+--------------------------------------------------------------------------------
+app/favicon.ico SUPPRIME. C etait le fichier par defaut de create-next-app —
+le logo Next, 25 931 octets. La doc locale (app-icons.md) est formelle : les
+conventions `favicon` et `icon` coexistent et emettent CHACUNE leur balise. Le
+laisser aurait servi le logo Next a cote du notre.
+
+app/icon.png reprend favicon-512.png (512x512). HTML rendu, une seule balise :
+
+  <link rel="icon" href="/icon.png?icon.3e2l9m24vmju0.png"
+        sizes="512x512" type="image/png"/>
+
+Build : /icon.png apparait comme route statique.
+
+
+--------------------------------------------------------------------------------
+6. PREUVES
+--------------------------------------------------------------------------------
+4 ROUTES        /  ·  /mentions-legales  ·  /confidentialite  ·  /admin/login
+                toutes en 200
+
+« BINACORE » DANS LE HTML SERVI :
+  /                  0 occurrence
+  /mentions-legales  0 occurrence
+  /confidentialite   0 occurrence
+  /admin/login       0 occurrence
+
+EXTRAITS :
+  <title>Nawa Corps — Studio digital, Genève</title>
+  <title>Mentions légales — Nawa Corps</title>
+  <title>Confidentialité — Nawa Corps</title>
+  <title>Administration — Nawa Corps</title>
+  nav    : <img class="wm-icone"> + <img class="wm-nom" alt="Nawa Corps">
+           lien large de 157px, identique menu ouvert ou ferme
+  loader : <img class="ld-icone"> + <img class="ld-nom">, blanchis sur le pin
+  geant  : <div class="giant" aria-hidden="true">NAWA CORPS</div>  (UNE ligne)
+  slogan : <p class="br-slogan">L'essentiel. Bien conçu.</p>
+  icone  : <link rel="icon" href="/icon.png…" sizes="512x512">
+
+RE-GREP « binacore » dans le code : 34 occurrences, toutes de la section 2
+« intouchees et justifiees ». ZERO dans du texte visible.
+
+eslint       exit 0
+tsc          exit 0
+npm run build exit 0 (dev tue avant), 11 pages generees
+
+LIMITE ASSUMEE, SIGNALEE PLUTOT QUE MAQUILLEE : le pied de page n a pas pu
+etre photographie. Le wrapper de scroll inertiel (translate3d sur #smooth)
+desynchronise la capture CDP du viewport reel — le DOM placait le geant a
+621px et le slogan a 844px dans une fenetre de 920px, donc tous deux visibles,
+mais l image rendue montrait une autre region. Le pied de page est donc
+verifie PAR LA MESURE (une ligne, nowrap actif, +11,5 % aux trois largeurs,
+slogan present dans le DOM et dans le HTML servi), et non par l image. La nav,
+elle, a bien ete capturee dans ses deux etats.
+
+
+--------------------------------------------------------------------------------
+7. ETAT ET SUITE
+--------------------------------------------------------------------------------
+Base de donnees : 0 lead, 0 conversation, 0 jeton, 14 services (catalogue
+intact, La Carte a 45000 centimes).
+
+A TRAITER A LA GRANDE RECETTE :
+  · hello@nawacorps.ch — marque « A CONFIRMER » en commentaire dans
+    FooterContact, MenuOverlay et confidentialite ; deja « [à confirmer] »
+    visible dans les mentions legales.
+  · [PRÉNOM NOM — À COMPLÉTER] des mentions legales, laisse tel quel.
+  · « Ayoub » conserve dans Studio.tsx — voulu, section narrative.
+  · numeros wa.me et telephone : placeholders +41 76 000 00 00, inchanges.
+  · ADMIN_PASSWORD = ayoub1203 — a changer avant la mise en ligne.
+  · cle GROQ a revoquer avant la mise en ligne (reste du bloc B10b).
+  · variante logo « blanc sur transparent » a produire, si tu veux recuperer
+    l accent laiton dans l etat menu ouvert (voir 3.2).
+
+Acces : http://localhost:3000   —   admin : /admin, mot de passe ayoub1203
+================================================================================
