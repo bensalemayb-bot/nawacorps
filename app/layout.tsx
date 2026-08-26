@@ -2,6 +2,7 @@ import { Hanken_Grotesk, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import "./binacore.css";
 import "./chat.css";
+import "./noyau.css";
 import "./fonts.css";
 
 /**

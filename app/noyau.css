@@ -1,0 +1,225 @@
+/* ============================================================================
+   LE NOYAU — hero epingle, scrubbe au scroll.
+   ============================================================================
+
+   Principe : le noyau ne defile pas. Il reste au centre de l'ecran pendant que
+   les quatre « temps » du hero lui passent dessus. Sa position, son echelle et
+   sa rotation sont pilotees par la progression du scroll (voir NoyauStage.tsx).
+
+   POURQUOI LE STAGE EST HORS DE #smoothWrap :
+   binacore.css pose `html.smooth #smoothWrap{position:fixed}` et Interactions
+   applique un translate3d sur #smooth. Un `position:fixed` a l'interieur d'un
+   ancetre transforme est resolu contre cet ancetre, pas contre le viewport : le
+   noyau defilerait avec la page. Le stage vit donc a cote de .grain, .loader et
+   .cursor, dans (site)/layout.tsx, exactement pour la raison que ce layout
+   documente deja.
+
+   ORDRE DE PEINTURE :
+   .noyau-stage a z-index:0 et precede #smoothWrap dans le DOM. #smoothWrap etant
+   fixed, il cree son propre contexte d'empilement a z-index auto — a egalite,
+   l'ordre du DOM tranche, et le contenu passe donc DEVANT le noyau. C'est voulu.
+   Corollaire : tout ce qui suit le hero doit etre opaque, sinon le stage
+   transparaitrait au travers. D'ou .page-body plus bas.
+   ---------------------------------------------------------------------------- */
+
+/* ---------- la scene ---------- */
+
+.noyau-stage{
+  position:fixed;inset:0;z-index:0;
+  pointer-events:none;
+  overflow:hidden;
+  contain:layout paint;
+  opacity:0;                 /* pilote image par image par NoyauStage */
+  /* La chambre. Teinte calee sur le fond du PNG (#EBDECD au coin haut-gauche,
+     #EEE1CF au coin bas-droite) et non sur --bone (#F1EEE6), plus froid : poser
+     le visuel sur --bone laisserait un rectangle chaud visible. */
+  background:radial-gradient(ellipse 72% 62% at 50% 46%,
+    #F5ECDE 0%, #F0E3D2 34%, #EADCC7 68%, #E3D4BA 100%);
+}
+
+/* Vignette chaude : creuse les bords et assoit l'objet dans sa chambre. */
+.noyau-vignette{
+  position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 78% 70% at 50% 47%,
+    rgba(0,0,0,0) 52%, rgba(78,58,28,.07) 78%, rgba(58,42,20,.15) 100%);
+}
+
+/* ---------- l'objet ---------- */
+
+.noyau-persp{position:absolute;inset:0;perspective:1400px}
+.noyau-tilt{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
+
+.noyau-obj{
+  position:absolute;left:50%;top:50%;
+  width:min(92vh,92vw,1020px);
+  aspect-ratio:1448/1086;
+  /* `translate` est une propriete distincte de `transform` : elle s'applique
+     AVANT lui. Le centrage survit donc aux transforms que le JS ecrit dans
+     `transform`, sans avoir a les recomposer a chaque frame. */
+  translate:-50% -50%;
+  /* Le coeur dore du PNG, mesure : 50.4% / 48.3%. C'est le point sur lequel la
+     plongee macro doit converger — pas le centre geometrique de l'image. */
+  transform-origin:50.4% 48.3%;
+  will-change:transform;
+}
+
+/* Couche d'ENTREE, distincte de .noyau-obj — et c'est tout l'interet.
+   Une animation CSS l'emporte sur un style inline dans la cascade : si l'arrivee
+   du noyau et le scrub ecrivaient tous deux `transform` sur le meme element, le
+   scroll serait ignore pendant toute la duree de l'animation. Deux elements
+   imbriques, deux `transform` qui se composent, aucun arbitrage a faire.
+   La mise en pause reprend celle des autres elements du hero (binacore.css). */
+.noyau-enter{
+  position:absolute;inset:0;
+  animation:noyau-in 1.7s var(--ease) .15s both;
+}
+html.has-intro:not(.loaded) .noyau-enter{animation-play-state:paused}
+@keyframes noyau-in{
+  from{opacity:0;transform:scale(.86);filter:blur(16px)}
+  to{opacity:1;transform:scale(1);filter:blur(0)}
+}
+
+.noyau-img{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:contain;
+  /* Plume tres large et tres douce : le degrade du stage et le fond du PNG ne
+     sont pas rigoureusement identiques, etaler la transition sur la moitie du
+     rayon rend l'ecart imperceptible — y compris quand l'image tourne, ce qui
+     ferait autrement apparaitre ses coins. */
+  -webkit-mask-image:radial-gradient(ellipse 46% 58% at 50.4% 48.3%,#000 54%,rgba(0,0,0,0) 100%);
+  mask-image:radial-gradient(ellipse 46% 58% at 50.4% 48.3%,#000 54%,rgba(0,0,0,0) 100%);
+}
+
+/* ---------- les anneaux vivants ----------
+   Le PNG a ses propres anneaux, mais ils sont figes. Ceux-ci sont en SVG, en
+   surimpression, et tournent en permanence a des vitesses et des inclinaisons
+   differentes. C'est eux qui donnent la profondeur : la couche `near` passe
+   DEVANT l'objet, la couche `far` derriere. Sans elles, une image fixe qu'on
+   agrandit reste une image fixe qu'on agrandit. */
+
+.noyau-rings{
+  position:absolute;inset:0;width:100%;height:100%;
+  overflow:visible;pointer-events:none;
+}
+.noyau-rings ellipse,.noyau-rings circle{vector-effect:non-scaling-stroke}
+
+.noyau-rings g{
+  transform-box:view-box;
+  transform-origin:50px 48px;
+  animation:noyau-spin var(--dur,90s) linear infinite;
+}
+.noyau-rings g[data-rev]{animation-direction:reverse}
+@keyframes noyau-spin{to{transform:rotate(360deg)}}
+
+.noyau-ring{fill:none;stroke:var(--brass);stroke-width:.16;opacity:.42}
+.noyau-ring-l{fill:none;stroke:var(--brass-l);stroke-width:.12;opacity:.3}
+.noyau-dot{fill:var(--brass);opacity:.75}
+.noyau-dot-d{fill:var(--pine);opacity:.55}
+
+.noyau-rings.near{opacity:.62}
+
+/* ---------- la piste et ses quatre temps ---------- */
+
+.noyau-hero{position:relative;display:block}
+.noyau-track{position:relative}
+
+.noyau-beat{
+  min-height:100svh;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  position:relative;
+  will-change:opacity,transform;
+}
+
+/* Temps 1 — porte la classe .hero : toutes les regles d'entree de binacore.css
+   (kicker, h1 ligne a ligne, hero-foot, et leur mise en pause tant que le
+   loader tourne) continuent de s'appliquer sans etre dupliquees ici. */
+
+/* Temps 2 — la phrase. Calee a gauche ; le noyau derive a droite au meme
+   moment (piste `x` dans NoyauStage), comme la montre de la reference. */
+.noyau-beat-2{justify-content:center}
+.noyau-say{max-width:30ch;margin-top:18px}
+.noyau-say p{
+  font-weight:550;letter-spacing:-.025em;line-height:1.12;
+  font-size:clamp(1.7rem,3.6vw,3.1rem);
+}
+.noyau-say .serif-i{font-size:1.06em}
+
+/* Temps 3 — la plongee. Le noyau remplit l'ecran : le texte passe en clair.
+   C'est le moment ou la page bascule dans le coeur. */
+.noyau-beat-3{justify-content:center;color:var(--bone)}
+.noyau-beat-3 .meta{color:var(--brass-l)}
+.noyau-spec{display:grid;grid-template-columns:auto 1fr;gap:clamp(28px,6vw,90px);align-items:end}
+@media(max-width:760px){.noyau-spec{grid-template-columns:1fr;gap:26px;align-items:start}}
+
+.noyau-fig{display:flex;align-items:baseline;gap:.32em;line-height:.86}
+.noyau-num{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(5rem,15vw,11rem);letter-spacing:-.04em;
+}
+.noyau-unit{
+  font-size:.7rem;font-weight:600;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--muted-g);
+}
+.noyau-specs{list-style:none;max-width:34ch;width:100%}
+.noyau-specs li{
+  display:flex;align-items:baseline;gap:.9em;
+  padding:9px 0;font-size:.92rem;
+  border-bottom:1px solid var(--line-g);
+}
+.noyau-specs li:first-child{border-top:1px solid var(--line-g)}
+.noyau-specs .k{
+  font-size:.66rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--muted-g);flex:0 0 auto;min-width:9em;
+}
+.noyau-specs .v{margin-left:auto;text-align:right}
+
+/* Temps 4 — la sortie. Le noyau se retire, la page reprend la main. */
+.noyau-beat-4{min-height:74svh;justify-content:center}
+.noyau-out{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;
+  padding-top:26px;border-top:1px solid var(--line)}
+.noyau-out p{max-width:34ch;color:var(--muted);font-size:1.02rem;line-height:1.7}
+
+/* ---------- le reste du site ----------
+   Opaque, obligatoirement : voir ORDRE DE PEINTURE en tete de fichier. */
+.page-body{position:relative;z-index:1;background:var(--bone)}
+
+/* ---------- nav : accord avec la chambre ----------
+   .nav.on est teinte en --bone, plus froid que la chambre. Tant que le hero est
+   a l'ecran on rechauffe le fond ; pendant la plongee on l'inverse, sinon le
+   wordmark sombre disparaitrait sur le noyau. */
+html.noyau-on .nav.on{background:rgba(240,227,210,.84)}
+html.noyau-dark .nav,
+html.noyau-dark .nav a,
+html.noyau-dark .nav .nav-time{color:var(--bone);transition:color .5s var(--ease)}
+html.noyau-dark .nav.on{background:rgba(16,44,35,.55);box-shadow:0 1px 0 var(--line-g)}
+html.noyau-dark .pill{border-color:var(--bone)}
+html.noyau-dark .pill:hover{background:var(--bone);color:var(--pine)}
+html.noyau-dark .burger i{background:var(--bone)}
+
+/* ---------- sobriete imposee : la piste se replie ----------
+   NoyauStage pose html.noyau-sobre puis s'arrete la — aucun rAF, aucun scrub.
+   Sans ce repli, l'utilisateur heriterait de 3,6 ecrans de defilement quasi vide
+   pour une scene qui, elle, ne bouge plus. Le noyau redevient donc ce qu'il
+   serait sans JavaScript : un visuel de hero, pose derriere le premier ecran,
+   et les quatre temps redeviennent quatre blocs de texte qui s'enchainent. */
+html.noyau-sobre .noyau-stage{position:absolute;top:0;height:100svh;opacity:1}
+html.noyau-sobre .noyau-beat{min-height:auto;padding:clamp(40px,8vw,96px) 0}
+html.noyau-sobre .noyau-beat.hero{min-height:100svh;padding:0}
+/* Plus de plongee : le temps 3 repasse sur fond clair, donc en encre sombre. */
+html.noyau-sobre .noyau-beat-3{color:var(--ink)}
+html.noyau-sobre .noyau-beat-3 .meta{color:var(--brass)}
+html.noyau-sobre .noyau-specs li{border-color:var(--line)}
+html.noyau-sobre .noyau-specs .k,
+html.noyau-sobre .noyau-unit{color:var(--muted)}
+
+/* ---------- sobriete imposee ----------
+   Meme traitement que le reste de binacore.css : on ne degrade pas, on fige.
+   Le noyau reste affiche, centre, net — seuls le scrub et les orbites tombent. */
+@media(prefers-reduced-motion:reduce){
+  .noyau-rings g{animation:none}
+  .noyau-dot,.noyau-dot-d{display:none}
+  .noyau-enter{animation:none}
+  .noyau-beat{will-change:auto}
+  .noyau-tilt,.noyau-obj{will-change:auto}
+}

@@ -1,8 +1,8 @@
 import CarteDuStudio from "@/components/CarteDuStudio";
 import Faq from "@/components/Faq";
 import FooterContact from "@/components/FooterContact";
-import Hero from "@/components/Hero";
 import Methode from "@/components/Methode";
+import NoyauHero from "@/components/NoyauHero";
 import Offres from "@/components/Offres";
 import ServicesRows from "@/components/ServicesRows";
 import Strip from "@/components/Strip";
@@ -27,16 +27,21 @@ export const dynamic = "force-dynamic";
 export default function Home() {
   return (
     <>
-      <Hero />
-      <Travaux />
-      <Strip />
-      <ServicesRows />
-      <Offres />
-      <CarteDuStudio />
-      <Methode />
-      <Studio />
-      <Faq />
-      <FooterContact />
+      <NoyauHero />
+      {/* .page-body est OPAQUE, et doit le rester : le noyau est une scene
+          position:fixed peinte derriere le contenu (cf. app/noyau.css). Sans
+          fond ici, il transparaitrait sous toutes les sections suivantes. */}
+      <div className="page-body">
+        <Travaux />
+        <Strip />
+        <ServicesRows />
+        <Offres />
+        <CarteDuStudio />
+        <Methode />
+        <Studio />
+        <Faq />
+        <FooterContact />
+      </div>
     </>
   );
 }

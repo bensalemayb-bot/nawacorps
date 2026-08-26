@@ -5,6 +5,7 @@ import Interactions from "@/components/Interactions";
 import Loader from "@/components/Loader";
 import MenuOverlay from "@/components/MenuOverlay";
 import Nav from "@/components/Nav";
+import NoyauStage from "@/components/NoyauStage";
 
 /**
  * Layout du SITE PUBLIC — bloc B11.
@@ -47,6 +48,11 @@ export default function SiteLayout({ children }: LayoutProps<"/">) {
       {/* ChatWidget est en position:fixed — il reste HORS du wrapper,
           pour la meme raison que nav/loader/cursor ci-dessus. */}
       <ChatWidget />
+      {/* NoyauStage est en position:fixed : meme raison encore. Il precede
+          volontairement #smoothWrap — a z-index egal l ordre du DOM tranche, et
+          le noyau doit rester DERRIERE le contenu qui lui passe dessus.
+          Il ne s active que sur l accueil, seule page a poser #noyau-track. */}
+      <NoyauStage />
       <div id="smoothWrap"><div id="smooth">{children}</div></div>
     </>
   );
