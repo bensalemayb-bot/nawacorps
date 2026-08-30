@@ -47,24 +47,37 @@ export default async function NoyauHero() {
             <div className="kicker">
               <span className="meta"><span className="index">®</span>&nbsp; Studio de création digitale</span>
               <span className="meta">Genève, Suisse</span>
-              <span className="meta">Sites de PME</span>
+              <span className="meta">Pour les PME</span>
             </div>
             <h1>
-              {/* Chaque .l doit tenir sur UNE ligne : binacore.css les revele
+              {/* LE TITRE NOMME LE METIER, PAS UN PRODUIT. Il annoncait « Un
+                  site qui recoit vos demandes, refait en une semaine » : le
+                  studio y devenait un vendeur de sites, et l identite, les
+                  imprimes, la photo et les reseaux tombaient en appendice a la
+                  fin du sous-titre. Le site reste le produit d entree — il
+                  ouvre l enumeration et le sous-titre le chiffre — mais il
+                  n est plus le sujet.
+
+                  Chaque .l doit tenir sur UNE ligne : binacore.css les revele
                   ligne par ligne, et un debordement casse l'animation autant
                   que la mise en page (le hero-foot passe sous la ligne de
                   flottaison). La maquette tient 21 caracteres au plus large —
-                  s'y tenir en reecrivant. */}
-              <span className="l"><span>Un site qui reçoit</span></span>
-              <span className="l"><span>vos demandes, <span className="serif-i">refait</span></span></span>
-              <span className="l"><span>en une semaine.</span></span>
+                  s'y tenir en reecrivant. Decompte des trois lignes ci-dessous,
+                  serif-i compris : 15, 16, 19. */}
+              <span className="l"><span>Site, imprimés,</span></span>
+              <span className="l"><span>photos, réseaux.</span></span>
+              <span className="l"><span>Une seule <span className="serif-i">personne</span>.</span></span>
             </h1>
             <div className="hero-foot">
-              {/* Le sous-titre n enumerait que des fonctions de site. Il dit
-                  desormais que le site est le point d entree, pas le catalogue
-                  entier. Le h1 au-dessus, lui, ne bouge pas : ses lignes .l
-                  sont mesurees a 21 caracteres. */}
-              <p className="hero-sub">Le compte à rebours démarre quand vous dites oui : vos textes, je les reprends de votre site actuel. Vous n&apos;avez rien à préparer. Demande de devis, prise de rendez-vous et fiche Google comprises.{entree ? ` Dès ${entree}, TVA comprise.` : ""} Et le site n&apos;est pas tout : identité, imprimés, photos et réseaux sociaux se prennent ici aussi, sur devis.</p>
+              {/* LE SOUS-TITRE A ETE COUPE DE MOITIE, et pas pour le style :
+                  a 328 caracteres il rendait sept lignes, le hero-foot
+                  descendait a 898px et debordait de 46px sous une fenetre de
+                  1442 x 852. Il enumerait par ailleurs des fonctions de site
+                  avant de rattraper le reste du catalogue en fin de phrase —
+                  ce que le h1 ci-dessus dit maintenant en premier. Il ne lui
+                  reste donc que ce que le titre ne peut pas porter : le delai,
+                  ce qu il n y a rien a preparer, et le prix d entree. */}
+              <p className="hero-sub">Le site refait en une semaine : je reprends vos textes, vous n&apos;avez rien à préparer.{entree ? ` Dès ${entree}, TVA comprise.` : ""} Le reste sort du même atelier, sur devis.</p>
               <div className="hero-cta">
                 <a className="btn" href={WHATSAPP_HREF} target="_blank" rel="noopener">Faire refaire mon site <span className="ar">→</span></a>
                 <a className="btn btn-line" href="#travaux">Voir les avant / après</a>
