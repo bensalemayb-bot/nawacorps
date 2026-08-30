@@ -60,7 +60,7 @@ export default function Image() {
           }}
         >
           <span>Votre site a dix ans.</span>
-          <span>En 72 heures, il travaille pour vous.</span>
+          <span>Refait en une semaine. Vous n&apos;avez rien à préparer.</span>
         </div>
         <div style={{ display: "flex", fontSize: 28, opacity: 0.7 }}>
           Nawa Corps — Studio digital, Genève
