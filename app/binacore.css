@@ -481,6 +481,11 @@ html.menu-open .menu .m-lnk:nth-child(2){transition-delay:.3s}
 html.menu-open .menu .m-lnk:nth-child(3){transition-delay:.38s}
 html.menu-open .menu .m-lnk:nth-child(4){transition-delay:.46s}
 html.menu-open .menu .m-lnk:nth-child(5){transition-delay:.54s}
+/* Le menu compte SIX entrees depuis l'ajout de « Prestations » ; l'echelonnement
+   s'arretait a cinq. Sans delai, la sixieme (Contact) partait a 0s et arrivait
+   donc AVANT les cinq autres, a rebours de la cascade. Defaut visible sur
+   telephone uniquement : le menu plein ecran ne s'ouvre que sous 860px. */
+html.menu-open .menu .m-lnk:nth-child(6){transition-delay:.62s}
 .menu .mi{font-size:.7rem;font-weight:600;letter-spacing:.18em;color:var(--brass-l)}
 .menu .mt{font-weight:550;font-size:clamp(2rem,7.5vw,4.2rem);letter-spacing:-.03em;line-height:1.15;transition:color .3s}
 .menu .m-lnk:hover .mt{color:var(--brass-l)}

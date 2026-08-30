@@ -202,6 +202,17 @@
 .chat-form button:hover:not(:disabled) { background: transparent; color: var(--bone); }
 .chat-form button:disabled { opacity: 0.5; cursor: default; }
 
+/* iOS Safari ZOOME la page des qu'un champ pris au focus calcule une taille de
+   police inferieure a 16px. Le champ ci-dessus est a .85rem, soit 13.6px : le
+   visiteur qui tape sa reponse a l'assistant voyait donc le site grossir d'un
+   coup, et devait pincer pour revenir. Le desagrement est propre au telephone,
+   la correction aussi — au-dessus de 860px la regle n'existe pas et le champ
+   garde ses .85rem. Le bouton d'envoi, lui, n'a pas de focus clavier textuel :
+   il ne declenche pas le zoom et n'est pas touche. */
+@media (max-width: 860px) {
+  .chat-form input { font-size: 16px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .chat-fab { transition: none; }
   .chat-fab:hover { transform: none; }
