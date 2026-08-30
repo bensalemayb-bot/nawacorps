@@ -8,6 +8,7 @@ import {
   isQuote,
 } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
+import BoutonDevis from "@/components/BoutonDevis";
 
 /**
  * Section Offres — reference/binacore.html lignes 976-1031.
@@ -159,7 +160,9 @@ export default async function Offres() {
         {quotes.map((service) => (
           <div className="p-note" data-reveal key={service.id}>
             <span>{`${service.name} — ${QUOTE_LABEL}`}</span>
-            <a className="lnk" href={DEVIS_HREF} target="_blank" rel="noopener">{DEVIS_LABEL}</a>
+            <BoutonDevis href={DEVIS_HREF} sujet="devis-sur-mesure">
+              {DEVIS_LABEL}
+            </BoutonDevis>
           </div>
         ))}
 

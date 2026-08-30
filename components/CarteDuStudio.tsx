@@ -8,6 +8,7 @@ import {
   isQuote,
 } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
+import BoutonDevis from "@/components/BoutonDevis";
 
 /**
  * Carte du studio — reference/binacore.html lignes 1033-1063.
@@ -107,7 +108,9 @@ export default async function CarteDuStudio() {
             </div>
             <div className="sm-foot">
               <span>Prix indicatifs, TVA comprise — devis en cinq minutes.</span>
-              <a className="lnk" href={DEVIS_HREF} target="_blank" rel="noopener">Demander un devis →</a>
+              <BoutonDevis href={DEVIS_HREF} sujet="devis-carte-du-studio">
+                Demander un devis →
+              </BoutonDevis>
             </div>
           </div>
         </div>

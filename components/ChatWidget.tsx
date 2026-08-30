@@ -1,6 +1,7 @@
 "use client";
 
 import { whatsapp } from "@/lib/site";
+import { NAWA_CHAT_OUVRIR } from "@/lib/chat-ouvrir";
 import { useEffect, useRef, useState } from "react";
 
 /**
@@ -72,6 +73,20 @@ export default function ChatWidget() {
   useEffect(() => {
     messagesRef.current = messages;
   }, [messages]);
+
+  // Ouverture pilotee de l'exterieur — voir lib/chat-ouvrir.ts. Le `sujet`
+  // transporte par l'evenement n'est pas encore consomme ici : rien, pour
+  // l'instant, ne configure la conversation a partir de lui. Le stocker dans
+  // un etat sans lecteur serait du code mort ; on l'ajoutera avec la
+  // configuration de l'assistant qui en aura l'usage.
+  useEffect(() => {
+    function surDemande() {
+      setOuvert(true);
+      setReplie(false);
+    }
+    window.addEventListener(NAWA_CHAT_OUVRIR, surDemande);
+    return () => window.removeEventListener(NAWA_CHAT_OUVRIR, surDemande);
+  }, []);
 
   // ABANDON : l onglet se ferme, la page change. On n a plus le temps d un
   // fetch — sendBeacon confie la requete au navigateur, qui la poste apres
