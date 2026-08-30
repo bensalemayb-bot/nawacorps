@@ -9,12 +9,14 @@
 
 ## 1. Le produit
 
-Studio digital indépendant à Genève, opéré par Ayoub (designer + développeur).
+Agence digitale indépendante à Genève, opérée par **Ayoub Bensalem**
+(designer + développeur). **Pas de bureau** : c'est une structure volontairement
+légère, et c'est ce qui explique les prix.
 Structure d'une personne, avec un partenaire commercial et de production
 (voir §7).
 
 Ce qui est vendu, en une phrase :
-**le site des PME genevoises, refait en 72 heures, et transformé en source de
+**le site des PME genevoises, refait en une semaine, et transformé en source de
 demandes — devis, rendez-vous, contact.**
 
 Ce n'est pas « du web design ». C'est la remise à niveau d'un actif commercial
@@ -82,23 +84,38 @@ abandonné comme **cœur de cible**. La restauration reste une ligne secondaire
 ### La revendication de catégorie
 
 Pas « une agence web ». Pas « un freelance ».
-**Le studio qui remet à niveau le site des PME genevoises, en 72 heures.**
+**L'agence qui remet à niveau le site des PME genevoises, en une semaine,
+sans que le client ait quoi que ce soit à préparer.**
 
 ### Les trois piliers
 
-**1. 72 heures.**
-Un site existant refait et livré en trois jours. Une semaine s'il faut partir
-de zéro. Personne à Genève n'annonce ce délai ; les agences comptent en
-semaines, parfois en mois.
+**1. Vous n'avez rien à préparer.**
 
-**Et le délai court s'applique précisément à l'ICP.** Le client cible a déjà un
-site — c'est même la définition du prospect qualifié (§2). Le cas « partir de
-rien » est la minorité. La promesse s'écrit donc telle quelle, sans tricher :
+C'est le pilier, et il ne repose sur aucun compte d'heures.
 
-> **72 h si vous avez déjà un site. Une semaine si on part de zéro.**
+**Le délai annoncé est « une semaine ».** Pas 72 h, pas 48 h. Le chiffre exact
+a bougé plusieurs fois et n'est pas tenu ; une semaine est le seul délai que le
+studio a confirmé pouvoir tenir, et il suffit largement : la veille relève des
+concurrents à **deux à huit semaines**. Promettre moins vite qu'on ne peut est
+un avantage, pas une faiblesse — un délai raté coûte plus cher que le délai
+gagné.
 
-Formulée ainsi elle est vérifiable, tenable, et elle qualifie le prospect au
-passage.
+**Ne jamais écrire « personne à Genève ne fait aussi vite ».** La veille ne peut
+pas porter ce superlatif : trois acteurs proprement genevois relevés, plus huit
+voisins nommés sans que leur délai ait été vérifié.
+
+**Le vrai différenciateur, sourcé, ne parle pas de vitesse.** Les deux seuls
+concurrents rapides relevés **conditionnent leur délai à la fourniture du
+contenu par le client** (« après validation du contenu » chez l'un, « une fois
+le contenu fourni » chez l'autre). Le studio, lui, démarre au feu vert : il
+reprend les textes de l'ancien site et rédige la maquette lui-même (§5, « Les
+conditions »).
+
+> Chez les autres, le compteur part quand vous avez fourni vos textes.
+> Ici, quand vous dites oui.
+
+C'est un fait sur le studio, vérifiable, qui n'oblige à prouver aucun négatif
+et ne dépend d'aucun chronomètre.
 
 **2. Le site fait entrer des demandes.**
 Devis, rendez-vous, contact, appel, itinéraire. Le site n'est pas une plaquette
@@ -113,8 +130,8 @@ démonstration.
 
 ### La promesse
 
-> Votre site a dix ans. En 72 heures, il redevient un site qui vous amène des
-> demandes — et je reste pour le tenir à jour.
+> Votre site a dix ans. En une semaine, il redevient un site qui vous amène
+> des demandes — et vous n'avez rien à préparer pour ça.
 
 ---
 
@@ -167,8 +184,7 @@ Trois formules, et trois seulement, sur la grille d'accueil.
 |---|---|---|---|
 | **Prix** | **699.–** | **1'499.–** | **2'499.–** |
 | **Pour qui** | Le site est daté, il faut qu'il soit présentable | Le site doit faire entrer des demandes et les traiter seul | Le site répond, qualifie et relance à votre place |
-| **Délai** | 72 h | 72 h | 72 h |
-| *(si départ de zéro)* | *1 semaine* | *1 semaine* | *1 semaine* |
+| **Délai** | 1 semaine | 1 semaine | 1 semaine |
 | One-page, mobile d'abord | ✓ | ✓ | ✓ |
 | **Formulaire de demande** | ✓ | ✓ | ✓ |
 | Appel, itinéraire, horaires | ✓ | ✓ | ✓ |
@@ -348,7 +364,7 @@ actuel du site, ce qui est rare.
 
 ### Ce qui fonctionne, à conserver
 
-- **Le concret plutôt que l'adjectif.** « 48 h », « Jour 14 », « 85 × 55
+- **Le concret plutôt que l'adjectif.** « une semaine », « 85 × 55
   recto-verso », « 8 à 12 publications par mois ». C'est le meilleur actif
   d'écriture du site.
 - **« Vous parlez à celui qui fait le travail. »** L'argument le plus net face
@@ -361,8 +377,8 @@ actuel du site, ce qui est rare.
 |---|---|
 | Ne jamais tourner en dérision le « avant » du client | Le carrousel actuel se moque de sites et de cartes qui sont exactement ceux du prospect. « Daté », jamais « ridicule ». |
 | Retirer « Depuis 2026 » | On est en 2026 : présenté comme un marqueur d'ancienneté, ça souligne la jeunesse. |
-| Une seule promesse de délai | Aujourd'hui « deux semaines » au hero, « 48 h » en méthode, « une semaine » en FAQ. La promesse devient **« 72 h si vous avez déjà un site, une semaine si on part de zéro »**, et elle est unique. |
-| Nommer le point de départ des 72 h | Les 72 h courent à partir du feu vert, pas de la réception du contenu : les textes sont repris de l'ancien site ou proposés en maquette, donc le studio ne dépend de personne. C'est ce qui rend la promesse tenable. |
+| Une seule promesse de délai | **« une semaine »**, partout, sans exception. Aucun compte d'heures — ni 72 h, ni 48 h : ces chiffres ont circulé, aucun n'est tenu. |
+| Nommer le point de départ du délai | Il court **dès le feu vert**, pas dès la réception du contenu : les textes sont repris de l'ancien site ou proposés en maquette. C'est ce qui rend la promesse tenable, et c'est le différenciateur. |
 | Trancher la contradiction sur le suivi | « 3 mois » côté services, « compris dans le suivi » côté FAQ. |
 
 ### Vocabulaire
@@ -372,7 +388,7 @@ actuel du site, ce qui est rare.
 | remise à niveau, refonte | « refonte digitale », « transformation » |
 | demandes, devis, rendez-vous | « leads », « conversion », « funnel » |
 | votre site | « votre présence digitale » |
-| 72 heures | « rapidement », « dans les meilleurs délais » |
+| une semaine | « rapidement », « dans les meilleurs délais », et tout compte d'heures |
 
 ---
 
@@ -383,7 +399,7 @@ actuel du site, ce qui est rare.
 | Clients à ce jour | **1** (une carte de restaurant) |
 | Références de site | **0** |
 | Revenu récurrent | **0** |
-| Délai réel de livraison | **72 h** en refonte d'un site existant · **1 semaine** en départ de zéro |
+| Délai annoncé | **1 semaine**, refonte comme départ de zéro. Le chiffre a bougé plusieurs fois : on annonce le seul qui soit tenu. |
 | Zone | Genève et alentours |
 | Langues | FR / EN |
 
@@ -397,7 +413,6 @@ Le studio est en phase d'amorçage : la contrainte n'est pas le prix, c'est
 | # | Décision | Bloque |
 |---|---|---|
 | 1 | Nombre de révisions incluses par palier | La rentabilité de La Vitrine à 699.– : sans limite écrite, un client bavard mange toute la marge |
-| 2 | Qui rédige les textes — le studio ou le client | La promesse de 72 h. Si le studio attend le contenu, le délai n'est pas tenable et la promesse se retourne |
-| 3 | Abonnement de suivi : 89.–/mois, à confirmer | Le palier 3 est intenable sans lui (coût API permanent) |
+| 2 | ~~Qui rédige les textes~~ — **tranché** : le studio reprend les textes de l'ancien site, ou propose une maquette que le client ajuste, compris dans le prix (§5) | — |
 | 4 | Conditions de paiement (acompte, solde) | La trésorerie, et le risque d'impayé sur un premier client |
 | 5 | La première référence de site PME | Toute la crédibilité du positionnement |

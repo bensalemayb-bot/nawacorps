@@ -55,7 +55,7 @@ export default function MentionsLegales() {
         <h1 className="t">Mentions légales</h1>
         <div className="studio-txt" style={{ marginTop: 40 }}>
           <p className="meta">Éditeur</p>
-          <p>Nawa Corps, studio digital, Genève, Suisse, exploité par [PRÉNOM NOM — À COMPLÉTER]. Contact : {CONTACT.email} [à confirmer].</p>
+          <p>Nawa Corps, agence digitale, Genève, Suisse, exploitée par Ayoub Bensalem. Contact : {CONTACT.email}.</p>
           <p className="meta">Hébergement</p>
           <p>[Infomaniak, Suisse — à confirmer en B12]</p>
           <p className="meta">Propriété intellectuelle</p>

@@ -47,12 +47,17 @@ export default function Confidentialite() {
           <p className="meta">Conservation</p>
           <p>12 mois, puis suppression.</p>
           <p className="meta">Hébergement des données</p>
-          <p>Suisse.</p>
+          <p>Le site et la base de données sont hébergés en Suisse.</p>
+          {/* CORRECTION D'EXACTITUDE. Cette page affirmait « Suisse » tout court,
+              alors que lib/llm.ts envoie chaque message de l'assistant a Google
+              ou a Groq selon LLM_PROVIDER — donc hors de Suisse. Une page de
+              confidentialite qui se trompe sur ce point precis est le pire
+              endroit ou se tromper. */}
+          <p>Les échanges avec l&apos;assistant de conversation sont traités par un fournisseur d&apos;intelligence artificielle situé hors de Suisse. Ne lui confiez pas d&apos;information sensible : pour cela, écrivez directement.</p>
           <p>Pas de cookies publicitaires ni de traceurs tiers.</p>
           <p className="meta">Vos droits</p>
           {/* BR : adresse A CONFIRMER avant la mise en ligne. */}
           <p>Accès, rectification, suppression sur simple demande à {CONTACT.email}.</p>
-          <p className="meta" style={{ marginTop: 40 }}>Formulaire et assistant arrivent prochainement</p>
           <p style={{ marginTop: 40 }}><a className="lnk" href="/">← Retour au site</a></p>
         </div>
       </div>
