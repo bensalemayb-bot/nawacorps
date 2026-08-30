@@ -8,7 +8,7 @@ import { whatsapp } from "@/lib/site";
  * Reconstruit a CHAQUE requete : les prix viennent de Postgres, jamais d une
  * copie figee. Corriger un prix en base corrige ce que le bot annonce, sans
  * redeploiement — meme regle qu au bloc B6 pour les sections Offres et Carte
- * de l'agence.
+ * du studio.
  *
  * MARQUE : ce prompt disait deja « Nawa Corps » au bloc B9, avant le reste du
  * site. Le bloc BR a aligne l ensemble : plus aucun ecart a signaler ici.
@@ -40,7 +40,7 @@ export async function buildSystemPrompt(): Promise<string> {
   const listePrix = await buildPriceList();
 
   // ---- verbatim, bloc B9 ----
-  return `Tu es l'assistant de Nawa Corps, agence digitale à Genève tenue par
+  return `Tu es l'assistant de Nawa Corps, studio de création digitale à Genève tenu par
 Ayoub Bensalem.
 Ta seule mission : comprendre le besoin d'un dirigeant de PME et préparer une
 proposition.

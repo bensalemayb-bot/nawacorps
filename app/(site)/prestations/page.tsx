@@ -22,8 +22,8 @@ import { openGraphPage, whatsapp } from "@/lib/site";
  *
  * Pourquoi cette page existe. L offre etait eclatee en deux endroits qui ne se
  * parlaient pas : la grille d accueil montrait les trois formules de site, la
- * « carte de l agence » montrait les supports. Le visiteur qui voulait savoir
- * ce que l agence vend devait donc reconstituer le catalogue de tete. Ici il
+ * « carte du studio » montrait les supports. Le visiteur qui voulait savoir
+ * ce que le studio vend devait donc reconstituer le catalogue de tete. Ici il
  * le voit d un coup, groupe, avec les prix.
  *
  * TOUT VIENT DE POSTGRES. Aucun montant n est ecrit dans ce fichier : noms,
@@ -31,7 +31,7 @@ import { openGraphPage, whatsapp } from "@/lib/site";
  * components/CarteDuStudio.tsx. Corriger un prix en base le corrige ici aussi.
  *
  * DEUX RENDUS, ET C EST VOULU. « Les formules » passe en CARTES sur fond pin,
- * comme la grille d accueil : ce sont les trois decisions d achat de l agence,
+ * comme la grille d accueil : ce sont les trois decisions d achat du studio,
  * elles meritent la place et elles ouvrent chacune une page dediee. Les trois
  * autres groupes passent en LIGNES : ce sont des complements, on les parcourt,
  * on ne les compare pas.
@@ -48,7 +48,7 @@ import { openGraphPage, whatsapp } from "@/lib/site";
 export const dynamic = "force-dynamic";
 
 const DESCRIPTION =
-  "Le catalogue de l'agence genevoise : trois formules de site, le suivi mensuel, l'identité et les imprimés, les réseaux sociaux et la ligne restauration.";
+  "Le catalogue du studio genevois : trois formules de site, le suivi mensuel, l'identité et les imprimés, les réseaux sociaux et la ligne restauration.";
 
 export const metadata: Metadata = {
   title: "Prestations et tarifs à Genève",
@@ -182,7 +182,7 @@ type ServiceRow = ServiceCatalogue;
 // ajoutee en base demain ne doit pas surgir d office dans cette page.
 const CATEGORIES = ["principal", "continu", "annee", "saison"];
 
-/** Le prix d une LIGNE, au format de la carte de l agence. */
+/** Le prix d une LIGNE, au format de la carte du studio. */
 function Prix({ service }: { service: ServiceRow }) {
   if (isQuote(service) || service.priceCents === null) {
     return <span className="px">{QUOTE_LABEL}</span>;
@@ -221,7 +221,7 @@ export default async function Prestations() {
               <h1 className="t">
                 Tout ce que fait
                 <br />
-                l&apos;agence, à Genève.
+                le studio, à Genève.
               </h1>
             </div>
           </div>

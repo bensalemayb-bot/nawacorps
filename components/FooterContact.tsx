@@ -56,8 +56,12 @@ export default function FooterContact() {
           plaide pas. */}
       <p className="br-slogan">L&apos;essentiel. Bien conçu.</p>
       <div className="legal">
-        <span>Agence digitale — Genève</span>
-        <span>Sites · Devis · Rendez-vous</span>
+        <span>Studio de création digitale — Genève</span>
+        {/* La bande de pied de page resumait l offre en trois mots qui ne
+            parlaient que du site. Le studio vend aussi de l identite, des
+            imprimes, des photos et la production des reseaux sociaux : le
+            resume les nomme, en gardant le site en tete. */}
+        <span>Sites · Identité · Imprimés · Réseaux sociaux</span>
         <a className="lnk" href="/mentions-legales">Mentions légales</a>
         <a className="lnk" href="/confidentialite">Confidentialité</a>
       </div>

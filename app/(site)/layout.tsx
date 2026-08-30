@@ -40,15 +40,16 @@ import { SITE_NAME, SITE_URL } from "@/lib/site";
  * deux pages legales repetaient ce suffixe a la main ; elles ne le font plus.
  *
  * L ORDRE DES MOTS DU TITRE A CHANGE, et c est deliberé. « Nawa Corps —
- * Agence digitale, Genève » mettait la marque en premier : personne ne cherche
- * encore « Nawa Corps ». Ce qui se cherche, c est une agence a Geneve. La
+ * Studio de création digitale, Genève » mettait la marque en premier :
+ * personne ne cherche
+ * encore « Nawa Corps ». Ce qui se cherche, c est un studio a Geneve. La
  * marque passe donc en fin de titre, la ou elle signe sans occuper la place
  * que les moteurs lisent en premier.
  *
  * LE TITRE RESTE CENTRE SUR LA REFONTE, LA DESCRIPTION NON. « Refonte de site
  * pour PME a Geneve » est la requete qui se cherche : c est le produit d
  * entree, il garde le titre. La description, elle, ne peut plus s y limiter —
- * l agence vend aussi de l identite, des imprimes, des photos, la fiche Google
+ * le studio vend aussi de l identite, des imprimes, des photos, la fiche Google
  * et la production des reseaux sociaux, et un extrait de resultat qui n en dit
  * rien fait perdre les visiteurs venus pour ca. Les montants ont quitte ces
  * chaines au passage : les prix vivent en base (lib/catalogue.ts), et une

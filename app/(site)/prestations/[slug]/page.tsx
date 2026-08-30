@@ -181,7 +181,7 @@ export default async function FormulePage({
     serviceType: "Création et refonte de site web",
     url: `${SITE_URL}/prestations/${slug}`,
     // L @id pose par components/SchemaStudio.tsx sur l accueil. On ne
-    // redeclare pas l agence ici : deux fiches du meme prestataire qui
+    // redeclare pas le studio ici : deux fiches du meme prestataire qui
     // divergeraient d un mot valent moins qu une seule, referencee.
     provider: { "@id": `${SITE_URL}/#studio` },
     areaServed: {
@@ -237,7 +237,7 @@ export default async function FormulePage({
             {formule.resout}
           </p>
 
-          {/* .facts : le meme bandeau de faits que la section « L agence ».
+          {/* .facts : le meme bandeau de faits que la section « Le studio ».
               Le point de depart du delai y a sa propre colonne parce que c est
               LE differenciateur, et parce qu il se dit sans comparer : ce qui
               est affirme porte sur NOUS, jamais sur ce que ferait un autre. */}
@@ -275,10 +275,10 @@ export default async function FormulePage({
           {prixSuivi ? (
             <p className="sm-note" data-reveal>
               Prix en francs suisses, TVA comprise. Le suivi à {prixSuivi} est{" "}
-              <strong>obligatoire</strong> avec {service.name} : il démarre la
-              2ᵉ année — la première est comprise dans le prix — et se règle
-              TVA comprise. L&apos;assistant consomme des appels d&apos;API tous
-              les mois ; sans le suivi, il s&apos;arrête.
+              <strong>obligatoire</strong> avec {service.name} et démarre la
+              2ᵉ année — la première est comprise dans le prix du site.
+              L&apos;assistant consomme des appels d&apos;API tous les mois ;
+              sans le suivi, il s&apos;arrête.
             </p>
           ) : (
             <p className="sm-note" data-reveal>

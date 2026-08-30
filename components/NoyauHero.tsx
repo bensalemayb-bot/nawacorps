@@ -24,7 +24,7 @@ export default async function NoyauHero() {
   // le site. Ils etaient ecrits en dur ici — « Dès 699.– » et « Dès 49.–/mois »
   // — ce qui les rendait faux le jour ou la grille bouge en base, sur l ecran
   // que tout le monde voit en premier. La lecture est memoisee par requete
-  // (lib/catalogue.ts) : Offres et la carte de l agence, rendues plus bas,
+  // (lib/catalogue.ts) : Offres et la carte du studio, rendues plus bas,
   // partagent celle-ci et ne paient pas un second aller-retour.
   const catalogue = await chargerCatalogue();
   const prixDe = (slug: string) => {
@@ -45,7 +45,7 @@ export default async function NoyauHero() {
         <div className="noyau-beat hero" data-temps="">
           <div className="wrap hero-in">
             <div className="kicker">
-              <span className="meta"><span className="index">®</span>&nbsp; Agence digitale indépendante</span>
+              <span className="meta"><span className="index">®</span>&nbsp; Studio de création digitale</span>
               <span className="meta">Genève, Suisse</span>
               <span className="meta">Sites de PME</span>
             </div>

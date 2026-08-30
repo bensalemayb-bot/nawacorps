@@ -262,7 +262,7 @@ const CardNew = () => (
     <div className="bc bc-recto" aria-hidden="true">
       <span className="wm">Nawa Corps</span>
       <span className="rl" />
-      <span className="cp">Agence digitale — Genève</span>
+      <span className="cp">Studio de création digitale</span>
     </div>
     <div className="bc bc-verso" aria-hidden="true">
       <div className="top"><span className="nm">Ayoub</span><span className="no">N° 001</span></div>

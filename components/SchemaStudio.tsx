@@ -10,14 +10,14 @@ import {
 } from "@/lib/site";
 
 /**
- * DONNEE STRUCTUREE DE L AGENCE — ProfessionalService.
+ * DONNEE STRUCTUREE DU STUDIO — ProfessionalService.
  *
  * C est la fiche d identite que lisent Google et les moteurs de reponse. Elle
  * ne dessine rien : le composant n emet qu une balise <script>.
  *
  * TOUT CE QUI EST ICI EST DEJA ECRIT QUELQUE PART SUR LA PAGE. Les horaires
  * viennent du pied de page (« Lu–Sa · 9h–19h »), les langues de la section
- * « L agence », les six prestations de ServicesRows, et les delais du hero
+ * « Le studio », les six prestations de ServicesRows, et les delais du hero
  * (une semaine). `foundingDate` est la seule donnee sans reflet a
  * l ecran depuis le retrait de « Depuis 2026 » (.facts de Studio.tsx ne montre
  * plus que Geneve / une semaine / FR-EN) — c est un fait d etat civil, pas un
@@ -26,9 +26,9 @@ import {
  * structuree que Google finit par ignorer, au mieux.
  *
  * LA FICHE COUVRE TOUT LE CATALOGUE, PAS LES SEULS SITES. Elle ne listait que
- * des fonctions de site ; l agence vend aussi de l identite, des imprimes, des
+ * des fonctions de site ; le studio vend aussi de l identite, des imprimes, des
  * photos, la production des reseaux sociaux et une ligne restauration. Une
- * fiche qui tait la moitie du catalogue prive l agence des requetes qui vont
+ * fiche qui tait la moitie du catalogue prive le studio des requetes qui vont
  * avec, et contredit ce que la page montre desormais.
  *
  * CE QUI N Y EST PAS, ET POURQUOI. Ni telephone, ni e-mail, ni adresse tant
@@ -60,7 +60,7 @@ export default function SchemaStudio() {
     name: SITE_NAME,
     url: SITE_URL,
     description:
-      "Agence digitale indépendante à Genève. Refonte du site des PME genevoises en une semaine, sans que le client ait de contenu à fournir — puis tout ce qui va autour : identité, imprimés, photos, fiche Google, réseaux sociaux et supports pour la restauration.",
+      "Studio de création digitale indépendant à Genève. Refonte du site des PME genevoises en une semaine, sans que le client ait de contenu à fournir — puis tout ce qui va autour : identité, imprimés, photos, fiche Google, réseaux sociaux et supports pour la restauration.",
     slogan: "L'essentiel. Bien conçu.",
     image: `${SITE_URL}/brand/nawa-corps-logo-principal-transparent.png`,
     logo: `${SITE_URL}/brand/nawa-corps-logo-principal-transparent.png`,
@@ -88,7 +88,7 @@ export default function SchemaStudio() {
     ],
     hasOfferCatalog: {
       "@type": "OfferCatalog",
-      name: "Prestations de l'agence",
+      name: "Prestations du studio",
       itemListElement: PRESTATIONS.map((nom) => ({
         "@type": "Offer",
         itemOffered: {

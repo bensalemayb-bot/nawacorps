@@ -36,7 +36,7 @@ export default function Loader() {
           />
         </span>
       </div>
-      <span className="lmeta">Agence digitale — Genève</span>
+      <span className="lmeta">Studio de création digitale</span>
       <span className="pct" id="pct">0</span>
     </div>
   );

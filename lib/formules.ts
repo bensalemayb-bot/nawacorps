@@ -196,7 +196,7 @@ export const FORMULES: Record<FormuleSlug, Formule> = {
     // des prestations hors perimetre. Elles vivent toutes au catalogue, sur
     // devis — d ou le renvoi vers /prestations plutot que vers une formule.
     //
-    // La liste a ete elargie a ce que l agence vend REELLEMENT hors site :
+    // La liste a ete elargie a ce que le studio vend REELLEMENT hors site :
     // imprimes, photos, reseaux sociaux et ligne restauration. Elle n en
     // citait que trois, ce qui laissait croire que le catalogue s arretait la.
     auDela: [

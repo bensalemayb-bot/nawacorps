@@ -87,7 +87,7 @@ const EDITORIAL: Record<string, Editorial> = {
 
 // CTA de devis de la maquette (ligne 1060). Le libelle est verbatim ; le ?text=
 // est adapte a cette ligne. La maquette contient un seul CTA de devis, ecrit
-// pour le menu de l agence (« pour un support »), que CarteDuStudio conserve.
+// pour le menu du studio (« pour un support »), que CarteDuStudio conserve.
 //
 // « sur mesure » a quitte l amorce : le guide de voix le classe parmi les mots
 // vides, et il est sature chez quatre concurrents sur six. « multi-pages » dit

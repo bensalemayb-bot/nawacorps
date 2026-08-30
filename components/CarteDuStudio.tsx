@@ -15,7 +15,7 @@ import {
 import BoutonDevis from "@/components/BoutonDevis";
 
 /**
- * Carte de l agence — reference/binacore.html lignes 1033-1063.
+ * Carte du studio — reference/binacore.html lignes 1033-1063.
  *
  * Toutes les lignes et tous les prix viennent de Postgres. Aucun montant n'est
  * ecrit ici.
@@ -95,14 +95,13 @@ export default async function CarteDuStudio() {
       <div className="wrap">
         <div className="studio-menu">
           <div className="sm-head" data-reveal>
-            <h2>La carte <span className="serif-i">de l&apos;agence</span></h2>
+            <h2>La carte <span className="serif-i">du studio</span></h2>
           </div>
-          {/* « le studio » et « sans engagement » ont quitte cette accroche :
-              le premier est proscrit par le glossaire (c est l agence), le
-              second est vague juridiquement et sature chez les concurrents.
-              Et l accroche ne parle plus seulement de l apres-site : la moitie
-              de ces lignes se commande sans site du tout. */}
-          <p className="lede" data-reveal style={{ marginBottom: 30 }}>Tout ce que l&apos;agence vend, ligne par ligne. Les sites portent un prix, le suivi aussi ; le reste se chiffre sur devis, et se commande avec un site comme sans.</p>
+          {/* « sans engagement » a quitte cette accroche : la formule est
+              vague juridiquement et saturee chez les concurrents. Et
+              l accroche ne parle plus seulement de l apres-site : la moitie de
+              ces lignes se commande sans site du tout. */}
+          <p className="lede" data-reveal style={{ marginBottom: 30 }}>Tout ce que le studio vend, ligne par ligne. Les sites portent un prix, le suivi aussi ; le reste se chiffre sur devis, et se commande avec un site comme sans.</p>
           <div className="sm-card" data-reveal>
             <div className="sm-cols">
               <div className="sm-col">

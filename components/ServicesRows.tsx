@@ -1,14 +1,14 @@
 // Section Services — reference/binacore.html lignes 940-973 pour la structure.
 //
 // Les six lignes sont STATIQUES et le restent : ce sont des categories
-// editoriales de l'agence, pas les enregistrements de la table Service. Rien
+// editoriales du studio, pas les enregistrements de la table Service. Rien
 // ici ne vient de la base, et aucun montant n'y est ecrit — les prix vivent en
-// base et s'affichent dans Offres et la carte de l'agence.
+// base et s'affichent dans Offres et la carte du studio.
 //
 // POURQUOI ELLES ONT ETE REECRITES. Le repositionnement PME avait resserre les
 // six gestes sur les seules FONCTIONS D'UN SITE — recevoir, chiffrer, prendre
 // rendez-vous, repondre. Le site est bien le produit d'entree, et il reste en
-// tete de liste ; mais l'agence vend aussi de l'identite, des imprimes, des
+// tete de liste ; mais le studio vend aussi de l'identite, des imprimes, des
 // photos, la fiche Google, la production des reseaux sociaux et une ligne
 // restauration. Une section de services qui n'en montre rien laisse croire que
 // le catalogue s'arrete au site, et le visiteur qui cherche des cartes de
