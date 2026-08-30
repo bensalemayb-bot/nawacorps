@@ -10,8 +10,8 @@ import Strip from "@/components/Strip";
 import Studio from "@/components/Studio";
 import Travaux from "@/components/Travaux";
 import type { Metadata } from "next";
+import { chargerCatalogue } from "@/lib/catalogue";
 import { formatChfAmount } from "@/lib/format";
-import { prisma } from "@/lib/prisma";
 
 /**
  * DESCRIPTION DE L ACCUEIL — construite a chaque requete, prix compris.
@@ -24,6 +24,15 @@ import { prisma } from "@/lib/prisma";
  * `generateMetadata` sur une page deja `force-dynamic` s execute a la requete,
  * comme le reste de la page : le montant est toujours celui de la base.
  *
+ * ELLE PASSE PAR chargerCatalogue(), ET SUREMENT PAS PAR UNE REQUETE A ELLE.
+ * Une `prisma.service.findFirst` propre a cette fonction rouvrait une decision
+ * deja mesuree et consignee plus bas : l accueil ne doit lire Postgres qu UNE
+ * fois par requete. `chargerCatalogue()` est memoisee par le `cache()` de
+ * React, donc la promesse est celle que Faq, Offres et CarteDuStudio attendent
+ * deja — zero aller-retour en plus sur la page la plus visitee du site. Le prix
+ * d entree se derive ensuite EN MEMOIRE, exactement comme le font NoyauHero et
+ * Faq : la table tient en dix-huit lignes de quelques champs.
+ *
  * LE `try` N EST PAS DECORATIF. L etage builder du Dockerfile n a pas de base ;
  * si Next tentait malgre tout de pre-generer cette metadata, une exception
  * ferait echouer le build entier — exactement le mode d echec qui a deja fait
@@ -33,14 +42,16 @@ export async function generateMetadata(): Promise<Metadata> {
   const socle =
     "Nawa Corps refait le site des PME genevoises en une semaine : demande de devis, prise de rendez-vous, fiche Google. Vous n'avez rien à préparer.";
   try {
-    const entree = await prisma.service.findFirst({
-      where: { category: "principal", visible: true, priceCents: { not: null } },
-      orderBy: { priceCents: "asc" },
-      select: { priceCents: true },
-    });
-    if (!entree?.priceCents) return { description: socle };
+    const catalogue = await chargerCatalogue();
+    const montants = catalogue
+      .filter((s) => s.category === "principal")
+      .map((s) => s.priceCents)
+      .filter((cents): cents is number => cents !== null);
+    // Base vide, formules masquees depuis /admin, toutes passees sur devis :
+    // l extrait se referme sans le montant plutot que d en inventer un.
+    if (montants.length === 0) return { description: socle };
     return {
-      description: `${socle} Dès ${formatChfAmount(entree.priceCents)}.–, TVA comprise.`,
+      description: `${socle} Dès ${formatChfAmount(Math.min(...montants))}.–, TVA comprise.`,
     };
   } catch {
     return { description: socle };
