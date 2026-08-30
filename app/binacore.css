@@ -713,7 +713,20 @@ html.menu-open .nav-time,html.menu-open .nav-r a{opacity:0;pointer-events:none}
   .car2{flex-direction:column;min-height:0}
   .car2-left{width:100%;height:190px}
   .car2.collapsed .car2-left{width:100%;height:190px}
-  .chip{left:50%;transform:translateX(-50%)!important;position:absolute}
+  /* `translate` ET NON `transform`, sinon la pile de pastilles s'effondre.
+     feature-carousel.tsx ecrit la position verticale de chaque pastille en
+     style INLINE (`transform:translateY(w * 62px)`). Un `transform` d'auteur
+     en !important appartient a une couche de cascade superieure a l'attribut
+     style : il ne se compose pas avec lui, il le REMPLACE. Le translateY
+     disparaissait donc, et les cinq pastilles se superposaient au meme pixel —
+     mesure sur le composant reel : les cinq a y=3774, contre 3832 / 3894 /
+     3956 / 4018 / 4080 sur grand ecran. Seule la derniere du DOM etait
+     visible, et la pastille active pouvait rester dessous.
+     `translate` est une propriete distincte, appliquee AVANT `transform` : le
+     centrage horizontal et le decalage vertical du JS coexistent, sans
+     !important et sans toucher une ligne de TypeScript. Meme idiome que
+     .car2-nav .car-btn plus haut et .noyau-obj dans noyau.css. */
+  .chip{left:50%;translate:-50% 0;position:absolute}
   .car2-list .chip{margin-top:-24px;height:48px}
   .car2-toggle{display:none}
   .car2-right{padding:22px 16px 26px}
