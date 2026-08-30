@@ -14,7 +14,7 @@ export default function Studio() {
           <p className="studio-quote" data-reveal>« Vous parlez à celui qui <em>fait</em> le travail. »</p>
           <div className="studio-txt" data-reveal>
             <p>Nawa Corps est le studio de création digitale d&apos;Ayoub Bensalem, designer et développeur à Genève. Pas de commerciaux, pas de chargé de compte : la personne qui répond à votre message est celle qui dessine et construit votre site.</p>
-            <p>Si les prix sont ceux-là, c&apos;est la structure qui l&apos;explique, pas le travail : pas de bureaux, pas d&apos;équipe commerciale, aucun intermédiaire entre vous et celui qui fait le site. Ce que vous ne payez pas, ce sont les frais de quelqu&apos;un d&apos;autre.</p>
+            <p>Pas de bureaux, pas d&apos;équipe commerciale, aucun intermédiaire entre vous et celui qui fait le site. Vous parlez à une seule personne, du premier message à la mise en ligne — et c&apos;est elle qui a les mains dans le travail.</p>
             <div className="facts">
               <div><b>Genève</b><span>Basé ici</span></div>
               <div><b>1 sem.</b><span>Refonte livrée</span></div>

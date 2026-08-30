@@ -9,6 +9,43 @@ import ServicesRows from "@/components/ServicesRows";
 import Strip from "@/components/Strip";
 import Studio from "@/components/Studio";
 import Travaux from "@/components/Travaux";
+import type { Metadata } from "next";
+import { formatChfAmount } from "@/lib/format";
+import { prisma } from "@/lib/prisma";
+
+/**
+ * DESCRIPTION DE L ACCUEIL — construite a chaque requete, prix compris.
+ *
+ * Le prix d entree est un signal fort dans un extrait Google pour une
+ * prestation de service : il qualifie le clic avant meme la visite. Mais la
+ * regle du depot interdit tout montant en dur, et une metadata statique ne
+ * peut pas relire Postgres — le prix avait donc disparu de l extrait.
+ *
+ * `generateMetadata` sur une page deja `force-dynamic` s execute a la requete,
+ * comme le reste de la page : le montant est toujours celui de la base.
+ *
+ * LE `try` N EST PAS DECORATIF. L etage builder du Dockerfile n a pas de base ;
+ * si Next tentait malgre tout de pre-generer cette metadata, une exception
+ * ferait echouer le build entier — exactement le mode d echec qui a deja fait
+ * abandonner l ISR ici. Sans base, on sert la meme phrase sans le prix.
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  const socle =
+    "Nawa Corps refait le site des PME genevoises en une semaine : demande de devis, prise de rendez-vous, fiche Google. Vous n'avez rien à préparer.";
+  try {
+    const entree = await prisma.service.findFirst({
+      where: { category: "principal", visible: true, priceCents: { not: null } },
+      orderBy: { priceCents: "asc" },
+      select: { priceCents: true },
+    });
+    if (!entree?.priceCents) return { description: socle };
+    return {
+      description: `${socle} Dès ${formatChfAmount(entree.priceCents)}.–, TVA comprise.`,
+    };
+  } catch {
+    return { description: socle };
+  }
+}
 
 /**
  * Rendu a chaque requete, volontairement.
