@@ -20,6 +20,14 @@ type ServiceSeed = {
  * Prix en centimes CHF, TVA COMPRISE. priceCents null pour les prestations
  * sur devis (QUOTE).
  *
+ * REGLE D AFFICHAGE : seules les trois formules de site et les deux
+ * abonnements portent un prix affiche. Tout le reste — supports, identite,
+ * photos, reseaux, ligne restauration — est sur devis. Un support se chiffre
+ * mal hors contexte (tirage, format, papier, urgence), et une grille de
+ * petits montants transformait le catalogue en liste de courses au lieu d une
+ * offre. Le devis n est pas une derobade : c est la seule facon d annoncer un
+ * prix juste sur ces lignes.
+ *
  * Les slugs des trois formules de sites sont la seule chose que le code
  * connaisse par coeur : components/Offres.tsx indexe son habillage editorial
  * dessus. Les renommer demande de renommer les cles de EDITORIAL au meme
@@ -61,9 +69,13 @@ const services: ServiceSeed[] = [
     sortOrder: 3,
   },
   {
+    // Le slug reste `site-sur-mesure` : c est une cle, la renommer casserait
+    // les lignes deja en base sans rien apporter. Le NOM, lui, ne peut plus
+    // dire « sur-mesure » — mot vide du guide de voix, et sature chez quatre
+    // concurrents sur six. Il est affiche sur l accueil et sur /prestations.
     slug: "site-sur-mesure",
-    name: "Site multi-pages / sur-mesure",
-    description: "Au-delà du one-page : périmètre défini ensemble",
+    name: "Site à plusieurs pages",
+    description: "Au-delà de la page unique : périmètre défini ensemble",
     category: "principal",
     priceType: "QUOTE",
     priceCents: null,
@@ -97,8 +109,8 @@ const services: ServiceSeed[] = [
   },
   {
     slug: "reseaux-sociaux",
-    name: "Réseaux sociaux — publications mensuelles",
-    description: "Préparées et programmées pour vous",
+    name: "Réseaux sociaux — la ligne complète",
+    description: "Calendrier, création, rédaction, publication et suivi — vous ne touchez à rien",
     category: "continu",
     priceType: "QUOTE",
     priceCents: null,
@@ -113,8 +125,8 @@ const services: ServiceSeed[] = [
     name: "Cartes de visite — conception + 75 ex. imprimés",
     description: "Recto-verso, 85 × 55, papier choisi avec vous",
     category: "annee",
-    priceType: "FIXED",
-    priceCents: 20000,
+    priceType: "QUOTE",
+    priceCents: null,
     priceFrom: false,
     isMonthly: false,
     sortOrder: 10,
@@ -146,9 +158,9 @@ const services: ServiceSeed[] = [
     name: "Traduction du site FR / EN",
     description: "Genève travaille en deux langues",
     category: "annee",
-    priceType: "FROM",
-    priceCents: 22000,
-    priceFrom: true,
+    priceType: "QUOTE",
+    priceCents: null,
+    priceFrom: false,
     isMonthly: false,
     sortOrder: 13,
   },
@@ -157,8 +169,8 @@ const services: ServiceSeed[] = [
     name: "Sticker vitrine « Avis Google » + QR",
     description: "QR direct vers votre fiche, 30 secondes",
     category: "annee",
-    priceType: "FIXED",
-    priceCents: 12000,
+    priceType: "QUOTE",
+    priceCents: null,
     priceFrom: false,
     isMonthly: false,
     sortOrder: 14,
@@ -168,9 +180,9 @@ const services: ServiceSeed[] = [
     name: "Affiche — événement, promotion, recrutement",
     description: "Prête à imprimer",
     category: "annee",
-    priceType: "FROM",
-    priceCents: 18000,
-    priceFrom: true,
+    priceType: "QUOTE",
+    priceCents: null,
+    priceFrom: false,
     isMonthly: false,
     sortOrder: 15,
   },
@@ -192,8 +204,8 @@ const services: ServiceSeed[] = [
     name: "Carte de fidélité à tampons",
     description: "Dix tampons, un vrai design",
     category: "saison",
-    priceType: "FIXED",
-    priceCents: 22000,
+    priceType: "QUOTE",
+    priceCents: null,
     priceFrom: false,
     isMonthly: false,
     sortOrder: 31,
@@ -203,9 +215,9 @@ const services: ServiceSeed[] = [
     name: "Bons cadeaux",
     description: "Noël, Saint-Valentin, fête des mères",
     category: "saison",
-    priceType: "FROM",
-    priceCents: 25000,
-    priceFrom: true,
+    priceType: "QUOTE",
+    priceCents: null,
+    priceFrom: false,
     isMonthly: false,
     sortOrder: 32,
   },
@@ -214,8 +226,8 @@ const services: ServiceSeed[] = [
     name: "Chevalets de table — carte, QR & wifi",
     description: "Carte, QR & wifi sur table",
     category: "saison",
-    priceType: "FIXED",
-    priceCents: 14000,
+    priceType: "QUOTE",
+    priceCents: null,
     priceFrom: false,
     isMonthly: false,
     sortOrder: 33,
@@ -225,8 +237,8 @@ const services: ServiceSeed[] = [
     name: "Pack saisonnier — affiche + posts + carte à jour",
     description: "Terrasse, rentrée, Escalade, Noël",
     category: "saison",
-    priceType: "FIXED",
-    priceCents: 49000,
+    priceType: "QUOTE",
+    priceCents: null,
     priceFrom: false,
     isMonthly: false,
     sortOrder: 34,
