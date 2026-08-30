@@ -50,9 +50,9 @@ export default function FooterContact() {
       </div>
       <div className="giant" aria-hidden="true">NAWA CORPS</div>
       {/* BR — le slogan de marque, a UN SEUL endroit du site. Ici et pas dans
-          le hero : celui-ci porte deja sa promesse, « Une presence digitale a
-          72 heures, il vous ramene des clients », et deux formules cote a cote se
-          seraient affaiblies l une l autre. En pied de page il signe, il ne
+          le hero : celui-ci porte deja sa promesse, « Votre site a dix ans.
+          En 72 heures, il travaille pour vous. », et deux formules cote a cote
+          se seraient affaiblies l une l autre. En pied de page il signe, il ne
           plaide pas. */}
       <p className="br-slogan">L&apos;essentiel. Bien conçu.</p>
       <div className="legal">

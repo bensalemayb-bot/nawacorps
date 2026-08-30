@@ -330,7 +330,7 @@ const SiteOld = () => (
 );
 
 const CardOld = () => (
-  <div className="obc">
+  <div className="obc" aria-hidden="true">
     <span className="t1">LE COMPTOIR</span>
     <span className="t2">Bar - Ambiance - Billard</span>
     <span className="st">★ ─── ★</span>

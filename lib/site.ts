@@ -75,7 +75,8 @@ export const CONTACT = {
  * Lien WhatsApp, avec message pre-rempli optionnel.
  *
  * Le site compte NEUF liens WhatsApp, chacun avec sa propre phrase d amorce
- * (« refaire la carte », « le pack complet m interesse »…). Ces phrases sont
+ * (« je souhaite faire refaire le site de mon entreprise », « l Assistant m
+ * interesse »…). Ces phrases sont
  * editoriales et doivent rester distinctes ; c est le NUMERO qui ne doit
  * exister qu une fois. D ou cette fonction plutot qu une constante : elle
  * centralise le seul fragment qui ne varie pas.
