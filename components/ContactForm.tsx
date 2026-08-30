@@ -66,7 +66,17 @@ export default function ContactForm() {
       });
 
       if (res.ok) {
-        setEtat({ statut: "succes", message: "Message reçu — réponse sous 24 h." });
+        // « réponse sous 24 h » a survecu ici a la purge des delais parce
+        // qu il vivait dans une chaine JS et non dans du JSX. C est pourtant
+        // le meme engagement interdit : le seul autorise est « réponse le
+        // jour ouvrable suivant », et il est deja ecrit au-dessus du
+        // formulaire — le repeter en ferait une seconde occurrence. Le
+        // message de succes dit donc un FAIT verifiable a la place : ou
+        // arrive le message (lib/telegram.ts).
+        setEtat({
+          statut: "succes",
+          message: "Message reçu — il arrive directement sur mon téléphone.",
+        });
         form.reset();
         return;
       }
@@ -125,7 +135,10 @@ export default function ContactForm() {
 
         <div>
           <button className="btn" type="submit" disabled={etat.statut === "envoi"}>
-            {etat.statut === "envoi" ? "Envoi…" : "Envoyer"}
+            {/* « Envoyer » seul ne dit pas ce qui part. Le guide de voix
+                impose « Envoyer ma demande » : c est ce que le visiteur
+                envoie, et c est le mot du glossaire (entree 6). */}
+            {etat.statut === "envoi" ? "Envoi…" : "Envoyer ma demande"}
             <span className="ar">→</span>
           </button>
         </div>
