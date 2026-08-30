@@ -1,7 +1,13 @@
-# Réécriture — page `/confidentialite`
+# Réécriture — page `/confidentialite` — **tour 2**
 
 > Mode `propose`. Aucun fichier du site n'est modifié.
 > Fichier : `app/(site)/confidentialite/page.tsx`.
+> Remplace la version du tour 1, archivée dans
+> `docs/agents/_archive/2026-08-30-tour1/copy/confidentialite.md`.
+> **Le fond de cette page ne change pas au tour 2** : la revue A la range parmi
+> les artefacts sans correction à faire, et son §2 — le transfert des
+> conversations hors de Suisse — y est désigné comme la meilleure trouvaille du
+> lot. Deux retouches seulement, marquées *(tour 2)*.
 > **Mot-clé cible** : *politique de confidentialité Nawa Corps (nLPD)*. Il est
 > dans le `title`, dans la `meta description` et dans le `h1` — inchangés.
 >
@@ -64,7 +70,7 @@
 - **POURQUOI.** L'affirmation actuelle est vraie et vérifiable — aucun script
   d'analytics n'est chargé, `SchemaStudio` n'émet qu'un `<script>` de donnée
   structurée et aucun pixel. Elle mérite d'être dite en entier plutôt qu'à
-  moitié : c'est un des rares endroits du site où le studio a un fait net à
+  moitié : c'est un des rares endroits du site où l'agence a un fait net à
   opposer à ce que le visiteur redoute. Aucune promesse ajoutée, une négation
   précisée.
 - **PREUVE.** `components/SchemaStudio.tsx` et son commentaire dans
@@ -90,11 +96,11 @@
 
 - **AVANT** (`:48-49`) — Conservation — « 12 mois, puis suppression. »
 - **APRÈS** — **« 12 mois après notre dernier échange, puis suppression. »**
-- **POURQUOI.** « 12 mois » sans point de départ est la même faute que
-  « 72 heures » sans point de départ : le lecteur ne peut pas savoir quand le
-  compteur démarre. Trois mots le disent. C'est aussi la règle du guide (§4,
-  « On nomme le point de départ et la condition ») appliquée hors du discours
-  commercial.
+- **POURQUOI.** *(tour 2 : l'analogie changeait de chiffre, pas de sens.)*
+  « 12 mois » sans point de départ est la même faute qu'un délai de refonte sans
+  point de départ : le lecteur ne peut pas savoir quand le compteur démarre.
+  Trois mots le disent. C'est la règle du guide (§4, « On nomme le point de
+  départ et la condition ») appliquée hors du discours commercial.
 - **POINT OUVERT.** Cette durée est-elle réellement appliquée ? Aucune purge
   automatique n'a été relevée dans le schéma Prisma. Une durée annoncée et non
   tenue est pire que pas de durée du tout.

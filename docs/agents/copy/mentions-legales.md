@@ -1,60 +1,78 @@
-# Réécriture — page `/mentions-legales`
+# Réécriture — page `/mentions-legales` — **tour 2**
 
 > Mode `propose`. Aucun fichier du site n'est modifié.
 > Fichier : `app/(site)/mentions-legales/page.tsx`.
+> Remplace la version du tour 1, archivée dans
+> `docs/agents/_archive/2026-08-30-tour1/copy/mentions-legales.md`.
 > **Mot-clé cible** : *mentions légales Nawa Corps Genève*. Il est dans le
 > `title`, dans la `meta description` et dans le `h1` — inchangés.
 >
-> C'est la page la plus courte du site et celle où le copy a le moins à faire :
-> elle est correcte de ton, sobre, sans un adjectif de trop. **Son problème n'en
-> est pas un de mots : trois valeurs y sont des marqueurs à remplir, et ils sont
-> visibles en production.** Ils ne peuvent être remplis que par Boualem — les
-> inventer serait exactement ce que la définition de rôle interdit.
+> **Ce qui change au tour 2 : un des trois marqueurs a sa réponse.**
+> `.agents/product-marketing.md` §1 nomme désormais l'exploitant, et le nom est
+> public. C'est la correction la moins chère et la plus utile du lot : la revue
+> A relève que l'identité vérifiable — un nom, une adresse, un numéro, à Genève
+> — est le **substitut de preuve sociale le moins cher à obtenir**, et que
+> `[PRÉNOM NOM — À COMPLÉTER]` le détruisait précisément là où le prospect
+> méfiant va vérifier.
 
 ---
 
-## 1. Les marqueurs à remplir — bloquant avant mise en ligne
+## 1. L'éditeur — le marqueur qui tombe
 
-| Ligne | Texte affiché aujourd'hui | Ce qu'il faut, et qui le fournit |
+- **AVANT** (`:58`) — Nawa Corps, **studio digital**, Genève, Suisse, exploité
+  par **[PRÉNOM NOM — À COMPLÉTER]**
+- **APRÈS** — **Nawa Corps, agence digitale, Genève, Suisse, exploitée par Ayoub
+  Bensalem.**
+- **POURQUOI.** Deux corrections dans une ligne. **(a)** Le nom est public :
+  `.agents/product-marketing.md` §1, « Agence digitale indépendante à Genève,
+  opérée par **Ayoub Bensalem** ». Ce n'est plus un placeholder, et le remplir
+  n'est plus une invention. **(b)** « Studio digital » n'est plus la catégorie
+  (voir `accueil.md` §I). L'accord passe au féminin avec « agence ».
+- **PREUVE.** §1 du positionnement.
+
+## 2. Les marqueurs qui restent — bloquants avant mise en ligne
+
+| Ligne | Ce qui manque | Qui le fournit |
 |---|---|---|
-| `:58` | Nawa Corps, studio digital, Genève, Suisse, exploité par **[PRÉNOM NOM — À COMPLÉTER]** | Le nom civil de l'exploitant, et la forme juridique si elle existe (raison individuelle, Sàrl). **Boualem.** |
-| `:58` | Contact : hello@nawacorps.ch **[à confirmer]** | L'adresse réelle. Verrouillée par `NAP_CONFIRME = false` (`lib/site.ts:42`). **Boualem.** |
-| `:60` | **[Infomaniak, Suisse — à confirmer en B12]** | L'hébergeur réel et son pays. **Boualem.** |
+| `:58` | **La forme juridique**, si elle existe : raison individuelle inscrite au registre, ou Sàrl. « Exploitée par Ayoub Bensalem » suffit pour une activité en nom propre non inscrite ; au-delà, la raison sociale exacte et le numéro IDE sont attendus. | **Boualem** |
+| `:58` | **L'adresse de l'éditeur.** `.agents/product-marketing.md` §1 pose « **pas de bureau** » — c'est assumé commercialement, mais une adresse de domiciliation reste attendue sur des mentions légales suisses. « Genève, Suisse » seul est une zone, pas une adresse. | **Boualem** |
+| `:58` | **L'adresse de contact** : `hello@nawacorps.ch` porte encore « [à confirmer] », et `NAP_CONFIRME = false` (`lib/site.ts:42`). C'est aussi le canal d'exercice des droits annoncé par `/confidentialite`. | **Boualem** |
+| `:60` | **L'hébergeur réel et son pays** : « [Infomaniak, Suisse — à confirmer en B12] ». | **Boualem** |
 
-- **POURQUOI ce n'est pas du copy.** Le commentaire du fichier le dit déjà, et
-  il a raison : « Les [PLACEHOLDERS] sont volontairement visibles : ils marquent
-  ce qui reste à confirmer et ne doivent jamais être remplis par invention. »
-  Le rôle de ce guide s'arrête là. La seule chose à ajouter est que **la page
-  est en ligne**, donc que ces marqueurs sont lus par les visiteurs et par les
-  moteurs, et qu'une mention légale incomplète est le premier document qu'un
-  prospect méfiant va chercher.
-- **PREUVE.** `.agents/product-marketing.md` §7, « À formaliser (non défini à ce
-  jour) : qui facture le client final, et qui porte la garantie ». La question
-  de l'éditeur n'est donc pas seulement administrative — elle n'est pas tranchée
-  sur le fond.
+- **POURQUOI ce n'est pas du copy.** Le commentaire du fichier le dit, et il a
+  raison : « Les [PLACEHOLDERS] sont volontairement visibles : ils marquent ce
+  qui reste à confirmer et ne doivent jamais être remplis par invention. » Le
+  rôle de ce guide s'arrête là — sauf pour le nom, qui n'est plus une invention.
+  La seule chose à ajouter est que **la page est en ligne** : ces marqueurs sont
+  lus par les visiteurs et par les moteurs, et une mention légale incomplète est
+  le premier document qu'un prospect méfiant va chercher.
+- **PREUVE.** §7 du positionnement, « À formaliser (non défini à ce jour) : qui
+  facture le client final, et qui porte la garantie ». La question de l'éditeur
+  n'est donc pas seulement administrative — elle n'est pas tranchée sur le fond.
 
-## 2. La seule réécriture proposée
+## 3. La propriété intellectuelle
 
 - **AVANT** (`:62`) — Propriété intellectuelle — « Contenus et design © Nawa
   Corps. Reproduction interdite sans accord. »
 - **APRÈS** — **Propriété intellectuelle** — **« Contenus, textes et design ©
   Nawa Corps. Reproduction interdite sans accord écrit. Les pièces présentées
-  en démonstration sur la page d'accueil sont des travaux du studio ; les
-  entreprises qui y figurent sont fictives. »**
-- **POURQUOI.** Deux ajouts, un seul motif : la page d'accueil montre cinq
-  pièces construites autour d'un établissement inventé, et le positionnement les
-  classe déjà « client fictif inventé — à retirer » (§6). Tant que ces pièces
-  sont en ligne, **le dire ici est le filet de sécurité minimal**, et c'est le
-  seul endroit du site où une telle mention est attendue. « Accord écrit »
-  plutôt qu'« accord » parce qu'un accord oral ne se prouve pas.
-- **PREUVE.** `.agents/product-marketing.md` §6, tableau des preuves et « Règle
-  absolue » ; CLAUDE.md, Interdits (« En Suisse, la LCD (art. 3) vise les
-  indications trompeuses »).
-- **RÉSERVE.** Cette mention **ne remplace pas** l'étiquetage des pièces
-  elles-mêmes. Le §6 demande une démonstration « étiquetée démonstration sans
-  ambiguïté », c'est-à-dire à côté de la pièce, pas dans une page annexe que
-  personne n'ouvre. Les réécritures de `accueil.md` §B s'en chargent ; celle-ci
-  les double, elle ne les remplace pas.
+  en démonstration sur la page d'accueil sont des travaux de l'agence ; les
+  établissements qui y figurent sont fictifs. »**
+- **POURQUOI.** La page d'accueil montre cinq pièces construites autour d'un
+  établissement inventé, que le positionnement classe déjà « client fictif
+  inventé — à retirer » (§6). Tant que ces pièces sont en ligne, **le dire ici
+  est le filet de sécurité minimal**, et c'est le seul endroit du site où une
+  telle mention est attendue. « Accord écrit » plutôt qu'« accord » parce qu'un
+  accord oral ne se prouve pas.
+- **PREUVE.** §6, tableau des preuves et « Règle absolue » ; `CLAUDE.md`,
+  Interdits.
+- **RÉSERVE — et elle se resserre au tour 2.** Cette mention **ne remplace pas**
+  l'étiquetage des pièces elles-mêmes ; `accueil.md` §B s'en charge. **Et si la
+  pièce « La carte » se révèle être le travail du client payant réel**
+  (`accueil.md` §B.4, décision ouverte), la phrase « les établissements qui y
+  figurent sont fictifs » devient **fausse** et doit être amendée en
+  conséquence. Les deux fichiers se tiennent : ne pas appliquer l'un sans
+  l'autre.
 
 ---
 

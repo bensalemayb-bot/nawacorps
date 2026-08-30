@@ -1,20 +1,84 @@
 # Inventaire des textes visibles — site Nawa Corps
 
-> Relevé le 2026-08-30. Mode `propose` : aucun fichier du site n'est modifié.
+> Relevé le 2026-08-30 (tour 1), **re-qualifié au tour 2** le même jour après la
+> révision de `.agents/product-marketing.md`. Version du tour 1 archivée dans
+> `docs/agents/_archive/2026-08-30-tour1/copy/_inventaire.md`.
+> Mode `propose` : aucun fichier du site n'est modifié.
 > Balayage : `app/(site)/**`, `components/**`, `lib/site.ts`, `prisma/seed.ts`.
 > **Aucun fichier i18n** (`*.json`, `*.po`, `*.yml`, `*.yaml`) n'existe :
 > l'intégralité des chaînes est écrite en dur dans le JSX (CLAUDE.md, §Langues).
 > Le back-office `/admin` est hors périmètre — il n'est pas public.
+>
+> ⚠️ **Le relevé des textes n'a pas été refait au tour 2** : deux agents
+> travaillent sur `components/`, `lib/`, `app/` et les routes, et ces fichiers
+> n'ont pas été rouverts. Les colonnes « texte actuel » et « fichier:ligne »
+> sont celles du tour 1 et **font foi** ; ce qui change au tour 2, c'est la
+> **qualification** — voir le §0 ci-dessous.
 
 **Périmètre : 3 pages** (`/`, `/mentions-legales`, `/confidentialite`) + le
 chrome partagé (nav, menu, loader, assistant), rendu par
 `app/(site)/layout.tsx` sur les trois routes.
 
-**112 textes visibles relevés · 68 signalés · 44 conformes, laissés tels quels.**
+**112 textes visibles relevés · 68 signalés au tour 1 · +14 signalés au tour 2
+(délai et identité) · 30 conformes, laissés tels quels.**
 
 Priorité : **haute** = contredit une réserve de la porte G1, une règle du
 positionnement ou le droit (LCD art. 3) · **moyenne** = affaiblit la promesse ou
 sort du glossaire · **basse** = confort de lecture.
+
+---
+
+## 0. Ce que le tour 2 requalifie — deux changements, 20 textes
+
+### 0.a — `DEL` · le délai annoncé n'est plus « 72 heures »
+
+`.agents/product-marketing.md` §3, §8 et §9 : **« une semaine », partout, sans
+exception**, refonte comme départ de zéro, et **aucun compte d'heures**. Tout
+texte ci-dessous affiche un délai devenu faux. **Priorité haute sans
+exception** — ce n'est plus un problème de formulation, c'est une information
+inexacte affichée au public.
+
+| Fichier:ligne | Texte actuel | Réécriture |
+|---|---|---|
+| `NoyauHero.tsx:40` | En **72 heures**, il | `accueil.md` §A.1 — `h1` entier remplacé |
+| `NoyauHero.tsx:44` | Refait en **72 heures** si vous avez déjà un site, une semaine si on part de zéro | `accueil.md` §A.2 |
+| `NoyauHero.tsx:73-74` | **72 / heures** *(chiffre géant)* | `accueil.md` §A.6, temps 3 |
+| `NoyauHero.tsx:77-80` | Refonte : **72 heures** · Départ de zéro : Une semaine | `accueil.md` §A.6, temps 3 |
+| `Strip.tsx:12-13` | **72 heures** *(jeton défilant)* | `accueil.md` §C.1 |
+| `ServicesRows.tsx:27` | Livré **en 72 heures** | `accueil.md` §C.3, geste 01 |
+| `Methode.tsx:12` | … à la mise en ligne : **72 heures** | `accueil.md` §E.1 |
+| `Methode.tsx:16` | **24 h** — La maquette | `accueil.md` §E.1, jalons |
+| `Methode.tsx:17` | **72 h** — La mise en ligne | `accueil.md` §E.1, jalons |
+| `Studio.tsx:20` | **72 h** / Refonte livrée | `accueil.md` §E.3 |
+| `Faq.tsx:18` | « **72 heures**, vraiment ? » | `accueil.md` §E.4, Q1 |
+| `Faq.tsx:35` | livré en **trois jours** au lieu de trois mois | `accueil.md` §E.4, Q5 |
+| `feature-carousel.tsx:385` | Un site de 2009 refait **en 72 heures** | `accueil.md` §B.3 |
+| `layout.tsx:55,66,72` | … — livré en **72 h** *(title, og, twitter)* | `accueil.md` §G |
+| `layout.tsx:59` | … en **72 heures** *(meta description)* | `accueil.md` §G |
+| `layout.tsx:68,74` | En **72 heures** il reçoit les demandes *(og/twitter description)* | `accueil.md` §G |
+
+> **À vérifier avant l'apply, hors de mon accès :** `lib/chat-prompt.ts` (le
+> prompt de l'assistant) et `prisma/seed.ts` (descriptions des services)
+> peuvent contenir le même délai. L'assistant est le seul texte du site qui
+> parle sans être relu.
+
+### 0.b — `IDT` · « studio digital » n'est plus la catégorie
+
+`.agents/product-marketing.md` §1 : **agence digitale** indépendante à Genève,
+opérée par **Ayoub Bensalem**, **pas de bureau**. Inventaire complet du
+renommage et réserve associée : `accueil.md` §I.
+
+| Fichier:ligne | Texte actuel | Prio |
+|---|---|---|
+| `NoyauHero.tsx:29-31` | ® **Studio digital indépendant** · Genève, Suisse | haute |
+| `Loader.tsx:39` | **Studio digital — Genève** | haute |
+| `FooterContact.tsx:59` | **Studio digital — Genève** | haute |
+| `Travaux.tsx:23` | Cinq démonstrations **du studio** | moyenne |
+| `CarteDuStudio.tsx:99,101,113` | La carte **du studio** ; **le studio** reste à disposition ; suivis par **le studio** | moyenne |
+| `Studio.tsx:10,16` | (05) **Le studio** ; Nawa Corps est **le studio d'Ayoub** | moyenne |
+| `mentions-legales/page.tsx:58` | Nawa Corps, **studio digital**, … **[PRÉNOM NOM — À COMPLÉTER]** | haute |
+
+*(Ces sept lignes couvrent les dix chaînes du tableau de renommage.)*
 
 ---
 
@@ -24,7 +88,10 @@ sort du glossaire · **basse** = confort de lecture.
 |---|---|
 | `B1` | superlatif de marché / affirmation sur les concurrents |
 | `B2` | concurrent nommé ou reconnaissable en creux |
-| `B3` | « 72 h » voyage seul, sans point de départ ni livrable |
+| `B3` | le délai voyage seul, sans point de départ ni livrable |
+| `DEL` | **délai périmé** — affiche 72 h / 48 h / 24 h / trois jours ; le délai est « une semaine » (tour 2, §0.a) |
+| `IDT` | **identité périmée** — « studio digital » ou « le studio » ; la catégorie est « agence digitale » (tour 2, §0.b) |
+| `ABO` | **abonnement obligatoire tu** — le palier 3 impose 129.–/mois et aucune ligne ne le dit (tour 2, BL-1) |
 | `B4` | « interlocuteur unique » ou variante reconnaissable |
 | `B6` | ligne de justification de prix (interdite avant décision Boualem) |
 | `PRV` | affirmation sans preuve dans le positionnement ni la veille |
@@ -42,13 +109,13 @@ sort du glossaire · **basse** = confort de lecture.
 
 | Page | Section | Fichier:ligne | Texte actuel | Problème | Prio |
 |---|---|---|---|---|---|
-| Toutes | title par défaut | `app/(site)/layout.tsx:55` | Refonte de site pour PME à Genève — livré en 72 h | — conforme (mot-clé + livrable dans la même unité) | — |
+| Toutes | title par défaut | `app/(site)/layout.tsx:55` | Refonte de site pour PME à Genève — livré en 72 h | **`DEL`** *(conforme au tour 1, périmé au tour 2)* | **haute** |
 | Toutes | title template | `app/(site)/layout.tsx:56` | `%s — Nawa Corps` | — conforme | — |
-| / | meta description | `app/(site)/layout.tsx:59` | Nawa Corps refait le site des PME genevoises en 72 heures : demande de devis… Dès 699.–, TVA comprise. | — conforme | — |
-| / | og:title | `app/(site)/layout.tsx:66` | Refonte de site pour PME à Genève — livré en 72 h | — conforme | — |
-| / | og:description | `app/(site)/layout.tsx:68` | **Votre site a dix ans.** En 72 heures il reçoit les demandes… | `PRV` affirme l'âge du site du lecteur ; `DBL` doit suivre le nouveau hero | haute |
-| / | twitter:title | `app/(site)/layout.tsx:72` | idem og:title | — conforme | — |
-| / | twitter:description | `app/(site)/layout.tsx:74` | idem og:description | `PRV` `DBL` | haute |
+| / | meta description | `app/(site)/layout.tsx:59` | Nawa Corps refait le site des PME genevoises en 72 heures : demande de devis… Dès 699.–, TVA comprise. | **`DEL`** | **haute** |
+| / | og:title | `app/(site)/layout.tsx:66` | Refonte de site pour PME à Genève — livré en 72 h | **`DEL`** | **haute** |
+| / | og:description | `app/(site)/layout.tsx:68` | **Votre site a dix ans.** En 72 heures il reçoit les demandes… | `PRV` affirme l'âge du site du lecteur ; `DBL` doit suivre le nouveau hero ; **`DEL`** | haute |
+| / | twitter:title | `app/(site)/layout.tsx:72` | idem og:title | **`DEL`** | **haute** |
+| / | twitter:description | `app/(site)/layout.tsx:74` | idem og:description | `PRV` `DBL` **`DEL`** | haute |
 | /mentions-legales | title / description / og | `app/(site)/mentions-legales/page.tsx:34-46` | Mentions légales… | — conforme | — |
 | /confidentialite | title / description / og | `app/(site)/confidentialite/page.tsx:21-30` | Confidentialité… | — conforme | — |
 
@@ -63,7 +130,7 @@ sort du glossaire · **basse** = confort de lecture.
 | Toutes | nav, bouton menu | `components/Nav.tsx:63` | Ouvrir le menu (aria-label) | — conforme | — |
 | Toutes | menu plein écran | `components/MenuOverlay.tsx:13-17` | (01) Travaux … (05) Contact | `GLO` même remarque que la nav | haute |
 | Toutes | menu, pied | `components/MenuOverlay.tsx:20-23` | WhatsApp · e-mail · Genève, Suisse | — conforme | — |
-| Toutes | loader | `components/Loader.tsx:39` | Studio digital — Genève | — conforme | — |
+| Toutes | loader | `components/Loader.tsx:39` | **Studio digital** — Genève | **`IDT`** la catégorie est « agence digitale » (§0.b) | **haute** |
 | Toutes | assistant, en-tête | `components/ChatWidget.tsx:180` | Assistant Nawa Corps | — conforme | — |
 | Toutes | assistant, sous-titre | `components/ChatWidget.tsx:181` | **Réponse d'Ayoub sous 24 h** | `PRV` délai de réponse absent du positionnement | haute |
 | Toutes | assistant, accueil | `components/ChatWidget.tsx:35-36` | Bonjour. Je prépare votre proposition avec Ayoub. Quel est votre métier, et avez-vous déjà un site en ligne ? | — conforme, et qualifie sur le signal ICP | — |
@@ -74,7 +141,7 @@ sort du glossaire · **basse** = confort de lecture.
 
 | Page | Section | Fichier:ligne | Texte actuel | Problème | Prio |
 |---|---|---|---|---|---|
-| / | kicker | `components/NoyauHero.tsx:29-31` | ® Studio digital indépendant · Genève, Suisse · Sites de PME | — conforme | — |
+| / | kicker | `components/NoyauHero.tsx:29-31` | ® **Studio digital indépendant** · Genève, Suisse · Sites de PME | **`IDT`** première ligne lue du site, elle nomme une catégorie abandonnée | **haute** |
 | / | **h1 ligne 1** | `components/NoyauHero.tsx:39` | **Votre site a dix ans.** | `PRV` affirmation sur le lecteur (l'ICP est « plus de cinq ans ») ; `DER` frôle le reproche ; **rejeté par Boualem** | **haute** |
 | / | **h1 ligne 2** | `components/NoyauHero.tsx:40` | **En 72 heures, il** | `B3` le délai n'a ni point de départ ni livrable dans le h1 | **haute** |
 | / | **h1 ligne 3** | `components/NoyauHero.tsx:41` | **travaille pour vous.** | `TON` abstrait, ne dit pas ce qui entre | **haute** |
@@ -145,13 +212,13 @@ sort du glossaire · **basse** = confort de lecture.
 | / | La Vitrine, CTA | `components/Offres.tsx:55` | Refaire mon site | — conforme | — |
 | / | Le Site, puces | `components/Offres.tsx:63-66` | Tout La Vitrine, plus : · Prise de rendez-vous en ligne · Devis chiffré automatiquement · Fiche Google et photos comprises | — conforme | — |
 | / | Le Site, CTA | `components/Offres.tsx:68` | **Lancer mon site** | `GLO` « lancer » ne dit pas le bénéfice du palier | moyenne |
-| / | L'Assistant, puces | `components/Offres.tsx:76-79` | Tout Le Site, plus : · L'assistant de ce site, sur le vôtre · Alerte sur votre téléphone à chaque demande · Relance automatique et tableau de bord | — conforme, et démontrable en direct | — |
+| / | L'Assistant, puces | `components/Offres.tsx:76-79` | Tout Le Site, plus : · L'assistant de ce site, sur le vôtre · Alerte sur votre téléphone… | **`ABO`** aucune puce n'annonce le suivi obligatoire à 129.–/mois ; et la seule preuve vérifiable du site est enterrée dans une puce | **haute** |
 | / | L'Assistant, CTA | `components/Offres.tsx:81` | Automatiser mes demandes | — conforme | — |
 | / | note de prix 1 | `components/Offres.tsx:170` | Prix en francs suisses, TVA comprise, **sans frais cachés.** | `SAT` | haute |
-| / | note de prix 2 | `components/Offres.tsx:171` | Suivi et hébergement dès 49.–/mois, à partir de la 2ᵉ année. | — conforme ; **montant en dur** (voir points ouverts) | moyenne |
+| / | note de prix 2 | `components/Offres.tsx:171` | Suivi et hébergement **dès 49.–/mois**, à partir de la 2ᵉ année. | **`ABO`** « dès 49.– » fait lire un plancher facultatif là où le palier 3 impose 129.– ; **montant en dur** | **haute** |
 | / | ligne « sur devis » | `components/Offres.tsx:162,93` | `<nom> — sur devis` + Demander un devis → | — conforme | — |
 | / | carte, h2 | `components/CarteDuStudio.tsx:99` | La carte du studio | — conforme | — |
-| / | carte, chapô | `components/CarteDuStudio.tsx:101` | Votre site en ligne, le studio reste à disposition — à la carte, **sans engagement.** | `SAT` terme relevé chez un acteur, et vague | moyenne |
+| / | carte, chapô | `components/CarteDuStudio.tsx:101` | Votre site en ligne, **le studio** reste à disposition — à la carte, **sans engagement.** | `SAT` terme relevé chez un acteur, et vague ; **`IDT`** | moyenne |
 | / | carte, libellés de groupe | `components/CarteDuStudio.tsx:35-38` | Les formules · En complément · En continu · Pour la restauration | — conforme | — |
 | / | carte, note restauration | `components/CarteDuStudio.tsx:113` | La ligne restauration reste ouverte… pour les établissements déjà suivis par le studio. | — conforme (§5, règle des 300.–) | basse |
 | / | carte, pied | `components/CarteDuStudio.tsx:117` | Prix indicatifs, TVA comprise — **devis en cinq minutes.** | `PRV` délai inventé | **haute** |
@@ -174,9 +241,9 @@ sort du glossaire · **basse** = confort de lecture.
 | / | **paragraphe 2** | `components/Studio.tsx:17` | **Si les prix sont ceux-là, c'est la structure qui l'explique**, pas le travail : pas de bureaux, pas d'équipe commerciale… | **`B6`** défense de prix, interdite avant la décision de Boualem | **haute** |
 | / | faits | `components/Studio.tsx:19-21` | Genève / Basé ici · **72 h / Refonte livrée** · FR / EN / Langues | `B3` le 72 h est seul dans sa case | moyenne |
 | / | étiquette de section | `components/Faq.tsx:58` | (06) Questions | — conforme | — |
-| / | Q1 | `components/Faq.tsx:18-19` | 72 heures, vraiment ? — … le délai court dès votre feu vert, pas dès que vous m'avez envoyé quelque chose. | — **la meilleure réponse du site**, à remonter en haut de page | — |
+| / | Q1 | `components/Faq.tsx:18-19` | **72 heures**, vraiment ? — … le délai court dès votre feu vert, pas dès que vous m'avez envoyé quelque chose. | **`DEL`** sur la question ; la **réponse** reste **la meilleure du site**, à remonter en haut de page | **haute** |
 | / | Q2 | `components/Faq.tsx:22-23` | Je n'ai ni textes ni photos. C'est bloquant ? | — conforme | — |
-| / | Q3 | `components/Faq.tsx:26-27` | Qui gère l'hébergement et le nom de domaine ? | — conforme ; **montants en dur** (points ouverts) | moyenne |
+| / | Q3 | `components/Faq.tsx:26-27` | Qui gère l'hébergement et le nom de domaine ? *(cite 49.– et 129.–)* | **`ABO`** cite 129.– comme un montant d'hébergement, pas comme une condition d'achat du palier 3 ; **montants en dur** | haute |
 | / | Q4 | `components/Faq.tsx:30-31` | Et si je veux changer quelque chose après ? … **c'est corrigé dans la journée.** | `PRV` `DBL` même délai non sourcé qu'en Méthode 04 | haute |
 | / | **Q5** | `components/Faq.tsx:34-35` | **Pourquoi moins cher qu'une agence ?** … et il est livré en **trois jours au lieu de trois mois.** | **`B6`** défense de prix · **`B1`** affirme le délai des agences · `GLO` « trois jours » ≠ « 72 heures » | **haute** |
 | / | JSON-LD FAQPage | `components/Faq.tsx:39-47` | reprend les 5 Q/R | suit automatiquement les corrections ci-dessus | — |
@@ -197,7 +264,7 @@ sort du glossaire · **basse** = confort de lecture.
 | / | colonnes | `components/FooterContact.tsx:45-48` | Genève, Suisse · téléphone · Lu–Sa · 9h–19h · © 2026 Nawa Corps | téléphone et horaires non confirmés (`NAP_CONFIRME=false`) | moyenne |
 | / | signature géante | `components/FooterContact.tsx:51` | NAWA CORPS | — conforme | — |
 | / | slogan | `components/FooterContact.tsx:57` | L'essentiel. Bien conçu. | — conforme, **un seul endroit du site** (§8) | — |
-| / | bande légale | `components/FooterContact.tsx:59-62` | Studio digital — Genève · Sites · Devis · Rendez-vous · Mentions légales · Confidentialité | — conforme | — |
+| / | bande légale | `components/FooterContact.tsx:59-62` | **Studio digital — Genève** · Sites · Devis · Rendez-vous · Mentions légales · Confidentialité | **`IDT`** | **haute** |
 
 ## 9. Pages légales
 
@@ -236,7 +303,25 @@ sort du glossaire · **basse** = confort de lecture.
    copy** — signalée à `revue-code`.
 2. **Coordonnées non confirmées.** `NAP_CONFIRME = false` (`lib/site.ts:42`) :
    téléphone, e-mail et horaires affichés sont des valeurs de remplacement, y
-   compris en grand sur la carte de visite du carrousel.
-3. **Contradiction interne du positionnement.** §5 fixe le suivi à 49.– / 129.–,
-   §10 décision n°3 le décrit comme « 89.–/mois, à confirmer ». Le site affiche
-   49.–. À trancher avant l'apply.
+   compris en grand sur la carte de visite du carrousel. **Le nom de
+   l'exploitant, lui, n'est plus un point ouvert** : `.agents/product-marketing.md`
+   §1 le rend public — **Ayoub Bensalem**.
+3. ~~**Contradiction interne du positionnement** sur le prix du suivi.~~
+   **Point ouvert supprimé au tour 2 : la contradiction n'existe plus.** Le §10
+   sur disque n'a pas de décision n°3 sur le suivi, et le §5 porte un paragraphe
+   « Pourquoi 49.– et pas 89.– » qui tranche. Le point ouvert du tour 1 avait
+   été écrit contre une version antérieure du document ; envoyer Boualem
+   arbitrer un point déjà arbitré coûtait un aller-retour pour rien.
+   *(Correction MINEUR 5 de la revue A.)*
+4. **`ABO` — l'abonnement obligatoire du palier 3 n'est écrit nulle part.**
+   `.agents/product-marketing.md` §5 : « Le palier 3 impose l'abonnement de
+   suivi — ce n'est pas une option », 129.–/mois. Trois textes sont concernés et
+   aucun ne le dit : `Offres.tsx:171` (note sous la grille), `Offres.tsx:76-79`
+   (puces de L'Assistant), `Faq.tsx:27` (Q3, qui cite 129.– comme un montant
+   d'hébergement et non comme une condition d'achat). Réécritures :
+   `accueil.md` §D.2, §D.3, §E.4. **Priorité haute — c'est un prix caché.**
+5. **`CLAUDE.md` porte encore l'ancien délai et l'ancienne catégorie**
+   (§ Le projet : « studio digital indépendant », « refonte du site en
+   **72 heures** »). C'est le fichier que le harnais charge en premier : tant
+   qu'il n'est pas corrigé, chaque agent suivant repart du chiffre mort. **Hors
+   de mon périmètre d'écriture** — signalé à `boss-decision`.
