@@ -16,7 +16,7 @@ const eslintConfig = defineConfig([
     "reference/**",
   ]),
 
-  // EXCEPTION CIBLEE — une seule regle, quatre fichiers. Jamais globale : la
+  // EXCEPTION CIBLEE — une seule regle, six fichiers. Jamais globale : la
   // regle reste active partout ailleurs dans le projet.
   {
     files: [
@@ -25,6 +25,7 @@ const eslintConfig = defineConfig([
       "app/(site)/mentions-legales/page.tsx",
       "app/(site)/confidentialite/page.tsx",
       "components/ChatWidget.tsx",
+      "app/(site)/prestations/page.tsx",
     ],
     rules: {
       // volontaire — next/link casserait les reveals (Interactions ne tourne qu'une fois), voir décision B7
