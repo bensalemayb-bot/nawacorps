@@ -863,8 +863,9 @@ a.cat-it:hover .go .ar{transform:translateX(4px)}
   background:repeating-conic-gradient(#ddd 0 25%,#f4f4f4 0 50%) 0 0/16px 16px;
   display:flex;align-items:center;justify-content:center;color:#777;font-size:.55rem}
 .osite .onew{color:#d00;font-weight:700;font-size:.66rem;letter-spacing:.04em}
-.osite .octr{margin:7px auto 0;width:70%;border:1px inset #aaa;background:#f4f2ea;padding:3px;font-size:.52rem;color:#333}
-.osite .ofoot{margin-top:9px;border-top:1px solid #bbb;padding:5px;font-size:.5rem;color:#777;font-style:italic}
+/* .octr et .ofoot sont partis avec le compteur de visiteurs et le pied
+   « optimise pour Internet Explorer 6 » de feature-carousel.tsx : l « avant »
+   doit rester date, jamais ridicule. Rien ne les porte plus. */
 .obc{width:min(270px,72%);aspect-ratio:85/55;background:#fdfcf3;border:1px solid #999;
   font-family:"Times New Roman",Times,serif;color:#111;transform:rotate(-4deg);
   box-shadow:0 14px 34px rgba(60,50,25,.3);display:flex;flex-direction:column;

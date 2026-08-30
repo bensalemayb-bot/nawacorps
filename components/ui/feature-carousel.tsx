@@ -330,8 +330,11 @@ const SiteOld = () => (
       <p className="onav">Accueil | Photos | Livre d&apos;or | Contact</p>
       <div className="oimg">photo_bar_001.jpg</div>
       <p className="onew">NOUVEAU : soirée jazz le jeudi !!!</p>
-      <div className="octr">Vous êtes le visiteur n° 000482</div>
-      <p className="ofoot">Site optimisé pour Internet Explorer 6 — résolution 800 × 600</p>
+      {/* LE COMPTEUR DE VISITEURS ET LE PIED « optimise pour Internet
+          Explorer 6 » ONT ETE SUPPRIMES, sans remplacement. Le guide de voix
+          demande un « avant » date, jamais ridicule : ce site-la est celui du
+          prospect, et deux clins d oeil de plus le faisaient basculer de la
+          constatation a la moquerie. Ne pas les remettre. */}
     </div>
   </div>
 );
