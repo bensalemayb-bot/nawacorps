@@ -20,13 +20,14 @@ type ServiceSeed = {
  * Prix en centimes CHF, TVA COMPRISE. priceCents null pour les prestations
  * sur devis (QUOTE).
  *
- * REGLE D AFFICHAGE : seules les trois formules de site et les deux
- * abonnements portent un prix affiche. Tout le reste — supports, identite,
- * photos, reseaux, ligne restauration — est sur devis. Un support se chiffre
- * mal hors contexte (tirage, format, papier, urgence), et une grille de
- * petits montants transformait le catalogue en liste de courses au lieu d une
- * offre. Le devis n est pas une derobade : c est la seule facon d annoncer un
- * prix juste sur ces lignes.
+ * REGLE D AFFICHAGE, tranchee par le proprietaire : seules les trois formules
+ * de site et les deux abonnements portent un prix affiche. TOUT LE RESTE EST
+ * SUR DEVIS, et ce n est pas une derobade — « ca depend ». Un imprime se
+ * chiffre selon le tirage, le format, le papier et l urgence : un montant
+ * affiche hors contexte serait faux la moitie du temps, et il faudrait le
+ * corriger devant le client. Demander deux informations avant de chiffrer
+ * donne un prix juste du premier coup.
+
  *
  * Les slugs des trois formules de sites sont la seule chose que le code
  * connaisse par coeur : components/Offres.tsx indexe son habillage editorial
