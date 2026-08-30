@@ -63,7 +63,23 @@ section{padding:clamp(90px,11vw,160px) 0}
    Les deux pages legales ne sont pas concernees : leur h1 vit HORS du
    .sec-head, qui n'y contient qu'un libelle seul. */
 .sec-head:has(h1),.sec-head:has(h2){grid-template-columns:clamp(140px,12vw,190px) 1fr}
-@media(max-width:760px){.sec-head{grid-template-columns:1fr;align-items:start;gap:18px}}
+/* LES DEUX SELECTEURS `:has()` SONT REPETES ICI, ET C'EST OBLIGATOIRE.
+   Une media query n'ajoute AUCUNE specificite : ce bloc ne pesait donc que
+   `.sec-head` (0,1,0) face aux (0,1,1) de la regle du dessus — la specificite
+   de `:has(h2)` est celle de son argument, `h2`, qui vaut un element. La plus
+   specifique gagnait quel que soit l'ordre, si bien que la bascule mobile ne
+   s'appliquait qu'aux .sec-head SANS titre, c'est-a-dire aux deux pages
+   legales — jamais a une seule section titree du site.
+   Mesure a 390px avant correction : colonne de titre a 190px au lieu des 350px
+   disponibles. Le h1 de /prestations/le-site tenait sur 227px de haut au lieu
+   de 115 ; « Six gestes, un seul interlocuteur. » forcait meme sa piste a
+   206px — le mot « interlocuteur. » ne rentre pas dans 190 — et debordait donc
+   de 16px dans la gouttiere droite de .wrap. */
+@media(max-width:760px){
+  .sec-head,
+  .sec-head:has(h1),
+  .sec-head:has(h2){grid-template-columns:1fr;align-items:start;gap:18px}
+}
 /* `h1.t` rejoint `h2.t`. La classe .t veut dire « titre de section » et rien
    d'autre ; elle etait deja ecrite sur les h1 des pages legales et sur ceux des
    pages de prestations, mais aucune regle ne la servait pour un h1 — le
