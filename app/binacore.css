@@ -921,3 +921,49 @@ html.menu-open .wordmark img { filter: brightness(0) invert(1); }
    .prest-liste du site — le catalogue — les enfants directs sont les lignes
    .sm-it, qui se seraient toutes ecartees de 50px. */
 .prest-palier + .prest-palier{margin-top:clamp(34px,4vw,52px)}
+
+/* ========== cibles tactiles ==========
+   BLOC MOBILE UNIQUEMENT (<=860px, le seuil qui fait deja basculer la nav en
+   burger). Rien de ce qui suit ne s'applique au-dessus, et rien ne deplace un
+   pixel : on n'agrandit que la SURFACE SENSIBLE, jamais la boite de mise en
+   page. Aucune de ces regles ne peint quoi que ce soit.
+
+   Mesures relevees au navigateur a 390px de large, hauteur de la zone
+   cliquable :
+     .burger                          40 x 40
+     .legal .lnk (mentions, confid.)  125 x 17  et  113 x 17
+     .c-cols .lnk (le telephone)       99 x 21
+     .m-foot a (WhatsApp, e-mail)      73 x 18  et  164 x 18
+     .p-note .lnk (demander un devis) 124 x 21
+     .sm-foot .lnk (demander un devis)135 x 22
+   Sept des huit passent sous les 24px que reclame le WCAG 2.2 AA (2.5.8), et
+   les huit sous les 44px recommandes par Apple. Deux d'entre elles sont des
+   CTA de devis : ce sont les liens les plus rentables de la page.
+
+   La hauteur de 44px a ete verifiee compatible avec l'ecartement vertical
+   reel de chaque bande a 390px (.c-cols : 66px entre deux rangees ; .legal :
+   33px ; .p-note : 35px ; .sm-foot : 57px). Aucune de ces surfaces n'en
+   recouvre une AUTRE cliquable — au pire elle passe au-dessus d'un <span> de
+   texte, qui ne capte aucun clic. */
+@media(max-width:860px){
+  /* Le burger garde ses 40px dessines ; seule sa zone sensible deborde de 2px
+     sur chaque bord. `inset` negatif plutot que width/height : changer sa
+     taille aurait pousse la hauteur de la barre de nav, qui s'aligne sur le
+     plus haut de ses enfants. */
+  .burger::after{content:"";position:absolute;inset:-2px}
+
+  /* .lnk porte deja position:relative (son souligne ::after en depend) ; son
+     ::before est libre. Le menu plein ecran, lui, utilise des <a> nus : il
+     faut leur donner le position:relative que le ::before exige. */
+  .menu .m-foot a{position:relative}
+  .legal .lnk::before,
+  .c-cols .lnk::before,
+  .menu .m-foot a::before,
+  .p-note .lnk::before,
+  .sm-foot .lnk::before{
+    content:"";position:absolute;left:0;right:0;top:50%;
+    /* `translate` et non `transform` : coherent avec le reste du fichier, et
+       insensible a toute transformation qui viendrait s'ajouter. */
+    translate:0 -50%;height:44px;
+  }
+}
