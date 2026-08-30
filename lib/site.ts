@@ -23,14 +23,26 @@
 /**
  * URL publique, sans slash final.
  *
- * Lue depuis l environnement pour que la meme image Docker serve la preview et
- * la production. Le repli sur localhost n est pas un defaut deguise : il vaut
- * en developpement, ou NEXT_PUBLIC_SITE_URL n est pas toujours defini, et
- * evite que `next build` echoue sur un `new URL(undefined)`.
+ * FAUX, corrige : ce fichier disait que la variable etait « lue depuis l
+ * environnement pour que la meme image Docker serve la preview et la
+ * production ». Les variables NEXT_PUBLIC_* sont INLINEES AU BUILD par
+ * `next build`, pas lues au demarrage du conteneur — voir
+ * node_modules/next/dist/docs/01-app/02-guides/environment-variables.md,
+ * autour de la ligne 164. Une image compilee avec une valeur ne peut pas en
+ * servir une autre au runtime : l image devient propre a UN domaine, et c est
+ * le prix a payer pour des canoniques, un sitemap et un JSON-LD corrects.
+ *
+ * Le repli sur localhost reste utile en developpement (ou la variable n est
+ * pas toujours definie), mais en production il transformait un oubli de
+ * configuration en erreur invisible — d ou le garde-fou ci-dessous.
  */
-export const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
-).replace(/\/$/, "");
+const brut = process.env.NEXT_PUBLIC_SITE_URL;
+if (!brut && process.env.NODE_ENV === "production") {
+  throw new Error(
+    "NEXT_PUBLIC_SITE_URL manquante : le build produirait des canoniques, un sitemap et un JSON-LD pointant vers localhost.",
+  );
+}
+export const SITE_URL = (brut || "http://localhost:3000").replace(/\/$/, "");
 
 /** Nom de marque. Le nom LEGAL, lui, vit dans les mentions legales. */
 export const SITE_NAME = "Nawa Corps";

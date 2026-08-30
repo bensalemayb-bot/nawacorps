@@ -15,6 +15,12 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npx prisma generate
+# NEXT_PUBLIC_* est inlinee AU BUILD par next build, pas lue au runtime : sans
+# cet ARG/ENV, le seul environment: de docker-compose.yml (etage runner)
+# n'a aucun effet et le build fige http://localhost:3000 dans les canoniques,
+# le sitemap, robots.txt et le JSON-LD. Voir lib/site.ts.
+ARG NEXT_PUBLIC_SITE_URL
+ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
 RUN npm run build
 
 # ---------- runner ----------
