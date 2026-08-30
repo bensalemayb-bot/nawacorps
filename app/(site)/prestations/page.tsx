@@ -71,11 +71,12 @@ export const metadata: Metadata = {
   /**
    * LE BLOC TWITTER EST OBLIGATOIRE ICI, et pour une raison de fond, pas de
    * cosmetique. Next fusionne les metadata champ par champ mais SANS descendre
-   * dans les objets : une page qui n en declare pas herite integralement de
-   * celui du layout — lequel annonce encore « livré en 72 h ». Ce delai est
-   * interdit (voir .agents/product-marketing.md §8) : la seule promesse est
-   * « une semaine ». Sans ce bloc, la carte de partage de cette page
-   * republierait le chiffre que la page elle-meme ne dit nulle part.
+   * dans les objets : un `twitter` partiel n herite pas des cles manquantes,
+   * et une page qui n en declare aucun herite integralement de celui du layout
+   * — titre et description de l accueil compris. La carte de partage de ce
+   * catalogue annoncerait donc la refonte de site, c est-a-dire un tiers de ce
+   * que la page presente. Meme mecanique que `openGraph`, meme parade : on
+   * redeclare le bloc EN ENTIER.
    * L image, elle, vient du fichier app/opengraph-image et n a pas a etre
    * redeclaree.
    */

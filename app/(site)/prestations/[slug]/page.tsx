@@ -99,11 +99,12 @@ export async function generateMetadata({
       description: formule.seoDescription,
       chemin: `/prestations/${slug}`,
     }),
-    // Meme raison qu au catalogue : sans bloc `twitter` propre, la page herite
-    // de celui du layout, qui annonce encore « livré en 72 h » — un delai
-    // interdit. La fusion des metadata ne descend pas dans les objets, il faut
-    // donc le redeclarer en entier. L image reste celle du fichier
-    // app/opengraph-image.
+    // Meme raison qu au catalogue : la fusion des metadata de Next ne descend
+    // pas dans les objets. Un `twitter` partiel perdrait les cles qu il ne
+    // redeclare pas, et n en declarer aucun ferait heriter celui du layout en
+    // entier — la carte de partage de La Vitrine porterait alors le titre et
+    // la description de l accueil. Il est donc redeclare complet. L image reste
+    // celle du fichier app/opengraph-image.
     twitter: {
       card: "summary_large_image",
       title: `${formule.seoTitre} — ${SITE_NAME}`,
