@@ -55,6 +55,13 @@ import { SITE_NAME, SITE_URL } from "@/lib/site";
  * chaines au passage : les prix vivent en base (lib/catalogue.ts), et une
  * metadonnee statique ne sait pas les relire.
  *
+ * L ORDRE DES DEUX MOITIES A ETE INVERSE. Les trois descriptions ouvraient sur
+ * la refonte puis rattrapaient le reste du catalogue par « Autour du site : »
+ * ou « Et le site n est pas tout — » : la moitie du metier arrivait en
+ * appendice, exactement le defaut que le h1 du hero portait aussi. Le metier
+ * passe donc devant, la refonte suit avec son delai. Le titre, lui, ne bouge
+ * pas : c est la requete, pas la definition.
+ *
  * `canonical` est declaree ICI, au layout, et vaut donc « / » pour l accueil.
  * Chaque page fille redeclare la sienne — une canonique heritee ferait pointer
  * les pages legales vers l accueil, ce qui les desindexerait.
@@ -66,7 +73,7 @@ export const metadata: Metadata = {
     template: `%s — ${SITE_NAME}`,
   },
   description:
-    "Nawa Corps refait le site des PME genevoises en une semaine : vous n'avez rien à préparer. Autour du site : identité, imprimés, photos, fiche Google, réseaux sociaux.",
+    "Studio de création digitale à Genève : sites, identité, imprimés, photos, fiche Google, réseaux sociaux. Le site des PME refait en une semaine, vous n'avez rien à préparer.",
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
@@ -75,13 +82,13 @@ export const metadata: Metadata = {
     url: "/",
     title: "Refonte de site pour PME à Genève — en une semaine",
     description:
-      "Refait en une semaine, et vous n'avez rien à préparer : je reprends les textes de votre site actuel. Et le site n'est pas tout — identité, imprimés, photos, fiche Google et réseaux sociaux se prennent ici aussi.",
+      "Site, identité, imprimés, photos, fiche Google, réseaux sociaux : une seule personne les fait, à Genève. Le site est refait en une semaine et vous n'avez rien à préparer — je reprends les textes de votre site actuel.",
   },
   twitter: {
     card: "summary_large_image",
     title: "Refonte de site pour PME à Genève — en une semaine",
     description:
-      "Refait en une semaine, et vous n'avez rien à préparer : je reprends les textes de votre site actuel. Et le site n'est pas tout — identité, imprimés, photos, fiche Google et réseaux sociaux se prennent ici aussi.",
+      "Site, identité, imprimés, photos, fiche Google, réseaux sociaux : une seule personne les fait, à Genève. Le site est refait en une semaine et vous n'avez rien à préparer — je reprends les textes de votre site actuel.",
   },
 };
 

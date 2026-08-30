@@ -17,7 +17,7 @@ import {
  *
  * TOUT CE QUI EST ICI EST DEJA ECRIT QUELQUE PART SUR LA PAGE. Les horaires
  * viennent du pied de page (« Lu–Sa · 9h–19h »), les langues de la section
- * « Le studio », les six prestations de ServicesRows, et les delais du hero
+ * « Le studio », les prestations de ServicesRows, et le delai du hero
  * (une semaine). `foundingDate` est la seule donnee sans reflet a
  * l ecran depuis le retrait de « Depuis 2026 » (.facts de Studio.tsx ne montre
  * plus que Geneve / une semaine / FR-EN) — c est un fait d etat civil, pas un
@@ -42,13 +42,27 @@ import {
  * en dur ici, c est prendre le risque qu il contredise la grille affichee.
  */
 
-/** Les six prestations, dans l ordre de ServicesRows. */
+/**
+ * Les prestations, dans l ordre de ServicesRows.
+ *
+ * ELLES NE SUIVENT PLUS LE DECOUPAGE EDITORIAL DES SIX LIGNES. « Identite,
+ * imprimes et photographie » et « Fiche Google et reseaux sociaux » sont des
+ * titres de section : ils groupent des metiers distincts pour tenir sur une
+ * ligne a l ecran. Un OfferCatalog n a pas cette contrainte, et un moteur
+ * n apparie pas une requete « logotype Geneve » avec un intitule qui melange
+ * trois prestations. Chacune est donc nommee separement — toutes sont ecrites
+ * dans le corps des lignes 04, 05 et 06 de ServicesRows, la regle du docblock
+ * ci-dessus tient.
+ */
 const PRESTATIONS = [
   "Refonte de site",
   "Demande de devis et prise de rendez-vous en ligne",
   "Assistant et relances automatiques",
-  "Identité, imprimés et photographie",
-  "Fiche Google et réseaux sociaux",
+  "Identité visuelle et logotype",
+  "Cartes de visite, affiches et stickers vitrine",
+  "Photographie d'entreprise",
+  "Fiche Google",
+  "Réseaux sociaux",
   "Supports pour la restauration",
 ];
 
@@ -60,7 +74,7 @@ export default function SchemaStudio() {
     name: SITE_NAME,
     url: SITE_URL,
     description:
-      "Studio de création digitale indépendant à Genève. Refonte du site des PME genevoises en une semaine, sans que le client ait de contenu à fournir — puis tout ce qui va autour : identité, imprimés, photos, fiche Google, réseaux sociaux et supports pour la restauration.",
+      "Studio de création digitale indépendant à Genève : sites, identité et logotype, imprimés, photographie d'entreprise, fiche Google, réseaux sociaux et supports pour la restauration. Une seule personne les fait. Le site des PME genevoises est refait en une semaine, sans que le client ait de contenu à fournir.",
     slogan: "L'essentiel. Bien conçu.",
     image: `${SITE_URL}/brand/nawa-corps-logo-principal-transparent.png`,
     logo: `${SITE_URL}/brand/nawa-corps-logo-principal-transparent.png`,
