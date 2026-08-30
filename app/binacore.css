@@ -46,9 +46,16 @@ section{padding:clamp(90px,11vw,160px) 0}
    de largeur d'une section a l'autre — 92px pour « (03) Offres », 118px pour
    « (06) Questions ». Avec `auto`, le titre partait donc d'un x different a
    chaque section et rien ne s'alignait verticalement le long de la page.
-   140px couvre le libelle le plus large avec de la marge, et le clamp suit la
-   police si elle grandit sur grand ecran. */
-.sec-head{display:grid;grid-template-columns:clamp(140px,12vw,190px) 1fr;gap:clamp(20px,4vw,60px);align-items:end;margin-bottom:clamp(44px,6vw,80px)}
+   140px couvre le libelle le plus large avec de la marge. Le `12vw` du clamp
+   ne suit AUCUNE police : `.meta` est figee a .68rem et ne grandit jamais ; il
+   ne fait qu'eviter que la colonne ne devienne absurdement large sur un tres
+   grand ecran, en la plafonnant a 190px au-dela de 1583px de viewport. */
+.sec-head{display:grid;grid-template-columns:auto 1fr;gap:clamp(20px,4vw,60px);align-items:end;margin-bottom:clamp(44px,6vw,80px)}
+/* La colonne fixe ne vaut que pour les sections qui portent un titre : c'est
+   entre elles que l'alignement se joue. Les pages legales n'ont qu'un libelle
+   seul dans leur .sec-head, et « Nawa Corps · nLPD » (~143px) deborderait une
+   colonne de 140px en passant a la ligne. */
+.sec-head:has(h2){grid-template-columns:clamp(140px,12vw,190px) 1fr}
 @media(max-width:760px){.sec-head{grid-template-columns:1fr;align-items:start;gap:18px}}
 h2.t{
   font-weight:550;font-size:clamp(2.3rem,5.4vw,4.4rem);
