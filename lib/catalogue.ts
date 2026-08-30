@@ -54,3 +54,26 @@ export function parCategories(
 ): ServiceCatalogue[] {
   return services.filter((s) => categories.includes(s.category));
 }
+
+/**
+ * LE PRIX D ENTREE, une seule fois pour tout le site.
+ *
+ * Deux endroits l affichent sur le meme ecran : le sous-titre du hero et la
+ * meta description que Google reprend dans son extrait. Ils le derivaient
+ * chacun a sa facon — l un par le slug `la-vitrine`, l autre par le plus petit
+ * montant de la categorie `principal`. Les deux coincidaient, mais rien ne le
+ * garantissait : ajouter une formule moins chere, ou renommer ce slug, faisait
+ * diverger l extrait et la page. Un visiteur aurait lu deux prix d entree
+ * differents pour la meme offre, a une seconde d intervalle.
+ *
+ * La regle retenue est celle qui suit l offre plutot qu un identifiant : le
+ * plus petit montant affiche parmi les formules. Renvoie null si aucune n en
+ * porte — la phrase se referme alors sans montant, jamais avec un trou.
+ */
+export function prixEntreeCents(catalogue: readonly ServiceCatalogue[]): number | null {
+  const montants = catalogue
+    .filter((s) => s.category === "principal")
+    .map((s) => s.priceCents)
+    .filter((cents): cents is number => cents !== null);
+  return montants.length > 0 ? Math.min(...montants) : null;
+}

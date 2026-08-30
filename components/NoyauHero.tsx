@@ -1,4 +1,4 @@
-import { chargerCatalogue } from "@/lib/catalogue";
+import { chargerCatalogue, prixEntreeCents } from "@/lib/catalogue";
 import { CHF_UNIT, MONTHLY_SUFFIX, formatChfAmount } from "@/lib/format";
 import { WHATSAPP_HREF } from "@/lib/site";
 
@@ -34,7 +34,15 @@ export default async function NoyauHero() {
   };
   // Base injoignable, ligne masquee depuis /admin, slug renomme : la phrase se
   // referme sans le montant plutot que d afficher un prix invente ou un trou.
-  const entree = prixDe("la-vitrine");
+  // MEME REGLE QUE L EXTRAIT GOOGLE, et surtout pas une regle a soi : la meta
+  // description de app/(site)/page.tsx affiche ce meme prix d entree, sur le
+  // meme ecran. Deriver ici par le slug « la-vitrine » et la-bas par le plus
+  // petit montant marchait tant que les deux coincidaient — une formule moins
+  // chere au catalogue les aurait fait diverger, et le visiteur aurait lu deux
+  // prix d entree differents a une seconde d intervalle.
+  const centsEntree = prixEntreeCents(catalogue);
+  const entree =
+    centsEntree === null ? null : `${formatChfAmount(centsEntree)}${CHF_UNIT}`;
   const suivi = prixDe("hebergement");
 
   return (

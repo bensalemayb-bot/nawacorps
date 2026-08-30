@@ -46,6 +46,10 @@ const eslintConfig = defineConfig([
       // classiques, parce qu'une navigation client-side ne rejouerait pas
       // Interactions et laisserait les [data-reveal] a opacity:0.
       "components/PageFamille.tsx",
+      // La 404 racine. Meme decision que les pages legales : des <a> classiques,
+      // et elle vit hors du groupe (site) donc sans le chrome qui justifierait
+      // une navigation client.
+      "app/not-found.tsx",
     ],
     rules: {
       // volontaire — next/link casserait les reveals (Interactions ne tourne qu'une fois), voir décision B7

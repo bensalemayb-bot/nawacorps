@@ -32,7 +32,6 @@ export default function MenuOverlay() {
       </nav>
       <div className="m-foot">
         <a href={whatsapp()} target="_blank" rel="noopener">WhatsApp</a>
-        {/* BR : adresse A CONFIRMER avant la mise en ligne. */}
         <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
         <span>Genève, Suisse</span>
       </div>

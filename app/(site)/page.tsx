@@ -10,7 +10,7 @@ import Strip from "@/components/Strip";
 import Studio from "@/components/Studio";
 import Travaux from "@/components/Travaux";
 import type { Metadata } from "next";
-import { chargerCatalogue } from "@/lib/catalogue";
+import { chargerCatalogue, prixEntreeCents } from "@/lib/catalogue";
 import { formatChfAmount } from "@/lib/format";
 
 /**
@@ -42,16 +42,12 @@ export async function generateMetadata(): Promise<Metadata> {
   const socle =
     "Nawa Corps refait le site des PME genevoises en une semaine : demande de devis, prise de rendez-vous, fiche Google. Vous n'avez rien à préparer.";
   try {
-    const catalogue = await chargerCatalogue();
-    const montants = catalogue
-      .filter((s) => s.category === "principal")
-      .map((s) => s.priceCents)
-      .filter((cents): cents is number => cents !== null);
     // Base vide, formules masquees depuis /admin, toutes passees sur devis :
     // l extrait se referme sans le montant plutot que d en inventer un.
-    if (montants.length === 0) return { description: socle };
+    const cents = prixEntreeCents(await chargerCatalogue());
+    if (cents === null) return { description: socle };
     return {
-      description: `${socle} Dès ${formatChfAmount(Math.min(...montants))}.–, TVA comprise.`,
+      description: `${socle} Dès ${formatChfAmount(cents)}.–, TVA comprise.`,
     };
   } catch {
     return { description: socle };
