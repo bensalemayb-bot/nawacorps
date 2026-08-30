@@ -85,8 +85,17 @@ function construireQuestions(
       // semaine, et un plaidoyer de prix qui attire l attention sur le doute
       // qu il veut lever. La question devient celle que le lecteur se pose
       // vraiment, et la reponse BORNE la prestation au lieu de la defendre.
+      //
+      // « NI SOUS-TRAITANCE » NE REVIENT PAS. C etait faux : la production des
+      // reseaux sociaux est faite avec un partenaire, et /prestations/
+      // reseaux-sociaux comme lib/familles.ts le disent noir sur blanc. La
+      // contradiction etait a deux clics sur le site public. La phrase a deja
+      // ete corrigee une fois puis reintroduite par une reecriture : la portee
+      // exacte est « le site est dessine et construit par la meme personne »,
+      // ce qui est vrai, et non une negation en bloc, qui ne l est pas.
+      // Meme correction dans components/Studio.tsx, second paragraphe.
       q: "À ce prix-là, qu'est-ce qui n'est pas fait ?",
-      r: "Une page, pas dix. Deux allers-retours, pas trois. Vos textes sont repris de votre site actuel et réécrits, pas rédigés de zéro. Il n'y a ni bureaux, ni équipe commerciale, ni sous-traitance : vous parlez à celui qui fait le travail, et c'est la même personne qui répond l'année suivante.",
+      r: "Une page, pas dix. Deux allers-retours, pas trois. Vos textes sont repris de votre site actuel et réécrits, pas rédigés de zéro. Il n'y a ni bureaux, ni équipe commerciale : votre site est dessiné et construit par la même personne, celle à qui vous parlez, et c'est encore elle qui répond l'année suivante.",
     },
   ];
 }
