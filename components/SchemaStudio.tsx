@@ -16,10 +16,14 @@ import {
  * ne dessine rien : le composant n emet qu une balise <script>.
  *
  * TOUT CE QUI EST ICI EST DEJA ECRIT QUELQUE PART SUR LA PAGE. Les horaires
- * viennent du pied de page (« Lu–Sa · 9h–19h »), les langues et l annee de la
- * section « Le studio », les six prestations de ServicesRows, et les delais
- * du hero (72 h / une semaine). Une donnee structuree qui promet ce que la page ne montre pas
- * est une donnee structuree que Google finit par ignorer, au mieux.
+ * viennent du pied de page (« Lu–Sa · 9h–19h »), les langues de la section
+ * « Le studio », les six prestations de ServicesRows, et les delais du hero
+ * (72 h / une semaine). `foundingDate` est la seule donnee sans reflet a
+ * l ecran depuis le retrait de « Depuis 2026 » (.facts de Studio.tsx ne montre
+ * plus que Geneve / 72 h / FR-EN) — c est un fait d etat civil, pas un
+ * argument marketing, donc une exception assumee a la regle ci-dessus. Une
+ * donnee structuree qui promet ce que la page ne montre pas est une donnee
+ * structuree que Google finit par ignorer, au mieux.
  *
  * CE QUI N Y EST PAS, ET POURQUOI. Ni telephone, ni e-mail, ni adresse tant
  * que NAP_CONFIRME vaut false (voir lib/site.ts). Le numero affiche en pied de

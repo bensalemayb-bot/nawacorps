@@ -241,7 +241,11 @@ const services: ServiceSeed[] = [
  * qui lit la meme table.
  *
  * `visible: false` plutot qu'un delete : la ligne reste consultable depuis
- * /admin, et la remettre en service ne demande qu'une case a cocher.
+ * /admin. Mais la remettre en service NE demande PAS qu'une case a cocher :
+ * l'updateMany ci-dessous s'execute a chaque seed et remasquerait la case
+ * cochee au prochain `npm run db:seed`. La remettre en service demande de la
+ * retirer de `retires` PUIS de la recocher : tant que son slug est liste ici,
+ * chaque seed la remasque.
  */
 const retires = ["pack-complet"];
 

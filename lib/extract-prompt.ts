@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
  * System prompt d extraction — bloc B10.
  *
  * Second appel au modele, apres la conversation : il ne parle plus au
- * commercant, il rend un objet. D ou askLlmJson et non askLlm.
+ * visiteur, il rend un objet. D ou askLlmJson et non askLlm.
  *
  * La liste des libelles de services vient de Postgres a CHAQUE appel, comme le
  * catalogue de prix du prompt de conversation (B9). Le modele ne peut donc
@@ -28,7 +28,7 @@ export async function buildExtractPrompt(): Promise<string> {
 
   // ---- verbatim, bloc B10 ----
   return `Tu extrais des informations d'une conversation entre l'assistant de
-Nawa Corps et un commerçant. Réponds UNIQUEMENT avec un objet JSON
+Nawa Corps et un dirigeant de PME. Réponds UNIQUEMENT avec un objet JSON
 valide, sans texte autour, exactement ce schéma :
 {"name": string|null, "phone": string|null, "email": string|null,
  "commerce_type": string|null, "commerce_name": string|null,
