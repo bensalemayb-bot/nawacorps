@@ -27,7 +27,13 @@ export default function FooterContact() {
     <footer className="contact green" id="contact">
       <div className="wrap">
         <span className="meta" data-reveal><span className="index">(07)</span>&nbsp; Contact</span>
-        <h2 data-reveal style={{ marginTop: 26 }}>Montrez-moi votre site.<br />Je vous dis <span className="serif-i">ce qu&apos;il lui manque.</span></h2>
+        {/* « Montrez-moi votre site » fermait la page sur le seul produit
+            d entree, et renvoyait le visiteur venu pour un logotype ou des
+            cartes de visite. « Ce que vous avez » couvre le site, l imprime et
+            la fiche Google sans rien perdre de l invitation. Le decoupage en
+            deux lignes ne bouge pas : Interactions.tsx scinde ce h2 sur ses
+            <br />, et la seconde ligne garde son .serif-i. */}
+        <h2 data-reveal style={{ marginTop: 26 }}>Montrez-moi ce que vous avez.<br />Je vous dis <span className="serif-i">ce qui manque.</span></h2>
         <div className="c-row" data-reveal>
           <a className="btn" href={WHATSAPP_HREF} target="_blank" rel="noopener">Écrire sur WhatsApp <span className="ar">→</span></a>
           {/* BR : adresse A CONFIRMER avant la mise en ligne — lib/site.ts. */}
@@ -38,7 +44,7 @@ export default function FooterContact() {
             Les deux CTA ci-dessus sont inchanges — le formulaire s ajoute a cote
             d eux, il ne les remplace pas. */}
         <div data-reveal>
-          <p className="meta" style={{ marginTop: 34 }}>ou laissez-moi l&apos;adresse de votre site</p>
+          <p className="meta" style={{ marginTop: 34 }}>ou dites-moi en deux lignes ce qu&apos;il vous faut</p>
           <ContactForm />
         </div>
         <div className="c-cols" data-reveal>
@@ -50,9 +56,9 @@ export default function FooterContact() {
       </div>
       <div className="giant" aria-hidden="true">NAWA CORPS</div>
       {/* BR — le slogan de marque, a UN SEUL endroit du site. Ici et pas dans
-          le hero : celui-ci porte deja sa promesse, « Un site qui recoit vos
-          demandes, refait en une semaine. », et deux formules cote a cote
-          se seraient affaiblies l une l autre. En pied de page il signe, il ne
+          le hero : celui-ci porte deja son titre, « Site, imprimes, photos,
+          reseaux. Une seule personne. », et deux formules cote a cote se
+          seraient affaiblies l une l autre. En pied de page il signe, il ne
           plaide pas. */}
       <p className="br-slogan">L&apos;essentiel. Bien conçu.</p>
       <div className="legal">

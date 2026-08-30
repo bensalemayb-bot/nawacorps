@@ -40,8 +40,13 @@ function construireQuestions(
 
   return [
     {
+      // « Oui, quand vous avez deja un site … si on part de zero, comptez une
+      // semaine » faisait deux promesses de delai la ou le guide de voix n en
+      // autorise qu une : le depart de zero n a plus de delai distinct, c est
+      // la meme semaine. La reponse le dit d une phrase, et la seconde
+      // condition disparait avec.
       q: "Une semaine, vraiment ?",
-      r: "Oui, quand vous avez déjà un site : je reprends vos textes, je refais la mise en page, je branche le formulaire et les rendez-vous. Si on part de zéro, comptez une semaine — il faut écrire le contenu. Dans les deux cas le délai court dès votre feu vert, pas dès que vous m'avez envoyé quelque chose.",
+      r: "Oui, et c'est la même semaine que vous ayez déjà un site ou non. Je reprends vos textes, je refais la mise en page, je branche le formulaire et les rendez-vous. Le délai court dès votre feu vert, pas dès que vous m'avez envoyé quelque chose : vous n'avez rien à préparer.",
     },
     {
       q: "Je n'ai ni textes ni photos. C'est bloquant ?",
@@ -56,8 +61,13 @@ function construireQuestions(
       // reactivite sans source, et le seul autorise — « réponse le jour
       // ouvrable suivant » — vit au formulaire, une seule fois. Ce qui le
       // remplace est un fait de perimetre, verifiable au contrat.
-      q: "Et si je veux changer quelque chose après ?",
-      r: "Deux allers-retours sont compris pendant la conception. Une fois en ligne, un message suffit : un tarif qui bouge, une prestation qui s'ajoute, un horaire qui change. Les modifications de contenu sont comprises dans le suivi de L'Assistant ; sur les deux autres formules, elles sont facturées à la demande.",
+      // LES CINQ QUESTIONS PRESUPPOSAIENT TOUTES UN SITE. Celle-ci est la
+      // seule ou le reste du catalogue s installe sans forcer : « apres » vaut
+      // aussi bien pour une correction que pour une affiche de rentree. Elle
+      // s elargit donc, et c est elle qui dit au visiteur venu pour des cartes
+      // de visite qu il est au bon endroit.
+      q: "Et après, si j'ai besoin d'autre chose ?",
+      r: "Deux allers-retours sont compris pendant la conception. Une fois en ligne, un message suffit : un tarif qui bouge, une prestation qui s'ajoute, un horaire qui change. Les modifications de contenu sont comprises dans le suivi de L'Assistant ; sur les deux autres formules, elles sont facturées à la demande. Et vous n'êtes pas limité au site : logotype, cartes de visite, affiche, photos de votre entreprise, fiche Google, réseaux sociaux, supports de restaurant — sur devis, avec un site chez moi comme sans.",
     },
     {
       // ANCIENNE VERSION, RETIREE EN ENTIER : « Pourquoi moins cher qu'une

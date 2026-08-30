@@ -124,7 +124,7 @@ export default function ContactForm() {
           name="message"
           maxLength={1000}
           rows={4}
-          placeholder="Votre site actuel, votre besoin"
+          placeholder="Votre besoin, et votre site actuel si vous en avez un"
           aria-label="Votre message"
         />
 
