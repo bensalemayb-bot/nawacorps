@@ -12,9 +12,12 @@ import { CONTACT, whatsapp } from "@/lib/site";
 // change de page, le document est remplace et la classe html.menu-open part
 // avec lui. Aucune modification d Interactions.tsx n est requise.
 //
-// LA NUMEROTATION EST CELLE DU MENU, pas celle des sections de l accueil :
-// elles divergent depuis longtemps (la page porte (05) Le studio, (06)
-// Questions, (07) Contact). Elle se contente donc de rester continue.
+// LA NUMEROTATION EST CELLE DU MENU, pas celle des sections de l accueil, et
+// les deux divergent volontairement. Le menu compte SES six entrees dans SON
+// ordre — « Prestations » y prend un rang (04) que l accueil n a pas, puisque
+// c est une autre page. L accueil, lui, numerote ses sept sections dans l ordre
+// ou elles defilent : (03) Methode, (04) Le studio, (05) Questions, (06) Offres.
+// Le menu se contente donc de rester continu ; il n a pas a suivre la page.
 export default function MenuOverlay() {
   // volontaire — next/link casserait les reveals (Interactions ne tourne qu'une fois), voir décision B7
   return (

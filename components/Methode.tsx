@@ -23,7 +23,7 @@ export default function Methode() {
     <section id="methode">
       <div className="wrap">
         <div className="sec-head">
-          <span className="meta" data-reveal><span className="index">(04)</span>&nbsp; Méthode</span>
+          <span className="meta" data-reveal><span className="index">(03)</span>&nbsp; Méthode</span>
           <div data-reveal><h2 className="t">Du feu vert à la mise<br />en ligne : une semaine.</h2></div>
         </div>
         <div className="steps">

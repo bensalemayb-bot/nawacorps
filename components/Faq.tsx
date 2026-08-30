@@ -132,7 +132,7 @@ export default async function Faq() {
       />
       <div className="wrap">
         <div className="sec-head">
-          <span className="meta" data-reveal><span className="index">(06)</span>&nbsp; Questions</span>
+          <span className="meta" data-reveal><span className="index">(05)</span>&nbsp; Questions</span>
           <h2 className="sr-only">Questions fréquentes</h2>
         </div>
         <div data-reveal>

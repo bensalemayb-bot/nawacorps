@@ -28,7 +28,7 @@ export default function Studio() {
     <section id="studio" style={{ paddingTop: 0 }}>
       <div className="wrap">
         <div className="sec-head">
-          <span className="meta" data-reveal><span className="index">(05)</span>&nbsp; Le studio</span>
+          <span className="meta" data-reveal><span className="index">(04)</span>&nbsp; Le studio</span>
           <h2 className="sr-only">Le studio</h2>
         </div>
         <div className="studio-grid">

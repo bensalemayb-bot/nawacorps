@@ -147,7 +147,7 @@ export default async function Offres() {
     <section className="offres green" id="offres" style={{ paddingBottom: 0 }}>
       <div className="wrap">
         <div className="sec-head">
-          <span className="meta" data-reveal><span className="index">(03)</span>&nbsp; Offres</span>
+          <span className="meta" data-reveal><span className="index">(06)</span>&nbsp; Offres</span>
           <div data-reveal><h2 className="t">Des prix clairs,<br />tout compris.</h2></div>
         </div>
 

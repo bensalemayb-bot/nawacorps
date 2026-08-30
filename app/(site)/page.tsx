@@ -119,7 +119,16 @@ export default function Home() {
              laissee en question ouverte : elle est tranchee ici.
 
           Aucune section n'est modifiee, seul leur ordre change. Les ancres de
-          la nav (#services, #offres, #methode, #contact) restent valides. */}
+          la nav (#services, #offres, #methode, #contact) restent valides.
+
+          LES BADGES SUIVENT CET ORDRE, ET IL FAUT LES RENUMEROTER AVEC LUI.
+          Chaque section porte son rang en dur dans son propre composant
+          (<span className="index">) : le reordonnancement les avait laisses
+          defiler 01, 02, 04, 05, 06, 03, 07 — « (03) Offres » apparaissait
+          apres « (06) Questions ». Ils lisent desormais Travaux 01, Services
+          02, Methode 03, Le studio 04, Questions 05, Offres 06, Contact 07.
+          La numerotation du MENU (components/MenuOverlay.tsx) est une autre
+          suite, dans un autre ordre : elle n a pas a etre alignee. */}
       <div className="page-body">
         <Travaux />
         <Strip />
