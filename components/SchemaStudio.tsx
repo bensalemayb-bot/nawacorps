@@ -31,12 +31,23 @@ import {
  * fiche qui tait la moitie du catalogue prive le studio des requetes qui vont
  * avec, et contredit ce que la page montre desormais.
  *
- * CE QUI N Y EST PAS, ET POURQUOI. Ni telephone, ni e-mail, ni adresse tant
- * que NAP_CONFIRME vaut false (voir lib/site.ts). Le numero affiche en pied de
- * page est encore un +41 76 000 00 00 de remplissage ; le declarer ici le
- * ferait remonter dans une fiche, un panneau de connaissance, une reponse
- * d assistant. Une coordonnee fausse en donnee structuree se propage, et se
- * corrige mal. Le silence est la bonne reponse en attendant.
+ * LE NAP SORT D ICI DEPUIS QUE LE VERROU EST OUVERT. NAP_CONFIRME vaut true
+ * (lib/site.ts) : le telephone, l e-mail et la localite sont ceux d Ayoub
+ * Bensalem, et les trois champs partent donc bien dans la fiche. C est ce qui
+ * la rend eligible au pack local et au rapprochement avec la fiche Google — et
+ * la regle du dessus tient toujours, les trois sont affiches en pied de page.
+ *
+ * LE VERROU RESTE, ET IL FAUT COMPRENDRE POURQUOI. Le bloc conditionnel plus
+ * bas n est pas un vestige : une coordonnee declaree ici remonte dans une
+ * fiche, un panneau de connaissance, une reponse d assistant — elle se propage
+ * hors du site et se corrige mal. Tant que les valeurs etaient des
+ * remplissages, le silence valait mieux qu une donnee structuree fausse.
+ * Refermer le verrou est donc le bon geste le jour ou une coordonnee redevient
+ * incertaine : on ne corrige pas ici, on cesse d emettre.
+ *
+ * L adresse est volontairement sans rue : le studio n a pas de bureau, et
+ * inventer une voie « pour faire serieux » serait exactement la donnee fausse
+ * que ce verrou existe pour empecher.
  *
  * Pas de priceRange non plus : les prix vivent en base et varient. L annoncer
  * en dur ici, c est prendre le risque qu il contredise la grille affichee.
@@ -114,7 +125,8 @@ export default function SchemaStudio() {
       })),
     },
 
-    // Le verrou. Voir le docblock ci-dessus : rien de faux ne sort d ici.
+    // Le verrou, OUVERT — les trois champs sortent. Voir le docblock ci-dessus :
+    // ce qui se coupe ici, c est l emission entiere, pas une valeur.
     ...(NAP_CONFIRME
       ? {
           telephone: CONTACT.telephone,
