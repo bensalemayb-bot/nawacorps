@@ -9,8 +9,8 @@ export default function Strip() {
   return (
     <div className="strip" aria-hidden="true">
       <div className="tk">
-        <span>Refonte de site</span><span>Demande de devis</span><span>Prise de rendez-vous</span><span>Fiche Google</span><span>72 heures</span><span>Genève</span>
-        <span>Refonte de site</span><span>Demande de devis</span><span>Prise de rendez-vous</span><span>Fiche Google</span><span>72 heures</span><span>Genève</span>
+        <span>Refonte de site</span><span>Demande de devis</span><span>Prise de rendez-vous</span><span>Fiche Google</span><span>Une semaine</span><span>Genève</span>
+        <span>Refonte de site</span><span>Demande de devis</span><span>Prise de rendez-vous</span><span>Fiche Google</span><span>Une semaine</span><span>Genève</span>
       </div>
     </div>
   );

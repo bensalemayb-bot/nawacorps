@@ -18,9 +18,9 @@ import {
  * TOUT CE QUI EST ICI EST DEJA ECRIT QUELQUE PART SUR LA PAGE. Les horaires
  * viennent du pied de page (« Lu–Sa · 9h–19h »), les langues de la section
  * « Le studio », les six prestations de ServicesRows, et les delais du hero
- * (72 h / une semaine). `foundingDate` est la seule donnee sans reflet a
+ * (une semaine). `foundingDate` est la seule donnee sans reflet a
  * l ecran depuis le retrait de « Depuis 2026 » (.facts de Studio.tsx ne montre
- * plus que Geneve / 72 h / FR-EN) — c est un fait d etat civil, pas un
+ * plus que Geneve / une semaine / FR-EN) — c est un fait d etat civil, pas un
  * argument marketing, donc une exception assumee a la regle ci-dessus. Une
  * donnee structuree qui promet ce que la page ne montre pas est une donnee
  * structuree que Google finit par ignorer, au mieux.
@@ -54,7 +54,7 @@ export default function SchemaStudio() {
     name: SITE_NAME,
     url: SITE_URL,
     description:
-      "Studio digital indépendant à Genève. Refonte du site des PME genevoises en 72 heures : demande de devis, prise de rendez-vous, fiche Google, assistant et relances.",
+      "Agence digitale indépendante à Genève. Refonte du site des PME genevoises en une semaine, sans que le client ait de contenu à fournir : demande de devis, prise de rendez-vous, fiche Google, assistant et relances.",
     slogan: "L'essentiel. Bien conçu.",
     image: `${SITE_URL}/brand/nawa-corps-logo-principal-transparent.png`,
     logo: `${SITE_URL}/brand/nawa-corps-logo-principal-transparent.png`,

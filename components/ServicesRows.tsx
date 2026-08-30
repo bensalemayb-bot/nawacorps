@@ -24,7 +24,7 @@ export default function ServicesRows() {
         <div className="rows" data-reveal>
           <div className="row" data-row>
             <div className="row-h"><span className="n">01</span><h3>Refonte de site</h3><span className="pl">+</span></div>
-            <div className="row-b"><div><p>Votre site actuel, repris et refait : lisible sur téléphone, rapide, à jour. Les textes existants sont récupérés puis réécrits, vous signalez ce qui doit changer. Livré en 72 heures, deux allers-retours compris.</p></div></div>
+            <div className="row-b"><div><p>Votre site actuel, repris et refait : lisible sur téléphone, rapide, à jour. Les textes existants sont récupérés puis réécrits, vous signalez ce qui doit changer. Livré en une semaine, deux allers-retours compris.</p></div></div>
           </div>
           <div className="row" data-row>
             <div className="row-h"><span className="n">02</span><h3>Demande de devis</h3><span className="pl">+</span></div>

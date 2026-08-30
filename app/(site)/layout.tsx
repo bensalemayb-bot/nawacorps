@@ -52,26 +52,26 @@ import { SITE_NAME, SITE_URL } from "@/lib/site";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Refonte de site pour PME à Genève — livré en 72 h",
+    default: "Refonte de site pour PME à Genève — en une semaine",
     template: `%s — ${SITE_NAME}`,
   },
   description:
-    "Nawa Corps refait le site des PME genevoises en 72 heures : demande de devis, prise de rendez-vous, fiche Google. Dès 699.–, TVA comprise.",
+    "Nawa Corps refait le site des PME genevoises en une semaine : demande de devis, prise de rendez-vous, fiche Google. Vous n'avez rien à préparer. Dès 699.–, TVA comprise.",
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "fr_CH",
     siteName: SITE_NAME,
     url: "/",
-    title: "Refonte de site pour PME à Genève — livré en 72 h",
+    title: "Refonte de site pour PME à Genève — en une semaine",
     description:
-      "Votre site a dix ans. En 72 heures il reçoit les demandes, chiffre les devis et prend les rendez-vous. Dès 699.–, TVA comprise.",
+      "Refait en une semaine, et vous n'avez rien à préparer : je reprends les textes de votre site actuel. Demandes, devis et rendez-vous compris. Dès 699.–, TVA comprise.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Refonte de site pour PME à Genève — livré en 72 h",
+    title: "Refonte de site pour PME à Genève — en une semaine",
     description:
-      "Votre site a dix ans. En 72 heures il reçoit les demandes, chiffre les devis et prend les rendez-vous. Dès 699.–, TVA comprise.",
+      "Refait en une semaine, et vous n'avez rien à préparer : je reprends les textes de votre site actuel. Demandes, devis et rendez-vous compris. Dès 699.–, TVA comprise.",
   },
 };
 

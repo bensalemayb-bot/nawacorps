@@ -26,7 +26,7 @@ export default function NoyauHero() {
         <div className="noyau-beat hero" data-temps="">
           <div className="wrap hero-in">
             <div className="kicker">
-              <span className="meta"><span className="index">®</span>&nbsp; Studio digital indépendant</span>
+              <span className="meta"><span className="index">®</span>&nbsp; Agence digitale indépendante</span>
               <span className="meta">Genève, Suisse</span>
               <span className="meta">Sites de PME</span>
             </div>
@@ -36,12 +36,12 @@ export default function NoyauHero() {
                   que la mise en page (le hero-foot passe sous la ligne de
                   flottaison). La maquette tient 21 caracteres au plus large —
                   s'y tenir en reecrivant. */}
-              <span className="l"><span>Votre site a dix ans.</span></span>
-              <span className="l"><span>En <span className="serif-i">72 heures</span>, il</span></span>
-              <span className="l"><span>travaille pour vous.</span></span>
+              <span className="l"><span>Un site qui reçoit</span></span>
+              <span className="l"><span>vos demandes, <span className="serif-i">refait</span></span></span>
+              <span className="l"><span>en une semaine.</span></span>
             </h1>
             <div className="hero-foot">
-              <p className="hero-sub">Sites de PME à Genève : demande de devis, prise de rendez-vous, fiche Google. Refait en 72 heures si vous avez déjà un site, une semaine si on part de zéro. Dès 699.–, TVA comprise.</p>
+              <p className="hero-sub">Le compte à rebours démarre quand vous dites oui : vos textes, je les reprends de votre site actuel. Vous n&apos;avez rien à préparer. Demande de devis, prise de rendez-vous et fiche Google comprises. Dès 699.–, TVA comprise.</p>
               <div className="hero-cta">
                 <a className="btn" href={WHATSAPP_HREF} target="_blank" rel="noopener">Faire refaire mon site <span className="ar">→</span></a>
                 <a className="btn btn-line" href="#travaux">Voir les avant / après</a>
@@ -70,13 +70,13 @@ export default function NoyauHero() {
             <span className="meta"><span className="index">(002)</span>&nbsp; Le coeur</span>
             <div className="noyau-spec">
               <p className="noyau-fig">
-                <span className="noyau-num">72</span>
-                <span className="noyau-unit">heures</span>
+                <span className="noyau-num">1</span>
+                <span className="noyau-unit">semaine</span>
               </p>
               <ul className="noyau-specs">
                 <li><span className="k">Atelier</span><span className="v">Genève, Suisse</span></li>
-                <li><span className="k">Refonte</span><span className="v">72 heures</span></li>
-                <li><span className="k">Départ de zéro</span><span className="v">Une semaine</span></li>
+                <li><span className="k">Livraison</span><span className="v">Une semaine</span></li>
+                <li><span className="k">À fournir</span><span className="v">Rien</span></li>
                 <li><span className="k">Suivi</span><span className="v">Dès 49.–/mois</span></li>
               </ul>
             </div>

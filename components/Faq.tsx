@@ -15,7 +15,7 @@ import { jsonLd } from "@/lib/site";
 // exactement ce que Google sanctionne.
 const QUESTIONS = [
   {
-    q: "72 heures, vraiment ?",
+    q: "Une semaine, vraiment ?",
     r: "Oui, quand vous avez déjà un site : je reprends vos textes, je refais la mise en page, je branche le formulaire et les rendez-vous. Si on part de zéro, comptez une semaine — il faut écrire le contenu. Dans les deux cas le délai court dès votre feu vert, pas dès que vous m'avez envoyé quelque chose.",
   },
   {

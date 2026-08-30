@@ -17,7 +17,7 @@ export default function Studio() {
             <p>Si les prix sont ceux-là, c&apos;est la structure qui l&apos;explique, pas le travail : pas de bureaux, pas d&apos;équipe commerciale, pas de sous-traitance. Ce que vous ne payez pas, ce sont les frais de quelqu&apos;un d&apos;autre.</p>
             <div className="facts">
               <div><b>Genève</b><span>Basé ici</span></div>
-              <div><b>72 h</b><span>Refonte livrée</span></div>
+              <div><b>1 sem.</b><span>Refonte livrée</span></div>
               <div><b>FR / EN</b><span>Langues</span></div>
             </div>
           </div>
