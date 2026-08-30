@@ -168,7 +168,7 @@ export default function ChatWidget() {
     return (
       <button className="chat-fab" type="button" onClick={() => setOuvert(true)}>
         <span className="dot" aria-hidden="true"></span>
-        Décrivez votre besoin — réponse sous 24 h
+        Décrivez votre besoin — réponse le jour ouvrable suivant
       </button>
     );
   }
@@ -178,7 +178,7 @@ export default function ChatWidget() {
       <div className="chat-head">
         <div>
           <b>Assistant Nawa Corps</b>
-          <span>Réponse d&apos;Ayoub sous 24 h</span>
+          <span>Réponse d&apos;Ayoub le jour ouvrable suivant</span>
         </div>
         <button
           className="chat-close"
@@ -221,7 +221,7 @@ export default function ChatWidget() {
 
       {clos ? (
         <p className="chat-alert" role="status">
-          C&apos;est noté — Ayoub revient vers vous sous 24 h.
+          C&apos;est noté — Ayoub revient vers vous le jour ouvrable suivant.
         </p>
       ) : null}
 

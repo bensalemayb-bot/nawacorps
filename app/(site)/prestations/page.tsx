@@ -48,7 +48,7 @@ import { openGraphPage, whatsapp } from "@/lib/site";
 export const dynamic = "force-dynamic";
 
 const DESCRIPTION =
-  "Le catalogue complet du studio genevois : les trois formules de site, le suivi mensuel, les compléments et la ligne restauration. Prix TVA comprise.";
+  "Le catalogue complet de l'agence genevoise : les trois formules de site, le suivi mensuel, les compléments et la ligne restauration. Prix TVA comprise.";
 
 export const metadata: Metadata = {
   title: "Prestations et tarifs à Genève",
@@ -143,7 +143,7 @@ const GROUPES_LIGNES = [
       </>
     ),
     pourQui:
-      "Ligne secondaire, conservée pour les établissements déjà suivis par le studio : la carte, les supports de salle et ceux de saison. Ces supports se commandent groupés — en dessous, l'échange coûte plus cher que la prestation.",
+      "Ligne secondaire, conservée pour les établissements déjà suivis par l'agence : la carte, les supports de salle et ceux de saison. Ces supports se commandent groupés — en dessous, l'échange coûte plus cher que la prestation.",
     amorce: whatsapp(
       "Bonjour, j'aimerais un devis pour les supports de mon établissement.",
     ),
@@ -203,14 +203,14 @@ export default async function Prestations() {
               <h1 className="t">
                 Tout ce que fait
                 <br />
-                le studio, à Genève.
+                l&apos;agence, à Genève.
               </h1>
             </div>
           </div>
           <p className="lede" data-reveal>
             Quatre groupes, tous les prix, aucune ligne cachée. Les sites
             d&apos;abord — c&apos;est le métier ; puis ce qui les tient dans le
-            temps, ce qui les complète, et la ligne restauration que le studio a
+            temps, ce qui les complète, et la ligne restauration que l&apos;agence a
             gardée.
           </p>
           <p className="lede" data-reveal style={{ marginTop: "1.2em" }}>
