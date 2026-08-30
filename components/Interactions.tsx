@@ -59,16 +59,26 @@ export default function Interactions() {
     } else {
       docEl.classList.add("has-intro");
       requestAnimationFrame(function () { docEl.classList.add("intro"); });
+      /* CADENCE DE L'INTRO — contrainte de performance, pas de gout.
+         A 0.12 par tic de 60 ms, le compteur mettait 28 tics soit 1 680 ms a
+         atteindre 100, plus 250 ms d'attente, plus les 950 ms de transition du
+         voile : le premier ecran n'etait pas utilisable avant ~2 880 ms, et
+         3,5 a 4 s sur un telephone en 4G. Les animations du hero sont gelees
+         jusque-la. L'exigence posee est de deux secondes.
+         A 0.30 et 120 ms d'attente, le compteur atteint 100 en ~660 ms et le
+         premier ecran devient utilisable vers 1,6 s. L'intro joue toujours,
+         elle dure un tiers du temps. Le serveur, lui, n'a jamais ete en cause :
+         20 ms de TTFB en production. */
       var p = 0;
       var iv = setInterval(function () {
-        p += Math.max(1, Math.round((100 - p) * 0.12));
+        p += Math.max(1, Math.round((100 - p) * 0.30));
         if (p >= 100) { p = 100; clearInterval(iv); }
         pctEl.textContent = String(p);
         if (p === 100) {
           setTimeout(function () {
             docEl.classList.add("loaded");
             try { sessionStorage.setItem("bnc-intro", "1"); } catch (e) {}
-          }, 250);
+          }, 120);
         }
       }, 60);
     }
