@@ -59,6 +59,11 @@ export default function Nav() {
         <a className="lnk" href="/#travaux">Travaux</a>
         <a className="lnk" href="/#services">Services</a>
         <a className="lnk" href="/#offres">Offres</a>
+        {/* « Prestations » est la seule entree qui mene a une AUTRE PAGE, d ou
+            sa place apres les trois ancres : celles-ci gardent l ordre des
+            sections de l accueil (01, 02, 03), la page vient ensuite. Elle est
+            un <a> nu comme les autres — voir la note en tete de fichier. */}
+        <a className="lnk" href="/prestations">Prestations</a>
         <a className="pill" href="/#contact">Parlons-en</a>
         <button className="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false"><i></i><i></i></button>
       </div>
