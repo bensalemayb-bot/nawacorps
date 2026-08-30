@@ -569,12 +569,27 @@ html.menu-open .nav-time,html.menu-open .nav-r a{opacity:0;pointer-events:none}
 .car2-toggle:hover{background:var(--bone);color:var(--pine)}
 .car2.collapsed .car2-toggle{transform:rotate(180deg)}
 .car2-right{flex:1;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:clamp(22px,4vw,54px);
+  --pad:clamp(22px,4vw,54px);padding:var(--pad);
   background:radial-gradient(700px 420px at 80% 0%, rgba(169,138,69,.08), transparent 60%),var(--bone-2)}
 /* La scene : elle porte la pile ET les fleches, pour que celles-ci se centrent
    sur la CARTE et non sur le panneau entier (qui inclut .car2-meta dessous,
    ce qui les descendrait sous le vrai milieu). */
 .car2-scene{position:relative;width:100%;display:flex;align-items:center;justify-content:center}
+/* LE RACCORD DES DEUX VERTS.
+   Le panneau de gauche est vert, et l'« apres » de quatre pieces sur cinq
+   l'est aussi : sans ce voile, deux blocs verts flottent a 117px l'un de
+   l'autre, separes par du beige. Il croit depuis la gauche a mesure que
+   --ba-x diminue, c'est-a-dire exactement quand l'« apres » se devoile.
+   Il deborde du padding (-var(--pad)) pour aller toucher le panneau.
+   Pose sur .car2-scene et non sur .car2-right : .car2-meta, juste dessous,
+   porte du texte sombre qui deviendrait illisible sur du pin. */
+.car2-scene::before{
+  content:"";position:absolute;top:0;bottom:0;
+  left:calc(-1 * var(--pad));right:calc(-1 * var(--pad));
+  background:var(--pine);
+  clip-path:inset(0 var(--ba-x,50%) 0 0);
+  z-index:0;pointer-events:none}
+.car2-scene>*{position:relative;z-index:1}
 /* Retrecie volontairement : c'est ce retrait qui degage la place ou les cartes
    precedente et suivante viennent depasser. A 100%, elles etaient rognees par
    l'overflow:hidden de .car2. */

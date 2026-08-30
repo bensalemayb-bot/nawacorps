@@ -80,6 +80,18 @@ function BeforeAfter({
     const el = ref.current;
     if (!el) return;
     el.style.setProperty("--x", pos.current + "%");
+    // La racine doit connaitre la position du curseur pour que le fond vert de
+    // la scene rejoigne le panneau de gauche. SEULE la carte active a le droit
+    // d'ecrire cette variable : les cartes prev/next existent toujours dans le
+    // DOM, et l'animation d'amorce de la premiere (teaser) se battrait avec
+    // l'active pour la meme variable.
+    const carte = el.closest<HTMLElement>(".pcard");
+    if (carte?.dataset.status === "active") {
+      el.closest<HTMLElement>(".car2")?.style.setProperty(
+        "--ba-x",
+        pos.current + "%",
+      );
+    }
     el.querySelector(".ba-handle")?.setAttribute(
       "aria-valuenow",
       String(Math.round(pos.current))
