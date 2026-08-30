@@ -21,12 +21,21 @@ import "./fonts.css";
  * decrivent le studio, pas l administration.
  */
 
-// Poids statiques, volontairement pas la police variable : la maquette charge
-// 300/400/500/600/700 via <link>, et font-weight:550 (10 occurrences) s'y resout
-// en 600. La police variable rendrait un vrai 550, plus leger.
+// Poids DECLARES un par un, volontairement pas `weight: "variable"` : chaque
+// @font-face n annonce alors qu UN poids, et font-weight:550 (11 occurrences en
+// CSS) se resout sur le voisin le plus proche au-dessus, soit 600. Declarer
+// l axe variable rendrait un vrai 550, plus leger — donc un autre dessin.
+//
+// CE QUE CE TABLEAU NE COUTE PAS, mesure et non suppose : Google sert Hanken
+// Grotesk en fichier VARIABLE. Les cinq poids pointaient tous vers les memes
+// quatre .woff2 (un par unicode-range), aux memes octets. Retirer le 300 n a
+// donc retire AUCUN fichier ni AUCUN octet de police — seulement quatre regles
+// @font-face. Il est retire quand meme parce qu il ne servait a rien : aucune
+// regle du site n emploie un poids inferieur a 400 (verifie sur app/*.css et
+// sur le JSX). La resolution du 550 est inchangee, 300 present ou non.
 const hanken = Hanken_Grotesk({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
   variable: "--font-hanken",
 });
