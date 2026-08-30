@@ -28,15 +28,19 @@ import BoutonDevis from "@/components/BoutonDevis";
  * (sections #services, #studio, #faq).
  */
 
-// Libelles de groupe, verbatim de la maquette (lignes 1041, 1050, 1053).
+// Libelles de groupe. « Les formules » ouvre la carte : c'est ce que le
+// visiteur cherche en premier, et son absence rendait cette section
+// incomplete — on y lisait les supports sans jamais voir les sites.
 const GROUP_LABEL: Record<string, string> = {
+  principal: "Les formules",
   annee: "En complément",
   continu: "En continu",
   saison: "Pour la restauration",
 };
 
-// Colonne 1 = au fil de l'annee ; colonne 2 = en continu, puis selon la saison.
-const COL_1 = ["annee"];
+// Colonne 1 = les formules puis les complements ; colonne 2 = le recurrent,
+// puis la ligne restauration.
+const COL_1 = ["principal", "annee"];
 const COL_2 = ["continu", "saison"];
 
 const DEVIS_HREF =
@@ -46,7 +50,10 @@ type ServiceRow = Awaited<ReturnType<typeof loadServices>>[number];
 
 async function loadServices() {
   return prisma.service.findMany({
-    where: { category: { in: ["annee", "continu", "saison"] }, visible: true },
+    where: {
+      category: { in: ["principal", "annee", "continu", "saison"] },
+      visible: true,
+    },
     orderBy: { sortOrder: "asc" },
   });
 }
