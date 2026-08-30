@@ -7,7 +7,11 @@ import {
   formatChfAmount,
   isQuote,
 } from "@/lib/format";
-import { prisma } from "@/lib/prisma";
+import {
+  type ServiceCatalogue,
+  chargerCatalogue,
+  parCategories,
+} from "@/lib/catalogue";
 import BoutonDevis from "@/components/BoutonDevis";
 
 /**
@@ -46,17 +50,12 @@ const COL_2 = ["continu", "saison"];
 const DEVIS_HREF =
   whatsapp("Bonjour, j'aimerais un devis pour une prestation.");
 
-type ServiceRow = Awaited<ReturnType<typeof loadServices>>[number];
+type ServiceRow = ServiceCatalogue;
 
-async function loadServices() {
-  return prisma.service.findMany({
-    where: {
-      category: { in: ["principal", "annee", "continu", "saison"] },
-      visible: true,
-    },
-    orderBy: { sortOrder: "asc" },
-  });
-}
+// Les quatre categories que cette carte affiche, dans l ordre des colonnes.
+// Le filtre reste ecrit ici et non dans la requete : la lecture est partagee
+// avec Offres, sur le meme ecran (cf. lib/catalogue.ts).
+const CATEGORIES = ["principal", "annee", "continu", "saison"];
 
 function Price({ service }: { service: ServiceRow }) {
   if (isQuote(service) || service.priceCents === null) {
@@ -89,7 +88,7 @@ function Group({ category, services }: { category: string; services: ServiceRow[
 }
 
 export default async function CarteDuStudio() {
-  const services = await loadServices();
+  const services = parCategories(await chargerCatalogue(), CATEGORIES);
 
   return (
     <section className="offres green" style={{ paddingTop: 0 }}>

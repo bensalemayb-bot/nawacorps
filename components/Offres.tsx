@@ -7,7 +7,7 @@ import {
   formatChfAmount,
   isQuote,
 } from "@/lib/format";
-import { prisma } from "@/lib/prisma";
+import { chargerCatalogue, parCategories } from "@/lib/catalogue";
 import BoutonDevis from "@/components/BoutonDevis";
 
 /**
@@ -93,10 +93,10 @@ const DEVIS_HREF =
 const DEVIS_LABEL = "Demander un devis →";
 
 export default async function Offres() {
-  const services = await prisma.service.findMany({
-    where: { category: "principal", visible: true },
-    orderBy: { sortOrder: "asc" },
-  });
+  // Lecture PARTAGEE avec CarteDuStudio, rendue juste apres sur le meme ecran :
+  // les deux tiraient chacune sa requete alors que la seconde contenait deja
+  // la premiere. Voir lib/catalogue.ts.
+  const services = parCategories(await chargerCatalogue(), ["principal"]);
 
   const cards = services.filter((s) => !isQuote(s));
   const quotes = services.filter((s) => isQuote(s));

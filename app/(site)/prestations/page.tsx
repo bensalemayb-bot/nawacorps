@@ -10,7 +10,11 @@ import {
   isQuote,
 } from "@/lib/format";
 import { estFormule } from "@/lib/formules";
-import { prisma } from "@/lib/prisma";
+import {
+  type ServiceCatalogue,
+  chargerCatalogue,
+  parCategories,
+} from "@/lib/catalogue";
 import { openGraphPage, whatsapp } from "@/lib/site";
 
 /**
@@ -37,6 +41,10 @@ import { openGraphPage, whatsapp } from "@/lib/site";
 // Postgres, et `next build` doit passer sans base joignable — l etage builder
 // du Dockerfile n en a aucune. Sans force-dynamic, Next tenterait de
 // prerendre la page au build et la construction echouerait.
+//
+// Essaye et VERIFIE : avec `export const revalidate`, `next build` s arrete
+// sur P1001 des que la base ne repond pas. Le detail de la mesure et le
+// pourquoi du renoncement a l ISR sont dans le docblock d app/(site)/page.tsx.
 export const dynamic = "force-dynamic";
 
 const DESCRIPTION =
@@ -149,17 +157,12 @@ const DEVIS_FORMULES = whatsapp(
   "Bonjour, j'aimerais un devis pour la refonte du site de mon entreprise.",
 );
 
-type ServiceRow = Awaited<ReturnType<typeof chargerServices>>[number];
+type ServiceRow = ServiceCatalogue;
 
-async function chargerServices() {
-  return prisma.service.findMany({
-    where: {
-      category: { in: ["principal", "continu", "annee", "saison"] },
-      visible: true,
-    },
-    orderBy: { sortOrder: "asc" },
-  });
-}
+// Les quatre groupes du catalogue. Le filtre est fait en memoire sur la
+// lecture partagee de lib/catalogue.ts, et reste ecrit ici : une categorie
+// ajoutee en base demain ne doit pas surgir d office dans cette page.
+const CATEGORIES = ["principal", "continu", "annee", "saison"];
 
 /** Le prix d une LIGNE, au format de la carte du studio. */
 function Prix({ service }: { service: ServiceRow }) {
@@ -176,7 +179,7 @@ function Prix({ service }: { service: ServiceRow }) {
 }
 
 export default async function Prestations() {
-  const services = await chargerServices();
+  const services = parCategories(await chargerCatalogue(), CATEGORIES);
   const parCategorie = (categorie: string) =>
     services.filter((s) => s.category === categorie);
 

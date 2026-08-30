@@ -10,7 +10,7 @@ import {
   inclus,
   manque,
 } from "@/lib/formules";
-import { prisma } from "@/lib/prisma";
+import { chargerCatalogue } from "@/lib/catalogue";
 import {
   CONTACT,
   SITE_NAME,
@@ -46,6 +46,10 @@ import {
 // Meme raison qu app/(site)/page.tsx : la page lit Postgres, et `next build`
 // tourne sans base joignable. force-dynamic empeche Next de tenter un
 // prerendu qui ferait echouer la construction.
+//
+// `generateStaticParams` ci-dessous n est donc PAS un prerendu : sous
+// force-dynamic elle ne sert qu a declarer les trois slugs legitimes. La
+// mesure qui a fait renoncer a l ISR est consignee dans app/(site)/page.tsx.
 export const dynamic = "force-dynamic";
 
 /**
@@ -105,9 +109,9 @@ export default async function FormulePage({
    * nom et du prix de la sienne, mais aussi du NOM des paliers superieurs pour
    * dire vers quoi monter — et ces noms vivent en base, pas ici.
    */
-  const paliers = await prisma.service.findMany({
-    where: { slug: { in: [...FORMULE_SLUGS] }, visible: true },
-  });
+  const paliers = (await chargerCatalogue()).filter((s) =>
+    estFormule(s.slug),
+  );
 
   // Absent de la base, ou passe a visible:false depuis /admin : la page
   // n existe plus. Un 404 est la reponse honnete ; une page vide en serait une
