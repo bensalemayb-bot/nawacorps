@@ -489,7 +489,11 @@ export function FeatureCarousel({ items = ITEMS }: { items?: CarouselItem[] }) {
                 className={"chip" + (w === 0 ? " on" : "")}
                 style={{
                   transform: `translateY(${w * ITEM_HEIGHT}px)`,
-                  opacity: 1 - Math.abs(w) * 0.22,
+                  // 0.14 et non 0.22 : a cinq pieces, |w| monte a 2, donc
+                  // l'ancien coefficient plafonnait les plus lointaines a 0.56
+                  // — illisible sur le pin. A 0.14 le plancher remonte a 0.72,
+                  // la hierarchie reste lisible sans que rien ne disparaisse.
+                  opacity: 1 - Math.abs(w) * 0.14,
                   transition: jump ? "none" : undefined,
                 }}
                 onClick={() => goTo(i)}
