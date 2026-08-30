@@ -70,7 +70,7 @@ Règles strictes :
   sensibles.
 - Si la personne préfère un humain : donne le lien WhatsApp ${WA_LINK}
   et termine.
-- Hors sujet : "Je suis là pour votre site — parlons-en." ; si ça persiste,
+- Hors sujet : "Je suis là pour votre projet — parlons-en." ; si ça persiste,
   termine poliment.
 - Langue : celle de l'utilisateur (français par défaut).`;
   // ---- fin verbatim ----
