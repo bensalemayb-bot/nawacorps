@@ -87,19 +87,57 @@ const EDITORIAL: Record<string, Editorial> = {
 
 // CTA de devis de la maquette (ligne 1060). Le libelle est verbatim ; le ?text=
 // est adapte a cette ligne. La maquette contient un seul CTA de devis, ecrit
-// pour le menu du studio (« pour un support »), que CarteDuStudio conserve.
+// pour le menu de l agence (« pour un support »), que CarteDuStudio conserve.
+//
+// « sur mesure » a quitte l amorce : le guide de voix le classe parmi les mots
+// vides, et il est sature chez quatre concurrents sur six. « multi-pages » dit
+// la meme chose et se verifie.
 const DEVIS_HREF =
-  whatsapp("Bonjour, j'aimerais un devis pour un site sur mesure.");
+  whatsapp("Bonjour, j'aimerais un devis pour un site à plusieurs pages.");
 const DEVIS_LABEL = "Demander un devis →";
 
 export default async function Offres() {
   // Lecture PARTAGEE avec CarteDuStudio, rendue juste apres sur le meme ecran :
   // les deux tiraient chacune sa requete alors que la seconde contenait deja
   // la premiere. Voir lib/catalogue.ts.
-  const services = parCategories(await chargerCatalogue(), ["principal"]);
+  const catalogue = await chargerCatalogue();
+  const services = parCategories(catalogue, ["principal"]);
 
   const cards = services.filter((s) => !isQuote(s));
   const quotes = services.filter((s) => isQuote(s));
+
+  /**
+   * LA NOTE DE SUIVI SOUS LA GRILLE, LUE EN BASE.
+   *
+   * Elle etait ecrite en dur (« dès 49.–/mois ») : un prix fige sous une
+   * grille qui, elle, vient de Postgres — les deux divergeaient au premier
+   * changement de tarif. Elle porte en plus le montant du suivi OBLIGATOIRE de
+   * L Assistant : un prix mensuel impose par un palier et passe sous silence
+   * est un prix cache, et il s annonce sur la carte du palier comme sous la
+   * grille.
+   *
+   * Chaque morceau ne s ecrit que si sa ligne existe et porte un montant :
+   * base injoignable ou ligne masquee depuis /admin, la phrase se referme sans
+   * inventer de chiffre.
+   */
+  const montant = (slug: string) => {
+    const service = catalogue.find((s) => s.slug === slug);
+    if (!service || service.priceCents === null) return null;
+    return `${formatChfAmount(service.priceCents)}${CHF_UNIT}${MONTHLY_SUFFIX}`;
+  };
+  const suiviBase = montant("hebergement");
+  const suiviAssistant = montant("suivi-assistant");
+  const assistant = services.find((s) => s.slug === "l-assistant");
+  const noteSuivi = [
+    suiviBase
+      ? `Suivi et hébergement dès ${suiviBase} à partir de la 2ᵉ année`
+      : null,
+    suiviAssistant && assistant
+      ? `${suiviAssistant} obligatoire avec ${assistant.name}`
+      : null,
+  ]
+    .filter(Boolean)
+    .join(", ");
 
   // paddingBottom 0 : la carte du studio, rendue juste apres, reconstitue le
   // contexte .green et porte paddingTop 0. La jointure neutralisee des deux
@@ -167,8 +205,13 @@ export default async function Offres() {
         ))}
 
         <div className="p-note" data-reveal>
-          <span>Prix en francs suisses, TVA comprise, sans frais cachés.</span>
-          <span>Suivi et hébergement dès 49.–/mois, à partir de la 2ᵉ année.</span>
+          {/* « sans frais cachés » est parti : la formule promet l absence de
+              ce qu on n attendait pas, et attire l attention sur le soupcon
+              qu elle veut lever. Elle est en plus saturee chez trois
+              concurrents sur six. Ce qui borne vraiment la prestation, ce sont
+              les deux allers-retours et le suivi annonce juste apres. */}
+          <span>Prix en francs suisses, TVA comprise. Deux allers-retours de correction compris.</span>
+          {noteSuivi ? <span>{`${noteSuivi}.`}</span> : null}
         </div>
       </div>
     </section>

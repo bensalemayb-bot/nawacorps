@@ -15,7 +15,7 @@ import {
 import BoutonDevis from "@/components/BoutonDevis";
 
 /**
- * Carte du studio — reference/binacore.html lignes 1033-1063.
+ * Carte de l agence — reference/binacore.html lignes 1033-1063.
  *
  * Toutes les lignes et tous les prix viennent de Postgres. Aucun montant n'est
  * ecrit ici.
@@ -95,9 +95,14 @@ export default async function CarteDuStudio() {
       <div className="wrap">
         <div className="studio-menu">
           <div className="sm-head" data-reveal>
-            <h2>La carte <span className="serif-i">du studio</span></h2>
+            <h2>La carte <span className="serif-i">de l&apos;agence</span></h2>
           </div>
-          <p className="lede" data-reveal style={{ marginBottom: 30 }}>Votre site en ligne, le studio reste à disposition — à la carte, sans engagement.</p>
+          {/* « le studio » et « sans engagement » ont quitte cette accroche :
+              le premier est proscrit par le glossaire (c est l agence), le
+              second est vague juridiquement et sature chez les concurrents.
+              Et l accroche ne parle plus seulement de l apres-site : la moitie
+              de ces lignes se commande sans site du tout. */}
+          <p className="lede" data-reveal style={{ marginBottom: 30 }}>Tout ce que l&apos;agence vend, ligne par ligne. Les sites portent un prix, le suivi aussi ; le reste se chiffre sur devis, et se commande avec un site comme sans.</p>
           <div className="sm-card" data-reveal>
             <div className="sm-cols">
               <div className="sm-col">
@@ -109,11 +114,18 @@ export default async function CarteDuStudio() {
                 {COL_2.map((category) => (
                   <Group key={category} category={category} services={services} />
                 ))}
-                <p className="sm-note">La ligne restauration reste ouverte : cartes, chevalets et supports de saison, pour les établissements déjà suivis par le studio.</p>
+                {/* Le minimum de commande de 300.– a disparu du catalogue :
+                    tous ces supports passent sur devis, et le seuil n a plus
+                    d objet. La ligne n est donc plus reservee aux
+                    etablissements deja suivis. */}
+                <p className="sm-note">La ligne restauration est ouverte à tous : la carte, les chevalets, la fidélité, les bons cadeaux et les supports de saison — avec un site chez moi ou sans.</p>
               </div>
             </div>
             <div className="sm-foot">
-              <span>Prix indicatifs, TVA comprise — devis en cinq minutes.</span>
+              {/* « devis en cinq minutes » etait un engagement de reactivite
+                  sans source : le seul admis est « réponse le jour ouvrable
+                  suivant », et il vit au formulaire. */}
+              <span>Prix en francs suisses, TVA comprise. Les lignes sur devis se chiffrent après un échange.</span>
               <BoutonDevis href={DEVIS_HREF} sujet="devis-carte-du-studio">
                 Demander un devis →
               </BoutonDevis>
