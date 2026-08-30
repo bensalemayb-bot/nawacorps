@@ -207,14 +207,21 @@ function BeforeAfter({
 }
 
 /* ------------------------------------------------------------------ */
-/*  Scènes "après" (identité Binacore)                                 */
+/*  Scenes « apres ».
+    AUCUN DETAIL LOCALISABLE dans ces maquettes : ni annee de fondation, ni rue
+    reelle, ni domaine en .ch. Elles portaient « fonde en 1987 », « Rue des
+    Etuves 12 · 1201 » et « lecomptoir-geneve.ch » — assez de precision pour
+    qu'un visiteur les prenne pour une reference client. Or c'est une
+    demonstration, et presenter un travail fictif comme une realisation est
+    vise par la LCD art. 3. La section est deja etiquetee « cinq
+    demonstrations » ; ces details la contredisaient.                     */
 /* ------------------------------------------------------------------ */
 
 const MenuNew = () => (
   <div className="m-new" aria-hidden="true">
     <span className="ov">Bar — Genève</span>
     <h3>Le Comptoir</h3>
-    <p className="st">Maison fondée en 1987 · Rue des Étuves</p>
+    <p className="st">Exemple de mise en page — démonstration</p>
     <p className="grp">Pressions</p>
     <div className="it"><span>Blonde locale</span><span className="px">5.50</span></div>
     <div className="it"><span>IPA du moment</span><span className="px">7.00</span></div>
@@ -232,18 +239,18 @@ const SiteNew = () => (
   <div className="browser" aria-hidden="true">
     <div className="bar">
       <div className="dots"><i /><i /><i /></div>
-      <div className="url">lecomptoir-geneve.ch</div>
+      <div className="url">exemple.test</div>
     </div>
     <div className="bsite">
       <div className="bhero">
-        <span className="ov">Bar — Genève · depuis 1987</span>
+        <span className="ov">Démonstration — établissement fictif</span>
         <h4>Un comptoir, des habitués, une vraie carte.</h4>
         <p>Ouvert du mardi au samedi, à deux pas de la place.</p>
         <span className="bb">Voir la carte</span>
       </div>
       <div className="brow">
         <div><b>Horaires</b><span>Ma–Sa · 16h–01h</span></div>
-        <div><b>Adresse</b><span>Rue des Étuves 12</span></div>
+        <div><b>Adresse</b><span>Affichée en un tap</span></div>
         <div><b>Contact</b><span>Appel en un tap</span></div>
       </div>
     </div>
@@ -273,11 +280,11 @@ const CardNew = () => (
 
 const PosterNew = () => (
   <div className="poster" aria-hidden="true">
-    <span className="top">Le Comptoir — Genève</span>
+    <span className="top">Le Comptoir — démonstration</span>
     <div className="big"><em>Soirée</em><b>JAZZ</b></div>
     <p className="dt">Jeudi 12 décembre — dès 19 h</p>
     <p className="dd">Entrée libre · concert à 20 h 30</p>
-    <div className="bt"><span>Rue des Étuves 12 · 1201</span><i /></div>
+    <div className="bt"><span>Votre adresse · votre ville</span><i /></div>
   </div>
 );
 
@@ -300,7 +307,7 @@ const FidNew = () => (
 const MenuOld = () => (
   <div className="m-old" aria-hidden="true">
     <h3>Le Comptoir</h3>
-    <p className="st">~ bar depuis 1987 ~</p>
+    <p className="st">~ exemple ~</p>
     <hr />
     <div className="it"><span>BIERE PRESSION</span><i /><span>5.-</span></div>
     <div className="it"><span>BIERE SPECIALE</span><i /><span>6.50</span></div>
