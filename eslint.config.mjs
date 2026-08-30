@@ -16,8 +16,8 @@ const eslintConfig = defineConfig([
     "reference/**",
   ]),
 
-  // EXCEPTION CIBLEE — une seule regle, six fichiers. Jamais globale : la
-  // regle reste active partout ailleurs dans le projet.
+  // EXCEPTION CIBLEE — une seule regle, cinq fichiers et un repertoire.
+  // Jamais globale : la regle reste active partout ailleurs dans le projet.
   {
     files: [
       "components/Nav.tsx",
@@ -25,7 +25,13 @@ const eslintConfig = defineConfig([
       "app/(site)/mentions-legales/page.tsx",
       "app/(site)/confidentialite/page.tsx",
       "components/ChatWidget.tsx",
-      "app/(site)/prestations/page.tsx",
+      // Le REPERTOIRE, et non les deux fichiers nommes un par un : le segment
+      // dynamique s ecrit `[slug]`, or dans un glob les crochets forment une
+      // classe de caracteres — le chemin litteral ne matcherait qu une lettre
+      // parmi s, l, u, g. Les echapper marche, mais se relit mal et se casse a
+      // la premiere copie. Toutes les pages de prestations sont concernees par
+      // la meme decision de toute facon.
+      "app/(site)/prestations/**",
     ],
     rules: {
       // volontaire — next/link casserait les reveals (Interactions ne tourne qu'une fois), voir décision B7
