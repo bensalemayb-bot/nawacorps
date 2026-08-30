@@ -2,7 +2,13 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import BoutonDevis from "@/components/BoutonDevis";
 import FooterContact from "@/components/FooterContact";
-import { CHF_UNIT, QUOTE_LABEL, formatChfAmount, isQuote } from "@/lib/format";
+import {
+  CHF_UNIT,
+  MONTHLY_SUFFIX,
+  QUOTE_LABEL,
+  formatChfAmount,
+  isQuote,
+} from "@/lib/format";
 import {
   FORMULES,
   FORMULE_SLUGS,
@@ -41,6 +47,16 @@ import {
  * l @id que pose components/SchemaStudio.tsx sur l accueil. AUCUNE note, AUCUN
  * compteur d avis : il n existe aucun avis reel, et en Suisse la LCD (art. 3)
  * vise les indications trompeuses.
+ *
+ * UN PRIX MENSUEL OBLIGATOIRE S AFFICHE AU POINT DE DECISION, PAS AILLEURS.
+ * L Assistant impose l abonnement de suivi — l assistant consomme des appels
+ * d API tous les mois, le vendre une seule fois reviendrait a porter une
+ * charge perpetuelle sans revenu. Cette obligation dormait dans un <details>
+ * replie, et SANS son montant : le visiteur lisait 2'499.–, cliquait, et
+ * decouvrait 129.–/mois plus tard. C est la definition d un prix cache. Le
+ * montant est donc rendu ENTRE le prix et le bouton, avec le mot
+ * « obligatoire », son point de depart et « TVA comprise » — et il est lu en
+ * base (slug `suivi-assistant`), jamais ecrit ici.
  */
 
 // Meme raison qu app/(site)/page.tsx : la page lit Postgres, et `next build`
@@ -109,9 +125,8 @@ export default async function FormulePage({
    * nom et du prix de la sienne, mais aussi du NOM des paliers superieurs pour
    * dire vers quoi monter — et ces noms vivent en base, pas ici.
    */
-  const paliers = (await chargerCatalogue()).filter((s) =>
-    estFormule(s.slug),
-  );
+  const catalogue = await chargerCatalogue();
+  const paliers = catalogue.filter((s) => estFormule(s.slug));
 
   // Absent de la base, ou passe a visible:false depuis /admin : la page
   // n existe plus. Un 404 est la reponse honnete ; une page vide en serait une
@@ -133,6 +148,29 @@ export default async function FormulePage({
   const prixAffiche = surDevis
     ? QUOTE_LABEL
     : `${formatChfAmount(service.priceCents as number)}${CHF_UNIT}`;
+
+  /**
+   * L abonnement que CETTE formule impose, s il y en a un.
+   *
+   * Le lien formule -> suivi est ecrit ici et pas en base : la table Service
+   * ne porte aucune relation entre une formule et son abonnement, et lui en
+   * ajouter une pour un seul cas couterait plus cher que cette ligne. Le
+   * MONTANT, lui, vient de la base — c est tout ce qui compte.
+   *
+   * Une ligne absente, masquee depuis /admin ou passee sur devis ne fait rien
+   * afficher : mieux vaut pas de mention qu une mention fausse.
+   */
+  const SUIVI_IMPOSE: Partial<Record<typeof slug, string>> = {
+    "l-assistant": "suivi-assistant",
+  };
+  const suiviSlug = SUIVI_IMPOSE[slug];
+  const suivi = suiviSlug
+    ? catalogue.find((s) => s.slug === suiviSlug) ?? null
+    : null;
+  const prixSuivi =
+    suivi && suivi.priceCents !== null && !isQuote(suivi)
+      ? `${formatChfAmount(suivi.priceCents)}${CHF_UNIT}${MONTHLY_SUFFIX}`
+      : null;
 
   const schema = {
     "@context": "https://schema.org",
@@ -219,10 +257,35 @@ export default async function FormulePage({
               <b>Dès votre feu vert</b>
               <span>Départ du délai</span>
             </div>
+            {/* Le quatrieme fait n existe que sur une formule qui impose un
+                abonnement. Il est dans le MEME bandeau que le prix du site :
+                le visiteur ne peut pas lire l un sans l autre, et il les lit
+                avant d atteindre le bouton. */}
+            {prixSuivi ? (
+              <div>
+                <b>{prixSuivi}</b>
+                <span>Suivi obligatoire</span>
+              </div>
+            ) : null}
           </div>
-          <p className="sm-note" data-reveal>
-            Prix en francs suisses, TVA comprise, sans frais cachés.
-          </p>
+          {/* « sans frais cachés » retire : la formule installe le soupcon
+              qu elle veut lever, et elle est saturee chez la concurrence. Ce
+              qui rassure vraiment, c est de nommer la contrainte — ce que fait
+              la phrase du suivi juste en dessous. */}
+          {prixSuivi ? (
+            <p className="sm-note" data-reveal>
+              Prix en francs suisses, TVA comprise. Le suivi à {prixSuivi} est{" "}
+              <strong>obligatoire</strong> avec {service.name} : il démarre la
+              2ᵉ année — la première est comprise dans le prix — et se règle
+              TVA comprise. L&apos;assistant consomme des appels d&apos;API tous
+              les mois ; sans le suivi, il s&apos;arrête.
+            </p>
+          ) : (
+            <p className="sm-note" data-reveal>
+              Prix en francs suisses, TVA comprise. Deux allers-retours de
+              correction compris, facturés au-delà.
+            </p>
+          )}
         </div>
       </section>
 
