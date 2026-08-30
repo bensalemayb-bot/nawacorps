@@ -6,8 +6,8 @@ import { SITE_NAME, openGraphPage, whatsapp } from "@/lib/site";
  * /prestations/<famille>.
  *
  * POURQUOI DES FAMILLES ET PAS UNE PAGE PAR LIGNE. Le meme raisonnement que
- * lib/formules.ts, applique au reste du catalogue : quinze lignes en base
- * n ont chacune qu un nom, une description d une ligne et un prix. Quinze
+ * lib/formules.ts, applique au reste du catalogue : quatorze lignes en base
+ * n ont chacune qu un nom, une description d une ligne et un prix. Quatorze
  * pages baties la-dessus seraient du contenu mince, et le contenu mince
  * dessert le referencement au lieu de le servir. Regroupees par famille, les
  * memes lignes ont de la matiere : ce qu elles resolvent, ce qu elles

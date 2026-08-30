@@ -91,12 +91,16 @@ export const CONTACT = {
 /**
  * Lien WhatsApp, avec message pre-rempli optionnel.
  *
- * Le site compte NEUF liens WhatsApp, chacun avec sa propre phrase d amorce
+ * Le site multiplie les amorces WhatsApp — le hero, le pied de page, la carte
+ * du studio, le menu, chaque formule (lib/formules.ts), chaque famille de
+ * prestations (lib/familles.ts), le chatbot — et chacune porte sa propre phrase
  * (« je souhaite faire refaire le site de mon entreprise », « l Assistant m
- * interesse »…). Ces phrases sont
- * editoriales et doivent rester distinctes ; c est le NUMERO qui ne doit
- * exister qu une fois. D ou cette fonction plutot qu une constante : elle
- * centralise le seul fragment qui ne varie pas.
+ * interesse »…). LEUR NOMBRE N EST PAS ECRIT ICI, DELIBEREMENT : ce commentaire
+ * a annonce « neuf » jusqu a ce que formules.ts, familles.ts et les pages de
+ * prestations le rendent faux, et il redeviendra faux a la prochaine page. Ces
+ * phrases sont editoriales et doivent rester distinctes ; c est le NUMERO qui
+ * ne doit exister qu une fois. D ou cette fonction plutot qu une constante :
+ * elle centralise le seul fragment qui ne varie pas.
  *
  * `encodeURIComponent` remplace les sequences pourcent ecrites a la main dans
  * la maquette. Meme resultat, mais la phrase redevient lisible a la relecture.

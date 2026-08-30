@@ -27,7 +27,6 @@ type ServiceSeed = {
  * affiche hors contexte serait faux la moitie du temps, et il faudrait le
  * corriger devant le client. Demander deux informations avant de chiffrer
  * donne un prix juste du premier coup.
-
  *
  * Les slugs des trois formules de sites sont la seule chose que le code
  * connaisse par coeur : components/Offres.tsx indexe son habillage editorial
