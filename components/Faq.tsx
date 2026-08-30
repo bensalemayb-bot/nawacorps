@@ -27,6 +27,14 @@ import { jsonLd } from "@/lib/site";
  *
  * Si une des deux lignes manque ou passe sur devis, la reponse se referme sans
  * chiffre plutot que d en inventer un.
+ *
+ * « TVA COMPRISE » EST DANS LA PHRASE, ET DOIT Y RESTER. La regle du depot est
+ * absolue (CLAUDE.md) : aucun prix affiche sans la mention. Elle ne pouvait pas
+ * etre deleguee aux mentions d Offres ni de CarteDuStudio — depuis que les
+ * objections passent avant le prix, la FAQ est rendue AVANT ces deux sections,
+ * et ces deux montants n etaient couverts par rien. Une note de bas de section
+ * n aurait pas suffi non plus : la reponse repart telle quelle dans le JSON-LD
+ * FAQPage ci-dessous, que Google republie hors de tout contexte de page.
  */
 function construireQuestions(
   prix: (slug: string) => string | null,
@@ -35,7 +43,7 @@ function construireQuestions(
   const suiviAssistant = prix("suivi-assistant");
   const tarifs =
     suivi && suiviAssistant
-      ? `Ensuite, ${suivi} pour l'hébergement, les mises à jour et les sauvegardes — ${suiviAssistant} si votre site a l'assistant, qui tourne en continu, et c'est alors obligatoire.`
+      ? `Ensuite, ${suivi} pour l'hébergement, les mises à jour et les sauvegardes — ${suiviAssistant} si votre site a l'assistant, qui tourne en continu, et c'est alors obligatoire. Les deux montants s'entendent TVA comprise.`
       : "Ensuite, le suivi mensuel prend le relais : hébergement, mises à jour et sauvegardes — et l'assistant quand votre site en a un, auquel cas le suivi est obligatoire.";
 
   return [
