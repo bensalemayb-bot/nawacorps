@@ -48,7 +48,7 @@ import { openGraphPage, whatsapp } from "@/lib/site";
 export const dynamic = "force-dynamic";
 
 const DESCRIPTION =
-  "Le catalogue complet de l'agence genevoise : les trois formules de site, le suivi mensuel, les compléments et la ligne restauration. Prix TVA comprise.";
+  "Le catalogue de l'agence genevoise : trois formules de site, le suivi mensuel, l'identité et les imprimés, les réseaux sociaux et la ligne restauration.";
 
 export const metadata: Metadata = {
   title: "Prestations et tarifs à Genève",
@@ -98,6 +98,18 @@ const DEVIS_LABEL = "Demander un devis →";
  *
  * Chaque groupe porte sa propre amorce WhatsApp et son propre `sujet` : ce sont
  * des conversations differentes, et l assistant doit savoir laquelle s ouvre.
+ *
+ * `pourQui` A ETE REECRIT POUR LES TROIS. Les accroches presentaient ces
+ * groupes comme un appendice aux formules — « pour completer le site », « en
+ * complement ». Or on ne vend pas que des sites : une identite, des imprimes,
+ * la production de reseaux sociaux ou la carte d un restaurant se commandent
+ * seuls, et le client qui vient pour ca repartait en croyant qu il fallait
+ * d abord acheter un site. Chaque accroche dit donc maintenant DE QUOI il
+ * s agit, A QUI ca s adresse, et que ca se prend sans site.
+ *
+ * Le MINIMUM DE COMMANDE de 300.– a disparu avec la nouvelle grille : tous ces
+ * supports passent sur devis, et un seuil n a plus d objet quand il n y a plus
+ * de petits montants a additionner. Aucune trace ne doit en rester.
  */
 const GROUPES_LIGNES = [
   {
@@ -113,7 +125,7 @@ const GROUPES_LIGNES = [
       </>
     ),
     pourQui:
-      "Pour qui veut que son site reste en ligne, à jour et sauvegardé sans y penser. Le suivi démarre la deuxième année : la première est comprise dans le prix du site.",
+      "Ce qui se paie au mois, pour le gérant qui ne veut plus y penser une fois le site en ligne : hébergement, nom de domaine, mises à jour, sauvegardes, sécurité. Le suivi démarre la deuxième année — la première est comprise dans le prix du site — et il est obligatoire avec L'Assistant, qui consomme des appels d'API en continu. C'est ici, aussi, que se prennent vos réseaux sociaux : calendrier, création, rédaction, publication et suivi, vous ne touchez à rien.",
     amorce: whatsapp("Bonjour, j'aimerais un devis pour le suivi de mon site."),
     sujet: "devis-en-continu",
   },
@@ -130,7 +142,7 @@ const GROUPES_LIGNES = [
       </>
     ),
     pourQui:
-      "Pour compléter le site : ce que vos clients ont en main, ce qui déborde de la page unique, et ce qui fait que votre entreprise se ressemble partout.",
+      "Une offre en soi, pas un supplément au site : votre identité, ce que vos clients gardent en main, les photos de votre entreprise. Pour le gérant dont le logo date, qui n'a plus de cartes à donner, ou dont le site et les documents ne se ressemblent pas. Tout se prend avec un site chez moi comme sans.",
     amorce: whatsapp(
       "Bonjour, j'aimerais un devis pour une prestation en complément de mon site.",
     ),
@@ -149,7 +161,7 @@ const GROUPES_LIGNES = [
       </>
     ),
     pourQui:
-      "Ligne secondaire, conservée pour les établissements déjà suivis par l'agence : la carte, les supports de salle et ceux de saison. Ces supports se commandent groupés — en dessous, l'échange coûte plus cher que la prestation.",
+      "Pour un café ou un restaurant genevois qui veut que sa salle se tienne : la carte repensée, ses fichiers d'impression et sa version en ligne avec QR, les chevalets de table, la carte de fidélité, les bons cadeaux et les supports de saison. Une ligne à part, tenue depuis le début, ouverte à qui n'a pas de site chez moi.",
     amorce: whatsapp(
       "Bonjour, j'aimerais un devis pour les supports de mon établissement.",
     ),
@@ -213,11 +225,17 @@ export default async function Prestations() {
               </h1>
             </div>
           </div>
+          {/* Quatre OFFRES, pas une offre et trois annexes. Le site reste en
+              tete parce qu il porte la promesse, le prix affiche et le
+              referencement — mais il n est plus le seul a exister sur cette
+              page. */}
           <p className="lede" data-reveal>
-            Quatre groupes, tous les prix, aucune ligne cachée. Les sites
-            d&apos;abord — c&apos;est le métier ; puis ce qui les tient dans le
-            temps, ce qui les complète, et la ligne restauration que l&apos;agence a
-            gardée.
+            Quatre offres, et le site n&apos;est que la première. Les formules
+            d&apos;abord — c&apos;est le produit d&apos;entrée ; puis le suivi
+            au mois, ce qui se voit ailleurs qu&apos;à l&apos;écran, et la ligne
+            restauration. Les formules et le suivi portent un prix ; tout ce
+            qui s&apos;imprime ou se produit se chiffre sur devis, parce
+            qu&apos;un tirage, un format et un papier ne se devinent pas.
           </p>
           {/* La comparaison « chez les autres » a ete retiree : le
               positionnement §8 interdit de comparer, nomme ou non. Ce qui la
@@ -250,7 +268,8 @@ export default async function Prestations() {
           <p className="lede" data-reveal style={{ marginBottom: 44 }}>
             Pour la PME genevoise dont le site a plus de cinq ans. Du site
             simplement présentable à celui qui répond et relance tout seul —
-            chaque palier contient le précédent en entier.
+            chaque palier contient le précédent en entier. Livré en une
+            semaine, dès votre feu vert.
           </p>
 
           <div className="price-grid">
