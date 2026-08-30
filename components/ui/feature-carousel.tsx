@@ -262,7 +262,7 @@ const CardNew = () => (
     <div className="bc bc-recto" aria-hidden="true">
       <span className="wm">Nawa Corps</span>
       <span className="rl" />
-      <span className="cp">Studio digital — Genève</span>
+      <span className="cp">Agence digitale — Genève</span>
     </div>
     <div className="bc bc-verso" aria-hidden="true">
       <div className="top"><span className="nm">Ayoub</span><span className="no">N° 001</span></div>
@@ -389,7 +389,7 @@ const ITEMS: CarouselItem[] = [
   {
     id: "site",
     label: "Le site",
-    desc: "Un site de 2009 refait en 72 heures : lisible sur téléphone, avec un formulaire de devis qui fonctionne.",
+    desc: "Un site d'il y a quinze ans refait en une semaine : lisible sur téléphone, avec un formulaire de devis qui fonctionne.",
     before: <SiteOld />,
     after: <SiteNew />,
   },

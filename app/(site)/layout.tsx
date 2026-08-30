@@ -40,7 +40,7 @@ import { SITE_NAME, SITE_URL } from "@/lib/site";
  * deux pages legales repetaient ce suffixe a la main ; elles ne le font plus.
  *
  * L ORDRE DES MOTS DU TITRE A CHANGE, et c est deliberé. « Nawa Corps —
- * Studio digital, Genève » mettait la marque en premier : personne ne cherche
+ * Agence digitale, Genève » mettait la marque en premier : personne ne cherche
  * encore « Nawa Corps ». Ce qui se cherche, c est un studio a Geneve. La
  * marque passe donc en fin de titre, la ou elle signe sans occuper la place
  * que les moteurs lisent en premier.

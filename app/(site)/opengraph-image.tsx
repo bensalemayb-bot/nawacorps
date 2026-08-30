@@ -18,7 +18,7 @@ import { ImageResponse } from "next/og";
  * pas la peine d ajouter une dependance reseau au build pour une image qui ne
  * change jamais.
  */
-export const alt = "Nawa Corps — Studio digital, Genève";
+export const alt = "Nawa Corps — Agence digitale, Genève";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -63,7 +63,7 @@ export default function Image() {
           <span>Refait en une semaine. Vous n&apos;avez rien à préparer.</span>
         </div>
         <div style={{ display: "flex", fontSize: 28, opacity: 0.7 }}>
-          Nawa Corps — Studio digital, Genève
+          Nawa Corps — Agence digitale, Genève
         </div>
       </div>
     ),
