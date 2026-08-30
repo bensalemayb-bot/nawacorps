@@ -16,14 +16,22 @@ const eslintConfig = defineConfig([
     "reference/**",
   ]),
 
-  // EXCEPTION CIBLEE — une seule regle, cinq fichiers et un repertoire.
+  // EXCEPTION CIBLEE — UNE SEULE REGLE, sur la liste nommee ci-dessous.
   // Jamais globale : la regle reste active partout ailleurs dans le projet.
+  // La liste n annonce pas son propre compte : elle s allonge a chaque page
+  // publique ajoutee, et un chiffre dans ce commentaire deviendrait faux.
   {
     files: [
       "components/Nav.tsx",
       "components/MenuOverlay.tsx",
       "app/(site)/mentions-legales/page.tsx",
       "app/(site)/confidentialite/page.tsx",
+      // La 404 du site public. Meme decision, meme raison exactement que les
+      // deux pages legales au-dessus : un next/link y ferait une navigation
+      // client-side, Interactions ne rejouerait pas, et les [data-reveal] de
+      // la page d arrivee resteraient a opacity:0. Une 404 qui renvoie sur un
+      // ecran vide est pire que celle qu elle remplace.
+      "app/(site)/not-found.tsx",
       "components/ChatWidget.tsx",
       // Le REPERTOIRE, et non les deux fichiers nommes un par un : le segment
       // dynamique s ecrit `[slug]`, or dans un glob les crochets forment une
