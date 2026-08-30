@@ -95,7 +95,7 @@ C'est le pilier, et il ne repose sur aucun compte d'heures.
 
 **Le délai annoncé est « une semaine ».** Pas 72 h, pas 48 h. Le chiffre exact
 a bougé plusieurs fois et n'est pas tenu ; une semaine est le seul délai que le
-studio a confirmé pouvoir tenir, et il suffit largement : la veille relève des
+l'agence a confirmé pouvoir tenir, et il suffit largement : la veille relève des
 concurrents à **deux à huit semaines**. Promettre moins vite qu'on ne peut est
 un avantage, pas une faiblesse — un délai raté coûte plus cher que le délai
 gagné.
