@@ -66,10 +66,12 @@ function BeforeAfter({
   before,
   after,
   teaser = false,
+  active = false,
 }: {
   before: ReactNode;
   after: ReactNode;
   teaser?: boolean;
+  active?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const pos = useRef(50);
@@ -111,6 +113,14 @@ function BeforeAfter({
   useEffect(() => {
     setPos(50);
   }, [setPos]);
+
+  // Une carte qui DEVIENT active doit reprendre la main sur --ba-x : les cinq
+  // cartes sont montees une fois pour toutes et ne se remontent jamais, donc
+  // sans cet effet la variable resterait figee sur la valeur laissee par la
+  // carte precedente — le voile vert et la carte affichee se contrediraient.
+  useEffect(() => {
+    if (active) setPos(pos.current);
+  }, [active, setPos]);
 
   /* Petit teaser d'invitation au drag (première carte uniquement) */
   useEffect(() => {
@@ -532,6 +542,7 @@ export function FeatureCarousel({ items = ITEMS }: { items?: CarouselItem[] }) {
                     before={item.before}
                     after={item.after}
                     teaser={i === 0}
+                    active={status === "active"}
                   />
                 </div>
               );
