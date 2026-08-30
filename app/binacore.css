@@ -55,9 +55,25 @@ section{padding:clamp(90px,11vw,160px) 0}
    entre elles que l'alignement se joue. Les pages legales n'ont qu'un libelle
    seul dans leur .sec-head, et « Nawa Corps · nLPD » (~143px) deborderait une
    colonne de 140px en passant a la ligne. */
-.sec-head:has(h2){grid-template-columns:clamp(140px,12vw,190px) 1fr}
+/* `:has(h1)` rejoint la regle : les pages de prestations ouvrent sur un h1
+   POSE DANS le .sec-head, comme les sections posent leur h2. Sans lui, ce
+   .sec-head-la retombait sur `auto 1fr` et le h1 partait d'un x different de
+   celui des h2 qui le suivent sur la meme page — l'alignement vertical, seule
+   raison d'etre de la colonne fixe, sautait des le premier titre.
+   Les deux pages legales ne sont pas concernees : leur h1 vit HORS du
+   .sec-head, qui n'y contient qu'un libelle seul. */
+.sec-head:has(h1),.sec-head:has(h2){grid-template-columns:clamp(140px,12vw,190px) 1fr}
 @media(max-width:760px){.sec-head{grid-template-columns:1fr;align-items:start;gap:18px}}
-h2.t{
+/* `h1.t` rejoint `h2.t`. La classe .t veut dire « titre de section » et rien
+   d'autre ; elle etait deja ecrite sur les h1 des pages legales et sur ceux des
+   pages de prestations, mais aucune regle ne la servait pour un h1 — le
+   preflight de Tailwind pose `h1{font-size:inherit;font-weight:inherit}`, si
+   bien que ces titres sortaient a la taille du corps de texte. Interactions.tsx
+   ciblait deja `h1.t` pour le decoupage en lignes : le CSS ne faisait que
+   manquer a l'appel.
+   Le selecteur reste qualifie par la balise, JAMAIS `.t` seul : `.stp .t` est
+   un tout autre objet — le petit libelle de duree des etapes de la methode. */
+h1.t,h2.t{
   font-weight:550;font-size:clamp(2.3rem,5.4vw,4.4rem);
   line-height:1.02;letter-spacing:-.03em;
 }
@@ -802,3 +818,41 @@ html.menu-open .wordmark img { filter: brightness(0) invert(1); }
   color: rgba(241, 238, 230, .55);
   text-align: center;
 }
+
+/* ========== pages prestations ========== */
+/* Les seules classes nouvelles de /prestations et /prestations/<slug>. Tout le
+   reste de ces pages reutilise le design system tel quel : .wrap, .sec-head,
+   .meta, .lede, .price-grid, .price, .p-note, .sm-it, .sm-grp, .sm-foot,
+   .sm-note, .facts, .faq, .c-row, .btn, .lnk. */
+
+/* La carte du studio bornait ses lignes a une colonne de sa grille ; ici elles
+   vivent en pleine page. Sans limite, le trait pointille de .sm-it traverse les
+   1360 px de .wrap et le prix se retrouve a l'autre bout de l'ecran : on ne lit
+   plus une ligne, on la suit du doigt. 720 px gardent l'intitule et le prix
+   dans le meme regard. */
+.prest-liste{max-width:720px}
+/* La description passe SOUS l'intitule, sur une seconde ligne. C'est ce qui
+   distingue cette page de la carte du studio : la carte liste des noms, le
+   catalogue doit dire ce que recouvre « Sticker vitrine » sans qu'on ait a le
+   demander. row-gap:2px, sinon le gap:.9em de .sm-it s'appliquerait aussi
+   entre les deux lignes et disloquerait la ligne de prix. */
+.prest-liste .sm-it{flex-wrap:wrap;row-gap:2px}
+.prest-liste .sm-it .d{flex:0 0 100%;order:3;font-size:.82rem;line-height:1.5;color:var(--muted);max-width:60ch}
+/* Le trait pointille et le prix perdent leur sens quand ils sont seuls sur leur
+   ligne : sous 560px binacore.css fait deja disparaitre le trait et pousse le
+   prix a droite (regle de .sm-it), on n'ajoute rien. */
+
+/* Les listes « ce qui est inclus » / « ce qui ne l'est pas ». .price ul/li
+   porte deja ce tiret en tete, mais il est peint pour le fond pin de la grille
+   d'accueil (#DCE4DC sur .price li) ; ces pages-ci sont sur fond os. Meme
+   dessin, palette claire. */
+.prest-inc{list-style:none;display:grid;gap:10px;max-width:62ch}
+.prest-inc li{font-size:.95rem;display:flex;gap:.8em}
+.prest-inc li::before{content:"—";color:var(--brass);flex:none}
+/* Deux blocs « il faut monter a … » s'enchainent sur la page de La Vitrine :
+   sans cet ecart, la seconde etiquette .sm-grp collait a la derniere puce du
+   bloc precedent et les deux paliers se lisaient comme un seul.
+   Classe propre plutot qu'un selecteur d'adjacence sur `div` : dans l'autre
+   .prest-liste du site — le catalogue — les enfants directs sont les lignes
+   .sm-it, qui se seraient toutes ecartees de 50px. */
+.prest-palier + .prest-palier{margin-top:clamp(34px,4vw,52px)}
