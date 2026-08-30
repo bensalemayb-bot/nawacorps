@@ -521,8 +521,21 @@ html.menu-open .nav-time,html.menu-open .nav-r a{opacity:0;pointer-events:none}
   .cursor{display:none}
 }
 /* ========== carte du studio ========== */
+/* CE QUI RESTE EN SERVICE ICI, ET CE QUI N Y EST PLUS. La carte du studio
+   affichait le catalogue en LIGNES, dans un encart clair a deux colonnes :
+   .sm-card, .sm-cols, .sm-col et .sm-it dessinaient ce menu de restaurant.
+   Le catalogue est passe en cartes (voir « le catalogue en cartes » plus bas)
+   et l accueil n emploie plus aucune de ces quatre classes.
+   Elles NE SONT PAS SUPPRIMEES : .sm-grp, .sm-it et .sm-foot sont reutilisees
+   par les pages /prestations, qui sont ecrites en parallele. Les retirer
+   casserait des pages qui ne sont pas encore toutes dans l arbre. */
 .studio-menu{margin-top:clamp(60px,8vw,110px)}
-.sm-head h3{font-weight:550;font-size:clamp(1.7rem,3.4vw,2.6rem);letter-spacing:-.02em}
+/* Le selecteur vise le h2, pas un h3 : c est un h2 que .sm-head contient
+   depuis le portage, et la regle ne trouvait donc AUCUNE cible — le preflight
+   de Tailwind pose `h2{font-size:inherit;font-weight:inherit}` et « La carte
+   du studio » sortait a la taille du corps de texte. La taille est celle de la
+   maquette, entre les titres de section (.t) et les titres de carte. */
+.sm-head h2{font-weight:550;font-size:clamp(1.7rem,3.4vw,2.6rem);letter-spacing:-.02em}
 .sm-head .serif-i{color:var(--brass-l);font-size:1.05em}
 .sm-card{background:var(--bone);color:var(--ink);border-radius:var(--r);
   padding:clamp(26px,4.5vw,56px);box-shadow:0 30px 80px rgba(0,0,0,.28)}
@@ -544,6 +557,74 @@ html.menu-open .nav-time,html.menu-open .nav-r a{opacity:0;pointer-events:none}
   font-size:.8rem;color:var(--muted)}
 .sm-foot .lnk{color:var(--ink);font-size:.85rem}
 @media(max-width:560px){.sm-it{flex-wrap:wrap;row-gap:2px}.sm-it i{display:none}.sm-it .px{margin-left:auto}}
+
+/* ========== le catalogue en cartes ========== */
+/* POURQUOI CES CLASSES EXISTENT, ET POURQUOI .price N EST PAS REUTILISEE.
+   Le catalogue se lisait en LIGNES : intitule, filet pointille, prix a droite
+   (.sm-it). C est la mise en page d une carte de restaurant, et elle dessert
+   ce qu elle presente. Elle range quatorze « sur devis » les uns sous les
+   autres et invite a les comparer, alors qu aucun ne se compare : un tirage,
+   un format et un papier se chiffrent apres un echange. Les trois formules,
+   elles, sont presentees en cartes (.price) et c est ce qui fonctionne — un
+   titre, une phrase, un prix, une porte de sortie.
+   .price reste a sa place : elle est calibree pour TROIS cartes de decision,
+   avec un prix en serif de 3.8rem, une liste de puces et un bouton en pied.
+   Ici il y a quatorze lignes dont douze sur devis. Meme grammaire, une echelle
+   en dessous — et le meme systeme par ailleurs : .wrap, .sec-head, .meta,
+   .lede, .btn, .lnk, .p-note et .sm-foot sont repris tels quels.
+   DEUX FONDS, UN SEUL DESSIN. La grille vit sur l accueil (fond pin, dans
+   .green) et sur /prestations (fond os). Comme .meta, .lede et .btn avant
+   elle, la carte declare sa palette claire puis ne redefinit sous .green que
+   ce qui change de couleur. */
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2.2vw,26px)}
+/* LA GRILLE DESCEND JUSQU AU TELEPHONE. Une grille a colonnes fixes sans point
+   de rupture casse sous 390px — c est le defaut releve a l audit sur plusieurs
+   grilles du site, faute d un seuil qui vise le telephone. Les seuils du site
+   sont deja 900/860/820/760/700/640/560 : 760 et 560 sont repris tels quels
+   plutot que d en ajouter deux de plus. Trois colonnes, puis deux, puis UNE :
+   a 390px une carte occupe toute la largeur utile (390 - 2 x 20px de --pad),
+   soit 350px, et son titre le plus long — « Suivi & hébergement — avec
+   assistant » — tient sur trois lignes sans deborder. */
+@media(max-width:760px){.cat-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.cat-grid{grid-template-columns:1fr}}
+.cat-it{display:flex;flex-direction:column;
+  border:1px solid var(--line);border-radius:var(--r);
+  padding:clamp(18px,2.2vw,26px);
+  color:inherit;text-decoration:none;
+  transition:border-color .3s var(--ease),background .3s var(--ease),transform .3s var(--ease)}
+.green .cat-it{border-color:var(--line-g)}
+/* Le survol ne concerne que les cartes QUI MENENT QUELQUE PART. Sur
+   /prestations la carte est un <article> : la faire reagir au pointeur
+   promettrait un clic qui n arrive pas. */
+a.cat-it:hover{border-color:var(--ink);background:var(--bone-2);transform:translateY(-3px)}
+.green a.cat-it:hover{border-color:var(--bone);background:rgba(241,238,230,.06)}
+.cat-it h3{font-weight:550;font-size:1.05rem;letter-spacing:-.01em;line-height:1.32}
+.cat-it .d{font-size:.85rem;line-height:1.55;color:var(--muted);margin-top:8px}
+.green .cat-it .d{color:var(--muted-g)}
+/* `margin-top:auto` POUSSE LE PRIX EN PIED DE CARTE. Sur une rangee, les
+   titres et les descriptions n ont pas la meme hauteur ; un prix qui suivrait
+   le texte se poserait a une hauteur differente dans chaque carte et l oeil
+   perdrait la ligne horizontale qui lui sert a comparer. */
+.cat-it .px{margin-top:auto;padding-top:18px;font-family:var(--serif);font-size:1.3rem;line-height:1}
+.cat-it .px small{font-family:var(--sans);font-size:.62rem;font-weight:600;color:var(--muted);
+  letter-spacing:.06em;margin-right:.4em;text-transform:uppercase}
+.green .cat-it .px small{color:var(--muted-g)}
+.cat-it .px small.per{margin-right:0;margin-left:.15em;text-transform:none;letter-spacing:0}
+/* LA FAMILLE EST NOMMEE AU PIED DE LA CARTE, et ce n est pas decoratif : la
+   carte entiere est un lien, et un lien doit dire ou il mene. Sans ce libelle,
+   cliquer « Cartes de visite » ouvrait « Imprimés & signalétique » sans
+   prevenir. Il n apparait que sur les cartes qui sont des liens. */
+.cat-it .go{margin-top:14px;font-size:.68rem;font-weight:600;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--brass)}
+.green .cat-it .go{color:var(--brass-l)}
+.cat-it .go .ar{display:inline-block;transition:transform .3s var(--ease)}
+a.cat-it:hover .go .ar{transform:translateX(4px)}
+/* Le « tout voir » de chaque famille sur /prestations. Un .btn plutot qu un
+   .lnk : c est la porte du bloc, et sa hauteur dessinee (1.05em de padding
+   vertical, soit ~46px) depasse deja les 44px des cibles tactiles — il n a
+   donc rien a demander au bloc de fin de fichier. */
+.cat-tout{margin-top:clamp(28px,3.5vw,40px)}
+
 /* ========== carrousel travaux ========== */
 .car-top{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:28px}
 .car-top .lede{max-width:44ch}
@@ -901,8 +982,11 @@ html.menu-open .wordmark img { filter: brightness(0) invert(1); }
 /* ========== pages prestations ========== */
 /* Les seules classes nouvelles de /prestations et /prestations/<slug>. Tout le
    reste de ces pages reutilise le design system tel quel : .wrap, .sec-head,
-   .meta, .lede, .price-grid, .price, .p-note, .sm-it, .sm-grp, .sm-foot,
-   .sm-note, .facts, .faq, .c-row, .btn, .lnk. */
+   .meta, .lede, .price-grid, .price, .p-note, .cat-grid, .cat-it, .cat-tout,
+   .sm-it, .sm-grp, .sm-foot, .sm-note, .facts, .faq, .c-row, .btn, .lnk.
+   L INDEX /prestations N EMPLOIE PLUS .prest-liste NI .sm-it : son catalogue
+   est passe en cartes (.cat-grid, plus haut). Les deux regles qui suivent ne
+   servent donc plus que les pages de detail, qui listent encore des lignes. */
 
 /* La carte du studio bornait ses lignes a une colonne de sa grille ; ici elles
    vivent en pleine page. Sans limite, le trait pointille de .sm-it traverse les

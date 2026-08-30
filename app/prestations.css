@@ -1,0 +1,1025 @@
+/* ==========================================================================
+   PAGES DE FAMILLE — /prestations/identite, /imprimes, /reseaux-sociaux,
+   /suivi, /restauration.
+   ==========================================================================
+
+   POURQUOI UNE FEUILLE A PART, et pas trois regles de plus dans binacore.css.
+   binacore.css est le portage a l octet pres de la maquette de reference et il
+   est travaille en parallele par un autre chantier ; y ajouter quarante regles
+   de vignettes garantissait un conflit. Cette feuille est importee par les
+   cinq pages de famille et par elles seules — un fichier global peut etre
+   importe depuis n importe quelle page en App Router (voir
+   node_modules/next/dist/docs/01-app/01-getting-started/11-css.md, section
+   « Global CSS »).
+
+   CE QUI N EST PAS ICI. Tout ce que les pages savent deja faire vient de
+   binacore.css et n est pas redefini : .wrap, .sec-head, .meta, .index, .t,
+   .lede, .sm-grp, .sm-note, .prest-inc, .prest-liste, .prest-palier, .faq,
+   .c-row, .btn, .lnk. Cette feuille n ajoute que deux choses : la mise en page
+   d une prestation (prefixe .pf-, « page famille ») et les vignettes de
+   demonstration (prefixe .vg-). Les deux prefixes ont ete verifies absents de
+   binacore.css avant d etre choisis.
+
+   AUCUNE ANIMATION. Les vignettes sont des illustrations fixes : rien a geler
+   sous prefers-reduced-motion, rien qui reclame du JS. Le seul mouvement de
+   ces pages reste le [data-reveal] de binacore.css, qui a deja son repli.
+   ========================================================================== */
+
+/* ---------- une prestation : le texte, puis sa vignette ---------- */
+
+/* Deux colonnes, et la vignette DERRIERE le texte dans le DOM. C est l ordre
+   de lecture qui commande : la vignette est masquee aux lecteurs d ecran, la
+   placer en premier n apporterait rien et decalerait le texte d un cran sur
+   telephone. */
+.pf-piece {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, clamp(240px, 30vw, 400px));
+  gap: clamp(22px, 4vw, 56px);
+  align-items: start;
+}
+
+/* Filet de securite : une prestation ajoutee en base sans vignette ne laisse
+   pas une colonne vide de 400 px a cote de son texte — elle reprend toute la
+   largeur. `:has()` est deja employe par binacore.css (.sec-head:has(h1)). */
+.pf-piece:not(:has(.vg-fig)) {
+  grid-template-columns: 1fr;
+}
+
+/* Le filet ET l ecart vivent sur la meme regle : deux prestations qui se
+   suivent doivent se lire comme deux blocs, pas comme une liste continue. */
+.pf-piece + .pf-piece {
+  margin-top: clamp(46px, 6vw, 84px);
+  padding-top: clamp(46px, 6vw, 84px);
+  border-top: 1px solid var(--line);
+}
+
+/* PAS D ALTERNANCE GAUCHE / DROITE — essayee, mesuree, retiree.
+   Elle avait l air d une bonne idee pour rompre la colonne d images de la page
+   restauration. Deux defauts au navigateur, a 1440 px :
+   1. le titre d une prestation sur deux repartait de x=940 au lieu de x=88,
+      alors que tout l alignement vertical du site repose sur une colonne de
+      gauche fixe (binacore.css, .sec-head:has(h2)) ;
+   2. la vignette fait 379 px de haut pour un bloc de texte qui en fait 746 :
+      posee a gauche, elle laissait 367 px de vide en haut de page — un trou,
+      pas une respiration.
+   La vignette reste donc toujours a droite. La rupture visuelle est apportee
+   par le filet de .pf-piece + .pf-piece, qui suffit. */
+
+.pf-piece-t {
+  font-weight: 550;
+  font-size: clamp(1.2rem, 2.3vw, 1.65rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+/* La description lue en base, en italique de titrage : elle resume la ligne
+   en un souffle avant le paragraphe qui la detaille. */
+.pf-piece-d {
+  margin-top: 8px;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  line-height: 1.4;
+  color: var(--muted);
+  max-width: 46ch;
+}
+
+.pf-piece-quoi {
+  margin-top: 18px;
+  max-width: 56ch;
+  font-size: 0.96rem;
+  line-height: 1.7;
+}
+
+/* Premiere etiquette du bloc : .sm-grp porte deja `margin:26px 0 10px`, on ne
+   fait que l ecarter du paragraphe qui la precede. */
+.pf-txt .sm-grp {
+  margin-top: 28px;
+}
+
+/* Le prix, lu en base. Il est SOUS la liste de ce qui est produit, jamais
+   au-dessus : on lit ce qu on recoit, puis ce que ca coute. */
+.pf-prix {
+  margin-top: 26px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: baseline;
+  gap: 0.9em;
+  flex-wrap: wrap;
+}
+.pf-prix b {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(1.45rem, 2.6vw, 2rem);
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+/* « TVA comprise » ou « Périmètre à définir », selon ce que dit la base. La
+   mention accompagne CHAQUE prix, dans la meme unite de lecture : une mention
+   unique en bas de page ne couvrirait pas un visiteur arrive par une ancre. */
+.pf-prix span {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Pourquoi cette ligne est sur devis, ou ce que le suivi impose. Meme
+   traitement pour les deux : c est la contrainte, et la contrainte se dit. */
+.pf-raison {
+  margin-top: 14px;
+  max-width: 56ch;
+  font-size: 0.85rem;
+  line-height: 1.65;
+  color: var(--muted);
+}
+.pf-raison strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* La note de page — mention du devis, mention de TVA. .sm-note plafonne a
+   42ch, trop etroit pour un paragraphe de trois phrases. */
+.pf-note {
+  margin-top: 1.6rem;
+  max-width: 64ch;
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+/* Les renvois du bloc « ce qui n est pas compris ». .prest-inc pose deja le
+   tiret et la grille ; il ne manque que la couleur du lien, qui doit se
+   distinguer du texte sans crier. */
+.pf-hors .lnk {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+@media (max-width: 860px) {
+  .pf-piece {
+    grid-template-columns: 1fr;
+  }
+  /* Sur une colonne, la vignette passe SOUS le texte — c est deja l ordre du
+     DOM, il n y a rien a neutraliser. */
+}
+
+/* ==========================================================================
+   LES VIGNETTES DE DEMONSTRATION
+   ==========================================================================
+   Elles sont dessinees en CSS et en DOM parce qu il n existe AUCUNE photo de
+   produit dans le depot — voir le mode d emploi en tete de
+   components/VignettePrestation.tsx, qui dit aussi ou glisser la vraie photo
+   quand elle arrivera.
+   ========================================================================== */
+
+.vg-fig {
+  margin: 0;
+  max-width: 440px;
+}
+
+/* La legende est le SEUL element de la figure qu un lecteur d ecran entend :
+   la vignette elle-meme porte aria-hidden. Elle dit « démonstration » en
+   toutes lettres, a cote de la piece — guide de voix §8, interdit n°1. */
+.vg-cap {
+  margin-top: 10px;
+  font-size: 0.72rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+/* La scene. Rapport 5/4 pour toutes : c est ce qui fait tenir ensemble six
+   vignettes de nature differente sur la page restauration. */
+.vg {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 5 / 4;
+  padding: clamp(14px, 2.2vw, 28px);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background:
+    radial-gradient(120% 90% at 18% 0%, #fbf9f4 0%, rgba(251, 249, 244, 0) 62%),
+    linear-gradient(155deg, #efebe1 0%, #e3ded1 100%);
+  overflow: hidden;
+  /* Repli : sans unite de conteneur, la vignette reste lisible a taille fixe
+     plutot que de retomber sur 1rem, qui la ferait deborder. */
+  font-size: 12px;
+}
+
+/* TOUT L INTERIEUR EST DIMENSIONNE EN `em`, et le `em` suit la LARGEUR DE LA
+   VIGNETTE, pas celle de l ecran. C est ce qui permet a la meme maquette de
+   tenir dans une colonne de 240 px et dans une figure de 440 px sans qu aucune
+   valeur ne soit ecrite deux fois. `@supports` garde le repli ci-dessus pour
+   un navigateur sans requetes de conteneur.
+
+   LE CONTENEUR EST .vg-fig, PAS .vg — et c est la seule facon que ca marche :
+   UN ELEMENT NE PEUT PAS SE REQUETER LUI-MEME. Avec `container-type` pose sur
+   .vg, les `cqw` ecrits dans .vg remontaient au conteneur suivant — c est-a-
+   dire, faute de conteneur, au viewport. Mesure au navigateur avant
+   correction : font-size a 15 px (le plafond du clamp) dans une vignette de
+   259 px, la ou elle devait valoir 10,6 px. Les maquettes ne retrecissaient
+   donc JAMAIS, et trois d entre elles debordaient de leur scene des que la
+   colonne descendait sous 300 px. .vg-fig porte la meme largeur que .vg : le
+   calcul est identique, il est simplement lu au bon endroit. */
+@supports (container-type: inline-size) {
+  .vg-fig {
+    container-type: inline-size;
+  }
+  .vg {
+    font-size: clamp(9px, 4cqw, 15px);
+    /* Le padding suit lui aussi la vignette. En `vw` il ne bougeait pas quand
+       la colonne retrecissait de 400 a 240 px : la scene perdait de la
+       hauteur utile sans rien rendre en marge. */
+    padding: clamp(10px, 5cqw, 26px);
+  }
+}
+
+/* ---------- primitives communes aux quatorze vignettes ---------- */
+
+/* Les barres remplacent les vrais textes. C est deliberé : un nom
+   d entreprise plausible, une adresse ou un domaine en .ch feraient passer
+   une demonstration pour une reference client — ce que vise la LCD art. 3. */
+.vg-bar {
+  display: block;
+  height: 0.62em;
+  border-radius: 0.31em;
+  background: rgba(23, 22, 19, 0.2);
+}
+.vg-bar + .vg-bar {
+  margin-top: 0.5em;
+}
+.vg-thin {
+  height: 0.4em;
+  background: rgba(23, 22, 19, 0.13);
+}
+
+.vg-micro {
+  display: block;
+  font-size: 0.62em;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.vg-over {
+  display: block;
+  font-size: 0.6em;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--brass);
+}
+
+/* Le QR est une TRAME, pas un code : il n encode rien, et il ne doit rien
+   encoder — un QR lisible dans une demonstration enverrait quelque part. */
+.vg-qr {
+  display: block;
+  width: 4.4em;
+  height: 4.4em;
+  flex: none;
+  border: 0.16em solid var(--ink);
+  border-radius: 0.2em;
+  background-color: var(--bone-2);
+  background-image: repeating-conic-gradient(
+    var(--ink) 0% 25%,
+    rgba(0, 0, 0, 0) 0% 50%
+  );
+  background-size: 0.62em 0.62em;
+}
+.vg-qr-s {
+  width: 2.5em;
+  height: 2.5em;
+  background-size: 0.42em 0.42em;
+}
+
+/* Marque abstraite : un carre pin, un anneau laiton, une barre claire. Aucune
+   lettre, donc aucune initiale d entreprise imaginaire. */
+.vg-mark {
+  display: block;
+  position: relative;
+  width: 3.6em;
+  height: 3.6em;
+  flex: none;
+  border-radius: 0.9em;
+  background: var(--pine);
+}
+.vg-mark::before {
+  content: "";
+  position: absolute;
+  inset: 26%;
+  border: 0.26em solid var(--brass-l);
+  border-radius: 50%;
+}
+.vg-mark::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 14%;
+  width: 0.26em;
+  height: 72%;
+  border-radius: 0.13em;
+  background: var(--bone);
+  transform: translateX(-50%) rotate(24deg);
+}
+.vg-mark-s {
+  width: 2.4em;
+  height: 2.4em;
+  border-radius: 0.6em;
+}
+
+/* ---------- identité : la planche ---------- */
+
+.vg-identite .vg-planche {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.9em;
+}
+.vg-swatches {
+  display: flex;
+  gap: 0.5em;
+  width: 100%;
+}
+.vg-swatches i {
+  flex: 1;
+  height: 1.9em;
+  border-radius: 0.3em;
+  border: 1px solid rgba(23, 22, 19, 0.12);
+}
+.vg-swatches i:nth-child(1) {
+  background: var(--pine);
+}
+.vg-swatches i:nth-child(2) {
+  background: var(--brass);
+}
+.vg-swatches i:nth-child(3) {
+  background: var(--bone-2);
+}
+.vg-swatches i:nth-child(4) {
+  background: var(--ink);
+}
+.vg-spec {
+  display: flex;
+  align-items: baseline;
+  gap: 1em;
+}
+.vg-spec-serif {
+  font-family: var(--serif);
+  font-size: 2.4em;
+  line-height: 1;
+  color: var(--ink);
+}
+.vg-spec-sans {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 1.9em;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+/* ---------- photographie : la planche de sélection ---------- */
+
+.vg-photos {
+  flex-direction: column;
+  gap: 0.9em;
+}
+.vg-sheet {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.45em;
+}
+/* Des aplats degrades, pas de fausses photos : une image inventee de local
+   commercial serait exactement le detail localisable qu on s interdit. */
+.vg-sheet i {
+  aspect-ratio: 4 / 3;
+  border-radius: 0.25em;
+}
+.vg-sheet i:nth-child(1) {
+  background: linear-gradient(150deg, #3e5348, #14372c);
+}
+.vg-sheet i:nth-child(2) {
+  background: linear-gradient(150deg, #c9ac6b, #8a6f34);
+}
+.vg-sheet i:nth-child(3) {
+  background: linear-gradient(150deg, #d8d2c2, #a9a396);
+}
+.vg-sheet i:nth-child(4) {
+  background: linear-gradient(150deg, #2a4a3d, #0d2a21);
+}
+.vg-sheet i:nth-child(5) {
+  background: linear-gradient(150deg, #efe9dc, #cfc7b4);
+}
+.vg-sheet i:nth-child(6) {
+  background: linear-gradient(150deg, #6e6355, #302b24);
+}
+.vg-sheet i.sel {
+  outline: 0.18em solid var(--brass);
+  outline-offset: 0.18em;
+}
+
+/* ---------- cartes de visite : recto et verso ---------- */
+
+/* 66 % et non 70 : a 265 px de colonne, le coin bas-gauche du recto — que la
+   rotation pousse encore plus a gauche — sortait de la scene et se faisait
+   couper par son `overflow:hidden`. Meme raison pour les 9 % de retrait et
+   pour la rotation ramenee a 3,5°. */
+.vg-cartes .vg-bc {
+  position: absolute;
+  width: 62%;
+  aspect-ratio: 85 / 55;
+  border-radius: 0.5em;
+  padding: 1em 1.1em;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0.8em 2em rgba(23, 22, 19, 0.18);
+}
+/* Marque ET libelle EN HAUT de la carte, l un sous l autre. Avec
+   `space-between` le libelle tombait en bas a gauche du recto, c est-a-dire
+   exactement sous le coin haut-gauche du verso : « Recto » disparaissait
+   des que la colonne descendait sous 300 px. */
+.vg-bc-recto {
+  left: 9%;
+  top: 7%;
+  background: var(--pine);
+  justify-content: flex-start;
+  gap: 0.6em;
+  align-items: flex-start;
+  transform: rotate(-3.5deg);
+}
+.vg-bc-recto .vg-micro {
+  color: var(--muted-g);
+}
+.vg-bc-verso {
+  right: 4%;
+  bottom: 7%;
+  background: var(--bone-2);
+  border: 1px solid rgba(23, 22, 19, 0.1);
+  transform: rotate(2.5deg);
+}
+.vg-bc-ct {
+  margin-top: auto;
+  display: grid;
+  gap: 0.32em;
+  width: 100%;
+}
+.vg-bc-verso .vg-micro {
+  margin-top: 0.6em;
+}
+
+/* ---------- affiche ---------- */
+
+.vg-poster {
+  height: 100%;
+  aspect-ratio: 3 / 4;
+  background: var(--bone-2);
+  border: 1px solid rgba(23, 22, 19, 0.1);
+  border-radius: 0.35em;
+  padding: 1.1em 1em;
+  display: flex;
+  flex-direction: column;
+  /* Le pied — libelle des formats et QR — debordait du poster des que le
+     libelle passait sur deux lignes, c est-a-dire des 265 px de colonne. */
+  overflow: hidden;
+  box-shadow: 0 1em 2.4em rgba(23, 22, 19, 0.18);
+}
+/* « votre AFFICHE » : la vignette dit ce qu elle est. Aucun nom
+   d etablissement, aucune date reelle, aucun lieu. */
+.vg-poster-big {
+  margin: 0.9em 0 0.8em;
+}
+.vg-poster-big em {
+  display: block;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.4em;
+  line-height: 1;
+  color: var(--brass);
+}
+.vg-poster-big b {
+  display: block;
+  font-weight: 700;
+  font-size: 2.2em;
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  color: var(--pine);
+}
+.vg-poster-foot {
+  margin-top: auto;
+  padding-top: 0.8em;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.6em;
+}
+.vg-poster-foot .vg-micro {
+  font-size: 0.46em;
+  letter-spacing: 0.06em;
+}
+.vg-poster-foot .vg-qr {
+  width: 2em;
+  height: 2em;
+  background-size: 0.36em 0.36em;
+}
+
+/* ---------- sticker vitrine ---------- */
+
+.vg-sticker-p {
+  width: 86%;
+  background: var(--pine);
+  border-radius: 1em;
+  padding: 1.1em;
+  display: flex;
+  align-items: center;
+  gap: 0.9em;
+  /* Le trait tirete figure la decoupe de l adhesif. */
+  outline: 0.12em dashed rgba(241, 238, 230, 0.34);
+  outline-offset: 0.5em;
+  box-shadow: 0 1em 2.4em rgba(23, 22, 19, 0.2);
+}
+.vg-sticker-txt {
+  flex: 1;
+  min-width: 0;
+}
+.vg-sticker-txt .vg-over {
+  color: var(--brass-l);
+  letter-spacing: 0.2em;
+  margin-bottom: 0.6em;
+}
+.vg-sticker-txt .vg-bar {
+  background: rgba(241, 238, 230, 0.34);
+}
+.vg-sticker-txt .vg-thin {
+  background: rgba(241, 238, 230, 0.2);
+}
+.vg-sticker-txt .vg-micro {
+  color: var(--muted-g);
+  letter-spacing: 0.12em;
+  margin-top: 0.7em;
+}
+.vg-sticker .vg-qr {
+  width: 3.6em;
+  height: 3.6em;
+  border-color: var(--bone);
+}
+
+/* ---------- réseaux sociaux : le calendrier et une publication ---------- */
+
+.vg-reseaux {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.7em;
+}
+.vg-cal,
+.vg-post {
+  background: var(--bone-2);
+  border: 1px solid rgba(23, 22, 19, 0.1);
+  border-radius: 0.5em;
+  padding: 0.7em;
+}
+/* La grille est PLAFONNEE en largeur, et c est ce qui la fait tenir. Sans
+   `max-width`, une case vaut un septieme de la carte : sur une figure de
+   440 px la grille seule depassait la hauteur de la scene et le bloc de
+   publication se retrouvait coupe par le `overflow:hidden`. */
+.vg-cal-grid {
+  margin-top: 0.6em;
+  max-width: 11.5em;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.25em;
+}
+.vg-cal-grid i {
+  aspect-ratio: 1;
+  border-radius: 0.18em;
+  background: rgba(23, 22, 19, 0.07);
+}
+.vg-cal-grid i.on {
+  background: var(--pine);
+}
+/* Grille plutot que flex : la vignette de publication tient l image sur deux
+   rangees sans qu il faille envelopper les deux barres dans un bloc de plus. */
+.vg-post {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.45em 0.8em;
+  align-items: center;
+}
+.vg-post-img {
+  grid-row: 1 / 3;
+  width: 2.8em;
+  height: 2.8em;
+  border-radius: 0.35em;
+  background: linear-gradient(150deg, #3e5348, #12352b);
+}
+.vg-post .vg-bar + .vg-bar {
+  margin-top: 0;
+}
+
+/* ---------- suivi : le carnet d'entretien ---------- */
+
+.vg-panel {
+  width: 90%;
+  background: var(--bone-2);
+  border: 1px solid rgba(23, 22, 19, 0.1);
+  border-radius: 0.6em;
+  padding: 0.95em 1.1em;
+  box-shadow: 0 0.8em 2em rgba(23, 22, 19, 0.1);
+}
+.vg-rows {
+  list-style: none;
+  margin-top: 0.6em;
+}
+.vg-rows li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+  padding: 0.32em 0;
+  font-size: 0.8em;
+  line-height: 1.3;
+  color: var(--ink);
+  border-top: 1px solid var(--line);
+}
+.vg-rows li:first-child {
+  border-top: 0;
+}
+/* Une coche dessinee, pas un caractere : le rendu d un ✓ depend de la police
+   installee, et la vignette doit etre identique partout. */
+.vg-ok {
+  position: relative;
+  width: 1.1em;
+  height: 1.1em;
+  flex: none;
+}
+.vg-ok::after {
+  content: "";
+  position: absolute;
+  left: 16%;
+  top: 4%;
+  width: 38%;
+  height: 74%;
+  border-right: 0.16em solid var(--brass);
+  border-bottom: 0.16em solid var(--brass);
+  transform: rotate(42deg);
+}
+
+/* ---------- assistant : l'écran et l'alerte ---------- */
+
+.vg-phone {
+  height: 100%;
+  aspect-ratio: 10 / 16;
+  background: var(--bone-2);
+  border: 1px solid rgba(23, 22, 19, 0.12);
+  border-radius: 1.2em;
+  padding: 0.8em 0.7em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  overflow: hidden;
+  box-shadow: 0 1em 2.4em rgba(23, 22, 19, 0.18);
+}
+.vg-notif {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.45em 0.6em;
+  border-radius: 0.6em;
+  background: var(--pine);
+  color: var(--bone);
+  font-size: 0.62em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.vg-dot {
+  width: 0.5em;
+  height: 0.5em;
+  flex: none;
+  border-radius: 50%;
+  background: var(--brass-l);
+}
+.vg-bubbles {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+}
+/* LARGEUR EN `width`, PAS EN `max-width`. Avec `max-width` seul, une bulle
+   posee en `align-self:flex-start` prend sa largeur de son contenu — et son
+   contenu, ce sont des barres exprimees en pourcentage de la bulle. La
+   largeur restait donc indefinie des deux cotes et les bulles se reduisaient
+   a deux pastilles de quelques pixels. Une largeur ferme casse le cercle. */
+.vg-bub {
+  padding: 0.5em 0.6em;
+  border-radius: 0.7em;
+}
+.vg-bub-in {
+  width: 76%;
+  align-self: flex-start;
+  background: rgba(23, 22, 19, 0.07);
+  border-bottom-left-radius: 0.2em;
+}
+.vg-bub-out {
+  width: 86%;
+  align-self: flex-end;
+  background: var(--pine);
+  border-bottom-right-radius: 0.2em;
+}
+.vg-bub-out .vg-bar {
+  background: rgba(241, 238, 230, 0.34);
+}
+.vg-bub-out .vg-thin {
+  background: rgba(241, 238, 230, 0.22);
+}
+.vg-phone > .vg-micro {
+  margin-top: auto;
+  text-align: center;
+}
+
+/* ---------- la carte ---------- */
+
+/* UN SEUL LEVIER pour faire tenir la carte : sa taille de base. Tout son
+   interieur est en `em`, donc 0.88 le reduit d un bloc — deux sections,
+   quatre lignes et le pied — au lieu de rogner sept regles une par une.
+   Sans lui, le pied « version en ligne » etait coupe sous 300 px. */
+.vg-menu {
+  width: 80%;
+  max-height: 100%;
+  overflow: hidden;
+  font-size: 0.92em;
+  background: var(--pine);
+  border-radius: 0.5em;
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 1em 2.4em rgba(23, 22, 19, 0.22);
+}
+.vg-menu .vg-over {
+  color: var(--brass-l);
+}
+.vg-grp {
+  margin: 0.6em 0 0.3em;
+  display: flex;
+  align-items: center;
+  gap: 0.8em;
+  font-size: 0.6em;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--brass-l);
+}
+.vg-grp::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line-g);
+}
+.vg-line {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin: 0.3em 0;
+}
+.vg-line .vg-bar {
+  flex: none;
+  background: rgba(241, 238, 230, 0.3);
+}
+.vg-dots {
+  flex: 1;
+  height: 1px;
+  border-bottom: 1px dotted rgba(241, 238, 230, 0.3);
+}
+/* LA COLONNE DES PRIX EST UNE BARRE. Aucun montant n est ecrit dans une
+   demonstration : un chiffre en dur ne se corrige jamais, et rien ne dit au
+   visiteur qu il ne s agit pas d un prix du studio. */
+.vg-px {
+  width: 1.8em;
+  height: 0.5em;
+  flex: none;
+  border-radius: 0.25em;
+  background: rgba(241, 238, 230, 0.45);
+}
+.vg-menu-foot {
+  margin-top: auto;
+  padding-top: 0.7em;
+  border-top: 1px solid var(--line-g);
+  display: flex;
+  align-items: center;
+  gap: 0.8em;
+}
+.vg-menu .vg-micro {
+  color: var(--muted-g);
+}
+.vg-menu .vg-qr {
+  width: 2.1em;
+  height: 2.1em;
+  border-color: var(--bone);
+}
+
+/* ---------- chevalets de table ---------- */
+
+.vg-tent {
+  width: 86%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  perspective: 40em;
+}
+.vg-tent-a,
+.vg-tent-b {
+  padding: 1em 0.9em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45em;
+  border: 1px solid rgba(23, 22, 19, 0.1);
+  box-shadow: 0 0.8em 2em rgba(23, 22, 19, 0.16);
+}
+.vg-tent-a {
+  width: 56%;
+  aspect-ratio: 3 / 4;
+  background: var(--bone-2);
+  transform: rotateY(20deg);
+  transform-origin: right center;
+}
+.vg-tent-b {
+  width: 42%;
+  aspect-ratio: 3 / 4.4;
+  background: var(--pine);
+  align-items: center;
+  justify-content: center;
+  transform: rotateY(-34deg);
+  transform-origin: left center;
+}
+.vg-tent-b .vg-micro {
+  color: var(--muted-g);
+  text-align: center;
+}
+.vg-tent-b .vg-qr {
+  border-color: var(--bone);
+}
+
+/* ---------- carte de fidélité ---------- */
+
+.vg-fid {
+  width: 82%;
+  aspect-ratio: 85 / 55;
+  background: var(--pine);
+  border-radius: 0.7em;
+  padding: 1.2em 1.3em;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 1em 2.4em rgba(23, 22, 19, 0.22);
+}
+.vg-fid .vg-over {
+  color: var(--brass-l);
+}
+.vg-stamps {
+  margin: auto 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.5em;
+}
+.vg-stamps i {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px dashed rgba(241, 238, 230, 0.4);
+}
+.vg-stamps i.on {
+  border: 0;
+  background: var(--brass-l);
+}
+.vg-fid .vg-micro {
+  color: var(--muted-g);
+}
+
+/* ---------- bons cadeaux ---------- */
+
+.vg-bon {
+  width: 88%;
+  display: flex;
+  background: var(--bone-2);
+  border: 1px solid rgba(23, 22, 19, 0.12);
+  border-radius: 0.5em;
+  overflow: hidden;
+  box-shadow: 0 1em 2.4em rgba(23, 22, 19, 0.16);
+}
+.vg-bon-main {
+  flex: 1;
+  min-width: 0;
+  padding: 1.2em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
+}
+/* L emplacement du montant reste VIDE — c est une ligne a remplir a la main,
+   pas un prix affiche. */
+.vg-bon-slot i {
+  display: block;
+  margin-top: 0.6em;
+  height: 1px;
+  background: rgba(23, 22, 19, 0.3);
+}
+.vg-bon-stub {
+  width: 27%;
+  flex: none;
+  padding: 1.2em 0.8em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5em;
+  border-left: 1px dashed rgba(23, 22, 19, 0.3);
+  background: rgba(169, 138, 69, 0.09);
+}
+
+/* ---------- pack saisonnier ---------- */
+
+.vg-pack-stack {
+  position: relative;
+  width: 84%;
+  aspect-ratio: 1 / 0.8;
+}
+/* Les trois pieces se chevauchent : sans z-index explicite l ordre du DOM
+   faisait passer la carte a jour PAR-DESSUS le libelle de l affiche. Le
+   libelle est aussi plus petit — a 265 px de colonne, « PUBLICATIONS »
+   debordait de sa piece. */
+.vg-pack-i {
+  position: absolute;
+  display: flex;
+  align-items: flex-end;
+  padding: 0.5em;
+  border-radius: 0.4em;
+  border: 1px solid rgba(23, 22, 19, 0.12);
+  background: var(--bone-2);
+  box-shadow: 0 0.8em 2em rgba(23, 22, 19, 0.16);
+}
+.vg-pack-i .vg-micro {
+  font-size: 0.5em;
+  letter-spacing: 0.1em;
+  line-height: 1.25;
+}
+.vg-pack-1 {
+  left: 0;
+  top: 2%;
+  width: 40%;
+  aspect-ratio: 3 / 4;
+  transform: rotate(-7deg);
+  z-index: 1;
+}
+.vg-pack-2 {
+  left: 36%;
+  top: 18%;
+  width: 32%;
+  aspect-ratio: 1;
+  background: var(--pine);
+  transform: rotate(3deg);
+  z-index: 3;
+}
+.vg-pack-2 .vg-micro {
+  color: var(--muted-g);
+}
+.vg-pack-3 {
+  right: 0;
+  top: 6%;
+  width: 34%;
+  aspect-ratio: 3 / 4.2;
+  transform: rotate(8deg);
+  z-index: 2;
+}
+
+/* ---------- traduction FR / EN ---------- */
+
+.vg-langs {
+  width: 92%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8em;
+}
+.vg-lang {
+  padding: 1em 0.9em;
+  border-radius: 0.45em;
+  border: 1px solid rgba(23, 22, 19, 0.1);
+  background: var(--bone-2);
+  display: flex;
+  flex-direction: column;
+}
+.vg-tag {
+  align-self: flex-start;
+  margin-bottom: 0.9em;
+  padding: 0.35em 0.7em;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  font-size: 0.62em;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+}
+.vg-tag-on {
+  background: var(--pine);
+  border-color: var(--pine);
+  color: var(--bone);
+}

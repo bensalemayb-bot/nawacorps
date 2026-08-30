@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import BoutonDevis from "@/components/BoutonDevis";
+import CarteService from "@/components/CarteService";
 import FooterContact from "@/components/FooterContact";
 import {
   CHF_UNIT,
@@ -10,11 +11,9 @@ import {
   isQuote,
 } from "@/lib/format";
 import { estFormule } from "@/lib/formules";
-import {
-  type ServiceCatalogue,
-  chargerCatalogue,
-  parCategories,
-} from "@/lib/catalogue";
+import { type FamilleSlug, MENTION_TVA } from "@/lib/familles";
+import { CATEGORIES_FAMILLES, parFamilles } from "@/lib/catalogue-familles";
+import { chargerCatalogue, parCategories } from "@/lib/catalogue";
 import { openGraphPage, whatsapp } from "@/lib/site";
 
 /**
@@ -30,11 +29,21 @@ import { openGraphPage, whatsapp } from "@/lib/site";
  * descriptions et prix sortent de la table Service (visible: true), comme dans
  * components/CarteDuStudio.tsx. Corriger un prix en base le corrige ici aussi.
  *
- * DEUX RENDUS, ET C EST VOULU. « Les formules » passe en CARTES sur fond pin,
- * comme la grille d accueil : ce sont les trois decisions d achat du studio,
- * elles meritent la place et elles ouvrent chacune une page dediee. Les trois
- * autres groupes passent en LIGNES : ce sont des complements, on les parcourt,
- * on ne les compare pas.
+ * TOUT EST EN CARTES, ET C EST UN CHANGEMENT. Les trois formules l ont
+ * toujours ete — cartes sur fond pin, comme la grille d accueil. Le reste du
+ * catalogue s affichait en LIGNES : intitule, filet pointille, prix a droite,
+ * la mise en page d une carte de restaurant. Elle rangeait quatorze
+ * « sur devis » les uns sous les autres en invitant a les comparer, alors
+ * qu aucun ne se compare — un tirage, un format et un papier se chiffrent
+ * apres un echange. Meme grammaire partout, desormais : un titre, ce que c est
+ * en une phrase, le prix ou « sur devis ».
+ *
+ * ET LE REGROUPEMENT A CHANGE AVEC. La page suivait les CATEGORIES de la table
+ * Service — `continu`, `annee`, `saison` —, c est-a-dire un rangement de base.
+ * Elle suit maintenant les cinq FAMILLES, qui sont un rangement de lecture et
+ * qui ont chacune leur page : le bloc porte le titre de la famille, son
+ * accroche, ses prestations et la porte qui l ouvre en entier. Le rangement
+ * lui-meme vit dans lib/catalogue-familles.ts, partage avec l accueil.
  */
 
 // Rendu a chaque requete, meme raison qu app/(site)/page.tsx : cette page lit
@@ -78,9 +87,13 @@ export const metadata: Metadata = {
 };
 
 /**
- * La mention est obligatoire sous CHAQUE bloc de prix, pas une fois en bas de
- * page : en Suisse un prix annonce a un consommateur s entend TVA comprise, et
- * un visiteur qui arrive par une ancre de groupe ne voit que ce groupe.
+ * LA MENTION TVA VIENT DE lib/familles.ts, ou vivent aussi les cinq pages de
+ * famille : la meme phrase doit se lire mot pour mot d une page a l autre, et
+ * deux copies divergent toujours.
+ *
+ * Elle est obligatoire sous CHAQUE bloc de prix, pas une fois en bas de page :
+ * en Suisse un prix annonce a un consommateur s entend TVA comprise, et un
+ * visiteur qui arrive par l ancre d une famille ne voit que cette famille.
  *
  * « sans frais cachés » en a ete retire. La formule promet l absence de ce
  * qu on n attendait pas : elle installe le soupcon qu elle pretend lever, et
@@ -88,86 +101,8 @@ export const metadata: Metadata = {
  * prestation — deux allers-retours, le suivi obligatoire de L Assistant — se
  * dit la ou il s applique, pas dans une mention legale generique.
  */
-const MENTION_TVA = "Prix en francs suisses, TVA comprise.";
 
 const DEVIS_LABEL = "Demander un devis →";
-
-/**
- * Les trois groupes rendus en LIGNES. « Les formules » n est pas dans ce
- * tableau : il a son propre rendu en cartes, juste avant.
- *
- * Chaque groupe porte sa propre amorce WhatsApp et son propre `sujet` : ce sont
- * des conversations differentes, et l assistant doit savoir laquelle s ouvre.
- *
- * `pourQui` A ETE REECRIT POUR LES TROIS. Les accroches presentaient ces
- * groupes comme un appendice aux formules — « pour completer le site », « en
- * complement ». Or on ne vend pas que des sites : une identite, des imprimes,
- * la production de reseaux sociaux ou la carte d un restaurant se commandent
- * seuls, et le client qui vient pour ca repartait en croyant qu il fallait
- * d abord acheter un site. Chaque accroche dit donc maintenant DE QUOI il
- * s agit, A QUI ca s adresse, et que ca se prend sans site.
- *
- * Le MINIMUM DE COMMANDE de 300.– a disparu avec la nouvelle grille : tous ces
- * supports passent sur devis, et un seuil n a plus d objet quand il n y a plus
- * de petits montants a additionner. Aucune trace ne doit en rester.
- */
-const GROUPES_LIGNES = [
-  {
-    categorie: "continu",
-    ancre: "en-continu",
-    index: "(02)",
-    libelle: "En continu",
-    titre: (
-      <>
-        Le site vit,
-        <br />
-        et il est tenu.
-      </>
-    ),
-    pourQui:
-      "Ce qui se paie au mois, pour le gérant qui ne veut plus y penser une fois le site en ligne : hébergement, nom de domaine, mises à jour, sauvegardes, sécurité. Le suivi démarre la deuxième année — la première est comprise dans le prix du site — et il est obligatoire avec L'Assistant, qui consomme des appels d'API en continu. C'est ici, aussi, que se prennent vos réseaux sociaux : calendrier, création, rédaction, publication et suivi, vous ne touchez à rien.",
-    amorce: whatsapp("Bonjour, j'aimerais un devis pour le suivi de mon site."),
-    sujet: "devis-en-continu",
-  },
-  {
-    categorie: "annee",
-    ancre: "en-complement",
-    index: "(03)",
-    libelle: "En complément",
-    titre: (
-      <>
-        Ce qui se voit
-        <br />
-        ailleurs qu&apos;à l&apos;écran.
-      </>
-    ),
-    pourQui:
-      "Une offre en soi, pas un supplément au site : votre identité, ce que vos clients gardent en main, les photos de votre entreprise. Pour le gérant dont le logo date, qui n'a plus de cartes à donner, ou dont le site et les documents ne se ressemblent pas. Tout se prend avec un site chez moi comme sans.",
-    amorce: whatsapp(
-      "Bonjour, j'aimerais un devis pour une prestation en complément de mon site.",
-    ),
-    sujet: "devis-en-complement",
-  },
-  {
-    categorie: "saison",
-    ancre: "pour-la-restauration",
-    index: "(04)",
-    libelle: "Pour la restauration",
-    titre: (
-      <>
-        La ligne
-        <br />
-        restauration.
-      </>
-    ),
-    pourQui:
-      "Pour un café ou un restaurant genevois qui veut que sa salle se tienne : la carte repensée, ses fichiers d'impression et sa version en ligne avec QR, les chevalets de table, la carte de fidélité, les bons cadeaux et les supports de saison. Une ligne à part, tenue depuis le début, ouverte à qui n'a pas de site chez moi.",
-    amorce: whatsapp(
-      "Bonjour, j'aimerais un devis pour les supports de mon établissement.",
-    ),
-    sujet: "devis-restauration",
-  },
-] as const;
 
 // CTA du groupe « Les formules », a part parce que son amorce parle de site et
 // non de support.
@@ -175,33 +110,65 @@ const DEVIS_FORMULES = whatsapp(
   "Bonjour, j'aimerais un devis pour la refonte du site de mon entreprise.",
 );
 
-type ServiceRow = ServiceCatalogue;
+/**
+ * L HABILLAGE DES CINQ BLOCS DE FAMILLE, PROPRE A CETTE PAGE.
+ *
+ * Tout le reste — libelle, accroche, amorce, prestations — est lu dans
+ * lib/familles.ts : c est la page de la famille qui fait autorite sur ce
+ * qu elle est, et le recopier ici garantirait qu un jour les deux se
+ * contredisent. Ne restent ici que deux choses qui n existent QUE sur l index.
+ *
+ * 1. LE TITRE. Le h1 d une page de famille se termine par « à Genève » — c est
+ *    son travail, elle est seule sur son ecran. Empiles, les cinq donneraient
+ *    cinq « Genève » sur une meme page : le mot cesse d etre une precision et
+ *    devient du bruit. Le titre de bloc dit donc ce que la famille resout.
+ * 2. LE LIBELLE DU LIEN. « Voir » + libelle donnerait « Voir Identité &
+ *    photographie » ; la langue se decide phrase par phrase, pas par
+ *    concatenation.
+ *
+ * Le Record est INDEXE PAR FamilleSlug : ajouter une famille dans
+ * lib/familles.ts sans lui donner de titre ici ne compile pas. Une erreur de
+ * build vaut mieux qu un bloc muet en production.
+ */
+const BLOCS: Record<
+  FamilleSlug,
+  { titre: readonly [string, string]; lien: string }
+> = {
+  identite: {
+    titre: ["Ce qui fait", "qu'on vous reconnaît."],
+    lien: "Voir l'identité",
+  },
+  imprimes: {
+    titre: ["Ce qui se voit", "ailleurs qu'à l'écran."],
+    lien: "Voir les imprimés",
+  },
+  "reseaux-sociaux": {
+    titre: ["Vos réseaux,", "tenus au mois."],
+    lien: "Voir les réseaux sociaux",
+  },
+  suivi: {
+    titre: ["Le site vit,", "et il est tenu."],
+    lien: "Voir le suivi",
+  },
+  restauration: {
+    titre: ["La ligne", "restauration."],
+    lien: "Voir la restauration",
+  },
+};
 
-// Les quatre groupes du catalogue. Le filtre est fait en memoire sur la
-// lecture partagee de lib/catalogue.ts, et reste ecrit ici : une categorie
-// ajoutee en base demain ne doit pas surgir d office dans cette page.
-const CATEGORIES = ["principal", "continu", "annee", "saison"];
-
-/** Le prix d une LIGNE, au format de la carte du studio. */
-function Prix({ service }: { service: ServiceRow }) {
-  if (isQuote(service) || service.priceCents === null) {
-    return <span className="px">{QUOTE_LABEL}</span>;
-  }
-  return (
-    <span className="px">
-      {service.priceFrom ? <small>{FROM_PREFIX}</small> : null}
-      {`${formatChfAmount(service.priceCents)}${CHF_UNIT}`}
-      {service.isMonthly ? <small className="per">{MONTHLY_SUFFIX}</small> : null}
-    </span>
-  );
-}
+/** « Les formules » ouvre la page en (01) ; les familles suivent. */
+const numero = (rang: number) => `(${String(rang).padStart(2, "0")})`;
 
 export default async function Prestations() {
-  const services = parCategories(await chargerCatalogue(), CATEGORIES);
-  const parCategorie = (categorie: string) =>
-    services.filter((s) => s.category === categorie);
+  // UNE seule lecture pour toute la page (cf. lib/catalogue.ts). Les formules
+  // gardent leur grille de cartes ; tout le reste est range en familles, le
+  // rangement etant partage avec l accueil (lib/catalogue-familles.ts).
+  const catalogue = await chargerCatalogue();
+  const principal = parCategories(catalogue, ["principal"]);
+  const familles = parFamilles(
+    parCategories(catalogue, [...CATEGORIES_FAMILLES]),
+  );
 
-  const principal = parCategorie("principal");
   // Les formules chiffrees prennent la grille de cartes ; celles qui se
   // traitent sur devis passent en ligne pleine largeur dessous, comme le fait
   // deja la grille d accueil. Cette separation n existe que parce que la base
@@ -323,42 +290,53 @@ export default async function Prestations() {
         </div>
       </section>
 
-      {/* ---------- (02) a (04) — les complements, en lignes ---------- */}
-      {GROUPES_LIGNES.map((groupe) => {
-        const lignes = parCategorie(groupe.categorie);
-        // Un groupe vide en base ne laisse pas une section fantome derriere
-        // lui : il disparait.
-        if (lignes.length === 0) return null;
+      {/* ---------- (02) a (06) — les cinq familles, en cartes ---------- */}
+      {familles.map(({ famille, lignes }, rang) => {
+        const bloc = BLOCS[famille.slug];
         return (
-          <section key={groupe.ancre} id={groupe.ancre}>
+          <section key={famille.slug} id={famille.slug}>
             <div className="wrap">
               <div className="sec-head">
                 <span className="meta" data-reveal>
-                  <span className="index">{groupe.index}</span>&nbsp;{" "}
-                  {groupe.libelle}
+                  <span className="index">{numero(rang + 2)}</span>&nbsp;{" "}
+                  {famille.contenu.libelle}
                 </span>
                 <div data-reveal>
-                  <h2 className="t">{groupe.titre}</h2>
+                  <h2 className="t">
+                    {bloc.titre[0]}
+                    <br />
+                    {bloc.titre[1]}
+                  </h2>
                 </div>
               </div>
+              {/* L accroche est celle de la page de la famille, lue telle
+                  quelle : l index annonce, la page developpe, et les deux ne
+                  peuvent pas se contredire. */}
               <p className="lede" data-reveal style={{ marginBottom: 34 }}>
-                {groupe.pourQui}
+                {famille.contenu.resout}
               </p>
-              <div className="prest-liste" data-reveal>
+              {/* Les cartes ne portent PAS le nom de leur famille ici : le
+                  bloc l a deja ecrit deux fois au-dessus, et le lien qui suit
+                  l ouvre en entier. Sur l accueil, ou il n y a pas de bloc,
+                  c est l inverse — voir components/CarteService.tsx. */}
+              <div className="cat-grid">
                 {lignes.map((service) => (
-                  <div className="sm-it" key={service.id}>
-                    <span>{service.name}</span>
-                    <i></i>
-                    <Prix service={service} />
-                    <span className="d">{service.description}</span>
-                  </div>
+                  <CarteService key={service.id} service={service} />
                 ))}
-                <div className="sm-foot">
-                  <span>{MENTION_TVA}</span>
-                  <BoutonDevis href={groupe.amorce} sujet={groupe.sujet}>
-                    {DEVIS_LABEL}
-                  </BoutonDevis>
-                </div>
+              </div>
+              <div className="cat-tout" data-reveal>
+                <a className="btn btn-line" href={famille.href}>
+                  {bloc.lien} <span className="ar">→</span>
+                </a>
+              </div>
+              <div className="sm-foot">
+                <span>{MENTION_TVA}</span>
+                <BoutonDevis
+                  href={famille.contenu.amorce}
+                  sujet={famille.contenu.sujet}
+                >
+                  {DEVIS_LABEL}
+                </BoutonDevis>
               </div>
             </div>
           </section>

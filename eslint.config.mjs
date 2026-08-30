@@ -32,6 +32,12 @@ const eslintConfig = defineConfig([
       // la premiere copie. Toutes les pages de prestations sont concernees par
       // la meme decision de toute facon.
       "app/(site)/prestations/**",
+      // Le corps partage des cinq pages de famille. Il vit dans components/
+      // parce que c'est un composant, mais il rend exactement le meme markup
+      // que les pages ci-dessus et il est soumis a la meme decision : des <a>
+      // classiques, parce qu'une navigation client-side ne rejouerait pas
+      // Interactions et laisserait les [data-reveal] a opacity:0.
+      "components/PageFamille.tsx",
     ],
     rules: {
       // volontaire — next/link casserait les reveals (Interactions ne tourne qu'une fois), voir décision B7
