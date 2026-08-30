@@ -1,0 +1,1184 @@
+[
+  {
+    "id": {
+      "valeur": "C1",
+      "source": "analyste",
+      "date": "2026-08-30"
+    },
+    "marche": {
+      "valeur": "Genève / Suisse romande",
+      "source": "https://helveit.ch/",
+      "date": "2026-08-30"
+    },
+    "nom": {
+      "valeur": "Helveit",
+      "source": "https://helveit.ch/",
+      "date": "2026-08-30"
+    },
+    "url": {
+      "valeur": "https://helveit.ch/",
+      "source": "https://helveit.ch/",
+      "date": "2026-08-30"
+    },
+    "type": {
+      "valeur": "direct",
+      "source": "https://helveit.ch/",
+      "date": "2026-08-30"
+    },
+    "segment_cible": {
+      "valeur": "PME et indépendants de Suisse romande (généraliste, non sectoriel)",
+      "source": "https://helveit.ch/",
+      "date": "2026-08-30"
+    },
+    "prestations": {
+      "valeur": "site vitrine ; site e-commerce ; application web sur mesure ; SEO (audit / local / accompagnement) ; automatisation IA",
+      "source": "https://helveit.ch/tarifs",
+      "date": "2026-08-30"
+    },
+    "prestations_phares": {
+      "valeur": "site sur mesure en Next.js/React, explicitement \"sans WordPress ni templates\"",
+      "source": "https://helveit.ch/llms.txt",
+      "date": "2026-08-30"
+    },
+    "secteurs_clients": {
+      "valeur": "PME, indépendants, startups (générique, aucun secteur précisé)",
+      "source": "https://helveit.ch/llms.txt",
+      "date": "2026-08-30"
+    },
+    "references_clients": {
+      "valeur": "inconnu",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "modele_prix": {
+      "valeur": "mixte (forfait affiché dès X CHF ou mensualités ; sur devis pour le sur-mesure)",
+      "source": "https://helveit.ch/tarifs",
+      "date": "2026-08-30"
+    },
+    "prix_min": {
+      "valeur": 1500,
+      "source": "https://helveit.ch/tarifs",
+      "date": "2026-08-30"
+    },
+    "prix_max": {
+      "valeur": 2500,
+      "source": "https://helveit.ch/tarifs",
+      "date": "2026-08-30"
+    },
+    "devise": {
+      "valeur": "CHF",
+      "source": "https://helveit.ch/tarifs",
+      "date": "2026-08-30"
+    },
+    "prix_source": {
+      "valeur": "https://helveit.ch/tarifs (site vitrine dès 1'500 CHF TTC ou 150 CHF TTC/mois ; e-commerce dès 2'500 CHF TTC ou 400 CHF TTC/mois ; sur-mesure sur devis)",
+      "source": "https://helveit.ch/tarifs",
+      "date": "2026-08-30"
+    },
+    "delais_annonces": {
+      "valeur": "Site vitrine : \"environ 2 à 4 semaines\" ; e-commerce : \"environ 4 à 8 semaines\"",
+      "source": "https://helveit.ch/tarifs",
+      "date": "2026-08-30"
+    },
+    "delais_source": {
+      "valeur": "https://helveit.ch/tarifs",
+      "source": "https://helveit.ch/tarifs",
+      "date": "2026-08-30"
+    },
+    "promesse_principale": {
+      "valeur": "Votre entreprise n'est pas générique. Votre site non plus.",
+      "source": "https://helveit.ch/",
+      "date": "2026-08-30"
+    },
+    "lexique_recurrent": {
+      "valeur": "sur mesure ; PME ; indépendants ; Suisse romande ; Next.js ; SEO local ; transparent ; sans engagement ; estimation ; prix fixe ; mensualités",
+      "source": "https://helveit.ch/ ; https://helveit.ch/tarifs",
+      "date": "2026-08-30"
+    },
+    "ton": {
+      "valeur": "professionnel ; moderne ; direct",
+      "source": "https://helveit.ch/",
+      "date": "2026-08-30"
+    },
+    "cta_principaux": {
+      "valeur": "\"Parlons de votre projet\" ; \"Voir nos réalisations\" ; estimateur de prix en ligne",
+      "source": "https://helveit.ch/ ; https://helveit.ch/estimation",
+      "date": "2026-08-30"
+    },
+    "preuves": {
+      "valeur": "Avis Google déclarés \"5/5 (36 avis)\" et \"+50 projets livrés\" — chiffres publiés uniquement dans le llms.txt du concurrent, non revérifiés sur Google lui-même",
+      "source": "https://helveit.ch/llms.txt",
+      "date": "2026-08-30"
+    },
+    "ca_ou_taille": {
+      "valeur": "inconnu (page à-propos ne publie ni effectif ni CA ; se décrit comme \"équipe indépendante\")",
+      "source": "https://helveit.ch/a-propos",
+      "date": "2026-08-30"
+    },
+    "seo_title_accueil": {
+      "valeur": "Création de site internet à Genève en Suisse - Agence Web Helveit",
+      "source": "https://helveit.ch/",
+      "date": "2026-08-30"
+    },
+    "seo_meta_accueil": {
+      "valeur": "Agence web à Genève, Helveit crée des sites internet sur mesure pour les PME et indépendants en Suisse romande : sites vitrines, e-commerce et SEO local.",
+      "source": "https://helveit.ch/",
+      "date": "2026-08-30"
+    },
+    "seo_h1_accueil": {
+      "valeur": "Votre entreprise n'est pas générique. Votre site non plus.",
+      "source": "https://helveit.ch/",
+      "date": "2026-08-30"
+    },
+    "seo_mots_cles_apparents": {
+      "valeur": "site internet Genève ; agence web Genève ; PME ; Suisse romande ; SEO local ; Next.js",
+      "source": "https://helveit.ch/",
+      "date": "2026-08-30"
+    },
+    "seo_blog": {
+      "valeur": "oui (/blog autorisé dans robots.txt ; fréquence non vérifiée directement)",
+      "source": "https://helveit.ch/robots.txt",
+      "date": "2026-08-30"
+    },
+    "seo_pages_indexees_approx": {
+      "valeur": "inconnu (outil non disponible dans ce run)",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "geo_schema_org": {
+      "valeur": "FAQPage ; ProfessionalService ; Offer ; OfferCatalog ; Service ; PriceSpecification ; WebSite ; WebPage ; Question ; Answer ; GeoCoordinates ; PostalAddress ; ContactPoint ; AdministrativeArea ; City ; ImageObject",
+      "source": "https://helveit.ch/ (JSON-LD)",
+      "date": "2026-08-30"
+    },
+    "geo_faq_structuree": {
+      "valeur": "oui",
+      "source": "https://helveit.ch/ (JSON-LD FAQPage)",
+      "date": "2026-08-30"
+    },
+    "geo_pages_comparatives": {
+      "valeur": "oui — tableau \"Helveit vs agence web traditionnelle\" dans le llms.txt",
+      "source": "https://helveit.ch/llms.txt",
+      "date": "2026-08-30"
+    },
+    "geo_robots_ia": {
+      "valeur": "non nommés explicitement (pas de ligne GPTBot/ClaudeBot/PerplexityBot dédiée) ; autorisés par défaut via \"User-agent: * / Allow: /\"",
+      "source": "https://helveit.ch/robots.txt",
+      "date": "2026-08-30"
+    },
+    "geo_llms_txt": {
+      "valeur": "oui — fichier détaillé, daté \"mai 2026\", avec Q/R citables et tableau comparatif",
+      "source": "https://helveit.ch/llms.txt",
+      "date": "2026-08-30"
+    },
+    "geo_citations_tierces": {
+      "valeur": "inconnu (non recherché dans ce run)",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "forces": {
+      "valeur": "prix fixe affiché et transparent ; llms.txt très détaillé et à jour (signal GEO fort) ; outil d'estimation interactif en ligne",
+      "source": "https://helveit.ch/tarifs ; https://helveit.ch/llms.txt ; https://helveit.ch/estimation",
+      "date": "2026-08-30"
+    },
+    "faiblesses": {
+      "valeur": "aucune fonction de devis auto/RDV/chatbot confirmée pour les sites livrés aux clients (l'estimateur est un outil marketing propre à Helveit, explicitement \"pas un devis automatique\") ; aucune référence client nommée ; aucun effectif publié",
+      "source": "https://helveit.ch/estimation ; https://helveit.ch/a-propos",
+      "date": "2026-08-30"
+    },
+    "date_releve": {
+      "valeur": "2026-08-30",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "sources": {
+      "valeur": "https://helveit.ch/ ; https://helveit.ch/tarifs ; https://helveit.ch/estimation ; https://helveit.ch/a-propos ; https://helveit.ch/robots.txt ; https://helveit.ch/llms.txt",
+      "source": "",
+      "date": "2026-08-30"
+    }
+  },
+  {
+    "id": {
+      "valeur": "C2",
+      "source": "analyste",
+      "date": "2026-08-30"
+    },
+    "marche": {
+      "valeur": "Suisse romande (Lausanne / Crissier, dessert Genève)",
+      "source": "https://flashdesign.ch/a-propos",
+      "date": "2026-08-30"
+    },
+    "nom": {
+      "valeur": "Flash Design",
+      "source": "https://flashdesign.ch/",
+      "date": "2026-08-30"
+    },
+    "url": {
+      "valeur": "https://flashdesign.ch/",
+      "source": "https://flashdesign.ch/",
+      "date": "2026-08-30"
+    },
+    "type": {
+      "valeur": "direct",
+      "source": "https://flashdesign.ch/",
+      "date": "2026-08-30"
+    },
+    "segment_cible": {
+      "valeur": "PME/TPE de services en Suisse romande",
+      "source": "https://flashdesign.ch/",
+      "date": "2026-08-30"
+    },
+    "prestations": {
+      "valeur": "création de site internet ; SEO ; GEO (référencement IA) ; identité visuelle/logo ; Google My Business ; UI/UX",
+      "source": "https://flashdesign.ch/creation-site-internet-geneve",
+      "date": "2026-08-30"
+    },
+    "prestations_phares": {
+      "valeur": "SEO + GEO combinés, revendiqué \"agence SEO & GEO n°1 en Romandie\" (revendication du concurrent, non vérifiée par un tiers)",
+      "source": "https://flashdesign.ch/",
+      "date": "2026-08-30"
+    },
+    "secteurs_clients": {
+      "valeur": "construction ; santé ; conseil ; PME/TPE de services",
+      "source": "https://flashdesign.ch/",
+      "date": "2026-08-30"
+    },
+    "references_clients": {
+      "valeur": "Grandet SA ; Helios Creations ; AB Nutrition (projets cités sur le site)",
+      "source": "https://flashdesign.ch/creation-site-internet-geneve",
+      "date": "2026-08-30"
+    },
+    "modele_prix": {
+      "valeur": "devis (aucun prix affiché sur les pages consultées)",
+      "source": "https://flashdesign.ch/creation-site-internet-geneve",
+      "date": "2026-08-30"
+    },
+    "prix_min": {
+      "valeur": "inconnu",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "prix_max": {
+      "valeur": "inconnu",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "devise": {
+      "valeur": "inconnu",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "prix_source": {
+      "valeur": "inconnu — accueil, page offre Genève et à-propos ne publient aucun prix",
+      "source": "https://flashdesign.ch/ ; https://flashdesign.ch/creation-site-internet-geneve ; https://flashdesign.ch/a-propos",
+      "date": "2026-08-30"
+    },
+    "delais_annonces": {
+      "valeur": "\"Votre site sera prêt en 10 à 14 jours\" — la finalisation dépend ensuite de la réactivité du client (paraphrase)",
+      "source": "https://flashdesign.ch/creation-site-internet-geneve",
+      "date": "2026-08-30"
+    },
+    "delais_source": {
+      "valeur": "https://flashdesign.ch/creation-site-internet-geneve",
+      "source": "https://flashdesign.ch/creation-site-internet-geneve",
+      "date": "2026-08-30"
+    },
+    "promesse_principale": {
+      "valeur": "Un site web référencé est votre meilleur commercial",
+      "source": "https://flashdesign.ch/",
+      "date": "2026-08-30"
+    },
+    "lexique_recurrent": {
+      "valeur": "SEO ; GEO ; référencement ; clients qualifiés ; Romandie ; PME/TPE ; appels ; rendez-vous ; ChatGPT SEO",
+      "source": "https://flashdesign.ch/",
+      "date": "2026-08-30"
+    },
+    "ton": {
+      "valeur": "orienté résultats ; rassurant ; professionnel",
+      "source": "https://flashdesign.ch/",
+      "date": "2026-08-30"
+    },
+    "cta_principaux": {
+      "valeur": "\"Contactez-nous\" ; \"Voir tous les témoignages\"",
+      "source": "https://flashdesign.ch/",
+      "date": "2026-08-30"
+    },
+    "preuves": {
+      "valeur": "avis Google 230+ (5/5) ; Facebook 5/5 (13 avis) ; Trustpilot 5/5 (14 avis) ; Clutch 5/5 (3 avis) — tous affichés sur la page d'accueil",
+      "source": "https://flashdesign.ch/",
+      "date": "2026-08-30"
+    },
+    "ca_ou_taille": {
+      "valeur": "effectif estimation : \"5 chefs de projet SEO\" + équipe design/stratégie ; \"500+ entreprises accompagnées\", \"200+ clients actifs\" (chiffres publiés par le concurrent lui-même, pas un CA) ; fondée en 2017",
+      "source": "https://flashdesign.ch/a-propos",
+      "date": "2026-08-30"
+    },
+    "seo_title_accueil": {
+      "valeur": "Flash Design - Obtenez de nouveaux clients grâce à internet",
+      "source": "https://flashdesign.ch/",
+      "date": "2026-08-30"
+    },
+    "seo_meta_accueil": {
+      "valeur": "Flash Design est une agence web & SEO à Lausanne en Suisse. Ambitieux, artisans et ponctuels, nous allons donner une nouvelle vie à vos projets.",
+      "source": "https://flashdesign.ch/",
+      "date": "2026-08-30"
+    },
+    "seo_h1_accueil": {
+      "valeur": "Un site web référencé est votre meilleur commercial",
+      "source": "https://flashdesign.ch/",
+      "date": "2026-08-30"
+    },
+    "seo_mots_cles_apparents": {
+      "valeur": "agence web Lausanne ; SEO ; GEO ; création site internet Genève ; référencement PME",
+      "source": "https://flashdesign.ch/",
+      "date": "2026-08-30"
+    },
+    "seo_blog": {
+      "valeur": "inconnu (pas de section blog identifiée dans les pages consultées)",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "seo_pages_indexees_approx": {
+      "valeur": "inconnu",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "geo_schema_org": {
+      "valeur": "Article ; ImageObject ; Person ; SearchAction ; WebPage ; WebSite (page d'accueil — aucun FAQPage ni Organization détecté)",
+      "source": "https://flashdesign.ch/ (JSON-LD)",
+      "date": "2026-08-30"
+    },
+    "geo_faq_structuree": {
+      "valeur": "non (aucun schema FAQPage détecté sur l'accueil)",
+      "source": "https://flashdesign.ch/ (JSON-LD)",
+      "date": "2026-08-30"
+    },
+    "geo_pages_comparatives": {
+      "valeur": "inconnu (non identifié dans les pages consultées)",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "geo_robots_ia": {
+      "valeur": "non nommés (robots.txt générique \"User-agent: * / Disallow: /wp-admin/\" uniquement) ; autorisés par défaut",
+      "source": "https://flashdesign.ch/robots.txt",
+      "date": "2026-08-30"
+    },
+    "geo_llms_txt": {
+      "valeur": "non (HTTP 301 / absent)",
+      "source": "https://flashdesign.ch/llms.txt",
+      "date": "2026-08-30"
+    },
+    "geo_citations_tierces": {
+      "valeur": "inconnu (non recherché dans ce run)",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "forces": {
+      "valeur": "volume d'avis très élevé et multi-plateformes (230+ Google) ; ancienneté 2017, 200+ clients actifs déclarés ; positionnement SEO/GEO assumé",
+      "source": "https://flashdesign.ch/ ; https://flashdesign.ch/a-propos",
+      "date": "2026-08-30"
+    },
+    "faiblesses": {
+      "valeur": "aucun prix affiché (sur devis uniquement, aucune fourchette publique) ; pas de schema FAQPage/Organization sur l'accueil ; pas de llms.txt",
+      "source": "https://flashdesign.ch/creation-site-internet-geneve ; https://flashdesign.ch/llms.txt",
+      "date": "2026-08-30"
+    },
+    "date_releve": {
+      "valeur": "2026-08-30",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "sources": {
+      "valeur": "https://flashdesign.ch/ ; https://flashdesign.ch/creation-site-internet-geneve ; https://flashdesign.ch/a-propos ; https://flashdesign.ch/robots.txt ; https://flashdesign.ch/llms.txt",
+      "source": "",
+      "date": "2026-08-30"
+    }
+  },
+  {
+    "id": {
+      "valeur": "C3",
+      "source": "analyste",
+      "date": "2026-08-30"
+    },
+    "marche": {
+      "valeur": "Genève",
+      "source": "https://wecode.swiss/",
+      "date": "2026-08-30"
+    },
+    "nom": {
+      "valeur": "Wecode",
+      "source": "https://wecode.swiss/",
+      "date": "2026-08-30"
+    },
+    "url": {
+      "valeur": "https://wecode.swiss/",
+      "source": "https://wecode.swiss/",
+      "date": "2026-08-30"
+    },
+    "type": {
+      "valeur": "direct",
+      "source": "https://wecode.swiss/",
+      "date": "2026-08-30"
+    },
+    "segment_cible": {
+      "valeur": "PME romandes, secteurs variés (santé, thérapies, immobilier/énergie, services B2B)",
+      "source": "https://wecode.swiss/",
+      "date": "2026-08-30"
+    },
+    "prestations": {
+      "valeur": "site vitrine ; e-commerce ; WordPress starter/advanced ; SEO ; marketing digital ; publicité ; communication ; intégrations (réservation, paiement, CRM)",
+      "source": "https://wecode.swiss/services/creation-sites-internet-geneve",
+      "date": "2026-08-30"
+    },
+    "prestations_phares": {
+      "valeur": "refonte de site + SEO combinés avec garantie de résultat de trafic chiffrée",
+      "source": "https://wecode.swiss/",
+      "date": "2026-08-30"
+    },
+    "secteurs_clients": {
+      "valeur": "santé (dentiste), thérapies, immobilier/énergie, services B2B (déduit des références clients citées)",
+      "source": "https://wecode.swiss/",
+      "date": "2026-08-30"
+    },
+    "references_clients": {
+      "valeur": "Le Cercle des Bains ; CGSE ; Omniservice ; CADES & CADHOM ; Interface Energies ; 32dents ; Jonction Thérapies ; Zuco ; AxLR",
+      "source": "https://wecode.swiss/",
+      "date": "2026-08-30"
+    },
+    "modele_prix": {
+      "valeur": "forfait affiché (fourchette dès X CHF)",
+      "source": "https://wecode.swiss/services/creation-sites-internet-geneve",
+      "date": "2026-08-30"
+    },
+    "prix_min": {
+      "valeur": 799,
+      "source": "https://wecode.swiss/services/creation-sites-internet-geneve",
+      "date": "2026-08-30"
+    },
+    "prix_max": {
+      "valeur": 3999,
+      "source": "https://wecode.swiss/services/creation-sites-internet-geneve",
+      "date": "2026-08-30"
+    },
+    "devise": {
+      "valeur": "CHF",
+      "source": "https://wecode.swiss/services/creation-sites-internet-geneve",
+      "date": "2026-08-30"
+    },
+    "prix_source": {
+      "valeur": "https://wecode.swiss/services/creation-sites-internet-geneve (landing page dès 799 CHF ; site vitrine dès 1'499 CHF ; WordPress starter dès 1'999 CHF ; refonte dès 2'499 CHF ; WordPress advanced/e-commerce dès 3'999 CHF)",
+      "source": "https://wecode.swiss/services/creation-sites-internet-geneve",
+      "date": "2026-08-30"
+    },
+    "delais_annonces": {
+      "valeur": "\"Livré en 2 à 6 semaines\" (vitrines 3-6 semaines ; projets complexes 2-3 mois)",
+      "source": "https://wecode.swiss/services/creation-sites-internet-geneve",
+      "date": "2026-08-30"
+    },
+    "delais_source": {
+      "valeur": "https://wecode.swiss/services/creation-sites-internet-geneve",
+      "source": "https://wecode.swiss/services/creation-sites-internet-geneve",
+      "date": "2026-08-30"
+    },
+    "promesse_principale": {
+      "valeur": "Agence web à Genève, partenaire digital des PME romandes",
+      "source": "https://wecode.swiss/",
+      "date": "2026-08-30"
+    },
+    "lexique_recurrent": {
+      "valeur": "PME romandes ; meilleur commercial ; croissance du trafic ; sur mesure ; interlocuteur unique ; SEO ; référencement naturel",
+      "source": "https://wecode.swiss/",
+      "date": "2026-08-30"
+    },
+    "ton": {
+      "valeur": "commercial ; chiffré ; rassurant",
+      "source": "https://wecode.swiss/",
+      "date": "2026-08-30"
+    },
+    "cta_principaux": {
+      "valeur": "\"Planifier une consultation\" ; \"Demander une offre\" ; \"Rappelez-moi\"",
+      "source": "https://wecode.swiss/",
+      "date": "2026-08-30"
+    },
+    "preuves": {
+      "valeur": "9 témoignages nommés avec entreprises citées ; \"150+ PME accompagnées en Suisse romande\" ; \"150% de croissance moyenne du trafic\" ; schema.org Review/Rating/AggregateRating présents mais note chiffrée non lisible dans le relevé",
+      "source": "https://wecode.swiss/",
+      "date": "2026-08-30"
+    },
+    "ca_ou_taille": {
+      "valeur": "inconnu (effectif non chiffré ; 4 prénoms d'équipe visibles dans des témoignages, insuffisant pour un chiffre)",
+      "source": "https://wecode.swiss/",
+      "date": "2026-08-30"
+    },
+    "seo_title_accueil": {
+      "valeur": "Agence web à Genève | Web, Communication, Design | Wecode",
+      "source": "https://wecode.swiss/",
+      "date": "2026-08-30"
+    },
+    "seo_meta_accueil": {
+      "valeur": "Votre agence web experte à Genève, spécialisée en création de sites internet, référencement naturel (SEO), marketing digital, publicité et communication. Développez votre présence en ligne avec des solutions sur mesure.",
+      "source": "https://wecode.swiss/",
+      "date": "2026-08-30"
+    },
+    "seo_h1_accueil": {
+      "valeur": "Agence web à Genève, partenaire digital des PME romandes",
+      "source": "https://wecode.swiss/",
+      "date": "2026-08-30"
+    },
+    "seo_mots_cles_apparents": {
+      "valeur": "agence web Genève ; PME romandes ; référencement naturel ; marketing digital ; communication",
+      "source": "https://wecode.swiss/",
+      "date": "2026-08-30"
+    },
+    "seo_blog": {
+      "valeur": "oui (articles datés avril 2026 relevés)",
+      "source": "https://wecode.swiss/",
+      "date": "2026-08-30"
+    },
+    "seo_pages_indexees_approx": {
+      "valeur": "inconnu",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "geo_schema_org": {
+      "valeur": "LocalBusiness ; Service ; Offer ; OfferCatalog ; Review ; Rating ; AggregateRating ; Person ; Place ; PostalAddress ; ContactPoint",
+      "source": "https://wecode.swiss/ (JSON-LD)",
+      "date": "2026-08-30"
+    },
+    "geo_faq_structuree": {
+      "valeur": "non (aucun FAQPage détecté)",
+      "source": "https://wecode.swiss/ (JSON-LD)",
+      "date": "2026-08-30"
+    },
+    "geo_pages_comparatives": {
+      "valeur": "inconnu",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "geo_robots_ia": {
+      "valeur": "non nommés (robots.txt générique \"User-agent: * / Allow: /\") ; autorisés par défaut",
+      "source": "https://wecode.swiss/robots.txt",
+      "date": "2026-08-30"
+    },
+    "geo_llms_txt": {
+      "valeur": "non (HTTP 404)",
+      "source": "https://wecode.swiss/llms.txt",
+      "date": "2026-08-30"
+    },
+    "geo_citations_tierces": {
+      "valeur": "inconnu (non recherché dans ce run)",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "forces": {
+      "valeur": "références clients nommées et variées ; RDV en ligne pour le premier contact commercial ; \"150+ PME accompagnées en Suisse romande\" sur 10 ans (revendication du concurrent)",
+      "source": "https://wecode.swiss/ ; https://wecode.swiss/services/creation-sites-internet-geneve",
+      "date": "2026-08-30"
+    },
+    "faiblesses": {
+      "valeur": "pas de FAQPage ni de llms.txt ; pas de devis automatisé ni de chatbot en standard (RDV en ligne réservé à la prise de contact commerciale, pas une fonction livrée dans les sites clients) ; note d'avis chiffrée non lisible dans le relevé",
+      "source": "https://wecode.swiss/robots.txt ; https://wecode.swiss/llms.txt ; https://wecode.swiss/",
+      "date": "2026-08-30"
+    },
+    "date_releve": {
+      "valeur": "2026-08-30",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "sources": {
+      "valeur": "https://wecode.swiss/ ; https://wecode.swiss/services/creation-sites-internet-geneve ; https://wecode.swiss/robots.txt ; https://wecode.swiss/llms.txt",
+      "source": "",
+      "date": "2026-08-30"
+    }
+  },
+  {
+    "id": {
+      "valeur": "C4",
+      "source": "analyste",
+      "date": "2026-08-30"
+    },
+    "marche": {
+      "valeur": "cible Genève, opère depuis la France (Reims)",
+      "source": "https://www.atelectro.fr/creation-site-web-geneve/",
+      "date": "2026-08-30"
+    },
+    "nom": {
+      "valeur": "Atelectro (L'Atelier Electro)",
+      "source": "https://www.atelectro.fr/creation-site-web-geneve/",
+      "date": "2026-08-30"
+    },
+    "url": {
+      "valeur": "https://www.atelectro.fr/creation-site-web-geneve/",
+      "source": "https://www.atelectro.fr/creation-site-web-geneve/",
+      "date": "2026-08-30"
+    },
+    "type": {
+      "valeur": "direct",
+      "source": "https://www.atelectro.fr/creation-site-web-geneve/",
+      "date": "2026-08-30"
+    },
+    "segment_cible": {
+      "valeur": "entreprises/indépendants à Genève ; artisans ; restaurants ; agences immobilières ; professions libérales (juridique, médical) ; associations",
+      "source": "https://www.atelectro.fr/creation-site-web-geneve/",
+      "date": "2026-08-30"
+    },
+    "prestations": {
+      "valeur": "site vitrine 1-3 pages ; site vitrine + blog SEO 10-20 pages ; e-commerce jusqu'à 50 produits",
+      "source": "https://www.atelectro.fr/creation-site-web-geneve/",
+      "date": "2026-08-30"
+    },
+    "prestations_phares": {
+      "valeur": "livraison 48-72h ; code natif HTML/CSS/JS revendiqué plus rapide que WordPress",
+      "source": "https://www.atelectro.fr/creation-site-web-geneve/",
+      "date": "2026-08-30"
+    },
+    "secteurs_clients": {
+      "valeur": "artisans, indépendants, restaurants, immobilier, professions libérales, associations",
+      "source": "https://www.atelectro.fr/creation-site-web-geneve/",
+      "date": "2026-08-30"
+    },
+    "references_clients": {
+      "valeur": "inconnu (aucun nom d'entreprise cliente identifié sur la page consultée)",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "modele_prix": {
+      "valeur": "forfait affiché",
+      "source": "https://www.atelectro.fr/creation-site-web-geneve/",
+      "date": "2026-08-30"
+    },
+    "prix_min": {
+      "valeur": 199,
+      "source": "https://www.atelectro.fr/creation-site-web-geneve/",
+      "date": "2026-08-30"
+    },
+    "prix_max": {
+      "valeur": 899,
+      "source": "https://www.atelectro.fr/creation-site-web-geneve/",
+      "date": "2026-08-30"
+    },
+    "devise": {
+      "valeur": "EUR",
+      "source": "https://www.atelectro.fr/creation-site-web-geneve/",
+      "date": "2026-08-30"
+    },
+    "prix_source": {
+      "valeur": "https://www.atelectro.fr/creation-site-web-geneve/ (vitrine 1-3 pages 199€ ; vitrine + blog SEO 10-20 pages 599€ ; e-commerce jusqu'à 50 produits 899€ ; hébergement + domaine inclus an 1, puis ~80€/an)",
+      "source": "https://www.atelectro.fr/creation-site-web-geneve/",
+      "date": "2026-08-30"
+    },
+    "delais_annonces": {
+      "valeur": "\"Site mis en ligne sous 48-72h\" après validation du contenu",
+      "source": "https://www.atelectro.fr/creation-site-web-geneve/",
+      "date": "2026-08-30"
+    },
+    "delais_source": {
+      "valeur": "https://www.atelectro.fr/creation-site-web-geneve/",
+      "source": "https://www.atelectro.fr/creation-site-web-geneve/",
+      "date": "2026-08-30"
+    },
+    "promesse_principale": {
+      "valeur": "Pas de WordPress qui charge en 8 secondes",
+      "source": "https://www.atelectro.fr/creation-site-web-geneve/",
+      "date": "2026-08-30"
+    },
+    "lexique_recurrent": {
+      "valeur": "48-72h ; hébergement européen ; PageSpeed 90+ ; RGPD ; sur mesure ; artisan ; indépendant ; SEO local",
+      "source": "https://www.atelectro.fr/creation-site-web-geneve/",
+      "date": "2026-08-30"
+    },
+    "ton": {
+      "valeur": "technique ; direct ; orienté vitesse",
+      "source": "https://www.atelectro.fr/creation-site-web-geneve/",
+      "date": "2026-08-30"
+    },
+    "cta_principaux": {
+      "valeur": "formulaire de contact / devis (non automatisé)",
+      "source": "https://www.atelectro.fr/creation-site-web-geneve/",
+      "date": "2026-08-30"
+    },
+    "preuves": {
+      "valeur": "schema.org AggregateRating ratingValue 4.9 sur 180 avis (plateforme d'avis non identifiée dans le contenu visible de la page)",
+      "source": "https://www.atelectro.fr/creation-site-web-geneve/ (JSON-LD)",
+      "date": "2026-08-30"
+    },
+    "ca_ou_taille": {
+      "valeur": "inconnu — entité française, SIRET 102 610 227 00013, Reims ; pas d'effectif publié ; le blog du même domaine porte sur la réparation électronique/électroménager, ce qui suggère une activité mère de dépannage avec le site web comme service annexe",
+      "source": "https://www.atelectro.fr/blog/",
+      "date": "2026-08-30"
+    },
+    "seo_title_accueil": {
+      "valeur": "Création site web à Genève | Design & SEO local",
+      "source": "https://www.atelectro.fr/creation-site-web-geneve/",
+      "date": "2026-08-30"
+    },
+    "seo_meta_accueil": {
+      "valeur": "Entreprise ou indépendant à Genève ? Création d'un site vitrine ou e-commerce soigné, multilingue si nécessaire, avec hébergement européen et SEO local.",
+      "source": "https://www.atelectro.fr/creation-site-web-geneve/",
+      "date": "2026-08-30"
+    },
+    "seo_h1_accueil": {
+      "valeur": "inconnu (non extrait explicitement dans le relevé)",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "seo_mots_cles_apparents": {
+      "valeur": "création site web Genève ; SEO local ; vitrine ; e-commerce ; hébergement européen",
+      "source": "https://www.atelectro.fr/creation-site-web-geneve/",
+      "date": "2026-08-30"
+    },
+    "seo_blog": {
+      "valeur": "oui, mais généraliste dépannage électronique/électroménager (PC, consoles, électroménager), sans lien avec la création de sites ; fréquence sporadique à mensuelle (derniers articles oct. 2025 à avril 2026)",
+      "source": "https://www.atelectro.fr/blog/",
+      "date": "2026-08-30"
+    },
+    "seo_pages_indexees_approx": {
+      "valeur": "inconnu",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "geo_schema_org": {
+      "valeur": "Organization ; Service ; Offer ; AggregateRating ; BreadcrumbList ; Country ; City ; AdministrativeArea ; GeoCoordinates ; PostalAddress ; OpeningHoursSpecification ; Person",
+      "source": "https://www.atelectro.fr/creation-site-web-geneve/ (JSON-LD)",
+      "date": "2026-08-30"
+    },
+    "geo_faq_structuree": {
+      "valeur": "non (aucun FAQPage détecté)",
+      "source": "https://www.atelectro.fr/creation-site-web-geneve/ (JSON-LD)",
+      "date": "2026-08-30"
+    },
+    "geo_pages_comparatives": {
+      "valeur": "non détecté",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "geo_robots_ia": {
+      "valeur": "non nommés (robots.txt générique \"User-agent: * / Allow: /\") ; autorisés par défaut",
+      "source": "https://www.atelectro.fr/robots.txt",
+      "date": "2026-08-30"
+    },
+    "geo_llms_txt": {
+      "valeur": "non (HTTP 301, absent)",
+      "source": "https://www.atelectro.fr/llms.txt",
+      "date": "2026-08-30"
+    },
+    "geo_citations_tierces": {
+      "valeur": "inconnu (non recherché dans ce run)",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "forces": {
+      "valeur": "prix le plus bas du panel relevé (dès 199€) ; délai le plus court affiché (48-72h, identique à la promesse du studio) ; argument technique anti-WordPress",
+      "source": "https://www.atelectro.fr/creation-site-web-geneve/",
+      "date": "2026-08-30"
+    },
+    "faiblesses": {
+      "valeur": "entité française sans présence locale genevoise identifiée ; activité principale du domaine centrée sur la réparation électronique, pas un spécialiste web dédié ; aucune fonction de RDV/devis auto/chatbot ; aucune référence client nommée",
+      "source": "https://www.atelectro.fr/blog/ ; https://www.atelectro.fr/creation-site-web-geneve/",
+      "date": "2026-08-30"
+    },
+    "date_releve": {
+      "valeur": "2026-08-30",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "sources": {
+      "valeur": "https://www.atelectro.fr/creation-site-web-geneve/ ; https://www.atelectro.fr/robots.txt ; https://www.atelectro.fr/llms.txt ; https://www.atelectro.fr/blog/",
+      "source": "",
+      "date": "2026-08-30"
+    }
+  },
+  {
+    "id": {
+      "valeur": "C5",
+      "source": "analyste",
+      "date": "2026-08-30"
+    },
+    "marche": {
+      "valeur": "Genève / Suisse romande",
+      "source": "https://elodiecastillo.com/",
+      "date": "2026-08-30"
+    },
+    "nom": {
+      "valeur": "Simplicity — studio web indépendant",
+      "source": "https://elodiecastillo.com/",
+      "date": "2026-08-30"
+    },
+    "url": {
+      "valeur": "https://elodiecastillo.com/",
+      "source": "https://elodiecastillo.com/",
+      "date": "2026-08-30"
+    },
+    "type": {
+      "valeur": "direct",
+      "source": "https://elodiecastillo.com/",
+      "date": "2026-08-30"
+    },
+    "segment_cible": {
+      "valeur": "indépendants, coachs, thérapeutes, photographes, PME, associations",
+      "source": "https://elodiecastillo.com/",
+      "date": "2026-08-30"
+    },
+    "prestations": {
+      "valeur": "site vitrine WordPress clé en main (offre \"Simplicity\") ; site sur mesure (offre \"Visibility\") ; ateliers/formations pour entrepreneurs",
+      "source": "https://elodiecastillo.com/creation-site-internet-geneve/ ; https://elodiecastillo.com/site-internet-sur-mesure-geneve/",
+      "date": "2026-08-30"
+    },
+    "prestations_phares": {
+      "valeur": "livraison en 7 jours ; formation incluse à la gestion autonome du site (session privée + support Notion)",
+      "source": "https://elodiecastillo.com/creation-site-internet-geneve/",
+      "date": "2026-08-30"
+    },
+    "secteurs_clients": {
+      "valeur": "indépendants, coachs, thérapeutes, photographes, nutritionnistes, PME, associations",
+      "source": "https://elodiecastillo.com/creation-site-internet-geneve/",
+      "date": "2026-08-30"
+    },
+    "references_clients": {
+      "valeur": "inconnu (15+ témoignages mentionnés sur le site mais noms non vérifiés comme entreprises publiques dans ce relevé)",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "modele_prix": {
+      "valeur": "forfait affiché",
+      "source": "https://elodiecastillo.com/creation-site-internet-geneve/",
+      "date": "2026-08-30"
+    },
+    "prix_min": {
+      "valeur": 1990,
+      "source": "https://elodiecastillo.com/creation-site-internet-geneve/",
+      "date": "2026-08-30"
+    },
+    "prix_max": {
+      "valeur": 4490,
+      "source": "https://elodiecastillo.com/site-internet-sur-mesure-geneve/",
+      "date": "2026-08-30"
+    },
+    "devise": {
+      "valeur": "CHF",
+      "source": "https://elodiecastillo.com/creation-site-internet-geneve/",
+      "date": "2026-08-30"
+    },
+    "prix_source": {
+      "valeur": "https://elodiecastillo.com/creation-site-internet-geneve/ (offre standard 1'990 CHF, premium 2'390 CHF, paiement 50/50) ; https://elodiecastillo.com/site-internet-sur-mesure-geneve/ (offre \"Visibility\" sur mesure dès 4'490 CHF, 2 versements)",
+      "source": "https://elodiecastillo.com/creation-site-internet-geneve/ ; https://elodiecastillo.com/site-internet-sur-mesure-geneve/",
+      "date": "2026-08-30"
+    },
+    "delais_annonces": {
+      "valeur": "\"7 jours\" une fois le contenu fourni (offre Simplicity) ; \"4 à 5 semaines\" (offre Visibility sur mesure)",
+      "source": "https://elodiecastillo.com/creation-site-internet-geneve/ ; https://elodiecastillo.com/site-internet-sur-mesure-geneve/",
+      "date": "2026-08-30"
+    },
+    "delais_source": {
+      "valeur": "https://elodiecastillo.com/creation-site-internet-geneve/ ; https://elodiecastillo.com/site-internet-sur-mesure-geneve/",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "promesse_principale": {
+      "valeur": "ton site vitrine professionnel en 7 jours, clé en main",
+      "source": "https://elodiecastillo.com/creation-site-internet-geneve/",
+      "date": "2026-08-30"
+    },
+    "lexique_recurrent": {
+      "valeur": "clé en main ; 7 jours ; WordPress ; autonomie ; formation ; sur mesure ; positionnement ; Suisse romande",
+      "source": "https://elodiecastillo.com/",
+      "date": "2026-08-30"
+    },
+    "ton": {
+      "valeur": "pédagogique ; chaleureux ; accompagnant",
+      "source": "https://elodiecastillo.com/creation-site-internet-geneve/",
+      "date": "2026-08-30"
+    },
+    "cta_principaux": {
+      "valeur": "prise de contact / devis (pas de réservation automatisée confirmée)",
+      "source": "https://elodiecastillo.com/creation-site-internet-geneve/",
+      "date": "2026-08-30"
+    },
+    "preuves": {
+      "valeur": "\"15+ témoignages\" avec notes 5 étoiles mentionnées sur la page (plateforme d'avis non précisée dans le relevé)",
+      "source": "https://elodiecastillo.com/creation-site-internet-geneve/",
+      "date": "2026-08-30"
+    },
+    "ca_ou_taille": {
+      "valeur": "entreprise individuelle, estimation 1 personne (studio solo, déduit de la présentation \"spécialiste\"/\"je\" sur le site — pas un chiffre de registre)",
+      "source": "https://elodiecastillo.com/",
+      "date": "2026-08-30"
+    },
+    "seo_title_accueil": {
+      "valeur": "Studio web & stratégie digitale à Genève | Élodie Castillo",
+      "source": "https://elodiecastillo.com/",
+      "date": "2026-08-30"
+    },
+    "seo_meta_accueil": {
+      "valeur": "Elodie Castillo · Studio Web : spécialiste WordPress à Genève. Création de sites pour indépendants, PME et associations romandes.",
+      "source": "https://elodiecastillo.com/",
+      "date": "2026-08-30"
+    },
+    "seo_h1_accueil": {
+      "valeur": "inconnu (non extrait explicitement dans le relevé)",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "seo_mots_cles_apparents": {
+      "valeur": "studio web Genève ; WordPress ; indépendants ; PME ; associations romandes",
+      "source": "https://elodiecastillo.com/",
+      "date": "2026-08-30"
+    },
+    "seo_blog": {
+      "valeur": "oui, fréquence sporadique (articles relevés de 2021-2023 puis 2025-2026)",
+      "source": "https://elodiecastillo.com/blog/",
+      "date": "2026-08-30"
+    },
+    "seo_pages_indexees_approx": {
+      "valeur": "inconnu",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "geo_schema_org": {
+      "valeur": "ProfessionalService ; FAQPage ; WebSite ; WebPage ; BreadcrumbList ; GeoCoordinates ; PostalAddress ; AdministrativeArea ; EntryPoint ; SearchAction ; Question ; Answer",
+      "source": "https://elodiecastillo.com/ (JSON-LD)",
+      "date": "2026-08-30"
+    },
+    "geo_faq_structuree": {
+      "valeur": "oui",
+      "source": "https://elodiecastillo.com/ (JSON-LD FAQPage)",
+      "date": "2026-08-30"
+    },
+    "geo_pages_comparatives": {
+      "valeur": "non détecté",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "geo_robots_ia": {
+      "valeur": "autorisés nommément — GPTBot, ClaudeBot, PerplexityBot, OAI-SearchBot, Google-Extended tous en \"Allow: /\"",
+      "source": "https://elodiecastillo.com/robots.txt",
+      "date": "2026-08-30"
+    },
+    "geo_llms_txt": {
+      "valeur": "oui — généré par Yoast SEO, liste pages et articles",
+      "source": "https://elodiecastillo.com/llms.txt",
+      "date": "2026-08-30"
+    },
+    "geo_citations_tierces": {
+      "valeur": "inconnu (non recherché dans ce run)",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "forces": {
+      "valeur": "seule du panel à autoriser nommément tous les grands robots IA (GPTBot, ClaudeBot, PerplexityBot) ; llms.txt et FAQPage structurée ; délai court (7 jours), formation incluse",
+      "source": "https://elodiecastillo.com/robots.txt ; https://elodiecastillo.com/llms.txt ; https://elodiecastillo.com/creation-site-internet-geneve/",
+      "date": "2026-08-30"
+    },
+    "faiblesses": {
+      "valeur": "prix (1'990-4'490 CHF) nettement au-dessus du segment \"quelques centaines de francs\" malgré le format indépendant ; structure solo, capacité limitée ; aucune fonction devis auto/RDV/chatbot relevée",
+      "source": "https://elodiecastillo.com/creation-site-internet-geneve/ ; https://elodiecastillo.com/site-internet-sur-mesure-geneve/",
+      "date": "2026-08-30"
+    },
+    "date_releve": {
+      "valeur": "2026-08-30",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "sources": {
+      "valeur": "https://elodiecastillo.com/ ; https://elodiecastillo.com/creation-site-internet-geneve/ ; https://elodiecastillo.com/site-internet-sur-mesure-geneve/ ; https://elodiecastillo.com/blog/ ; https://elodiecastillo.com/robots.txt ; https://elodiecastillo.com/llms.txt",
+      "source": "",
+      "date": "2026-08-30"
+    }
+  },
+  {
+    "id": {
+      "valeur": "C6",
+      "source": "analyste",
+      "date": "2026-08-30"
+    },
+    "marche": {
+      "valeur": "Suisse romande (Lausanne, dessert Genève)",
+      "source": "https://pixelium.ch/",
+      "date": "2026-08-30"
+    },
+    "nom": {
+      "valeur": "Pixelium",
+      "source": "https://pixelium.ch/",
+      "date": "2026-08-30"
+    },
+    "url": {
+      "valeur": "https://pixelium.ch/",
+      "source": "https://pixelium.ch/",
+      "date": "2026-08-30"
+    },
+    "type": {
+      "valeur": "direct",
+      "source": "https://pixelium.ch/",
+      "date": "2026-08-30"
+    },
+    "segment_cible": {
+      "valeur": "PME, artisans, professions libérales, e-commerce en Suisse romande",
+      "source": "https://pixelium.ch/",
+      "date": "2026-08-30"
+    },
+    "prestations": {
+      "valeur": "site vitrine (One Page Next.js/WordPress/complet) ; e-commerce ; web apps/PWA ; SEO + GEO ; automatisation IA ; communication/logo",
+      "source": "https://pixelium.ch/prix-creation-site-internet ; https://pixelium.ch/llms.txt",
+      "date": "2026-08-30"
+    },
+    "prestations_phares": {
+      "valeur": "référencement combiné SEO (Google) + GEO (IA) comme service dédié ; grille de prix publique",
+      "source": "https://pixelium.ch/prix-creation-site-internet",
+      "date": "2026-08-30"
+    },
+    "secteurs_clients": {
+      "valeur": "PME, artisans, professions libérales (positionnement générique Suisse romande)",
+      "source": "https://pixelium.ch/",
+      "date": "2026-08-30"
+    },
+    "references_clients": {
+      "valeur": "inconnu (portfolio mentionné, noms non extraits dans ce relevé)",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "modele_prix": {
+      "valeur": "mixte (forfait affiché pour les paliers standards ; sur devis pour le sur-mesure/enterprise)",
+      "source": "https://pixelium.ch/prix-creation-site-internet",
+      "date": "2026-08-30"
+    },
+    "prix_min": {
+      "valeur": 990,
+      "source": "https://pixelium.ch/prix-creation-site-internet",
+      "date": "2026-08-30"
+    },
+    "prix_max": {
+      "valeur": 5900,
+      "source": "https://pixelium.ch/prix-creation-site-internet",
+      "date": "2026-08-30"
+    },
+    "devise": {
+      "valeur": "CHF",
+      "source": "https://pixelium.ch/prix-creation-site-internet",
+      "date": "2026-08-30"
+    },
+    "prix_source": {
+      "valeur": "https://pixelium.ch/prix-creation-site-internet (One Page Next.js 990 CHF ; One Page WordPress 1'290 CHF ; vitrine complète dès 2'500 CHF ; e-commerce starter dès 3'490 CHF ; e-commerce business dès 5'900 CHF ; web apps 8'000-15'000 CHF ; au-delà sur devis)",
+      "source": "https://pixelium.ch/prix-creation-site-internet",
+      "date": "2026-08-30"
+    },
+    "delais_annonces": {
+      "valeur": "inconnu (aucun délai chiffré affiché sur la page tarifs consultée)",
+      "source": "https://pixelium.ch/prix-creation-site-internet",
+      "date": "2026-08-30"
+    },
+    "delais_source": {
+      "valeur": "inconnu",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "promesse_principale": {
+      "valeur": "Nos tarifs sont clairs, sans coûts cachés",
+      "source": "https://pixelium.ch/prix-creation-site-internet",
+      "date": "2026-08-30"
+    },
+    "lexique_recurrent": {
+      "valeur": "transparence ; SEO ; GEO ; structure collaborative ; à taille humaine ; Suisse romande ; automatisation IA",
+      "source": "https://pixelium.ch/ ; https://pixelium.ch/a-propos",
+      "date": "2026-08-30"
+    },
+    "ton": {
+      "valeur": "transparent ; technique ; moderne",
+      "source": "https://pixelium.ch/",
+      "date": "2026-08-30"
+    },
+    "cta_principaux": {
+      "valeur": "formulaire de contact ; téléphone",
+      "source": "https://pixelium.ch/",
+      "date": "2026-08-30"
+    },
+    "preuves": {
+      "valeur": "inconnu (aucune note d'avis chiffrée relevée sur les pages consultées)",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "ca_ou_taille": {
+      "valeur": "fondée fin 2023 ; se décrit comme \"structure collaborative à taille humaine\" avec freelances associés — pas d'effectif fixe chiffré",
+      "source": "https://pixelium.ch/a-propos",
+      "date": "2026-08-30"
+    },
+    "seo_title_accueil": {
+      "valeur": "Agence web suisse | Création de site web, SEO, IA | Pixelium",
+      "source": "https://pixelium.ch/",
+      "date": "2026-08-30"
+    },
+    "seo_meta_accueil": {
+      "valeur": "Pixelium, agence web suisse basée à Lausanne, spécialisée en création de site web, référencement sur Google (SEO) et sur les IA (GEO) en Suisse romande.",
+      "source": "https://pixelium.ch/",
+      "date": "2026-08-30"
+    },
+    "seo_h1_accueil": {
+      "valeur": "inconnu (non extrait explicitement dans le relevé)",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "seo_mots_cles_apparents": {
+      "valeur": "agence web suisse ; SEO ; GEO ; création site internet ; automatisation IA ; Suisse romande",
+      "source": "https://pixelium.ch/",
+      "date": "2026-08-30"
+    },
+    "seo_blog": {
+      "valeur": "oui — section \"Nouvelles du studio\" (/news)",
+      "source": "https://pixelium.ch/llms.txt",
+      "date": "2026-08-30"
+    },
+    "seo_pages_indexees_approx": {
+      "valeur": "inconnu",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "geo_schema_org": {
+      "valeur": "Organization ; FAQPage ; WebSite ; WebPage ; BreadcrumbList ; ContactPoint ; PostalAddress ; ImageObject ; Question ; Answer ; ReadAction",
+      "source": "https://pixelium.ch/ (JSON-LD)",
+      "date": "2026-08-30"
+    },
+    "geo_faq_structuree": {
+      "valeur": "oui",
+      "source": "https://pixelium.ch/ (JSON-LD FAQPage)",
+      "date": "2026-08-30"
+    },
+    "geo_pages_comparatives": {
+      "valeur": "inconnu",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "geo_robots_ia": {
+      "valeur": "non nommés (robots.txt générique \"User-Agent: * / Allow: /\") ; autorisés par défaut",
+      "source": "https://pixelium.ch/robots.txt",
+      "date": "2026-08-30"
+    },
+    "geo_llms_txt": {
+      "valeur": "oui — structuré par sections Services / Contenu / Entreprise",
+      "source": "https://pixelium.ch/llms.txt",
+      "date": "2026-08-30"
+    },
+    "geo_citations_tierces": {
+      "valeur": "inconnu (non recherché dans ce run)",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "forces": {
+      "valeur": "seule agence du panel à afficher une stratégie GEO dédiée comme service à part entière ; llms.txt structuré ; grille de prix publique et détaillée",
+      "source": "https://pixelium.ch/prix-creation-site-internet ; https://pixelium.ch/llms.txt",
+      "date": "2026-08-30"
+    },
+    "faiblesses": {
+      "valeur": "aucun délai de livraison chiffré affiché ; structure jeune (fin 2023) sans effectif fixe ; aucune fonction devis auto/RDV/chatbot confirmée dans l'offre vitrine standard",
+      "source": "https://pixelium.ch/prix-creation-site-internet ; https://pixelium.ch/creation-site-internet ; https://pixelium.ch/a-propos",
+      "date": "2026-08-30"
+    },
+    "date_releve": {
+      "valeur": "2026-08-30",
+      "source": "",
+      "date": "2026-08-30"
+    },
+    "sources": {
+      "valeur": "https://pixelium.ch/ ; https://pixelium.ch/prix-creation-site-internet ; https://pixelium.ch/creation-site-internet ; https://pixelium.ch/a-propos ; https://pixelium.ch/robots.txt ; https://pixelium.ch/llms.txt",
+      "source": "",
+      "date": "2026-08-30"
+    }
+  }
+]
