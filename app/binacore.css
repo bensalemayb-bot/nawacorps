@@ -42,7 +42,13 @@ a{color:inherit}
 .index{color:var(--brass);font-weight:600}
 .serif-i{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:0}
 section{padding:clamp(90px,11vw,160px) 0}
-.sec-head{display:grid;grid-template-columns:auto 1fr;gap:clamp(20px,4vw,60px);align-items:end;margin-bottom:clamp(44px,6vw,80px)}
+/* Premiere colonne FIXE et non `auto` : le libelle qui precede le titre change
+   de largeur d'une section a l'autre — 92px pour « (03) Offres », 118px pour
+   « (06) Questions ». Avec `auto`, le titre partait donc d'un x different a
+   chaque section et rien ne s'alignait verticalement le long de la page.
+   140px couvre le libelle le plus large avec de la marge, et le clamp suit la
+   police si elle grandit sur grand ecran. */
+.sec-head{display:grid;grid-template-columns:clamp(140px,12vw,190px) 1fr;gap:clamp(20px,4vw,60px);align-items:end;margin-bottom:clamp(44px,6vw,80px)}
 @media(max-width:760px){.sec-head{grid-template-columns:1fr;align-items:start;gap:18px}}
 h2.t{
   font-weight:550;font-size:clamp(2.3rem,5.4vw,4.4rem);
