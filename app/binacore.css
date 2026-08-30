@@ -156,6 +156,24 @@ h1.t,h2.t{
 .hero h1 .l:nth-child(2) span{animation-delay:.22s}
 .hero h1 .l:nth-child(3) span{animation-delay:.34s}
 .hero h1 .serif-i{font-size:1.04em;letter-spacing:-.01em}
+/* LE PLANCHER DU clamp() CI-DESSUS EST TROP HAUT POUR UN TELEPHONE.
+   Sous 566px de viewport, `8.2vw` passe sous 2.9rem et la taille se fige a
+   46.4px — elle ne suit plus l'ecran alors que .wrap, lui, continue de se
+   retrecir. Or la deuxieme ligne, « vos demandes, refait », mesure 8.457em
+   dans cette police (largeur relevee au navigateur, letter-spacing compris) :
+   il lui faut 8.457 x 46.4 = 392px, quand un ecran de 390px n'offre que 350px
+   entre les deux gouttieres. Elle passe donc a la ligne, le h1 tient sur
+   quatre lignes visuelles au lieu de trois, et l'animation de reveal ligne par
+   ligne perd son decoupage — exactement ce que CLAUDE.md interdit.
+   Le seuil de casse est 8.457 x 46.4 + 40 = 432px : TOUS les telephones en
+   portrait sont concernes (320, 360, 375, 390, 412, 430).
+   Mesure a 390px, hauteurs des trois .l : [46, 94, 46] avant, [34, 36, 34]
+   apres — 94px etant la double hauteur de la ligne cassee.
+   8.9vw et pas autre chose : a 520px il rend 46.28px contre 46.4px au-dessus
+   du seuil, soit un raccord invisible (0,12px). Plus bas, la boite du h1
+   redescend sous son propre `max-width:16ch` et la ligne 2 retrouve la marge
+   de 5,5 % qu'elle a sur grand ecran. Rien au-dessus de 520px n'est touche. */
+@media(max-width:520px){.hero h1{font-size:clamp(1.7rem,8.9vw,2.9rem)}}
 @keyframes up{to{transform:translateY(0)}}
 @keyframes fade{to{opacity:1}}
 .hero-foot{
