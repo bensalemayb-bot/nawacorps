@@ -98,6 +98,15 @@ h1.t,h2.t{
 [data-reveal]{opacity:0;transform:translateY(34px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
 [data-reveal].in{opacity:1;transform:none}
 .green{background:var(--pine);color:var(--bone)}
+/* LE VERT DOIT ETRE CONTINU, d Offres jusqu au pied de page.
+   .studio-menu porte un `margin-top:clamp(60px,8vw,110px)`, et comme la section
+   qui le contient a `padding-top:0` et aucune bordure, cette marge S ECHAPPE de
+   la section — c est la fusion des marges. Resultat : 73px de fond beige
+   s inseraient ENTRE deux aplats verts, alors que l espacement etait cense
+   vivre a l interieur du vert.
+   `flow-root` etablit un contexte de formatage de bloc : la marge reste
+   dedans, l espacement est identique, mais il est vert. */
+section.offres.green{display:flow-root}
 
 /* ---------- boutons & liens ---------- */
 .btn{

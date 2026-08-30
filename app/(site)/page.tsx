@@ -56,15 +56,31 @@ export default function Home() {
       {/* .page-body est OPAQUE, et doit le rester : le noyau est une scene
           position:fixed peinte derriere le contenu (cf. app/noyau.css). Sans
           fond ici, il transparaitrait sous toutes les sections suivantes. */}
+      {/* ORDRE DES SECTIONS — deux raisons, qui vont dans le meme sens.
+
+          1. LE VERT EST CONTIGU. Trois sections portent .green : Offres, la
+             carte du studio et le pied de page. Dans l'ordre precedent, Methode
+             / Studio / Faq s'inseraient entre les deux premieres et le pied de
+             page : le vert apparaissait donc en DEUX blocs separes par du
+             beige. Regroupees, elles forment un seul aplat qui ferme la page.
+
+          2. LES OBJECTIONS PASSENT AVANT LE PRIX. La FAQ repondait apres la
+             grille tarifaire, c'est-a-dire apres le moment ou le visiteur
+             decide. Une objection traitee apres la decision ne sert plus a
+             rien. La revue de persuasion l'avait signale, la porte G2 l'avait
+             laissee en question ouverte : elle est tranchee ici.
+
+          Aucune section n'est modifiee, seul leur ordre change. Les ancres de
+          la nav (#services, #offres, #methode, #contact) restent valides. */}
       <div className="page-body">
         <Travaux />
         <Strip />
         <ServicesRows />
-        <Offres />
-        <CarteDuStudio />
         <Methode />
         <Studio />
         <Faq />
+        <Offres />
+        <CarteDuStudio />
         <FooterContact />
       </div>
     </>

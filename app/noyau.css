@@ -130,6 +130,16 @@ html.has-intro:not(.loaded) .noyau-enter{animation-play-state:paused}
   position:relative;
   will-change:opacity,transform;
 }
+/* LES TEMPS S ALIGNENT SUR LA GRILLE DE PAGE, comme tout le reste du site.
+   .wrap porte `margin:0 auto`. Dans un conteneur FLEX, une marge auto sur
+   l axe transversal CENTRE l element au lieu de le laisser s etirer — et
+   `align-items:stretch` ne s applique plus des qu il y a une marge auto sur
+   cet axe. Les temps 2, 3 et 4 etaient donc centres sur leur propre largeur,
+   chacun a un bord gauche different : 310, 264 et 168 px, quand le h1 du hero
+   et toutes les sections du site commencent a 41.
+   `width:100%` rend la largeur definie : la marge auto n a plus de place a
+   distribuer, et le contenu retombe sur le padding de la grille. */
+.noyau-beat>.wrap{width:100%}
 
 /* Temps 1 — porte la classe .hero : toutes les regles d'entree de binacore.css
    (kicker, h1 ligne a ligne, hero-foot, et leur mise en pause tant que le

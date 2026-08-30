@@ -56,8 +56,7 @@ export default function Confidentialite() {
           <p>Les échanges avec l&apos;assistant de conversation sont traités par un fournisseur d&apos;intelligence artificielle situé hors de Suisse. Ne lui confiez pas d&apos;information sensible : pour cela, écrivez directement.</p>
           <p>Pas de cookies publicitaires ni de traceurs tiers.</p>
           <p className="meta">Vos droits</p>
-          {/* BR : adresse A CONFIRMER avant la mise en ligne. */}
-          <p>Accès, rectification, suppression sur simple demande à {CONTACT.email}.</p>
+          <p>Accès, rectification, suppression sur simple demande à {CONTACT.emailGeneral}.</p>
           <p style={{ marginTop: 40 }}><a className="lnk" href="/">← Retour au site</a></p>
         </div>
       </div>

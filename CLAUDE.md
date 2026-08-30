@@ -1,11 +1,11 @@
 @AGENTS.md
 
-# Nawa Corps — site de l'agence
+# Nawa Corps — site du studio
 
 ## Le projet
 
-Site public et back-office d'une agence digitale indépendante à Genève, opérée par
-une personne (Ayoub Bensalem), sans bureau, avec un partenaire commercial et de production (101 Agency,
+Site public et back-office d'un **studio de création digitale** indépendant à
+Genève, opéré par une personne (Ayoub Bensalem), sans bureau, avec un partenaire commercial et de production (101 Agency,
 apport d'affaires 2 % + production réseaux sociaux sur devis).
 
 **Marché** : Genève et sa région (Suisse romande). Marché unique — aucun autre
@@ -35,7 +35,7 @@ anglaise est prévue — c'est un chantier d'architecture, pas une traduction.
 
 **`.agents/product-marketing.md`** est l'entrée n°1 de tout travail marketing :
 promesse, ICP, positionnement, concurrence, offres et prix, preuves,
-partenariat, voix, chiffres de l'agence, décisions ouvertes.
+partenariat, voix, chiffres du studio, décisions ouvertes.
 
 Les agents s'y **adaptent** ; ils ne l'inventent pas. Une promesse, un prix, un
 délai ou une référence absents de ce fichier ne doivent apparaître nulle part.

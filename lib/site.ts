@@ -48,24 +48,41 @@ export const SITE_URL = (brut || "http://localhost:3000").replace(/\/$/, "");
 export const SITE_NAME = "Nawa Corps";
 
 /**
- * VERROU DU NAP — voir le docblock d en-tete.
- * Passer a true UNIQUEMENT quand telephone, e-mail et adresse sont reels.
+ * VERROU DU NAP — OUVERT le 30 aout 2026.
+ *
+ * Les coordonnees ci-dessous sont reelles : elles ont ete fournies par Ayoub
+ * Bensalem lui-meme. Le telephone, l e-mail et la localite partent donc
+ * desormais en donnee structuree, ce qui rend la fiche eligible au pack local
+ * et au rapprochement avec la fiche Google.
+ *
+ * Le refermer si une coordonnee redevient incertaine : une donnee structuree
+ * fausse se propage et se corrige mal.
  */
-export const NAP_CONFIRME = false;
+export const NAP_CONFIRME = true;
 
 /**
- * Coordonnees. Valeurs de remplacement tant que NAP_CONFIRME vaut false ;
- * elles restent affichees a l ecran (la maquette a besoin d un numero pour
- * tenir sa mise en page) mais ne partent JAMAIS en donnee structuree.
+ * Coordonnees REELLES.
+ *
+ * Pas d adresse postale de rue : le studio n a pas de bureau, et c est assume
+ * (cf. .agents/product-marketing.md §1). L adresse reste donc au niveau de la
+ * localite — Geneve, GE, CH. Inventer une rue pour « faire serieux » serait
+ * exactement la donnee fausse que ce verrou existe pour empecher.
  */
 export const CONTACT = {
   /** Format E.164, sans espaces — pour href="tel:" et pour schema.org. */
-  telephone: "+41760000000",
+  telephone: "+41789124035",
   /** Le meme numero, mis en forme pour l oeil. */
-  telephoneAffiche: "+41 76 000 00 00",
+  telephoneAffiche: "+41 78 912 40 35",
   /** Numero WhatsApp, sans le « + » : wa.me n en veut pas. */
-  whatsapp: "41760000000",
-  email: "hello@nawacorps.ch",
+  whatsapp: "41789124035",
+  /** Boite d Ayoub : c est elle qui recoit les demandes de projet. */
+  email: "ayoub@nawacorps.ch",
+  /**
+   * Boite generale. Sert aux questions qui ne sont pas une demande de projet :
+   * exercice des droits nLPD, mentions legales, sollicitations diverses.
+   * Les separer evite qu une demande client se perde dans le tout-venant.
+   */
+  emailGeneral: "contact@nawacorps.ch",
   ville: "Genève",
   region: "Genève",
   pays: "CH",

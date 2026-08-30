@@ -34,12 +34,12 @@ import { CONTACT, openGraphPage } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Mentions légales",
   description:
-    "Mentions légales de Nawa Corps, agence digitale indépendante à Genève : éditeur, hébergement, propriété intellectuelle et droit applicable.",
+    "Mentions légales de Nawa Corps, studio de création digitale indépendant à Genève : éditeur, hébergement, propriété intellectuelle et droit applicable.",
   alternates: { canonical: "/mentions-legales" },
   openGraph: openGraphPage({
     titre: "Mentions légales — Nawa Corps",
     description:
-      "Mentions légales de Nawa Corps, agence digitale indépendante à Genève : éditeur, hébergement, propriété intellectuelle et droit applicable.",
+      "Mentions légales de Nawa Corps, studio de création digitale indépendant à Genève : éditeur, hébergement, propriété intellectuelle et droit applicable.",
     chemin: "/mentions-legales",
   }),
 };
@@ -55,7 +55,7 @@ export default function MentionsLegales() {
         <h1 className="t">Mentions légales</h1>
         <div className="studio-txt" style={{ marginTop: 40 }}>
           <p className="meta">Éditeur</p>
-          <p>Nawa Corps, agence digitale, Genève, Suisse, exploitée par Ayoub Bensalem. Contact : {CONTACT.email}.</p>
+          <p>Nawa Corps, studio de création digitale, Genève, Suisse, exploité par Ayoub Bensalem. Contact : {CONTACT.emailGeneral} — {CONTACT.telephoneAffiche}.</p>
           <p className="meta">Hébergement</p>
           <p>[Infomaniak, Suisse — à confirmer en B12]</p>
           <p className="meta">Propriété intellectuelle</p>
