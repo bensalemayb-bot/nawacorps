@@ -4,6 +4,7 @@ import FooterContact from "@/components/FooterContact";
 import Methode from "@/components/Methode";
 import NoyauHero from "@/components/NoyauHero";
 import Offres from "@/components/Offres";
+import SchemaStudio from "@/components/SchemaStudio";
 import ServicesRows from "@/components/ServicesRows";
 import Strip from "@/components/Strip";
 import Studio from "@/components/Studio";
@@ -27,6 +28,8 @@ export const dynamic = "force-dynamic";
 export default function Home() {
   return (
     <>
+      {/* Donnee structuree du studio. N emet qu un <script> : aucun pixel. */}
+      <SchemaStudio />
       <NoyauHero />
       {/* .page-body est OPAQUE, et doit le rester : le noyau est une scene
           position:fixed peinte derriere le contenu (cf. app/noyau.css). Sans

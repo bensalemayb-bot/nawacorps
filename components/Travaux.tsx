@@ -20,7 +20,7 @@ export default function Travaux() {
             <h2 className="t">Tout a un avant.<br />Voici les après.</h2>
           </div>
         </div>
-        <p className="lede" data-reveal style={{ marginBottom: 30 }}>Cinq gestes du studio, chacun en deux mondes — glissez la poignée de chaque pièce pour comparer.</p>
+        <p className="lede" data-reveal style={{ marginBottom: 30 }}>Cinq démonstrations du studio — glissez la poignée de chaque pièce pour comparer l&apos;avant et l&apos;après.</p>
 
         <div data-reveal><FeatureCarousel /></div>
       </div>

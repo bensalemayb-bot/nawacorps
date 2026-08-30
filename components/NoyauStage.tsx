@@ -268,9 +268,19 @@ export default function NoyauStage() {
                 </g>
               </svg>
 
+              {/* srcSet ajoute : noyau-800.webp (26 Ko) existait dans public/
+                  mais n etait reference nulle part — le telephone telechargeait
+                  les 72 Ko de la version 1448 px pour l afficher sur 390 px de
+                  large. C est l element le plus lourd du premier ecran, donc
+                  tres probablement le LCP sur mobile.
+                  Toujours un <img> nu et non next/image : l image est peinte
+                  dans une scene position:fixed pilotee au scroll, et le
+                  wrapper que next/image insere casserait le calage. */}
               <img
                 className="noyau-img"
                 src="/brand/noyau.webp"
+                srcSet="/brand/noyau-800.webp 800w, /brand/noyau.webp 1448w"
+                sizes="(max-width: 820px) 100vw, 1448px"
                 alt=""
                 width={1448}
                 height={1086}

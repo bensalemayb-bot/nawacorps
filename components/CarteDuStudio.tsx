@@ -1,3 +1,4 @@
+import { whatsapp } from "@/lib/site";
 import {
   CHF_UNIT,
   FROM_PREFIX,
@@ -28,9 +29,9 @@ import { prisma } from "@/lib/prisma";
 
 // Libelles de groupe, verbatim de la maquette (lignes 1041, 1050, 1053).
 const GROUP_LABEL: Record<string, string> = {
-  annee: "Au fil de l'année",
+  annee: "En complément",
   continu: "En continu",
-  saison: "Selon la saison",
+  saison: "Pour la restauration",
 };
 
 // Colonne 1 = au fil de l'annee ; colonne 2 = en continu, puis selon la saison.
@@ -38,7 +39,7 @@ const COL_1 = ["annee"];
 const COL_2 = ["continu", "saison"];
 
 const DEVIS_HREF =
-  "https://wa.me/41760000000?text=Bonjour%2C%20j%27aimerais%20un%20devis%20pour%20un%20support.";
+  whatsapp("Bonjour, j'aimerais un devis pour une prestation.");
 
 type ServiceRow = Awaited<ReturnType<typeof loadServices>>[number];
 
@@ -87,9 +88,9 @@ export default async function CarteDuStudio() {
       <div className="wrap">
         <div className="studio-menu">
           <div className="sm-head" data-reveal>
-            <h3>La carte <span className="serif-i">du studio</span></h3>
+            <h2>La carte <span className="serif-i">du studio</span></h2>
           </div>
-          <p className="lede" data-reveal style={{ marginBottom: 30 }}>Votre commerce équipé, le studio reste à disposition toute l&apos;année — à la carte, comme chez vous.</p>
+          <p className="lede" data-reveal style={{ marginBottom: 30 }}>Votre site en ligne, le studio reste à disposition — à la carte, sans engagement.</p>
           <div className="sm-card" data-reveal>
             <div className="sm-cols">
               <div className="sm-col">
@@ -101,11 +102,11 @@ export default async function CarteDuStudio() {
                 {COL_2.map((category) => (
                   <Group key={category} category={category} services={services} />
                 ))}
-                <p className="sm-note">Terrasse d&apos;été, rentrée, Escalade, Noël, Saint-Valentin : cinq occasions par an de rester visible sans y penser.</p>
+                <p className="sm-note">La ligne restauration reste ouverte : cartes, chevalets et supports de saison, pour les établissements déjà suivis par le studio.</p>
               </div>
             </div>
             <div className="sm-foot">
-              <span>Prix indicatifs, tout compris — devis en cinq minutes.</span>
+              <span>Prix indicatifs, TVA comprise — devis en cinq minutes.</span>
               <a className="lnk" href={DEVIS_HREF} target="_blank" rel="noopener">Demander un devis →</a>
             </div>
           </div>

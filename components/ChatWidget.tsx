@@ -1,5 +1,6 @@
 "use client";
 
+import { whatsapp } from "@/lib/site";
 import { useEffect, useRef, useState } from "react";
 
 /**
@@ -28,10 +29,10 @@ const SEUIL_BOUTON = 6;
 /** En dessous, un abandon ne vaut pas la peine d etre finalise. */
 const SEUIL_ABANDON = 4;
 
-const WA_LINK = "https://wa.me/41760000000";
+const WA_LINK = whatsapp();
 
 const ACCUEIL =
-  "Bonjour ! Je prépare votre proposition avec Ayoub. Quel type de commerce tenez-vous ?";
+  "Bonjour. Je prépare votre proposition avec Ayoub. Quel est votre métier, et avez-vous déjà un site en ligne ?";
 
 export default function ChatWidget() {
   // volontaire — next/link casserait les reveals (Interactions ne tourne qu'une fois), voir décision B7

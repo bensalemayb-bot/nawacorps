@@ -6,6 +6,7 @@ import Loader from "@/components/Loader";
 import MenuOverlay from "@/components/MenuOverlay";
 import Nav from "@/components/Nav";
 import NoyauStage from "@/components/NoyauStage";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 /**
  * Layout du SITE PUBLIC — bloc B11.
@@ -25,15 +26,71 @@ import NoyauStage from "@/components/NoyauStage";
  * dessous.
  */
 
+/**
+ * METADATA DU SITE PUBLIC.
+ *
+ * `metadataBase` d abord : sans elle, tout champ d URL relatif — canonique,
+ * image Open Graph — leve une erreur de build. C est elle qui permet d ecrire
+ * `canonical: "/"` plutot que l URL absolue, et donc de changer de domaine
+ * sans toucher une seule page.
+ *
+ * `title` devient un objet a deux entrees. `default` sert la page d accueil,
+ * `template` habille les pages filles : « Mentions légales » ecrit dans
+ * mentions-legales/page.tsx ressort « Mentions légales — Nawa Corps ». Les
+ * deux pages legales repetaient ce suffixe a la main ; elles ne le font plus.
+ *
+ * L ORDRE DES MOTS DU TITRE A CHANGE, et c est deliberé. « Nawa Corps —
+ * Studio digital, Genève » mettait la marque en premier : personne ne cherche
+ * encore « Nawa Corps ». Ce qui se cherche, c est un studio a Geneve. La
+ * marque passe donc en fin de titre, la ou elle signe sans occuper la place
+ * que les moteurs lisent en premier.
+ *
+ * `canonical` est declaree ICI, au layout, et vaut donc « / » pour l accueil.
+ * Chaque page fille redeclare la sienne — une canonique heritee ferait pointer
+ * les pages legales vers l accueil, ce qui les desindexerait.
+ */
 export const metadata: Metadata = {
-  title: "Nawa Corps — Studio digital, Genève",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Refonte de site pour PME à Genève — livré en 72 h",
+    template: `%s — ${SITE_NAME}`,
+  },
   description:
-    "Nawa Corps conçoit cartes, sites, affiches et réseaux sociaux pour les commerces genevois. Studio digital indépendant, Genève.",
+    "Nawa Corps refait le site des PME genevoises en 72 heures : demande de devis, prise de rendez-vous, fiche Google. Dès 699.–, TVA comprise.",
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    locale: "fr_CH",
+    siteName: SITE_NAME,
+    url: "/",
+    title: "Refonte de site pour PME à Genève — livré en 72 h",
+    description:
+      "Votre site a dix ans. En 72 heures il reçoit les demandes, chiffre les devis et prend les rendez-vous. Dès 699.–, TVA comprise.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Refonte de site pour PME à Genève — livré en 72 h",
+    description:
+      "Votre site a dix ans. En 72 heures il reçoit les demandes, chiffre les devis et prend les rendez-vous. Dès 699.–, TVA comprise.",
+  },
 };
 
 export default function SiteLayout({ children }: LayoutProps<"/">) {
   return (
     <>
+      {/* FILET SANS JAVASCRIPT.
+          Deux mecaniques du site partent CACHEES et ne se devoilent que par
+          JS : [data-reveal] est a opacity:0 (binacore.css ligne 53) jusqu a ce
+          qu Interactions pose .in, et le loader couvre tout l ecran en
+          z-index:130 (ligne 336) jusqu a ce qu il pose .loaded. Si le script
+          ne demarre jamais, la page est une plaque verte vide — pour un
+          visiteur comme pour un robot qui n execute pas le JS.
+          Les deux regles ci-dessous sont EXACTEMENT celles que binacore.css
+          applique deja sous prefers-reduced-motion (lignes 330 et 423) : rien
+          de nouveau n est invente, on rejoue un etat de repli deja prevu. */}
+      <noscript>
+        <style>{`[data-reveal]{opacity:1;transform:none}.loader{display:none}`}</style>
+      </noscript>
       {/* Ordre du <body> de reference/binacore.html (lignes 683-723).
           CRITIQUE : grain, loader, cursor, nav et menu restent HORS de
           #smoothWrap > #smooth. Le scroll inertiel applique un translate3d

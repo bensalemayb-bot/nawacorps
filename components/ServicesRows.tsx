@@ -1,12 +1,18 @@
-// Section Services — reference/binacore.html lignes 940-973, copie verbatim.
+// Section Services — reference/binacore.html lignes 940-973 pour la structure.
 //
 // Les six lignes sont STATIQUES et le restent : ce sont des categories
 // editoriales du studio, pas les enregistrements de la table Service. Rien ici
 // ne vient de la base.
 //
+// REPOSITIONNEMENT PME : les six gestes decrivaient l'ancienne cible (cartes,
+// menus, chevalets, reseaux). Ils decrivent desormais ce qu'un site de PME doit
+// FAIRE — recevoir, chiffrer, prendre rendez-vous, repondre — parce que c'est
+// la promesse du positionnement, et qu'une section de services qui parle d'
+// autre chose que la grille de prix laisse le visiteur sans fil.
+// Voir .agents/product-marketing.md §3.
+//
 // Le depliage est pilote par Interactions.tsx, qui attache un click sur
-// `.row-h` de chaque `[data-row]` — code deja en place depuis B4, qui tolerait
-// zero match jusqu'ici.
+// `.row-h` de chaque `[data-row]` — code deja en place depuis B4.
 export default function ServicesRows() {
   return (
     <section id="services" style={{ paddingTop: 0 }}>
@@ -17,28 +23,28 @@ export default function ServicesRows() {
         </div>
         <div className="rows" data-reveal>
           <div className="row" data-row>
-            <div className="row-h"><span className="n">01</span><h3>Cartes &amp; menus</h3><span className="pl">+</span></div>
-            <div className="row-b"><div><p>Votre menu repensé : hiérarchie claire, typographie soignée, fichiers d&apos;impression fournis et version en ligne accessible par QR code. Les changements de prix sont inclus pendant trois mois, et la traduction FR / EN se fait sur demande — Genève est une ville de passage.</p></div></div>
+            <div className="row-h"><span className="n">01</span><h3>Refonte de site</h3><span className="pl">+</span></div>
+            <div className="row-b"><div><p>Votre site actuel, repris et refait : lisible sur téléphone, rapide, à jour. Les textes existants sont récupérés puis réécrits, vous signalez ce qui doit changer. Livré en 72 heures, deux allers-retours compris.</p></div></div>
           </div>
           <div className="row" data-row>
-            <div className="row-h"><span className="n">02</span><h3>Sites vitrines</h3><span className="pl">+</span></div>
-            <div className="row-b"><div><p>Un site sobre et rapide, pensé pour le téléphone : carte, horaires, adresse, appel et itinéraire en un geste. Nom de domaine et hébergement de la première année compris — vous n&apos;installez rien.</p></div></div>
+            <div className="row-h"><span className="n">02</span><h3>Demande de devis</h3><span className="pl">+</span></div>
+            <div className="row-b"><div><p>Un formulaire qui pose les bonnes questions — type de prestation, surface, délai, adresse — et qui vous arrive rempli plutôt qu&apos;en trois lignes vagues. Sur les formules qui l&apos;incluent, le visiteur repart avec une estimation chiffrée immédiate.</p></div></div>
           </div>
           <div className="row" data-row>
-            <div className="row-h"><span className="n">03</span><h3>Print &amp; supports</h3><span className="pl">+</span></div>
-            <div className="row-b"><div><p>Affiches d&apos;événements, cartes de fidélité, bons cadeaux, chevalets de table, stickers vitrine avec QR vers vos avis Google. Tout ce qui se voit dans votre commerce, dessiné dans votre identité et livré prêt à imprimer.</p></div></div>
+            <div className="row-h"><span className="n">03</span><h3>Prise de rendez-vous</h3><span className="pl">+</span></div>
+            <div className="row-b"><div><p>Vos créneaux en ligne, synchronisés avec votre agenda. Le client réserve seul, à 23 h comme le dimanche, et reçoit sa confirmation. Vous arrêtez de vous rappeler mutuellement pour caler une heure.</p></div></div>
           </div>
           <div className="row" data-row>
-            <div className="row-h"><span className="n">04</span><h3>Réseaux sociaux</h3><span className="pl">+</span></div>
-            <div className="row-b"><div><p>Huit à douze publications par mois, dans vos couleurs, préparées et programmées pour vous. Vous validez une fois par mois — le reste ne vous demande rien.</p></div></div>
+            <div className="row-h"><span className="n">04</span><h3>Assistant &amp; relances</h3><span className="pl">+</span></div>
+            <div className="row-b"><div><p>Un assistant formé sur vos prestations et vos tarifs répond aux questions courantes jour et nuit, note le nom et le numéro, et vous alerte sur votre téléphone dans la seconde. Les demandes restées sans réponse sont relancées seules.</p></div></div>
           </div>
           <div className="row" data-row>
-            <div className="row-h"><span className="n">05</span><h3>Identité &amp; photographie</h3><span className="pl">+</span></div>
-            <div className="row-b"><div><p>Un logotype propre si vous n&apos;en avez pas, une palette cohérente entre la carte, le site et la vitrine, et des photos de votre commerce cadrées pour le web comme pour Google.</p></div></div>
+            <div className="row-h"><span className="n">05</span><h3>Fiche Google &amp; avis</h3><span className="pl">+</span></div>
+            <div className="row-b"><div><p>Fiche complétée : photos, horaires exacts, zone d&apos;intervention, réponses aux avis. C&apos;est ce que voient vos futurs clients avant votre site — et souvent la seule chose qu&apos;ils voient.</p></div></div>
           </div>
           <div className="row" data-row>
-            <div className="row-h"><span className="n">06</span><h3>Google &amp; visibilité</h3><span className="pl">+</span></div>
-            <div className="row-b"><div><p>Fiche Google complétée et optimisée : photos, horaires exacts, réponses aux avis. C&apos;est la première chose que voient vos futurs clients — elle doit être irréprochable.</p></div></div>
+            <div className="row-h"><span className="n">06</span><h3>Identité &amp; photos</h3><span className="pl">+</span></div>
+            <div className="row-b"><div><p>Un logotype propre si vous n&apos;en avez pas, une palette cohérente entre le site, vos documents et vos véhicules, et des photos de votre entreprise cadrées pour le web comme pour Google.</p></div></div>
           </div>
         </div>
       </div>

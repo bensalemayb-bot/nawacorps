@@ -14,15 +14,26 @@ type ServiceSeed = {
   sortOrder: number;
 };
 
-// Prix en centimes CHF. priceCents null pour les prestations sur devis (QUOTE).
+/**
+ * CATALOGUE — repositionnement PME (voir .agents/product-marketing.md).
+ *
+ * Prix en centimes CHF, TVA COMPRISE. priceCents null pour les prestations
+ * sur devis (QUOTE).
+ *
+ * Les slugs des trois formules de sites sont la seule chose que le code
+ * connaisse par coeur : components/Offres.tsx indexe son habillage editorial
+ * dessus. Les renommer demande de renommer les cles de EDITORIAL au meme
+ * moment.
+ */
 const services: ServiceSeed[] = [
+  // ---------- Les trois formules de site ----------
   {
-    slug: "la-carte",
-    name: "La Carte",
-    description: "Votre menu repensé, prêt à imprimer, avec sa version en ligne.",
+    slug: "la-vitrine",
+    name: "La Vitrine",
+    description: "Votre site refait proprement, lisible sur téléphone, avec un formulaire qui fonctionne.",
     category: "principal",
     priceType: "FIXED",
-    priceCents: 45000,
+    priceCents: 69900,
     priceFrom: false,
     isMonthly: false,
     sortOrder: 1,
@@ -30,21 +41,21 @@ const services: ServiceSeed[] = [
   {
     slug: "le-site",
     name: "Le Site",
-    description: "Un site vitrine pensé mobile d'abord, mis en ligne clés en main.",
+    description: "Le site qui reçoit les demandes, prend les rendez-vous et chiffre les devis.",
     category: "principal",
     priceType: "FIXED",
-    priceCents: 195000,
+    priceCents: 149900,
     priceFrom: false,
     isMonthly: false,
     sortOrder: 2,
   },
   {
-    slug: "pack-complet",
-    name: "Le Pack Complet",
-    description: "Toute votre présence remise à niveau, en une seule livraison.",
+    slug: "l-assistant",
+    name: "L'Assistant",
+    description: "Le site qui répond, qualifie et relance à votre place, jour et nuit.",
     category: "principal",
     priceType: "FIXED",
-    priceCents: 290000,
+    priceCents: 249900,
     priceFrom: false,
     isMonthly: false,
     sortOrder: 3,
@@ -60,47 +71,84 @@ const services: ServiceSeed[] = [
     isMonthly: false,
     sortOrder: 4,
   },
+
+  // ---------- En continu ----------
   {
-    slug: "affiche-evenement",
-    name: "Affiche d'événement — soirée, brunch, happy hour",
-    description: "Soirée, brunch, happy hour — prête à imprimer",
+    slug: "hebergement",
+    name: "Suivi & hébergement",
+    description: "Hébergement, domaine, mises à jour, sauvegardes — dès la 2ᵉ année",
+    category: "continu",
+    priceType: "FIXED",
+    priceCents: 4900,
+    priceFrom: false,
+    isMonthly: true,
+    sortOrder: 20,
+  },
+  {
+    slug: "suivi-assistant",
+    name: "Suivi & hébergement — avec assistant",
+    description: "Idem, plus l'assistant et vos modifications de contenu",
+    category: "continu",
+    priceType: "FIXED",
+    priceCents: 12900,
+    priceFrom: false,
+    isMonthly: true,
+    sortOrder: 21,
+  },
+  {
+    slug: "reseaux-sociaux",
+    name: "Réseaux sociaux — publications mensuelles",
+    description: "Préparées et programmées pour vous",
+    category: "continu",
+    priceType: "QUOTE",
+    priceCents: null,
+    priceFrom: false,
+    isMonthly: false,
+    sortOrder: 22,
+  },
+
+  // ---------- En complément ----------
+  {
+    slug: "carte-visite",
+    name: "Cartes de visite — conception + 75 ex. imprimés",
+    description: "Recto-verso, 85 × 55, papier choisi avec vous",
     category: "annee",
-    priceType: "FROM",
-    priceCents: 12000,
-    priceFrom: true,
+    priceType: "FIXED",
+    priceCents: 20000,
+    priceFrom: false,
     isMonthly: false,
     sortOrder: 10,
   },
   {
-    slug: "carte-fidelite",
-    name: "Carte de fidélité à tampons",
-    description: "Dix tampons, un vrai design",
+    slug: "identite-logo",
+    name: "Identité complète / logo",
+    description: "Logotype, palette, cohérence site — supports — enseigne",
     category: "annee",
-    priceType: "FIXED",
-    priceCents: 15000,
+    priceType: "QUOTE",
+    priceCents: null,
     priceFrom: false,
     isMonthly: false,
     sortOrder: 11,
   },
   {
-    slug: "bons-cadeaux",
-    name: "Bons cadeaux — Noël, Saint-Valentin",
-    description: "Noël, Saint-Valentin",
+    slug: "photos",
+    name: "Photos de votre entreprise",
+    description: "Cadrées pour le site comme pour Google",
     category: "annee",
-    priceType: "FROM",
-    priceCents: 18000,
-    priceFrom: true,
+    priceType: "QUOTE",
+    priceCents: null,
+    priceFrom: false,
     isMonthly: false,
     sortOrder: 12,
   },
   {
-    slug: "chevalets",
-    name: "Chevalets de table — carte, QR & wifi",
-    description: "Carte, QR & wifi sur table",
+    slug: "traduction",
+    name: "Traduction du site FR / EN",
+    description: "Genève travaille en deux langues",
     category: "annee",
-    priceType: "FIXED",
-    priceCents: 9000,
-    priceFrom: false,
+    priceType: "FROM",
+    priceCents: 22000,
+    priceFrom: true,
     isMonthly: false,
     sortOrder: 13,
   },
@@ -110,67 +158,92 @@ const services: ServiceSeed[] = [
     description: "QR direct vers votre fiche, 30 secondes",
     category: "annee",
     priceType: "FIXED",
-    priceCents: 9000,
+    priceCents: 12000,
     priceFrom: false,
     isMonthly: false,
     sortOrder: 14,
   },
   {
-    slug: "traduction",
-    name: "Traduction de carte FR / EN",
-    description: "Genève est une ville de passage",
+    slug: "affiche-evenement",
+    name: "Affiche — événement, promotion, recrutement",
+    description: "Prête à imprimer",
     category: "annee",
     priceType: "FROM",
-    priceCents: 15000,
+    priceCents: 18000,
     priceFrom: true,
     isMonthly: false,
     sortOrder: 15,
   },
+
+  // ---------- Ligne restauration, secondaire ----------
   {
-    slug: "identite-logo",
-    name: "Identité complète / logo",
-    description: "Logotype, palette, cohérence carte-site-vitrine",
-    category: "annee",
+    slug: "la-carte",
+    name: "La Carte — menu de restaurant",
+    description: "Menu repensé, fichiers d'impression, version en ligne + QR",
+    category: "saison",
     priceType: "QUOTE",
     priceCents: null,
     priceFrom: false,
     isMonthly: false,
-    sortOrder: 16,
+    sortOrder: 30,
   },
   {
-    slug: "reseaux-sociaux",
-    name: "Réseaux sociaux — 8 à 12 posts par mois",
-    description: "8 à 12 publications par mois, préparées et programmées",
-    category: "continu",
+    slug: "carte-fidelite",
+    name: "Carte de fidélité à tampons",
+    description: "Dix tampons, un vrai design",
+    category: "saison",
     priceType: "FIXED",
-    priceCents: 39000,
+    priceCents: 22000,
     priceFrom: false,
-    isMonthly: true,
-    sortOrder: 20,
+    isMonthly: false,
+    sortOrder: 31,
   },
   {
-    slug: "hebergement",
-    name: "Hébergement & mises à jour du site",
-    description: "Vous ne touchez à rien",
-    category: "continu",
+    slug: "bons-cadeaux",
+    name: "Bons cadeaux",
+    description: "Noël, Saint-Valentin, fête des mères",
+    category: "saison",
+    priceType: "FROM",
+    priceCents: 25000,
+    priceFrom: true,
+    isMonthly: false,
+    sortOrder: 32,
+  },
+  {
+    slug: "chevalets",
+    name: "Chevalets de table — carte, QR & wifi",
+    description: "Carte, QR & wifi sur table",
+    category: "saison",
     priceType: "FIXED",
-    priceCents: 4900,
+    priceCents: 14000,
     priceFrom: false,
-    isMonthly: true,
-    sortOrder: 21,
+    isMonthly: false,
+    sortOrder: 33,
   },
   {
     slug: "pack-saisonnier",
     name: "Pack saisonnier — affiche + posts + carte à jour",
-    description: "Affiche + posts + carte à jour — terrasse, Escalade, Noël",
+    description: "Terrasse, rentrée, Escalade, Noël",
     category: "saison",
     priceType: "FIXED",
-    priceCents: 35000,
+    priceCents: 49000,
     priceFrom: false,
     isMonthly: false,
-    sortOrder: 30,
+    sortOrder: 34,
   },
 ];
+
+/**
+ * Slugs RETIRES du catalogue.
+ *
+ * L'upsert ne supprime rien : sans ce passage, « Le Pack Complet » resterait
+ * en base, visible, a 2'900.– — affiche dans la grille et cite par le chatbot,
+ * qui lit la meme table.
+ *
+ * `visible: false` plutot qu'un delete : la ligne reste consultable depuis
+ * /admin, et la remettre en service ne demande qu'une case a cocher.
+ */
+const retires = ["pack-complet"];
 
 const connectionString = process.env.DATABASE_URL;
 if (!connectionString) {
@@ -191,8 +264,15 @@ async function main() {
     });
   }
 
+  const { count: retraits } = await prisma.service.updateMany({
+    where: { slug: { in: retires } },
+    data: { visible: false },
+  });
+
   const count = await prisma.service.count();
-  console.log(`seed : ${services.length} services upsertes — total en base : ${count}`);
+  console.log(
+    `seed : ${services.length} services upsertes, ${retraits} retire(s) — total en base : ${count}`,
+  );
 }
 
 main()

@@ -84,7 +84,13 @@ export default function Interactions() {
     tick(); setInterval(tick, 30000);
 
     /* ---------- titres en lignes ---------- */
-    document.querySelectorAll<HTMLElement>("h2.t, footer.contact h2").forEach(function (h) {
+    // `h1.t` s ajoute a la liste : les deux pages legales ouvrent desormais sur un
+    // h1 et non plus un h2 (une page sans h1 est une page sans titre pour un
+    // moteur). Elles gardent ainsi le decoupage en lignes et le reveal.
+    // L accueil n est PAS concerne : son h1 (NoyauHero) ne porte pas .t — il a
+    // ses propres spans .l et son animation CSS, qui ne doivent pas etre
+    // reecrits par ce bloc.
+    document.querySelectorAll<HTMLElement>("h1.t, h2.t, footer.contact h2").forEach(function (h) {
       var out: HTMLElement[] = [], line = document.createDocumentFragment();
       function flush() {
         var lm = document.createElement("span"); lm.className = "lm";

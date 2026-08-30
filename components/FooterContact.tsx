@@ -1,4 +1,5 @@
 import ContactForm from "@/components/ContactForm";
+import { CONTACT, WHATSAPP_HREF } from "@/lib/site";
 
 // Footer Contact — reference/binacore.html lignes 1136-1153, copie verbatim.
 //
@@ -26,23 +27,23 @@ export default function FooterContact() {
     <footer className="contact green" id="contact">
       <div className="wrap">
         <span className="meta" data-reveal><span className="index">(07)</span>&nbsp; Contact</span>
-        <h2 data-reveal style={{ marginTop: 26 }}>Donnons à votre commerce<br />la présence <span className="serif-i">qu&apos;il mérite.</span></h2>
+        <h2 data-reveal style={{ marginTop: 26 }}>Montrez-moi votre site.<br />Je vous dis <span className="serif-i">ce qu&apos;il lui manque.</span></h2>
         <div className="c-row" data-reveal>
-          <a className="btn" href="https://wa.me/41760000000?text=Bonjour%2C%20parlons%20de%20mon%20commerce." target="_blank" rel="noopener">Écrire sur WhatsApp <span className="ar">→</span></a>
-          {/* BR : adresse A CONFIRMER avant la mise en ligne. */}
-          <a className="btn btn-line" href="mailto:hello@nawacorps.ch">hello@nawacorps.ch</a>
+          <a className="btn" href={WHATSAPP_HREF} target="_blank" rel="noopener">Écrire sur WhatsApp <span className="ar">→</span></a>
+          {/* BR : adresse A CONFIRMER avant la mise en ligne — lib/site.ts. */}
+          <a className="btn btn-line" href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
         </div>
 
         {/* ADDITION EDITORIALE B8, signalee : la maquette n a pas de formulaire.
             Les deux CTA ci-dessus sont inchanges — le formulaire s ajoute a cote
             d eux, il ne les remplace pas. */}
         <div data-reveal>
-          <p className="meta" style={{ marginTop: 34 }}>ou par écrit</p>
+          <p className="meta" style={{ marginTop: 34 }}>ou laissez-moi l&apos;adresse de votre site</p>
           <ContactForm />
         </div>
         <div className="c-cols" data-reveal>
           <span>Genève, Suisse</span>
-          <a className="lnk" href="tel:+41760000000">+41 76 000 00 00</a>
+          <a className="lnk" href={`tel:${CONTACT.telephone}`}>{CONTACT.telephoneAffiche}</a>
           <span>Lu–Sa · 9h–19h</span>
           <span>© 2026 Nawa Corps</span>
         </div>
@@ -50,13 +51,13 @@ export default function FooterContact() {
       <div className="giant" aria-hidden="true">NAWA CORPS</div>
       {/* BR — le slogan de marque, a UN SEUL endroit du site. Ici et pas dans
           le hero : celui-ci porte deja sa promesse, « Une presence digitale a
-          la hauteur de votre commerce », et deux formules cote a cote se
+          72 heures, il vous ramene des clients », et deux formules cote a cote se
           seraient affaiblies l une l autre. En pied de page il signe, il ne
           plaide pas. */}
       <p className="br-slogan">L&apos;essentiel. Bien conçu.</p>
       <div className="legal">
         <span>Studio digital — Genève</span>
-        <span>Cartes · Sites · Google</span>
+        <span>Sites · Devis · Rendez-vous</span>
         <a className="lnk" href="/mentions-legales">Mentions légales</a>
         <a className="lnk" href="/confidentialite">Confidentialité</a>
       </div>

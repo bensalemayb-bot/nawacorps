@@ -1,3 +1,4 @@
+import { whatsapp } from "@/lib/site";
 import {
   CHF_UNIT,
   FROM_PREFIX,
@@ -24,7 +25,6 @@ import { prisma } from "@/lib/prisma";
 
 type Editorial = {
   recommended?: boolean;
-  was: string;
   bullets: string[];
   ctaLabel: string;
   ctaHref: string;
@@ -32,47 +32,54 @@ type Editorial = {
   ctaArrow?: boolean;
 };
 
-// Habillage editorial, verbatim de la maquette, indexe par slug.
+/**
+ * Habillage editorial des trois formules, indexe par SLUG.
+ *
+ * Les cles doivent suivre prisma/seed.ts : la-vitrine, le-site, l-assistant.
+ * Un slug qui ne correspond a rien fait simplement disparaitre les puces et le
+ * bouton de la carte concernee — pas d'erreur, mais une carte muette.
+ *
+ * LES PRIX BARRES ONT DISPARU. Les trois portaient exactement -31 %, ce qui
+ * revenait a annoncer que le prix de reference n'avait jamais existe. Le champ
+ * `was` est retire du type : il ne peut plus revenir par inadvertance.
+ */
 const EDITORIAL: Record<string, Editorial> = {
-  "la-carte": {
-    was: "650.–",
+  "la-vitrine": {
     bullets: [
-      "Mise en page complète du menu",
-      "QR code vers la carte en ligne",
-      "Fichiers d'impression fournis",
-      "Changements de prix inclus 3 mois",
+      "Une page, lisible sur téléphone",
+      "Formulaire de demande qui fonctionne",
+      "Appel, itinéraire et horaires en un geste",
+      "Domaine et hébergement la 1ʳᵉ année",
     ],
-    ctaLabel: "Refaire ma carte",
+    ctaLabel: "Refaire mon site",
     ctaHref:
-      "https://wa.me/41760000000?text=Bonjour%2C%20je%20souhaite%20refaire%20la%20carte%20de%20mon%20commerce.",
+      whatsapp("Bonjour, je souhaite faire refaire le site de mon entreprise."),
     ctaOutline: true,
   },
   "le-site": {
     recommended: true,
-    was: "2'800.–",
     bullets: [
-      "One-page : carte, horaires, contact",
-      "Domaine + hébergement 1ʳᵉ année",
-      "Appel et itinéraire en un geste",
-      "Mise en ligne complète",
+      "Tout La Vitrine, plus :",
+      "Prise de rendez-vous en ligne",
+      "Devis chiffré automatiquement",
+      "Fiche Google et photos comprises",
     ],
-    ctaLabel: "Avoir mon site",
+    ctaLabel: "Lancer mon site",
     ctaHref:
-      "https://wa.me/41760000000?text=Bonjour%2C%20je%20souhaite%20un%20site%20pour%20mon%20commerce.",
+      whatsapp("Bonjour, je veux un site qui reçoive les demandes de devis."),
     ctaOutline: false,
     ctaArrow: true,
   },
-  "pack-complet": {
-    was: "4'200.–",
+  "l-assistant": {
     bullets: [
-      "La Carte + Le Site",
-      "Fiche Google optimisée",
-      "Photos de votre commerce",
-      "Un seul interlocuteur, du début à la fin",
+      "Tout Le Site, plus :",
+      "L'assistant de ce site, sur le vôtre",
+      "Alerte sur votre téléphone à chaque demande",
+      "Relance automatique et tableau de bord",
     ],
-    ctaLabel: "Tout remettre à niveau",
+    ctaLabel: "Automatiser mes demandes",
     ctaHref:
-      "https://wa.me/41760000000?text=Bonjour%2C%20le%20pack%20complet%20m%27int%C3%A9resse.",
+      whatsapp("Bonjour, l'Assistant m'intéresse pour mon site."),
     ctaOutline: true,
   },
 };
@@ -81,7 +88,7 @@ const EDITORIAL: Record<string, Editorial> = {
 // est adapte a cette ligne. La maquette contient un seul CTA de devis, ecrit
 // pour le menu du studio (« pour un support »), que CarteDuStudio conserve.
 const DEVIS_HREF =
-  "https://wa.me/41760000000?text=Bonjour%2C%20j%27aimerais%20un%20devis%20pour%20un%20site%20sur%20mesure.";
+  whatsapp("Bonjour, j'aimerais un devis pour un site sur mesure.");
 const DEVIS_LABEL = "Demander un devis →";
 
 export default async function Offres() {
@@ -128,7 +135,6 @@ export default async function Offres() {
                     </>
                   )}
                 </p>
-                {ed ? <p className="was"><s>{ed.was}</s> · tarif de lancement</p> : null}
                 {ed ? (
                   <ul>
                     {ed.bullets.map((b) => <li key={b}>{b}</li>)}
@@ -158,8 +164,8 @@ export default async function Offres() {
         ))}
 
         <div className="p-note" data-reveal>
-          <span>Tous les prix s&apos;entendent tout compris, sans frais cachés.</span>
-          <span>Tarifs de lancement — cinq premiers commerces.</span>
+          <span>Prix en francs suisses, TVA comprise, sans frais cachés.</span>
+          <span>Suivi et hébergement dès 49.–/mois, à partir de la 2ᵉ année.</span>
         </div>
       </div>
     </section>

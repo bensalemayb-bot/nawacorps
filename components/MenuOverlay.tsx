@@ -1,3 +1,4 @@
+import { CONTACT, whatsapp } from "@/lib/site";
 // Menu plein ecran — reference/binacore.html lignes 707-720.
 // Ouverture/fermeture pilotees par Interactions.tsx (classe html.menu-open).
 //
@@ -16,9 +17,9 @@ export default function MenuOverlay() {
         <a className="m-lnk" href="/#contact"><span className="mi">(05)</span><span className="mt">Contact</span></a>
       </nav>
       <div className="m-foot">
-        <a href="https://wa.me/41760000000" target="_blank" rel="noopener">WhatsApp</a>
+        <a href={whatsapp()} target="_blank" rel="noopener">WhatsApp</a>
         {/* BR : adresse A CONFIRMER avant la mise en ligne. */}
-        <a href="mailto:hello@nawacorps.ch">hello@nawacorps.ch</a>
+        <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
         <span>Genève, Suisse</span>
       </div>
     </div>

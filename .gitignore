@@ -54,3 +54,6 @@ backups/
 
 # config locale Claude Code (jamais versionnee)
 .claude/settings.local.json
+
+# Espace de travail des plans superpowers (scratch, jamais versionne).
+.superpowers/

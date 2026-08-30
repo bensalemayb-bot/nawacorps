@@ -17,6 +17,8 @@
  * Usage : import FeatureCarousel from "@/components/ui/feature-carousel";
  *         <FeatureCarousel />
  */
+
+import { CONTACT } from "@/lib/site";
 import React, {
   useCallback,
   useEffect,
@@ -187,7 +189,7 @@ function BeforeAfter({
 /* ------------------------------------------------------------------ */
 
 const MenuNew = () => (
-  <div className="m-new">
+  <div className="m-new" aria-hidden="true">
     <span className="ov">Bar — Genève</span>
     <h3>Le Comptoir</h3>
     <p className="st">Maison fondée en 1987 · Rue des Étuves</p>
@@ -205,7 +207,7 @@ const MenuNew = () => (
 );
 
 const SiteNew = () => (
-  <div className="browser">
+  <div className="browser" aria-hidden="true">
     <div className="bar">
       <div className="dots"><i /><i /><i /></div>
       <div className="url">lecomptoir-geneve.ch</div>
@@ -238,8 +240,8 @@ const CardNew = () => (
       <span className="ro">Design &amp; développement</span>
       <div className="hr" />
       <div className="ct">
-        <span><b>TÉL.</b> +41 76 000 00 00</span>
-        <span><b>MAIL</b> hello@nawacorps.ch</span>
+        <span><b>TÉL.</b> {CONTACT.telephoneAffiche}</span>
+        <span><b>MAIL</b> {CONTACT.email}</span>
         <span><b>WEB</b> nawacorps.ch</span>
       </div>
       <span className="ge">Genève, Suisse</span>
@@ -274,7 +276,7 @@ const FidNew = () => (
 /* ------------------------------------------------------------------ */
 
 const MenuOld = () => (
-  <div className="m-old">
+  <div className="m-old" aria-hidden="true">
     <h3>Le Comptoir</h3>
     <p className="st">~ bar depuis 1987 ~</p>
     <hr />
@@ -289,7 +291,7 @@ const MenuOld = () => (
 );
 
 const SiteOld = () => (
-  <div className="osite">
+  <div className="osite" aria-hidden="true">
     <div className="obar">
       <span>Le Comptoir - Microsoft Internet Explorer</span>
       <span>_ □ ✕</span>
@@ -351,35 +353,35 @@ const ITEMS: CarouselItem[] = [
   {
     id: "carte",
     label: "La carte",
-    desc: "Une carte plastifiée des années 2000 devient un objet qu'on a envie de lire — et sa version en ligne.",
+    desc: "Une carte qui a bien servi, remise à plat : hiérarchie claire, prix lisibles, et sa version en ligne par QR code.",
     before: <MenuOld />,
     after: <MenuNew />,
   },
   {
     id: "site",
     label: "Le site",
-    desc: "D'une page « optimisée Internet Explorer » à un one-page rapide, pensé pour le téléphone.",
+    desc: "Un site de 2009 refait en 72 heures : lisible sur téléphone, avec un formulaire de devis qui fonctionne.",
     before: <SiteOld />,
     after: <SiteNew />,
   },
   {
     id: "carte-visite",
     label: "La carte de visite",
-    desc: "Fini la carte Word centrée : 85 × 55 recto-verso, un papier qui donne confiance.",
+    desc: "85 × 55 recto-verso, sur un papier qu'on garde en main. Le même geste, mieux dit.",
     before: <CardOld />,
     after: <CardNew />,
   },
   {
     id: "affiche",
     label: "L'affiche",
-    desc: "La même soirée, sans WordArt : une affiche qu'on remarque et qu'on garde.",
+    desc: "La même annonce, redessinée : une affiche qu'on remarque et qu'on garde.",
     before: <PosterOld />,
     after: <PosterNew />,
   },
   {
     id: "fidelite",
     label: "La fidélité",
-    desc: "La carte à tampons repensée : dix cafés, un vrai design, zéro case au stylo.",
+    desc: "La carte à tampons remise au propre : dix passages, un vrai design.",
     before: <FidOld />,
     after: <FidNew />,
   },

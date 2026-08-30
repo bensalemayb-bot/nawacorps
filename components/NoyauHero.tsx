@@ -1,3 +1,5 @@
+import { WHATSAPP_HREF } from "@/lib/site";
+
 /**
  * LE NOYAU — le texte du hero, en flux normal.
  *
@@ -26,18 +28,23 @@ export default function NoyauHero() {
             <div className="kicker">
               <span className="meta"><span className="index">®</span>&nbsp; Studio digital indépendant</span>
               <span className="meta">Genève, Suisse</span>
-              <span className="meta">Depuis 2026</span>
+              <span className="meta">Sites de PME</span>
             </div>
             <h1>
-              <span className="l"><span>Une présence digitale</span></span>
-              <span className="l"><span><span className="serif-i">à la hauteur</span> de</span></span>
-              <span className="l"><span>votre commerce.</span></span>
+              {/* Chaque .l doit tenir sur UNE ligne : binacore.css les revele
+                  ligne par ligne, et un debordement casse l'animation autant
+                  que la mise en page (le hero-foot passe sous la ligne de
+                  flottaison). La maquette tient 21 caracteres au plus large —
+                  s'y tenir en reecrivant. */}
+              <span className="l"><span>Votre site a dix ans.</span></span>
+              <span className="l"><span>En <span className="serif-i">72 heures</span>, il</span></span>
+              <span className="l"><span>travaille pour vous.</span></span>
             </h1>
             <div className="hero-foot">
-              <p className="hero-sub">Cartes, sites, affiches et présence en ligne pour les bars, cafés et commerces genevois — conçus avec soin, livrés en deux semaines.</p>
+              <p className="hero-sub">Sites de PME à Genève : demande de devis, prise de rendez-vous, fiche Google. Refait en 72 heures si vous avez déjà un site, une semaine si on part de zéro. Dès 699.–, TVA comprise.</p>
               <div className="hero-cta">
-                <a className="btn" href="https://wa.me/41760000000?text=Bonjour%2C%20parlons%20de%20mon%20commerce." target="_blank" rel="noopener">Démarrer un projet <span className="ar">→</span></a>
-                <a className="btn btn-line" href="#travaux">Voir le travail</a>
+                <a className="btn" href={WHATSAPP_HREF} target="_blank" rel="noopener">Faire refaire mon site <span className="ar">→</span></a>
+                <a className="btn btn-line" href="#travaux">Voir les avant / après</a>
               </div>
               <span className="hero-scroll"><i></i> Défiler</span>
             </div>
@@ -50,7 +57,7 @@ export default function NoyauHero() {
           <div className="wrap">
             <span className="meta"><span className="index">(001)</span>&nbsp; Le noyau</span>
             <div className="noyau-say">
-              <p>Cartes, sites, affiches, présence en ligne — <span className="serif-i">un seul centre</span>, plusieurs orbites.</p>
+              <p>Il reçoit les demandes, chiffre les devis, prend les rendez-vous — <span className="serif-i">sans que vous y touchiez</span>.</p>
             </div>
           </div>
         </div>
@@ -63,14 +70,14 @@ export default function NoyauHero() {
             <span className="meta"><span className="index">(002)</span>&nbsp; Le coeur</span>
             <div className="noyau-spec">
               <p className="noyau-fig">
-                <span className="noyau-num">14</span>
-                <span className="noyau-unit">jours</span>
+                <span className="noyau-num">72</span>
+                <span className="noyau-unit">heures</span>
               </p>
               <ul className="noyau-specs">
                 <li><span className="k">Atelier</span><span className="v">Genève, Suisse</span></li>
-                <li><span className="k">Livraison</span><span className="v">Deux semaines</span></li>
-                <li><span className="k">Nature</span><span className="v">Studio indépendant</span></li>
-                <li><span className="k">Depuis</span><span className="v">2026</span></li>
+                <li><span className="k">Refonte</span><span className="v">72 heures</span></li>
+                <li><span className="k">Départ de zéro</span><span className="v">Une semaine</span></li>
+                <li><span className="k">Suivi</span><span className="v">Dès 49.–/mois</span></li>
               </ul>
             </div>
           </div>
@@ -80,8 +87,8 @@ export default function NoyauHero() {
         <div className="noyau-beat noyau-beat-4" data-temps="">
           <div className="wrap">
             <div className="noyau-out">
-              <p>Chaque commerce a son centre. Le travail consiste à le trouver, puis à faire tourner le reste autour.</p>
-              <a className="btn" href="#travaux">Voir le travail <span className="ar">→</span></a>
+              <p>Un site ne se regarde pas. Il travaille, ou il ne sert à rien.</p>
+              <a className="btn" href="#travaux">Voir les avant / après <span className="ar">→</span></a>
             </div>
           </div>
         </div>

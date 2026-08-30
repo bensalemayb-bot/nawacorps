@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { CONTACT, openGraphPage } from "@/lib/site";
 
 /**
  * Mentions legales.
@@ -12,8 +13,7 @@ import type { Metadata } from "next";
  *
  * Deux garde-fous :
  *  - AUCUN [data-reveal] ecrit a la main. Interactions.tsx en pose un sur
- *    `h2.t` (ligne 99) avant d installer l observateur (ligne 116) : le titre
- *    se revele. Le reste ne depend jamais de JS — si le script echoue, la page
+ *    `h1.t` avant d installer l observateur : le titre se revele. Le reste ne depend jamais de JS — si le script echoue, la page
  *    reste lisible au lieu de rester a opacity:0.
  *  - AUCUN <h3> nu : sans regle CSS propre il prendrait le defaut navigateur
  *    en dev (ou Tailwind n emet rien) et `font-size:inherit` du preflight en
@@ -22,8 +22,26 @@ import type { Metadata } from "next";
  * Les [PLACEHOLDERS] sont volontairement visibles : ils marquent ce qui reste
  * a confirmer et ne doivent jamais etre remplis par invention.
  */
+/**
+ * Le suffixe « — Nawa Corps » a disparu du titre : il est desormais ajoute par
+ * le `template` du layout (site). L ecrire ici le doublerait.
+ *
+ * `description` et `canonical` sont propres a la page. Sans elles, la page
+ * heritait de celles de l accueil — trois URL pour une seule description, et
+ * une canonique pointant vers « / », ce qui revenait a demander aux moteurs
+ * d ignorer cette page.
+ */
 export const metadata: Metadata = {
-  title: "Mentions légales — Nawa Corps",
+  title: "Mentions légales",
+  description:
+    "Mentions légales de Nawa Corps, studio digital indépendant à Genève : éditeur, hébergement, propriété intellectuelle et droit applicable.",
+  alternates: { canonical: "/mentions-legales" },
+  openGraph: openGraphPage({
+    titre: "Mentions légales — Nawa Corps",
+    description:
+      "Mentions légales de Nawa Corps, studio digital indépendant à Genève : éditeur, hébergement, propriété intellectuelle et droit applicable.",
+    chemin: "/mentions-legales",
+  }),
 };
 
 export default function MentionsLegales() {
@@ -34,10 +52,10 @@ export default function MentionsLegales() {
         <div className="sec-head">
           <span className="meta">Nawa Corps</span>
         </div>
-        <h2 className="t">Mentions légales</h2>
+        <h1 className="t">Mentions légales</h1>
         <div className="studio-txt" style={{ marginTop: 40 }}>
           <p className="meta">Éditeur</p>
-          <p>Nawa Corps, studio digital, Genève, Suisse, exploité par [PRÉNOM NOM — À COMPLÉTER]. Contact : hello@nawacorps.ch [à confirmer].</p>
+          <p>Nawa Corps, studio digital, Genève, Suisse, exploité par [PRÉNOM NOM — À COMPLÉTER]. Contact : {CONTACT.email} [à confirmer].</p>
           <p className="meta">Hébergement</p>
           <p>[Infomaniak, Suisse — à confirmer en B12]</p>
           <p className="meta">Propriété intellectuelle</p>

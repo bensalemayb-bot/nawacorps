@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { CONTACT, openGraphPage } from "@/lib/site";
 
 /**
  * Confidentialite (nLPD).
@@ -12,8 +13,21 @@ import type { Metadata } from "next";
  * n existent pas encore (blocs B8-B9). La note de fin de page le dit, plutot
  * que de laisser croire a une collecte deja en place.
  */
+/**
+ * Meme traitement que /mentions-legales : suffixe de marque delegue au
+ * `template` du layout (site), description et canonique propres a la page.
+ */
 export const metadata: Metadata = {
-  title: "Confidentialité — Nawa Corps",
+  title: "Confidentialité",
+  description:
+    "Politique de confidentialité de Nawa Corps (nLPD) : données collectées, finalité, durée de conservation, hébergement en Suisse et vos droits.",
+  alternates: { canonical: "/confidentialite" },
+  openGraph: openGraphPage({
+    titre: "Confidentialité — Nawa Corps",
+    description:
+      "Politique de confidentialité de Nawa Corps (nLPD) : données collectées, finalité, durée de conservation, hébergement en Suisse et vos droits.",
+    chemin: "/confidentialite",
+  }),
 };
 
 export default function Confidentialite() {
@@ -24,7 +38,7 @@ export default function Confidentialite() {
         <div className="sec-head">
           <span className="meta">Nawa Corps · nLPD</span>
         </div>
-        <h2 className="t">Confidentialité</h2>
+        <h1 className="t">Confidentialité</h1>
         <div className="studio-txt" style={{ marginTop: 40 }}>
           <p className="meta">Données collectées</p>
           <p>Formulaire de contact (nom, téléphone, message) et assistant de conversation (contenu des échanges, prénom, numéro).</p>
@@ -37,7 +51,7 @@ export default function Confidentialite() {
           <p>Pas de cookies publicitaires ni de traceurs tiers.</p>
           <p className="meta">Vos droits</p>
           {/* BR : adresse A CONFIRMER avant la mise en ligne. */}
-          <p>Accès, rectification, suppression sur simple demande à hello@nawacorps.ch.</p>
+          <p>Accès, rectification, suppression sur simple demande à {CONTACT.email}.</p>
           <p className="meta" style={{ marginTop: 40 }}>Formulaire et assistant arrivent prochainement</p>
           <p style={{ marginTop: 40 }}><a className="lnk" href="/">← Retour au site</a></p>
         </div>
