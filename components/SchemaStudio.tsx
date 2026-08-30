@@ -10,20 +10,26 @@ import {
 } from "@/lib/site";
 
 /**
- * DONNEE STRUCTUREE DU STUDIO — ProfessionalService.
+ * DONNEE STRUCTUREE DE L AGENCE — ProfessionalService.
  *
  * C est la fiche d identite que lisent Google et les moteurs de reponse. Elle
  * ne dessine rien : le composant n emet qu une balise <script>.
  *
  * TOUT CE QUI EST ICI EST DEJA ECRIT QUELQUE PART SUR LA PAGE. Les horaires
  * viennent du pied de page (« Lu–Sa · 9h–19h »), les langues de la section
- * « Le studio », les six prestations de ServicesRows, et les delais du hero
+ * « L agence », les six prestations de ServicesRows, et les delais du hero
  * (une semaine). `foundingDate` est la seule donnee sans reflet a
  * l ecran depuis le retrait de « Depuis 2026 » (.facts de Studio.tsx ne montre
  * plus que Geneve / une semaine / FR-EN) — c est un fait d etat civil, pas un
  * argument marketing, donc une exception assumee a la regle ci-dessus. Une
  * donnee structuree qui promet ce que la page ne montre pas est une donnee
  * structuree que Google finit par ignorer, au mieux.
+ *
+ * LA FICHE COUVRE TOUT LE CATALOGUE, PAS LES SEULS SITES. Elle ne listait que
+ * des fonctions de site ; l agence vend aussi de l identite, des imprimes, des
+ * photos, la production des reseaux sociaux et une ligne restauration. Une
+ * fiche qui tait la moitie du catalogue prive l agence des requetes qui vont
+ * avec, et contredit ce que la page montre desormais.
  *
  * CE QUI N Y EST PAS, ET POURQUOI. Ni telephone, ni e-mail, ni adresse tant
  * que NAP_CONFIRME vaut false (voir lib/site.ts). Le numero affiche en pied de
@@ -39,11 +45,11 @@ import {
 /** Les six prestations, dans l ordre de ServicesRows. */
 const PRESTATIONS = [
   "Refonte de site",
-  "Demande de devis en ligne",
-  "Prise de rendez-vous en ligne",
+  "Demande de devis et prise de rendez-vous en ligne",
   "Assistant et relances automatiques",
-  "Fiche Google et avis",
-  "Identité et photographie",
+  "Identité, imprimés et photographie",
+  "Fiche Google et réseaux sociaux",
+  "Supports pour la restauration",
 ];
 
 export default function SchemaStudio() {
@@ -54,12 +60,12 @@ export default function SchemaStudio() {
     name: SITE_NAME,
     url: SITE_URL,
     description:
-      "Agence digitale indépendante à Genève. Refonte du site des PME genevoises en une semaine, sans que le client ait de contenu à fournir : demande de devis, prise de rendez-vous, fiche Google, assistant et relances.",
+      "Agence digitale indépendante à Genève. Refonte du site des PME genevoises en une semaine, sans que le client ait de contenu à fournir — puis tout ce qui va autour : identité, imprimés, photos, fiche Google, réseaux sociaux et supports pour la restauration.",
     slogan: "L'essentiel. Bien conçu.",
     image: `${SITE_URL}/brand/nawa-corps-logo-principal-transparent.png`,
     logo: `${SITE_URL}/brand/nawa-corps-logo-principal-transparent.png`,
     foundingDate: FONDE_EN,
-    founder: { "@type": "Person", name: "Ayoub" },
+    founder: { "@type": "Person", name: "Ayoub Bensalem" },
     knowsLanguage: [...LANGUES],
     currenciesAccepted: "CHF",
     areaServed: {
@@ -82,7 +88,7 @@ export default function SchemaStudio() {
     ],
     hasOfferCatalog: {
       "@type": "OfferCatalog",
-      name: "Prestations du studio",
+      name: "Prestations de l'agence",
       itemListElement: PRESTATIONS.map((nom) => ({
         "@type": "Offer",
         itemOffered: {

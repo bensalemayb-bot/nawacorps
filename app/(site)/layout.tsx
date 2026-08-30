@@ -41,9 +41,18 @@ import { SITE_NAME, SITE_URL } from "@/lib/site";
  *
  * L ORDRE DES MOTS DU TITRE A CHANGE, et c est deliberé. « Nawa Corps —
  * Agence digitale, Genève » mettait la marque en premier : personne ne cherche
- * encore « Nawa Corps ». Ce qui se cherche, c est un studio a Geneve. La
+ * encore « Nawa Corps ». Ce qui se cherche, c est une agence a Geneve. La
  * marque passe donc en fin de titre, la ou elle signe sans occuper la place
  * que les moteurs lisent en premier.
+ *
+ * LE TITRE RESTE CENTRE SUR LA REFONTE, LA DESCRIPTION NON. « Refonte de site
+ * pour PME a Geneve » est la requete qui se cherche : c est le produit d
+ * entree, il garde le titre. La description, elle, ne peut plus s y limiter —
+ * l agence vend aussi de l identite, des imprimes, des photos, la fiche Google
+ * et la production des reseaux sociaux, et un extrait de resultat qui n en dit
+ * rien fait perdre les visiteurs venus pour ca. Les montants ont quitte ces
+ * chaines au passage : les prix vivent en base (lib/catalogue.ts), et une
+ * metadonnee statique ne sait pas les relire.
  *
  * `canonical` est declaree ICI, au layout, et vaut donc « / » pour l accueil.
  * Chaque page fille redeclare la sienne — une canonique heritee ferait pointer
@@ -56,7 +65,7 @@ export const metadata: Metadata = {
     template: `%s — ${SITE_NAME}`,
   },
   description:
-    "Nawa Corps refait le site des PME genevoises en une semaine : demande de devis, prise de rendez-vous, fiche Google. Vous n'avez rien à préparer. Dès 699.–, TVA comprise.",
+    "Nawa Corps refait le site des PME genevoises en une semaine : vous n'avez rien à préparer. Autour du site : identité, imprimés, photos, fiche Google, réseaux sociaux.",
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
@@ -65,13 +74,13 @@ export const metadata: Metadata = {
     url: "/",
     title: "Refonte de site pour PME à Genève — en une semaine",
     description:
-      "Refait en une semaine, et vous n'avez rien à préparer : je reprends les textes de votre site actuel. Demandes, devis et rendez-vous compris. Dès 699.–, TVA comprise.",
+      "Refait en une semaine, et vous n'avez rien à préparer : je reprends les textes de votre site actuel. Et le site n'est pas tout — identité, imprimés, photos, fiche Google et réseaux sociaux se prennent ici aussi.",
   },
   twitter: {
     card: "summary_large_image",
     title: "Refonte de site pour PME à Genève — en une semaine",
     description:
-      "Refait en une semaine, et vous n'avez rien à préparer : je reprends les textes de votre site actuel. Demandes, devis et rendez-vous compris. Dès 699.–, TVA comprise.",
+      "Refait en une semaine, et vous n'avez rien à préparer : je reprends les textes de votre site actuel. Et le site n'est pas tout — identité, imprimés, photos, fiche Google et réseaux sociaux se prennent ici aussi.",
   },
 };
 
