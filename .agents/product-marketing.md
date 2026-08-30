@@ -75,7 +75,7 @@ conseiller en assurance.
 L'ancien positionnement visait les bars, cafés et commerces genevois. Il est
 abandonné comme **cœur de cible**. La restauration reste une ligne secondaire
 (voir §5), parce qu'il existe un client payant et que la prestation est bonne
-— mais elle ne définit plus le studio.
+— mais elle ne définit plus l'agence.
 
 ---
 
@@ -107,25 +107,25 @@ voisins nommés sans que leur délai ait été vérifié.
 **Le vrai différenciateur, sourcé, ne parle pas de vitesse.** Les deux seuls
 concurrents rapides relevés **conditionnent leur délai à la fourniture du
 contenu par le client** (« après validation du contenu » chez l'un, « une fois
-le contenu fourni » chez l'autre). Le studio, lui, démarre au feu vert : il
+le contenu fourni » chez l'autre). L'agence, lui, démarre au feu vert : il
 reprend les textes de l'ancien site et rédige la maquette lui-même (§5, « Les
 conditions »).
 
 > Chez les autres, le compteur part quand vous avez fourni vos textes.
 > Ici, quand vous dites oui.
 
-C'est un fait sur le studio, vérifiable, qui n'oblige à prouver aucun négatif
+C'est un fait sur l'agence, vérifiable, qui n'oblige à prouver aucun négatif
 et ne dépend d'aucun chronomètre.
 
 **2. Le site fait entrer des demandes.**
 Devis, rendez-vous, contact, appel, itinéraire. Le site n'est pas une plaquette
-en ligne, c'est un canal d'entrée. C'est ce qui sort le studio de la
+en ligne, c'est un canal d'entrée. C'est ce qui sort l'agence de la
 comparaison avec la vitrine à 300.–, parce que ce n'est pas le même objet.
 
 **3. Un interlocuteur, à Genève, qui reste.**
 Le prospect a déjà été abandonné une fois : son site actuel en est la preuve.
 Quelqu'un l'a construit, encaissé, puis a disparu. La continuité est l'argument
-de vente le plus fort du studio, et le problème du client en est la
+de vente le plus fort de l'agence, et le problème du client en est la
 démonstration.
 
 ### La promesse
@@ -212,7 +212,7 @@ ce n'est plus de *recevoir* une demande, c'est de la **traiter sans y penser**
 > **Le palier 3 existe déjà.** Assistant conversationnel, notification Telegram,
 > tableau de bord des leads : tout tourne sur le site de Nawa Corps
 > (`ChatWidget`, `lib/chat-prompt.ts`, `lib/llm.ts`, `lib/telegram.ts`,
-> `/admin`). Le site du studio est la démonstration du produit — à ouvrir en
+> `/admin`). Le site de l'agence est la démonstration du produit — à ouvrir en
 > rendez-vous plutôt qu'à décrire.
 
 **Contrainte à ne pas oublier :** un assistant IA consomme des appels API en
@@ -237,7 +237,7 @@ compris. Le rendez-vous de renouvellement se joue donc après douze mois de
 service rendu, pas au moment de l'achat : c'est une reconduction, pas une
 objection de vente.
 
-**Pourquoi 49.– et pas 89.– :** le studio n'a aucun abonné aujourd'hui. À ce
+**Pourquoi 49.– et pas 89.– :** l'agence n'a aucun abonné aujourd'hui. À ce
 stade le taux de souscription vaut plus que le prix unitaire — 49.– se dit sans
 réfléchir, 89.– se discute. Le vrai revenu récurrent se construit sur
 L'Assistant à 129.–, où le montant est justifié par un coût réel et visible.
@@ -255,11 +255,12 @@ jamais après.
 |---|---|
 | **Révisions** | 2 allers-retours compris, facturés au-delà |
 | **Textes** | Compris dans le prix. Site existant : les textes sont repris, le client signale ses modifications. Départ de zéro : maquette proposée, le client ajuste |
+| **Réponse à une demande** | **Le jour ouvrable suivant.** Seul engagement de réactivité conservé après les 28 retraits faute de preuve : il est tenable un dimanche, contrairement à « sous 24 h » qui figurait sur trois pages sans avoir jamais été décidé. |
 | **Paiement** | À la livraison |
 | **Livraison** | Le site fini est présenté et validé, le paiement intervient, **puis** la mise en ligne |
 
 La séquence de livraison n'est pas un détail : sans acompte, présenter le site
-avant de pointer le domaine est la seule protection du studio contre un
+avant de pointer le domaine est la seule protection de l'agence contre un
 impayé — et elle ne demande aucune avance au client.
 
 ### En complément
@@ -319,7 +320,7 @@ Les deux réponses possibles, dans l'ordre :
 1. **Un cas réel, vite.** Un site de PME genevoise à prix réduit ou offert,
    contre l'autorisation de le montrer, des captures avant / après et deux
    phrases du gérant. Un seul suffit à débloquer le discours.
-2. **Une démonstration assumée.** Un avant / après construit par le studio,
+2. **Une démonstration assumée.** Un avant / après construit par l'agence,
    étiqueté « démonstration » sans ambiguïté. Honnête, et bien plus fort qu'une
    référence inventée.
 
@@ -340,8 +341,8 @@ portfolio et les exemples.
 **Deux rôles distincts :**
 
 1. **Production réseaux sociaux.** Vendu **sur devis**, cas par cas. Le
-   partenaire pose son prix, le studio ajoute le sien, l'écart est la marge.
-   Le studio reste l'interlocuteur du client.
+   partenaire pose son prix, l'agence ajoute le sien, l'écart est la marge.
+   L'agence reste l'interlocuteur du client.
 2. **Apporteur d'affaires.** Il amène des prospects, y compris pour les sites,
    contre **2 %**.
 
@@ -392,7 +393,7 @@ actuel du site, ce qui est rare.
 
 ---
 
-## 9. Les chiffres du studio
+## 9. Les chiffres de l'agence
 
 | | |
 |---|---|
@@ -403,7 +404,7 @@ actuel du site, ce qui est rare.
 | Zone | Genève et alentours |
 | Langues | FR / EN |
 
-Le studio est en phase d'amorçage : la contrainte n'est pas le prix, c'est
+L'agence est en phase d'amorçage : la contrainte n'est pas le prix, c'est
 **la première référence et le premier canal d'acquisition**.
 
 ---
@@ -413,6 +414,6 @@ Le studio est en phase d'amorçage : la contrainte n'est pas le prix, c'est
 | # | Décision | Bloque |
 |---|---|---|
 | 1 | Nombre de révisions incluses par palier | La rentabilité de La Vitrine à 699.– : sans limite écrite, un client bavard mange toute la marge |
-| 2 | ~~Qui rédige les textes~~ — **tranché** : le studio reprend les textes de l'ancien site, ou propose une maquette que le client ajuste, compris dans le prix (§5) | — |
+| 2 | ~~Qui rédige les textes~~ — **tranché** : l'agence reprend les textes de l'ancien site, ou propose une maquette que le client ajuste, compris dans le prix (§5) | — |
 | 4 | Conditions de paiement (acompte, solde) | La trésorerie, et le risque d'impayé sur un premier client |
 | 5 | La première référence de site PME | Toute la crédibilité du positionnement |

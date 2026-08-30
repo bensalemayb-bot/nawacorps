@@ -1,11 +1,11 @@
 @AGENTS.md
 
-# Nawa Corps — site du studio
+# Nawa Corps — site de l'agence
 
 ## Le projet
 
-Site public et back-office d'un studio digital indépendant à Genève, opéré par une
-personne (Ayoub), avec un partenaire commercial et de production (101 Agency,
+Site public et back-office d'une agence digitale indépendante à Genève, opérée par
+une personne (Ayoub Bensalem), sans bureau, avec un partenaire commercial et de production (101 Agency,
 apport d'affaires 2 % + production réseaux sociaux sur devis).
 
 **Marché** : Genève et sa région (Suisse romande). Marché unique — aucun autre
@@ -16,9 +16,16 @@ dont le site a plus de cinq ans. Métiers qui **devisent** (artisans, bâtiment,
 garage, architecte) ou qui **prennent rendez-vous** (cabinets, santé, beauté),
 ou qui **conseillent** (fiduciaire, avocat, régie, courtier).
 
-**Offre** : refonte du site en **72 heures** (une semaine en départ de zéro),
-en trois formules — La Vitrine 699.–, Le Site 1'499.–, L'Assistant 2'499.– —
-TVA comprise, plus un suivi mensuel et des prestations en complément.
+**Offre** : refonte du site en **une semaine**, en trois formules — La Vitrine
+699.–, Le Site 1'499.–, L'Assistant 2'499.– — TVA comprise, plus un suivi
+mensuel et des prestations en complément.
+
+**Le délai s'écrit « une semaine », jamais en heures.** « 72 h » et « 48 h » ont
+circulé dans le projet ; aucun n'est tenu, et ils sont désormais proscrits
+partout. Le différenciateur n'est d'ailleurs pas la vitesse : **le client n'a
+rien à préparer**, le délai court dès son feu vert, parce que les textes sont
+repris de son site actuel. Les concurrents rapides relevés par la veille, eux,
+attendent que le client fournisse son contenu.
 
 **Langues** : français uniquement à ce jour. **Aucune infrastructure i18n n'est
 en place** : toutes les chaînes sont écrites en dur dans le JSX. Une version
@@ -28,7 +35,7 @@ anglaise est prévue — c'est un chantier d'architecture, pas une traduction.
 
 **`.agents/product-marketing.md`** est l'entrée n°1 de tout travail marketing :
 promesse, ICP, positionnement, concurrence, offres et prix, preuves,
-partenariat, voix, chiffres du studio, décisions ouvertes.
+partenariat, voix, chiffres de l'agence, décisions ouvertes.
 
 Les agents s'y **adaptent** ; ils ne l'inventent pas. Une promesse, un prix, un
 délai ou une référence absents de ce fichier ne doivent apparaître nulle part.
