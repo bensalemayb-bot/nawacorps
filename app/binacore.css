@@ -284,6 +284,20 @@ h1.t,h2.t{
 .bsite .bhero p{font-size:.68rem;color:var(--muted-g);max-width:34ch}
 .bsite .bhero .bb{display:inline-block;margin-top:14px;font-size:.58rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;background:var(--bone);color:var(--pine);border-radius:999px;padding:.7em 1.4em}
 .bsite .brow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--line)}
+/* TROIS COLONNES QUI NE TIENNENT PLUS DANS LA CARTE DU CARROUSEL.
+   `1fr` vaut `minmax(auto,1fr)` : le minimum d'une piste est le min-content de
+   sa cellule, jamais moins. Ici ce min-content, c'est le libelle en capitales
+   espacees — « HORAIRES » mesure 57px a lui seul — plus les 28px de padding
+   lateral, soit ~85px par colonne, 246px pour les trois. Sur telephone la
+   maquette de navigateur ne fait que ~180px de large : la grille deborde de sa
+   propre carte et .browser{overflow:hidden} tranche la troisieme colonne.
+   Releve au navigateur sur la carte « Le site » : pistes 84,5 / 78,5 / 81,3px
+   pour une boite de 128px ; la cellule « Contact » s'etendait jusqu'a x=400
+   alors que la maquette s'arrete a x=345 — 55 de ses 69px invisibles.
+   Le seuil de casse tombe vers 495px de viewport ; 560px est le palier deja
+   utilise par .steps et .sm-it, avec la marge qu'il faut. Au-dela, les trois
+   colonnes tiennent et ne sont pas touchees. */
+@media(max-width:560px){.bsite .brow{grid-template-columns:1fr}}
 .bsite .brow div{background:var(--bone-2);padding:16px 14px}
 .bsite .brow b{display:block;font-size:.56rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);margin-bottom:4px}
 .bsite .brow span{font-size:.66rem;color:var(--muted);line-height:1.4;display:block}
