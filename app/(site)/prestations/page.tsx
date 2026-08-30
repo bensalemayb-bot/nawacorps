@@ -22,16 +22,16 @@ import { openGraphPage, whatsapp } from "@/lib/site";
  *
  * Pourquoi cette page existe. L offre etait eclatee en deux endroits qui ne se
  * parlaient pas : la grille d accueil montrait les trois formules de site, la
- * « carte du studio » montrait les supports. Le visiteur qui voulait savoir ce
- * que le studio vend devait donc reconstituer le catalogue de tete. Ici il le
- * voit d un coup, groupe, avec les prix.
+ * « carte de l agence » montrait les supports. Le visiteur qui voulait savoir
+ * ce que l agence vend devait donc reconstituer le catalogue de tete. Ici il
+ * le voit d un coup, groupe, avec les prix.
  *
  * TOUT VIENT DE POSTGRES. Aucun montant n est ecrit dans ce fichier : noms,
  * descriptions et prix sortent de la table Service (visible: true), comme dans
  * components/CarteDuStudio.tsx. Corriger un prix en base le corrige ici aussi.
  *
  * DEUX RENDUS, ET C EST VOULU. « Les formules » passe en CARTES sur fond pin,
- * comme la grille d accueil : ce sont les trois decisions d achat du studio,
+ * comme la grille d accueil : ce sont les trois decisions d achat de l agence,
  * elles meritent la place et elles ouvrent chacune une page dediee. Les trois
  * autres groupes passent en LIGNES : ce sont des complements, on les parcourt,
  * on ne les compare pas.
@@ -81,8 +81,14 @@ export const metadata: Metadata = {
  * La mention est obligatoire sous CHAQUE bloc de prix, pas une fois en bas de
  * page : en Suisse un prix annonce a un consommateur s entend TVA comprise, et
  * un visiteur qui arrive par une ancre de groupe ne voit que ce groupe.
+ *
+ * « sans frais cachés » en a ete retire. La formule promet l absence de ce
+ * qu on n attendait pas : elle installe le soupcon qu elle pretend lever, et
+ * elle est saturee chez trois concurrents sur six. Ce qui borne reellement une
+ * prestation — deux allers-retours, le suivi obligatoire de L Assistant — se
+ * dit la ou il s applique, pas dans une mention legale generique.
  */
-const MENTION_TVA = "Prix en francs suisses, TVA comprise, sans frais cachés.";
+const MENTION_TVA = "Prix en francs suisses, TVA comprise.";
 
 const DEVIS_LABEL = "Demander un devis →";
 
@@ -164,7 +170,7 @@ type ServiceRow = ServiceCatalogue;
 // ajoutee en base demain ne doit pas surgir d office dans cette page.
 const CATEGORIES = ["principal", "continu", "annee", "saison"];
 
-/** Le prix d une LIGNE, au format de la carte du studio. */
+/** Le prix d une LIGNE, au format de la carte de l agence. */
 function Prix({ service }: { service: ServiceRow }) {
   if (isQuote(service) || service.priceCents === null) {
     return <span className="px">{QUOTE_LABEL}</span>;
@@ -213,10 +219,15 @@ export default async function Prestations() {
             temps, ce qui les complète, et la ligne restauration que l&apos;agence a
             gardée.
           </p>
+          {/* La comparaison « chez les autres » a ete retiree : le
+              positionnement §8 interdit de comparer, nomme ou non. Ce qui la
+              remplace nomme l attente par defaut du lecteur — une croyance,
+              pas la pratique d un concurrent. */}
           <p className="lede" data-reveal style={{ marginTop: "1.2em" }}>
             Le délai est d&apos;<strong>une semaine</strong>, et il court dès
-            votre feu vert. Chez les autres, le compteur part quand vous avez
-            fourni vos textes ; ici, quand vous dites oui.
+            votre feu vert — pas dès que vous m&apos;aurez envoyé vos textes.
+            Vous n&apos;avez rien à préparer : je reprends ce qui est déjà en
+            ligne.
           </p>
         </div>
       </section>

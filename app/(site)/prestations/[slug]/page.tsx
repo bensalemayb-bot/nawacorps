@@ -143,7 +143,7 @@ export default async function FormulePage({
     serviceType: "Création et refonte de site web",
     url: `${SITE_URL}/prestations/${slug}`,
     // L @id pose par components/SchemaStudio.tsx sur l accueil. On ne
-    // redeclare pas le studio ici : deux fiches du meme prestataire qui
+    // redeclare pas l agence ici : deux fiches du meme prestataire qui
     // divergeraient d un mot valent moins qu une seule, referencee.
     provider: { "@id": `${SITE_URL}/#studio` },
     areaServed: {
@@ -199,10 +199,10 @@ export default async function FormulePage({
             {formule.resout}
           </p>
 
-          {/* .facts : le meme bandeau de trois faits que la section « Le
-              studio ». Le point de depart du delai y a sa propre colonne parce
-              que c est LE differenciateur — les concurrents rapides comptent a
-              partir du contenu fourni, pas a partir du oui. */}
+          {/* .facts : le meme bandeau de faits que la section « L agence ».
+              Le point de depart du delai y a sa propre colonne parce que c est
+              LE differenciateur, et parce qu il se dit sans comparer : ce qui
+              est affirme porte sur NOUS, jamais sur ce que ferait un autre. */}
           <div className="facts" data-reveal>
             <div>
               <b>{prixAffiche}</b>
@@ -292,8 +292,11 @@ export default async function FormulePage({
                     <li key={ligne}>{ligne}</li>
                   ))}
                 </ul>
+                {/* Le renvoi pointait vers la seule ancre « En complément »
+                    alors que la liste ci-dessus couvre aussi le continu et la
+                    restauration. Il ouvre donc le catalogue en entier. */}
                 <p style={{ marginTop: 16 }}>
-                  <a className="lnk" href="/prestations#en-complement">
+                  <a className="lnk" href="/prestations">
                     Voir tout le catalogue →
                   </a>
                 </p>

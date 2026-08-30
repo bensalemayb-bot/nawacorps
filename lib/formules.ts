@@ -33,6 +33,20 @@ import { whatsapp } from "@/lib/site";
  * LE DELAI EST « UNE SEMAINE », partout, sans exception, et il court DES LE
  * FEU VERT. Ni 72 h ni 48 h : ces chiffres ont circule, aucun n est tenu, et
  * un delai rate coute plus cher que le delai gagne.
+ *
+ * TROIS AFFIRMATIONS ONT ETE RETIREES DE CE FICHIER, et ne reviennent pas :
+ *  - « chez les autres, le compteur part quand… » : c est une comparaison
+ *    publiee. Le positionnement §8 les interdit, nommees ou non. Le fait se
+ *    dit desormais sur NOUS, en nommant l attente par defaut du lecteur
+ *    (« pas des que vous m aurez envoye vos textes ») — ce qui decrit une
+ *    croyance, pas la pratique de quelqu un d autre.
+ *  - « synchronisée avec votre agenda » : aucune source dans le
+ *    positionnement, et l affirmation avait deja ete retiree ailleurs. Ce qui
+ *    reste est ce que le visiteur voit : il choisit son creneau, il recoit sa
+ *    confirmation.
+ *  - « sur-mesure » : mot vide du guide de voix, sature chez quatre
+ *    concurrents sur six. « à plusieurs pages » dit la meme chose et se
+ *    verifie.
  */
 
 /**
@@ -114,7 +128,7 @@ export const FORMULES: Record<FormuleSlug, Formule> = {
     questions: [
       {
         q: "Une semaine — à partir de quand exactement ?",
-        r: "Dès votre feu vert. C'est la différence : chez les autres, le compteur part quand vous avez fourni vos textes ; ici, quand vous dites oui. Je reprends ce qui est déjà en ligne, je le réécris, et vous me signalez ce qui a changé.",
+        r: "Dès votre feu vert. Pas dès que vous m'aurez envoyé vos textes et vos photos — c'est ce qu'on attend d'habitude, et c'est précisément ce que vous n'avez pas à faire ici. Je reprends ce qui est déjà en ligne, je le réécris, et vous me signalez ce qui a changé.",
       },
       {
         q: "Je n'ai ni textes ni photos à jour. C'est bloquant ?",
@@ -135,7 +149,7 @@ export const FORMULES: Record<FormuleSlug, Formule> = {
     resout:
       "Un site présentable ne suffit pas quand votre métier vit de devis et de rendez-vous : il faut que la demande entre, et qu'elle entre complète. Le Site ajoute la prise de rendez-vous en ligne et le devis chiffré automatiquement, pour que le visiteur aille au bout sans avoir à vous appeler d'abord.",
     apporte: [
-      "Prise de rendez-vous en ligne, synchronisée avec votre agenda",
+      "Prise de rendez-vous en ligne : le visiteur choisit son créneau et reçoit sa confirmation",
       "Devis chiffré automatiquement : le visiteur repart avec une estimation",
       "Fiche Google complétée — photos, horaires, zone d'intervention",
       "Photos de votre entreprise, cadrées pour le site comme pour Google",
@@ -181,10 +195,16 @@ export const FORMULES: Record<FormuleSlug, Formule> = {
     // Sommet de l echelle : il n y a plus de palier au-dessus, mais il reste
     // des prestations hors perimetre. Elles vivent toutes au catalogue, sur
     // devis — d ou le renvoi vers /prestations plutot que vers une formule.
+    //
+    // La liste a ete elargie a ce que l agence vend REELLEMENT hors site :
+    // imprimes, photos, reseaux sociaux et ligne restauration. Elle n en
+    // citait que trois, ce qui laissait croire que le catalogue s arretait la.
     auDela: [
-      "Un site multi-pages ou sur-mesure, au-delà de la page unique",
-      "Une identité complète ou un logotype",
-      "La production de vos réseaux sociaux",
+      "Un site à plusieurs pages, au-delà de la page unique",
+      "Une identité complète, un logotype, vos imprimés",
+      "Les photos de votre entreprise",
+      "La production de vos réseaux sociaux, calendrier compris",
+      "La carte et les supports de salle, pour la restauration",
     ],
     questions: [
       {

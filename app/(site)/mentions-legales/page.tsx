@@ -34,12 +34,12 @@ import { CONTACT, openGraphPage } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Mentions légales",
   description:
-    "Mentions légales de Nawa Corps, studio digital indépendant à Genève : éditeur, hébergement, propriété intellectuelle et droit applicable.",
+    "Mentions légales de Nawa Corps, agence digitale indépendante à Genève : éditeur, hébergement, propriété intellectuelle et droit applicable.",
   alternates: { canonical: "/mentions-legales" },
   openGraph: openGraphPage({
     titre: "Mentions légales — Nawa Corps",
     description:
-      "Mentions légales de Nawa Corps, studio digital indépendant à Genève : éditeur, hébergement, propriété intellectuelle et droit applicable.",
+      "Mentions légales de Nawa Corps, agence digitale indépendante à Genève : éditeur, hébergement, propriété intellectuelle et droit applicable.",
     chemin: "/mentions-legales",
   }),
 };
