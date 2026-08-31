@@ -158,6 +158,13 @@
 /* La bulle de l assistant reste CLAIRE sur le panneau noir — os sur noir, le
    contraste le plus fort de la palette. On ne l inverse pas : c est elle qui
    porte le plus de texte, et c est ce qui la distingue de celle du visiteur. */
+/* Le gras des bulles ne vient PAS d un HTML injecte : ce sont des <strong>
+   rendus en JSX par `enSegments` (ChatWidget.tsx), qui neutralise le markdown
+   du modele. 600 et non 700 : c est le poids d emphase de tout le panneau
+   (.chat-head b, .chat-alert a), et c est une fonte reellement chargee
+   (app/layout.tsx declare 400/500/600/700) — donc aucun faux gras synthetise
+   par le navigateur. */
+.chat-msg strong { font-weight: 600; }
 .chat-msg.bot { align-self: flex-start; background: var(--bone); color: var(--ink); }
 .chat-msg.user { align-self: flex-end; background: var(--chat-bg-2); color: var(--bone); border: 1px solid var(--chat-line); }
 

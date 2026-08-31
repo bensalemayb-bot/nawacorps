@@ -152,8 +152,17 @@ de la deuxième année — la première est comprise dans le prix du site.
 - **On chiffre.** « une semaine », « 699.– TVA comprise », « deux
   allers-retours », « 85 × 55 recto-verso ». Un nombre bat un adjectif à chaque
   fois — sauf le compte d'heures, qui est interdit (§5).
-- **On vouvoie, et on parle à la première personne du singulier.** Le studio est
-  une personne ; « nous » serait un déguisement.
+- **On vouvoie, et on parle à la première personne du PLURIEL.** Décision
+  d'Ayoub, 31 août 2026 : la règle précédente imposait « je » et interdisait
+  « nous » au motif que le studio est une personne. Elle est renversée, et la
+  revendication « une seule personne » disparaît du site public.
+  **Ce que « nous » ne doit JAMAIS devenir.** Le studio travaille avec un
+  partenaire de production : « nous » n'est donc pas un mensonge. Mais il le
+  deviendrait à la première phrase qui annonce un effectif, une équipe, des
+  bureaux ou une ancienneté qui n'existent pas. **Aucun chiffre de personnel,
+  aucune adresse de bureau, aucun « notre équipe de X »** — la LCD art. 3 vise
+  les indications trompeuses, et un pluriel n'autorise rien de plus qu'un
+  singulier. On écrit « nous » ; on ne décrit jamais un « nous » inventé.
 - **On nomme le point de départ et la condition.** « dès votre feu vert »,
   « à partir de la 2ᵉ année », « avec L'Assistant ».
 - **On dit la contrainte quand elle vend.** L'abonnement obligatoire du palier 3,
@@ -383,7 +392,7 @@ toutes les métadonnées.
 
 | # | Terme | Ce qu'il désigne, et ce qu'il remplace |
 |---|---|---|
-| 1 | **le studio** | Nawa Corps comme entité, et **studio de création digitale** comme catégorie. Jamais « le studio », jamais « studio digital », jamais « nous », jamais « agence web ». |
+| 1 | **le studio** | Nawa Corps comme entité, et **studio de création digitale** comme catégorie. Jamais « studio digital », jamais « agence web ». (« nous » était interdit ici jusqu'au 31 août 2026 ; il est désormais la forme normale — voir §4.) |
 | 2 | **refonte** / **remise à niveau** | Refaire un site qui existe. Jamais « transformation », « modernisation ». |
 | 3 | **une semaine** | Le délai, **forme unique**, refonte comme départ de zéro. Jamais « 72 h », « 48 h », « 24 h », « trois jours », « 7 jours », « 5 jours ouvrés ». |
 | 4 | **vous n'avez rien à préparer** | Le bénéfice n°1, énoncé en toutes lettres au moins une fois, tôt. Jamais « clé en main », jamais « on s'occupe de tout ». |

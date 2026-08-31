@@ -31,16 +31,21 @@ import { lien, type Locale } from "@/lib/i18n";
  * des prestations montrent EXACTEMENT les memes lignes : deux rendus separes
  * divergeraient au premier ajout en base.
  *
- * >>> AUJOURD HUI IL N EN SERT PLUS QU UNE, ET C EST A REPARER. <<<
- * app/(site)/services/page.tsx a recopie ce composant sous le nom
+ * IL EN SERT DE NOUVEAU DEUX, ET LA COPIE EST PARTIE.
+ * app/(site)/services/page.tsx avait recopie ce composant sous le nom
  * `CarteCatalogue` — meme balise, memes classes, meme ordre — parce que
  * celui-ci ne prenait pas de `locale` et affichait donc « sur devis » et
- * « TVA comprise » sous les prix d une page anglaise. Le manque est comble
- * ci-dessous : `CarteCatalogue` peut disparaitre et la page repasser sur ce
- * composant en lui passant `versSaPage` et `locale`. Son propre docblock
- * l annonce en toutes lettres. Tant que les deux coexistent, TOUTE correction
- * de l un doit etre reportee sur l autre — et `versSaPage` reste ici, sans
- * appelant, en attendant ce repli.
+ * « TVA comprise » sous les prix d une page anglaise. Le manque comble, la
+ * copie a ete supprimee : le catalogue appelle `<CarteService versSaPage
+ * locale=… />`, et `versSaPage` a donc retrouve son appelant.
+ *
+ * CE QUE LA COPIE AVAIT DEJA FAIT DERIVER, releve au moment du repli : elle
+ * ecrivait « See the details » au pied des cartes anglaises la ou le
+ * dictionnaire dit « See the detail ». Quatorze cartes de /en/services ont
+ * change d un caractere en revenant a la source. C est le seul ecart de HTML
+ * du repli — le francais est identique a l octet — et il illustre exactement
+ * ce qu une seconde copie produit : une divergence que personne ne voit,
+ * parce que personne ne relit deux fichiers cote a cote.
  *
  * NOM, DESCRIPTION ET PRIX VIENNENT DE POSTGRES. Rien n est ecrit ici :
  * `service` sort de la table Service telle quelle, et c est `nomService()` /
@@ -79,8 +84,9 @@ import { lien, type Locale } from "@/lib/i18n";
  * destination n a alors pas a etre nommee — le titre de la carte EST le nom de
  * la page. C est le mode du catalogue /services : il promet qu on y voit tout
  * ce qui est vendu et que chaque ligne s ouvre, et une carte muette y etait une
- * impasse. Ce mode n a plus d appelant depuis la copie signalee plus haut ; il
- * en retrouvera un au repli.
+ * impasse. `hrefService` (lib/catalogue-familles.ts) decide de la destination
+ * exacte : une page de formule pour les trois formules, l ancre du bloc sur la
+ * page de la famille pour tout le reste.
  *
  * Sans l un ni l autre, la carte reste du contenu : mieux vaut une carte sans
  * porte de sortie qu une porte sur le vide.

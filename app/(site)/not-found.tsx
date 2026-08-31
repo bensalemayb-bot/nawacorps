@@ -17,7 +17,8 @@
  *
  * ATTENTION A CE QU ELLE NE COUVRE PAS : elle repond aux notFound() leves
  * DANS les segments de (site). Une URL qui ne correspond a aucune route du
- * tout releve de la racine (app/not-found.tsx), qui n existe pas encore — voir
+ * tout releve de la racine — app/not-found.tsx, qui EXISTE desormais et qui
+ * lit la langue du chemin pour repondre en francais ou en anglais. Voir
  * node_modules/next/dist/docs/01-app/03-api-reference/03-file-conventions/
  * not-found.md.
  *

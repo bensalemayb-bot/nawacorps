@@ -8,8 +8,8 @@ import { SITE_NAME, alternatesPage, openGraphPage, whatsapp } from "@/lib/site";
  * /services/<famille>.
  *
  * POURQUOI DES FAMILLES ET PAS UNE PAGE PAR LIGNE. Le meme raisonnement que
- * lib/formules.ts, applique au reste du catalogue : quatorze lignes en base
- * n ont chacune qu un nom, une description d une ligne et un prix. Quatorze
+ * lib/formules.ts, applique au reste du catalogue : treize lignes en base
+ * n ont chacune qu un nom, une description d une ligne et un prix. Treize
  * pages baties la-dessus seraient du contenu mince, et le contenu mince
  * dessert le referencement au lieu de le servir. Regroupees par famille, les
  * memes lignes ont de la matiere : ce qu elles resolvent, ce qu elles
@@ -56,7 +56,7 @@ import { SITE_NAME, alternatesPage, openGraphPage, whatsapp } from "@/lib/site";
  *
  * CE QUI N EST PAS TRADUIT ICI, ET NE DOIT PAS L ETRE : les `slug`, les `href`,
  * les ancres et les `sujet` (`devis-identite`…). Un slug traduit casserait les
- * URL publiques et les dix-sept ancres que le catalogue pointe
+ * URL publiques et les seize ancres que le catalogue pointe
  * (lib/catalogue-familles.ts, `hrefService`). Les NOMS des trois formules ne se
  * traduisent pas non plus — `La Vitrine`, `Le Site`, `L Assistant`, article
  * compris —, raison pour laquelle les pages ci-dessous les designent par
@@ -65,18 +65,22 @@ import { SITE_NAME, alternatesPage, openGraphPage, whatsapp } from "@/lib/site";
  *
  * LE VOCABULAIRE ANGLAIS EST FIXE AILLEURS : docs/agents/brand/glossaire-anglais.md.
  * Il est contraignant, et il tranche deja ce domaine — `table tents`,
- * `window sticker`, `gift vouchers`, `loyalty card`, `poster`, `shopfront sign`,
- * `print`, `Google listing`, `upkeep`, `hosting`, `an enquiry`, `a quote`. Les
+ * `gift vouchers`, `loyalty card`, `poster`, `shopfront sign`, `print`,
+ * `upkeep`, `hosting`, `an enquiry`, `a quote`. Les
  * NOMS de prestation, eux, sont repris MOT POUR MOT des `nameEn` de
  * prisma/seed.ts : la page d une famille ne peut pas appeler une ligne
  * autrement que la carte qui l affiche deux ecrans plus haut.
  *
- * TROIS REGLES QUI NE BOUGENT PAS EN ANGLAIS. Une seule personne tient le
- * studio : `I`, `me`, `my`, JAMAIS `we` ni `our` — c est la faute la plus facile
- * a commettre, l anglais commercial met « we » partout. L anglais est
- * BRITANNIQUE : `enquiry`, `organisation`, `colour`. Et le delai reste
- * « one week », jamais un compte d heures, jamais seul : la seule occurrence de
- * ce fichier porte son point de depart (« from your go-ahead »).
+ * TROIS REGLES QUI NE BOUGENT PAS EN ANGLAIS. Le studio parle a la PREMIERE
+ * PERSONNE DU PLURIEL depuis le 31 aout 2026 : `we`, `us`, `our`, JAMAIS `I`
+ * ni `my`. La regle precedente disait l inverse ; le proprietaire l a renversee.
+ * Le pluriel ne decrit rien de plus que le singulier ne decrivait — jamais
+ * `our team of X`, `our offices`, `our designers`, `since 20XX` : la LCD art. 3
+ * vise les indications trompeuses, et elle ne s arrete pas a la frontiere de la
+ * langue. L anglais est BRITANNIQUE : `enquiry`, `organisation`, `colour`. Et
+ * le delai reste « one week », jamais un compte d heures, jamais seul : la
+ * seule occurrence de ce fichier porte son point de depart
+ * (« from your go-ahead »).
  */
 
 /**
@@ -295,7 +299,7 @@ export const MENTION_DEVIS_EN =
  * la place que la conversion utilise mieux.
  *
  * LE PARTAGE RETENU : /services garde le raisonnement ENTIER, parce que c est
- * le catalogue et que c est la que le lecteur compare treize « sur devis » ;
+ * le catalogue et que c est la que le lecteur compare douze « sur devis » ;
  * l accueil n en garde que la raison, celle qui repond a « pourquoi pas de
  * prix ». Les cinq pages de famille gardent la version longue elles aussi :
  * on y arrive sans avoir lu l accueil.
@@ -322,7 +326,7 @@ export const MENTION_DEVIS_COURTE_EN =
  *
  * Il est tenable un dimanche de decembre, contrairement au « sous 24 h » qui
  * figurait sur trois pages sans avoir jamais ete decide. Il vivait au seul
- * formulaire ; il accompagne desormais AUSSI les deux endroits ou treize
+ * formulaire ; il accompagne desormais AUSSI les deux endroits ou douze
  * lignes sur devis se presentent ensemble — l accueil et l index des
  * prestations —, parce que « sur devis » sans delai de reponse se lit comme
  * une porte fermee, et que c est precisement ce qu il ne doit pas etre.
@@ -382,9 +386,9 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
     seoTitre: "Identité, logo et photos à Genève",
     seoTitreEn: "Identity, logo and photos in Geneva",
     seoDescription:
-      "Logotype, palette et photos de votre entreprise à Genève. La même identité du site à l'enseigne, et des images cadrées pour le site et la fiche Google.",
+      "Logotype, palette et photos de votre entreprise à Genève. La même identité du site à l'enseigne, et des images cadrées pour le site et vos réseaux.",
     seoDescriptionEn:
-      "Logotype, palette and photos of your business in Geneva. One identity from site to shopfront sign, and images framed for the site and your Google listing.",
+      "Logotype, palette and photos of your business in Geneva. One identity from site to shopfront sign, and images framed for the site and social media.",
     serviceType: "Identité visuelle et photographie d'entreprise",
     serviceTypeEn: "Visual identity and business photography",
     resout:
@@ -418,18 +422,18 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
         slug: "photos",
         quoi: "Une séance sur votre lieu de travail : l'équipe, l'atelier ou le cabinet, les gestes du métier, et deux ou trois vues qui situent l'endroit. Vous n'avez pas de mise en scène à préparer — on travaille dans ce qui existe, le jour où vous travaillez.",
         quoiEn:
-          "A session at your workplace: the team, the workshop or the practice, the work as it is done, and two or three wider views that place you. You have nothing to stage — I work with what is there, on a day you are working.",
+          "A session at your workplace: the team, the workshop or the practice, the work as it is done, and two or three wider views that place you. You have nothing to stage — we work with what is there, on a day you are working.",
         produit: [
           "Les images retouchées, livrées en deux tailles : une pour le site, une pour l'impression",
-          "Les cadrages carré et vertical que réclament la fiche Google et les réseaux",
+          "Les cadrages carré et vertical que réclament les réseaux sociaux",
           "Un portrait, si vous en voulez un",
-          "Les images intégrées au site et à la fiche Google si le site est fait ici",
+          "Les images intégrées au site, si le site est fait ici",
         ],
         produitEn: [
           "The retouched images, delivered in two sizes: one for the site, one for print",
-          "The square and vertical crops that your Google listing and social media ask for",
+          "The square and vertical crops that social media ask for",
           "A portrait, if you want one",
-          "The images put into the site and the Google listing, if the site is made here",
+          "The images put into the site, if the site is made here",
         ],
         raisonDevis:
           "Une séance se chiffre au temps passé sur place et au nombre d'images retenues. Un cabinet de deux pièces et un atelier avec sa cour ne demandent ni la même demi-journée ni le même matériel, et une prise de vue en extérieur dépend d'un jour qu'on choisit.",
@@ -439,8 +443,8 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
     ],
     horsPerimetre: [
       {
-        quoi: "L'impression de vos cartes, affiches et stickers",
-        quoiEn: "Printing your cards, posters and stickers",
+        quoi: "L'impression de vos cartes et de vos affiches",
+        quoiEn: "Printing your cards and your posters",
         href: "/services/imprimes",
         ou: "Imprimés & signalétique",
         ouEn: "Print & signage",
@@ -472,7 +476,7 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
         q: "Je garde mon logo. Vous pouvez faire le reste ?",
         qEn: "I'm keeping my logo. Can you do the rest?",
         r: "Oui. Beaucoup de logos n'ont pas besoin d'être refaits, seulement d'être remis au propre et redessinés en fichier vectoriel, avec une palette et des typographies qui tiennent autour. On part de ce qui existe quand ce qui existe est bon, et ça se voit sur le devis.",
-        rEn: "Yes. Plenty of logos do not need redrawing from scratch, only tidying up and redrawing as a vector file, with a palette and typefaces that hold together around them. I start from what exists when what exists is good, and that shows on the quote.",
+        rEn: "Yes. Plenty of logos do not need redrawing from scratch, only tidying up and redrawing as a vector file, with a palette and typefaces that hold together around them. We start from what exists when what exists is good, and that shows on the quote.",
       },
       {
         q: "Combien de propositions de logo ?",
@@ -505,21 +509,21 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
     seoTitre: "Imprimés et signalétique à Genève",
     seoTitreEn: "Print and signage in Geneva",
     seoDescription:
-      "Cartes de visite 85 × 55, affiches d'événement et sticker vitrine avec QR, à Genève. Conception, fichiers prêts à imprimer et tirage, sur devis.",
+      "Cartes de visite 85 × 55 et affiches d'événement, à Genève. Conception, fichiers prêts à imprimer, tirage commandé et contrôlé. Sur devis.",
     seoDescriptionEn:
-      "Business cards 85 × 55, event posters and a window sticker with a QR code, in Geneva. Design, print-ready files and printing, priced by quote.",
+      "Business cards 85 × 55 and event posters, in Geneva. Design, print-ready files, and the print run ordered and checked. Priced by quote.",
     serviceType: "Conception d'imprimés et de signalétique",
     serviceTypeEn: "Print and signage design",
     resout:
-      "Vous n'avez plus de cartes à donner, ou celles qui restent ne ressemblent plus à votre entreprise. Une affiche doit partir en vitrine la semaine prochaine et personne dans la maison ne sait la faire. Et les clients contents repartent sans laisser d'avis, faute d'un endroit où cliquer. Trois objets qu'on croise tous les jours, et qui font l'essentiel du contact hors écran : la carte qu'on garde, l'affiche qu'on lit de la rue, le QR qu'on scanne au comptoir.",
+      "Vous n'avez plus de cartes à donner, ou celles qui restent ne ressemblent plus à votre entreprise. Une affiche doit partir en vitrine la semaine prochaine et personne dans la maison ne sait la faire. Deux objets qu'on croise tous les jours, et qui font l'essentiel du contact hors écran : la carte qu'on garde, l'affiche qu'on lit de la rue. Les deux ressortent dans votre identité, avec leurs fichiers prêts à imprimer — et pour les cartes, le tirage commandé, contrôlé et livré.",
     resoutEn:
-      "You have run out of cards to hand over, or the ones left no longer look like your business. A poster has to go up in the window next week and nobody in the place knows how to make one. And happy customers leave without writing a review, for want of somewhere to click. Three everyday objects, and between them they carry most of the contact that happens away from a screen: the card people keep, the poster read from the street, the QR code scanned at the counter.",
+      "You have run out of cards to hand over, or the ones left no longer look like your business. A poster has to go up in the window next week and nobody in the place knows how to make one. Two everyday objects, and between them they carry most of the contact that happens away from a screen: the card people keep and the poster read from the street. Both come back in your identity, with their print-ready files — and for the cards, the print run ordered, checked and delivered.",
     pieces: [
       {
         slug: "carte-visite",
-        quoi: "Le format standard, 85 × 55 millimètres, recto-verso. On choisit le papier ensemble — un mat épais ne se tient pas en main comme un brillant fin — puis je m'occupe du fichier, de l'imprimeur et du contrôle avant tirage. Vous recevez les cartes, pas un fichier à débrouiller.",
+        quoi: "Le format standard, 85 × 55 millimètres, recto-verso. On choisit le papier ensemble — un mat épais ne se tient pas en main comme un brillant fin — puis nous nous occupons du fichier, de l'imprimeur et du contrôle avant tirage. Vous recevez les cartes, pas un fichier à débrouiller.",
         quoiEn:
-          "The standard size, 85 × 55 millimetres, both sides. The paper is chosen together — a thick matt does not sit in the hand like a thin gloss — then I handle the file, the printer and the proof check before printing. You receive the cards, not a file to work out for yourself.",
+          "The standard size, 85 × 55 millimetres, both sides. The paper is chosen together — a thick matt does not sit in the hand like a thin gloss — then we handle the file, the printer and the proof check before printing. You receive the cards, not a file to work out for yourself.",
         produit: [
           "Le dessin recto-verso, décliné pour chaque personne de l'équipe si besoin",
           "Le fichier d'impression aux normes : fonds perdus, marques de coupe, profil couleur",
@@ -559,28 +563,6 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
         raisonDevisEn:
           "A single poster and a series running across the year are not the same amount of work, and the print size is not decided before it is known where the poster will go.",
       },
-      {
-        slug: "sticker-avis",
-        quoi: "Un autocollant pour la vitrine, la caisse ou le comptoir, avec un QR qui ouvre directement le formulaire d'avis de votre fiche Google. Le client sort son téléphone, scanne, et arrive sur le bon écran sans avoir à chercher votre établissement.",
-        quoiEn:
-          "A sticker for the window, the till or the counter, with a QR code that opens the review form on your Google listing directly. The customer takes out their phone, scans, and lands on the right screen without having to search for your business.",
-        produit: [
-          "Le sticker dessiné à votre identité, avec le QR testé sur votre fiche",
-          "Les formats vitrine et comptoir",
-          "Le fichier d'impression, et le tirage si vous préférez que je m'en occupe",
-          "Un QR qui pointe sur votre fiche, et qui reste valable tant que la fiche existe",
-        ],
-        produitEn: [
-          "The sticker designed in your identity, with the QR code tested on your listing",
-          "The window and counter sizes",
-          "The print file, and the print run too if you would rather I handled it",
-          "A QR code that points at your listing, and stays valid for as long as the listing exists",
-        ],
-        raisonDevis:
-          "Le support décide du prix : un vinyle d'extérieur, un adhésif transparent posé côté vitre et un carton de comptoir ne coûtent pas la même chose, et la quantité fait le reste.",
-        raisonDevisEn:
-          "The material decides the price: outdoor vinyl, a clear adhesive applied on the glass side and a card for the counter do not cost the same, and the quantity does the rest.",
-      },
     ],
     horsPerimetre: [
       {
@@ -618,13 +600,13 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
       {
         q: "Vous imprimez, ou je dois trouver un imprimeur ?",
         qEn: "Do you print, or do I have to find a printer?",
-        r: "Les deux marchent. Pour les cartes de visite, le tirage est compris : je commande, je contrôle, vous recevez. Pour l'affiche et le sticker, vous repartez avec le fichier prêt à imprimer et vous le donnez à qui vous voulez — ou je m'en charge aussi, et ça se décide au devis.",
-        rEn: "Either works. For business cards, the print run is included: I order it, I check it, you receive it. For the poster and the sticker, you leave with the print-ready file and give it to whoever you like — or I take care of that too, and it is decided on the quote.",
+        r: "Les deux marchent. Pour les cartes de visite, le tirage est compris : nous commandons, nous contrôlons, vous recevez. Pour l'affiche, vous repartez avec le fichier prêt à imprimer et vous le donnez à qui vous voulez — ou nous nous en chargeons aussi, et ça se décide au devis.",
+        rEn: "Either works. For business cards, the print run is included: we order it, we check it, you receive it. For the poster, you leave with the print-ready file and give it to whoever you like — or we take care of that too, and it is decided on the quote.",
       },
       {
         q: "Il me faut une affiche pour la semaine prochaine.",
         qEn: "I need a poster for next week.",
-        r: "Le délai du studio est d'une semaine, et il court dès votre feu vert : vous n'avez rien à réunir avant de démarrer. Reste le tirage lui-même, qui suit le calendrier de l'imprimeur et non le mien — on le vérifie avant de lancer, pas après.",
+        r: "Le délai du studio est d'une semaine, et il court dès votre feu vert : vous n'avez rien à réunir avant de démarrer. Reste le tirage lui-même, qui suit le calendrier de l'imprimeur et non le nôtre — on le vérifie avant de lancer, pas après.",
         /**
          * LA SEULE OCCURRENCE DE « one week » DE CE FICHIER, et elle porte son
          * point de depart dans la meme phrase — « from your go-ahead » —, comme
@@ -632,7 +614,7 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
          * seance photo ou a une carte de restaurant : le positionnement ne
          * porte ce delai que sur le site.
          */
-        rEn: "The studio works to one week, and it runs from your go-ahead: you have nothing to gather before it starts. What is left is the printing itself, which follows the printer's schedule and not mine — I check that before anything goes to press, not after.",
+        rEn: "The studio works to one week, and it runs from your go-ahead: you have nothing to gather before it starts. What is left is the printing itself, which follows the printer's schedule and not ours — we check that before anything goes to press, not after.",
       },
       {
         q: "Je n'ai pas d'identité, juste un vieux logo.",
@@ -667,7 +649,7 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
     pieces: [
       {
         slug: "reseaux-sociaux",
-        quoi: "Le calendrier du mois vous est proposé, vous le validez, et il part. Visuels, textes, publication aux heures utiles, réponses aux commentaires et aux messages : la ligne est tenue de bout en bout. La production est faite avec un partenaire de production du studio, et le travail vous est rendu par moi.",
+        quoi: "Le calendrier du mois vous est proposé, vous le validez, et il part. Visuels, textes, publication aux heures utiles, réponses aux commentaires et aux messages : la ligne est tenue de bout en bout. La production est faite avec un partenaire de production du studio, et c'est le studio qui vous rend le travail.",
         /**
          * « de bout en bout » NE DEVIENT PAS « end-to-end ». Le terme est
          * sature chez les concurrents et interdit par le glossaire anglais §4 ;
@@ -675,7 +657,7 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
          * plus concret que l expression francaise.
          */
         quoiEn:
-          "You are shown the month's calendar, you approve it, and it goes out. Visuals, wording, posting at the hours that matter, replies to comments and messages: the whole of it is held, from the calendar to the last reply. The production is done with a production partner of the studio, and the work is handed back to you by me.",
+          "You are shown the month's calendar, you approve it, and it goes out. Visuals, wording, posting at the hours that matter, replies to comments and messages: the whole of it is held, from the calendar to the last reply. The production is done with a production partner of the studio, and it is the studio that hands the work back to you.",
         produit: [
           "Un calendrier mensuel proposé à l'avance, et validé par vous",
           "Les visuels et les textes, tenus dans votre identité",
@@ -736,14 +718,14 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
       {
         q: "Qui fait le travail ?",
         qEn: "Who does the work?",
-        r: "La production est faite avec un partenaire de production du studio. C'est moi qui porte le calendrier, qui vous répond et qui vous rend le travail : vous n'avez qu'une conversation à suivre.",
-        rEn: "The production is done with a production partner of the studio. I am the one who carries the calendar, who answers you and who hands the work back: there is only one conversation for you to follow.",
+        r: "La production est faite avec un partenaire de production du studio. C'est nous qui portons le calendrier, qui vous répondons et qui vous rendons le travail : vous n'avez qu'une conversation à suivre.",
+        rEn: "The production is done with a production partner of the studio. We are the ones who carry the calendar, who answer you and who hand the work back: there is only one conversation for you to follow.",
       },
       {
         q: "Je n'ai pas de site chez vous. C'est bloquant ?",
         qEn: "My site isn't one of yours. Is that a problem?",
-        r: "Non. La ligne se prend seule, sans site chez moi. Si vous en avez un ailleurs, les publications renvoient dessus — il faut simplement qu'il tienne debout sur un téléphone, sinon le trafic qu'on lui envoie ne sert à rien.",
-        rEn: "No. This can be taken on its own, with no site of mine behind it. If you have one elsewhere, the posts point to it — it just has to hold up on a phone, otherwise sending people to it achieves nothing.",
+        r: "Non. La ligne se prend seule, sans site chez nous. Si vous en avez un ailleurs, les publications renvoient dessus — il faut simplement qu'il tienne debout sur un téléphone, sinon le trafic qu'on lui envoie ne sert à rien.",
+        rEn: "No. This can be taken on its own, with no site of ours behind it. If you have one elsewhere, the posts point to it — it just has to hold up on a phone, otherwise sending people to it achieves nothing.",
       },
     ],
     amorce: whatsapp(
@@ -919,8 +901,8 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
       {
         q: "Et si je m'en vais ?",
         qEn: "And if I leave?",
-        r: "Le nom de domaine est à votre nom : il vous appartient et il vous suit. Le site aussi. Le suivi s'arrête, et vous repartez avec ce que vous avez payé — il n'y a rien à récupérer chez moi.",
-        rEn: "The domain name is in your name: it belongs to you and it goes with you. So does the site. The upkeep stops, and you leave with what you paid for — there is nothing of yours left with me to get back.",
+        r: "Le nom de domaine est à votre nom : il vous appartient et il vous suit. Le site aussi. Le suivi s'arrête, et vous repartez avec ce que vous avez payé — il n'y a rien à récupérer chez nous.",
+        rEn: "The domain name is in your name: it belongs to you and it goes with you. So does the site. The upkeep stops, and you leave with what you paid for — there is nothing of yours left with us to get back.",
       },
     ],
     amorce: whatsapp("Bonjour, j'aimerais un devis pour le suivi de mon site."),
@@ -943,9 +925,9 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
     serviceType: "Supports imprimés et numériques pour la restauration",
     serviceTypeEn: "Printed and digital pieces for restaurants and cafés",
     resout:
-      "La carte est le document le plus lu de votre établissement, et c'est souvent celui qu'on refait le plus vite, entre deux services. Les prix ont bougé trois fois, des plats retirés y figurent encore, et la version en ligne date de l'an dernier. Cette ligne existe pour que la salle se tienne : la carte reprise en entier, avec ses fichiers d'impression et son QR ; ce qu'il y a sur les tables ; et ce qu'on donne au client avant qu'il parte. Elle se commande avec un site chez moi comme sans.",
+      "La carte est le document le plus lu de votre établissement, et c'est souvent celui qu'on refait le plus vite, entre deux services. Les prix ont bougé trois fois, des plats retirés y figurent encore, et la version en ligne date de l'an dernier. Cette ligne existe pour que la salle se tienne : la carte reprise en entier, avec ses fichiers d'impression et son QR ; ce qu'il y a sur les tables ; et ce qu'on donne au client avant qu'il parte. Elle se commande avec un site chez nous comme sans.",
     resoutEn:
-      "The menu is the most-read document in your place, and it is often the one redone in the greatest hurry, between two services. Prices have moved three times, dishes you took off are still listed, and the online version dates from last year. This exists so that the room holds together: the whole menu reworked, with its print files and its QR code; what sits on the tables; and what is handed to the customer before they leave. It can be ordered whether or not your site is one of mine.",
+      "The menu is the most-read document in your place, and it is often the one redone in the greatest hurry, between two services. Prices have moved three times, dishes you took off are still listed, and the online version dates from last year. This exists so that the room holds together: the whole menu reworked, with its print files and its QR code; what sits on the tables; and what is handed to the customer before they leave. It can be ordered whether or not your site is one of ours.",
     pieces: [
       {
         slug: "la-carte",
@@ -1108,8 +1090,8 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
       {
         q: "Je n'ai pas de site chez vous.",
         qEn: "My site isn't one of yours.",
-        r: "Cette ligne est ouverte à qui n'a pas de site chez moi. Elle vit à part des formules, elle est tenue depuis le début du studio, et elle se commande seule.",
-        rEn: "This is open to anyone whose site is not one of mine. It sits apart from the packages, it has been part of the studio from the start, and it can be ordered on its own.",
+        r: "Cette ligne est ouverte à qui n'a pas de site chez nous. Elle vit à part des formules, elle est tenue depuis le début du studio, et elle se commande seule.",
+        rEn: "This is open to anyone whose site is not one of ours. It sits apart from the packages, it has been part of the studio from the start, and it can be ordered on its own.",
       },
       {
         q: "Ma carte change tous les mois.",
@@ -1120,8 +1102,8 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
       {
         q: "Vous imprimez, ou vous livrez les fichiers ?",
         qEn: "Do you print, or do you deliver the files?",
-        r: "Ça se décide au devis. Je peux livrer les fichiers prêts à imprimer, que vous donnez à votre imprimeur habituel, ou m'occuper du tirage et vous livrer les supports finis.",
-        rEn: "That is decided on the quote. I can deliver print-ready files for you to give to your usual printer, or take care of the print run and deliver the finished pieces.",
+        r: "Ça se décide au devis. Nous pouvons livrer les fichiers prêts à imprimer, que vous donnez à votre imprimeur habituel, ou nous occuper du tirage et vous livrer les supports finis.",
+        rEn: "That is decided on the quote. We can deliver print-ready files for you to give to your usual printer, or take care of the print run and deliver the finished pieces.",
       },
     ],
     amorce: whatsapp(

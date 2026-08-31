@@ -37,6 +37,15 @@ import { prisma } from "@/lib/prisma";
  * traduction faite par un modele a qui on demande par ailleurs de n inventer
  * RIEN.
  *
+ * LES DEUX DECISIONS DU 31 AOUT 2026 — « nous » a la place de « je », Google
+ * hors de l offre — NE TOUCHENT PAS CE PROMPT, et c est verifie plutot que
+ * suppose. Ce modele-ci ne parle a personne : il rend un objet, il n a donc ni
+ * voix ni pronom, et « nous » n a rien a y remplacer. Il ne cite pas davantage
+ * une prestation de lui-meme — les libelles autorises viennent de la base et
+ * `buildServiceList` ne lit que les services visibles, donc la ligne Google
+ * retiree du catalogue disparait d ici sans qu une ligne de ce fichier bouge.
+ * Le prompt de conversation (lib/chat-prompt.ts), lui, a change des deux cotes.
+ *
  * LA CONSIGNE « Réponds UNIQUEMENT avec un objet JSON valide » EST OBLIGATOIRE
  * DANS LES DEUX LANGUES. Le mode `json_object` des API au format OpenAI
  * (GROQ_MODE_JSON, lib/llm.ts) EXIGE que le mot « JSON » figure dans le

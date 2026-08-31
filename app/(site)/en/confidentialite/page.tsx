@@ -115,7 +115,7 @@ export default function Privacy() {
                 /en/mentions-legales se changent ensemble, avec leurs deux
                 jumeaux francais. */}
             <p>The site and its database are hosted by Vercel Inc., a United States company, on servers located in Germany (Frankfurt). Germany is on the list of States whose data protection the Federal Council recognises as adequate.</p>
-            <p>Exchanges with the conversation assistant are processed by an artificial intelligence provider located outside Switzerland. Do not give it sensitive information: for that, write to me directly.</p>
+            <p>Exchanges with the conversation assistant are processed by an artificial intelligence provider located outside Switzerland. Do not give it sensitive information: for that, write to us directly.</p>
             <p>No advertising cookies and no third-party trackers.</p>
             <p className="meta">Your rights</p>
             <p>Access, correction and deletion on simple request to {CONTACT.emailGeneral}.</p>

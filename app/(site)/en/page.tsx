@@ -68,8 +68,9 @@ export const dynamic = "force-dynamic";
  *    l ecrivait.
  *  - « redesign » EST UN FAUX AMI de « refonte » (§3) : on dit `rebuild`, ou
  *    `brought up to date`.
- *  - « Google Business Profile » EST PROSCRIT (§3) : on dit `Google listing`.
- *    La description l ecrivait.
+ *  - GOOGLE A QUITTE L OFFRE le 31 aout 2026 : la description listait
+ *    « Google listing » parmi les prestations vendues, elle ne le fait plus.
+ *    Le mot peut decrire un fait ; il ne nomme plus une chose vendue.
  *
  * ET « one week » NE VOYAGE PAS SEUL, ici non plus : le titre le fait suivre
  * de `nothing to prepare`, qui est le benefice n°1 et la seule chose que le
@@ -78,7 +79,7 @@ export const dynamic = "force-dynamic";
  */
 const TITRE = "Website rebuild in Geneva — one week, nothing to prepare";
 const DESCRIPTION =
-  "Digital design studio in Geneva: websites, identity, print, photography, Google listing, social media. Your site rebuilt in one week — you have nothing to prepare.";
+  "Digital design studio in Geneva: websites, identity, print, photography, social media. Your site rebuilt in one week — you have nothing to prepare.";
 
 /**
  * DESCRIPTION CONSTRUITE A CHAQUE REQUETE, PRIX COMPRIS — le meme dispositif

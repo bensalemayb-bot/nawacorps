@@ -100,11 +100,18 @@ alors que ce comportement *est* le produit.
 
 **Groq — ~6 requêtes par minute.** Ce n'est pas une limite en requêtes mais en
 **TPM, tokens par minute** : 8000 en tier `on_demand`, et le compte inclut
-l'entrée **plus les `max_tokens` réservés**, soit environ 1300 par appel ici.
-Six tirs d'affilée la saturent ; espacés de 13 s, ils passent tous. En
+l'entrée **plus les `max_tokens` réservés**, soit environ 1300 par appel au jour
+du relevé. Six tirs d'affilée la saturent ; espacés de 13 s, ils passent tous. En
 production cela vaut ~6 requêtes par minute *tous visiteurs confondus*. Au-delà :
 429, donc `{ unavailable }` et repli formulaire — jamais d'erreur nue. **Le
 budget revient tout seul à la minute suivante.**
+
+**Ce chiffre de 1300 est daté, et il a bougé.** Le 31 août 2026, les règles
+« nous » et Google — contre-exemples compris — ont fait passer le bloc français
+du prompt d'environ 6 000 à environ 8 500 caractères, catalogue injecté en plus.
+L'entrée pèse d'autant plus lourd, et le nombre de requêtes tenables par minute
+baisse d'autant. Il se re-mesure par le protocole de sonde ci-dessous, pas au
+jugé.
 
 **Gemini — 20 requêtes par modèle et par jour.** Le quota gratuit se compte
 **par modèle**, et il ne revient pas de la minute : il revient le lendemain.
@@ -345,8 +352,8 @@ sa phrase, dans les deux langues, et la route lit `locale` dans le corps.
 ## Le périmètre du prompt
 
 Le studio ne vend pas que des sites : son métier, c'est **l'image de
-l'entreprise en général** — identité, logotype, imprimés, photos, fiche Google,
-réseaux sociaux, supports de restaurant. Le prompt le dit, et son étape 1
+l'entreprise en général** — identité, logotype, imprimés, photos, réseaux
+sociaux, supports de restaurant. Le prompt le dit, et son étape 1
 interdit explicitement de prononcer le mot « site » en premier : la question
 d'ouverture est ouverte, et la liste d'exemples ne sort que si la personne
 hésite.
@@ -363,9 +370,169 @@ anglais du même fichier** :
   ont circulé, aucun n'est tenu.
 - **Le « feu vert »**, c'est le client qui dit oui, et rien d'autre. Jamais la
   fourniture de textes ou de photos : le client n'a **rien** à préparer, et
-  c'est l'argument de vente. Et l'assistant écrit « je », jamais « nous » — le
-  studio est une personne.
+  c'est l'argument de vente.
 
 En anglais, mot pour mot : `VAT included` (jamais `incl. VAT`, `TTC`,
 `plus VAT`), `one week` (jamais `48h`, `72h`, `7 days`), `your go-ahead` =
-le client dit oui **et rien d'autre**, `I` et jamais `we`.
+le client dit oui **et rien d'autre**.
+
+---
+
+## Les deux décisions du 31 août 2026
+
+Prises par le propriétaire, écrites **dans le prompt** et pas seulement dans les
+documents de marque (`docs/agents/brand/voice-guide.md` §4,
+`docs/agents/brand/glossaire-anglais.md` §2, `.agents/product-marketing.md`).
+La raison est mécanique : le prompt est le seul texte que le modèle lit. Une
+règle qui ne vit que dans `docs/` n'est pas une règle, c'est un souhait.
+
+### 1. L'assistant dit « nous », et la limite est absolue
+
+La consigne précédente imposait « je » et interdisait « nous » au motif que le
+studio est une personne. **Elle est renversée** : le studio travaille avec un
+partenaire de production, « nous » n'est donc pas un mensonge.
+
+**Il le deviendrait à la première phrase qui annonce un effectif, une équipe,
+des bureaux ou une ancienneté.** La garde est donc écrite **nommément** dans les
+deux blocs du prompt — « notre équipe », « notre équipe de X », « nos bureaux »,
+« nos designers », « depuis 20XX », `our team`, `our offices`, `our designers`,
+`since 20XX` — et elle couvre la question qui la déclenche : *« vous êtes
+combien ? »* ne se répond par **aucun chiffre**, elle se renvoie à Ayoub
+Bensalem. « Je travaille seul » est interdit au même titre que « nous sommes une
+petite équipe » : c'est la réponse exacte — mot pour mot — que rendait le prompt
+d'avant, mesurée en local avant le changement.
+
+**Deux dérives mesurées ensuite, et refermées de la même façon — par un
+contre-exemple.** Le premier jet de la règle interdisait « notre équipe de X » ;
+le modèle a répondu *« Nous ne communiquons pas d'informations sur la taille de
+notre équipe »*, puis *« Regarding the size of our team and our offices, that is
+for Ayoub Bensalem »*. **Une phrase qui refuse de dire la taille de l'équipe
+vient d'affirmer qu'il y en a une**, et reprendre les mots de la question remet
+les mots interdits dans la bouche de l'assistant. La règle interdit donc le mot
+« équipe » **même dans un refus**, interdit de reprendre les termes de la
+question, et donne les deux contre-exemples relevés tels quels avec la
+réécriture. Mesure d'après : *« C'est à Ayoub Bensalem, qui tient le studio,
+d'en parler — le plus simple est de lui écrire sur WhatsApp … »*, puis la
+question suivante du déroulé.
+
+Le panneau (`components/ChatWidget.tsx`) suit dans ses deux colonnes — accueil,
+accueil ciblé depuis `/devis`, sous-titre, clôture, bouton d'envoi, conversation
+complète : six phrases par langue, qui nommaient toutes Ayoub. Un accueil au
+« je » suivi de réponses au « nous » se lirait comme deux interlocuteurs. Le
+bouton d'envoi s'appelle désormais **« Envoyer ma demande »** /
+`Send my enquiry`, c'est-à-dire le CTA exact du guide de voix §7.
+
+L'accueil ciblé a perdu au passage sa **seconde question** — il demandait le
+métier *et* l'adresse du site actuel — et avec elle la présomption de site : le
+libellé cliqué peut être « Cartes de visite ». Le panneau ne s'autorise pas ce
+que le prompt interdit au modèle.
+
+Le nom d'**Ayoub Bensalem** reste public — mentions légales, section « Le
+studio », et le prompt le garde pour y renvoyer les questions d'effectif. Ce
+sont les libellés du panneau qui passent au pluriel, pas le nom qui disparaît.
+
+### 2. Google sort de l'offre
+
+Le studio ne vend plus « fiche Google complétée » ni le sticker vitrine « avis
+Google ». Les deux ont été retirés de l'énumération du métier **et** de la liste
+de pistes de l'étape 2, dans les deux langues.
+
+**« Les stickers vitrine » sont partis avec, et ce n'est pas un élargissement du
+périmètre** : la seule ligne de sticker du catalogue était `sticker-avis`,
+« Sticker vitrine — avis Google », celle que la décision retire. L'énumération
+du métier la citait sous sa forme générique ; la garder aurait fait proposer par
+le prompt, de lui-même, la prestation qu'on vient de supprimer. Vérifié en base
+et sur `/services/imprimes`, qui n'en portent plus aucune.
+
+Le mot reste **permis pour constater un fait** (« vos clients vous cherchent sur
+Google ») et **interdit pour désigner une prestation** — la règle l'écrit ainsi,
+parce qu'un simple retrait laisserait le modèle libre de reproposer la chose de
+lui-même. Côté prix il n'y a rien de plus à faire : `buildPriceList` filtre sur
+`visible`, donc la ligne retirée du catalogue en base — `sticker-avis`, passée à
+`visible = false` — disparaît d'elle-même de la liste injectée à chaque requête.
+Le prompt n'a donc qu'une chose à faire : ne plus la citer de lui-même.
+
+**Un refus n'est pas un renvoi.** Mesuré aussi : l'assistant répondait *« We
+don't manage Google listings, that is for Ayoub Bensalem »* — il refusait la
+prestation puis la confiait à quelqu'un, donc il la vendait encore. La règle
+sépare maintenant les deux mouvements : **le renvoi à Ayoub ne vaut que pour les
+questions d'effectif, de bureaux ou d'ancienneté** ; sur Google la réponse est
+simplement non, suivie de ce que le studio fait.
+
+**Et l'exemple nomme ce qu'il refuse.** Écrit d'abord « Ce n'est pas ce que fait
+le studio », sans sujet, il s'est recopié tel quel en tête d'une réponse à
+« vous êtes combien ? » — un contre-sens poli. Un exemple de prompt est une
+phrase que le modèle réemploie : s'il ne dit pas de quoi il parle, il se
+réemploie n'importe où. Il s'écrit donc **« La fiche Google n'est pas ce que
+fait le studio »** / **`A Google listing is not what the studio does`**. Mesures
+d'après, sur les deux pièges : *« La fiche Google n'est pas ce que fait le
+studio. Souhaitez-vous créer ou rafraîchir votre logotype ? »* et, sur la
+question d'effectif, *« C'est à Ayoub Bensalem, qui tient le studio, d'en
+parler — … »* sans préambule étranger.
+
+---
+
+## Deux défauts de comportement, et comment ils ont été refermés
+
+Relevés en local, dans les deux langues, sur le cas d'un visiteur qui demande
+**deux prestations à la fois** (« il me faut un logo et des cartes de visite »).
+
+### 1. L'assistant posait deux questions dans un seul message
+
+Le prompt disait déjà « UNE seule question par message ». Il **énonçait un fait
+sans interdire son contraire** — et le modèle s'en accommodait :
+
+> Pour le logo, avez-vous une idée de style ou de couleurs ? Et pour les cartes
+> de visite, quel format et quel tirage envisagez-vous ?
+
+C'est le piège déjà rencontré sur la règle du « feu vert », et il se referme de
+la même façon : **interdire l'inverse, nommément**. La règle de
+`lib/chat-prompt.ts` — présente à l'identique dans les deux blocs — énumère
+désormais les formes de l'enchaînement (« et », point-virgule, parenthèse, deux
+phrases qui se suivent), pose un **compteur vérifiable** — un seul point
+d'interrogation par message —, donne le contre-exemple relevé tel quel avec sa
+réécriture, et dit quoi faire du reste : le garder pour le message suivant.
+
+Les listes de pistes de l'étape 2 (« pas de prise de rendez-vous ? illisible
+sur téléphone ? ») portent la même mention, sans quoi le prompt se
+contredisait lui-même en affichant quatre `?` d'affilée.
+
+### 2. Le modèle renvoyait du markdown, la bulle affichait les astérisques
+
+`**Le Site — 1'499.–**` s'affichait avec ses astérisques : `.chat-msg` rend du
+**texte**, pas du HTML. Aucun des deux prompts ne l'interdisait.
+
+**Ceinture et bretelles, les deux.** Un prompt n'est pas une garantie : le jour
+où le modèle change, la faute revient à l'écran sans qu'une ligne du dépôt ne
+bouge.
+
+- **Ceinture — `lib/chat-prompt.ts`** : une règle « écris en TEXTE BRUT »,
+  dans les deux langues, qui nomme la faute et montre la forme correcte.
+- **Bretelles — `components/ChatWidget.tsx`** : `enSegments()` découpe le
+  message du modèle en segments et rend du **JSX**. **Jamais
+  `dangerouslySetInnerHTML`** — ce texte vient d'un modèle, donc d'un inconnu.
+
+Le rendu est **minimal, délibérément** : le gras (`<strong>`, poids 600, une
+fonte réellement chargée) et les retours à la ligne, que `white-space:
+pre-wrap` rend déjà — il n'y a donc aucun `<br>` à fabriquer. Tous les autres
+marqueurs sont **retirés** : titres `#`, puces (`-`, `*`, `+`, converties en
+`•`), séparateurs `---`, marqueurs de code.
+
+Trois précautions qui se lisent mal dans le code sans leur raison :
+
+- **Le souligné `_` n'est pas traité.** Il traîne dans les adresses e-mail et
+  les URL ; le prendre pour de l'italique mangerait un caractère au milieu
+  d'une adresse.
+- **Une astérisque isolée entre deux espaces est gardée** (« 85 * 55 mm ») :
+  la retirer laisserait une double espace, soit un second défaut d'affichage
+  pour en corriger un premier.
+- **Pas de lookbehind `(?<=\S)`**, qui n'existe qu'à partir de Safari 16.4 :
+  sur un iPhone plus ancien, la seule écriture du littéral jetterait une
+  `SyntaxError` au chargement du module et **le widget entier disparaîtrait**
+  pour une astérisque.
+
+**Le texte du visiteur n'est pas touché** : il s'affiche tel qu'il l'a tapé.
+Le nettoyage ne vise que ce que le modèle écrit.
+
+Le format suisse des prix traverse tout cela intact : `1'499.–` n'est jamais
+reformaté, ni par le prompt ni par l'affichage.

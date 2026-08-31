@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { LOCALES, LOCALE_DEFAUT, type Locale, estLocale } from "@/lib/i18n";
+import { LOCALES, LOCALE_DEFAUT, type Locale, localeDuCorps } from "@/lib/i18n";
 import { clientIp, hashIp } from "@/lib/iphash";
 import { prisma } from "@/lib/prisma";
 import { notifyTelegram } from "@/lib/telegram";
@@ -120,17 +120,6 @@ const MESSAGES: Record<Locale, Refus> = {
   },
 };
 
-/**
- * La langue AVANT la validation — il en faut une pour rediger le refus de la
- * validation elle-meme. Cette lecture ne valide rien : elle reconnait un champ
- * ou retombe sur le francais, via `estLocale` (lib/i18n.ts) pour qu il
- * n existe qu une seule definition de ce qu est une langue connue.
- */
-function localeDuCorps(brut: unknown): Locale {
-  const valeur = (brut as { locale?: unknown } | null)?.locale;
-  return typeof valeur === "string" && estLocale(valeur) ? valeur : LOCALE_DEFAUT;
-}
-
 // Le studio vend une proposition ecrite : il lui faut au moins un moyen de
 // la faire parvenir. Ni `phone` ni `email` n est requis seul — chacun n est
 // verifie dans son format que s il est rempli, une chaine vide passant les
@@ -173,7 +162,7 @@ function construireSchema(t: Refus) {
       // et une valeur presente mais inconnue (« de », « EN ») ferait echouer
       // l enum — donc un 400, donc un LEAD PERDU a cause d un champ decoratif.
       // `.catch()` retombe sur le francais dans les deux cas, comme
-      // `localeDuCorps` ci-dessus.
+      // `localeDuCorps` (lib/i18n.ts), qui lit le meme champ avant le schema.
       locale: z.enum(LOCALES).catch(LOCALE_DEFAUT),
     })
     .refine((data) => data.phone.trim() !== "" || data.email.trim() !== "", {
@@ -247,13 +236,18 @@ export async function POST(req: Request) {
   }
   await prisma.rateLimit.create({ data: { ipHash, action: ACTION } });
 
-  // 4. Le lead. `email` est optionnel en base (Lead.email String?) : une
-  //    chaine vide devient null plutot que d y ecrire "" — le refine du
-  //    schema garantit deja qu au moins phone ou email est renseigne.
+  // 4. Le lead. `phone` ET `email` sont optionnels en base (String?) : une
+  //    chaine vide devient null plutot que d y etre ecrite — le refine du
+  //    schema garantit deja qu au moins l un des deux est renseigne.
+  //    LE TELEPHONE A REJOINT L E-MAIL AU BLOC B13. Il etait NOT NULL alors
+  //    que le formulaire dit « telephone OU e-mail » : une demande laissee
+  //    avec le seul e-mail ecrivait "" en base, et /admin en tirait un lien
+  //    wa.me vers un numero inexistant. On ecrit maintenant ce qu on sait, et
+  //    rien quand on ne sait pas.
   await prisma.lead.create({
     data: {
       name,
-      phone,
+      phone: phone.trim() === "" ? null : phone,
       email: email.trim() === "" ? null : email,
       source: "FORM",
       status: "NEW",

@@ -41,6 +41,23 @@ import {
  * (guide de voix §4). Le silence sur un negatif n est pas une affirmation
  * fausse.
  *
+ * DECISION DU 31 AOUT 2026 — « NOUS » REMPLACE « JE », ET LA REVENDICATION
+ * D ETRE SEUL DISPARAIT. C etait LA page qui la vendait : son h1, sa section
+ * (01) « une seule personne, et vous lui parlez » et le titre « une seule
+ * main » de la section (03) reposaient tous dessus. Elle a donc ete REECRITE,
+ * pas conjuguee — mettre « nous » partout aurait donne les memes phrases au
+ * pluriel. Ce qui est garde : ce que le studio fait, ce qu il ne fait pas,
+ * l absence de bureau, et le fait que le lecteur parle a qui fait le travail.
+ * Ce qui n est PAS ajoute pour combler : aucun effectif, aucune equipe, aucun
+ * bureau, aucune anciennete — le pluriel grammatical n autorise rien de plus
+ * que le singulier (guide de voix §4 ; LCD art. 3 sur les indications
+ * trompeuses).
+ *
+ * ET « GOOGLE » NE DESIGNE PLUS UNE PRESTATION, meme decision du meme jour.
+ * La sixieme ligne de travail — « Fiche Google » — est retiree de la section
+ * (03), qui en compte donc cinq. Le mot peut encore decrire un fait ; il ne
+ * nomme plus une chose vendue.
+ *
  * LE TROISIEME PARAGRAPHE DE LA SECTION (01) N EST PAS DECORATIF.
  * « Aucune sous-traitance » est faux — la production des reseaux sociaux se
  * fait avec un partenaire, et lib/familles.ts comme ServicesRows l ecrivent en
@@ -85,7 +102,7 @@ import {
  */
 const TITRE = "Ayoub Bensalem, studio de création digitale à Genève";
 const DESCRIPTION =
-  "Qui fait le travail : une seule personne, à Genève. Ce que le studio sait faire, ce qu'il ne prend pas, et comment se passe une refonte.";
+  "Qui fait le travail, à Genève. Ce que le studio sait faire, ce qu'il ne prend pas, et comment se passe une refonte, du premier message à la mise en ligne.";
 
 export const metadata: Metadata = {
   title: TITRE,
@@ -113,13 +130,13 @@ export const metadata: Metadata = {
  * pourquoi la `Person` ci-dessous se rattache au studio par `worksFor`
  * plutot que de recopier ses coordonnees.
  *
- * LA PAGE QUI PRESENTE UNE PERSONNE NE DECLARAIT AUCUNE `Person`.
+ * LA PAGE QUI NOMME L EXPLOITANT NE DECLARAIT AUCUNE `Person`.
  *
  * Elle n emettait qu une `AboutPage` renvoyant au n ud du studio
- * (`/#studio`). Or c est la seule page du site dont le sujet EST quelqu un :
- * son h1 dit « Le studio, c est une personne, à Genève », et tout l argument
- * de vente — un seul interlocuteur, le meme l annee suivante — repose sur
- * cette personne. Un moteur n avait aucun moyen de le savoir.
+ * (`/#studio`). Or le nom de l exploitant est public et il s ecrit ici comme
+ * dans les mentions legales (guide de voix §10) : un moteur n avait aucun
+ * moyen de relier ce nom au studio. Le n ud dit QUI exploite le studio — pas
+ * combien de personnes y travaillent, ce qui ne s ecrit nulle part.
  *
  * Le n ud porte le meme `@id` que le `founder` declare sur l accueil
  * (components/SchemaStudio.tsx) : les deux descriptions se fondent en une
@@ -178,17 +195,16 @@ export default function StudioPage() {
             {/* Interactions.tsx decoupe h1.t sur ses <br> et lui pose lui-meme
                 un [data-reveal] : ne pas en ecrire un a la main. */}
             <h1 className="t">
-              Le studio, c&apos;est
+              Qui fait le travail,
               <br />
-              une personne, à Genève.
+              et comment.
             </h1>
           </div>
 
           <p className="lede" data-reveal>
-            Nawa Corps est le studio de création digitale d&apos;Ayoub Bensalem.
-            Celui qui lit votre message est celui qui dessine la maquette, écrit
-            le code et vous rappelle. Cette page dit ce que ça change, et ce que
-            ça exclut.
+            Nawa Corps est le studio de création digitale d&apos;Ayoub
+            Bensalem, à Genève. Cette page dit comment se passe une refonte,
+            ce que nous savons faire, et ce que nous ne prenons pas.
           </p>
 
           {/* .facts : le meme bandeau que la section « Le studio » de l accueil
@@ -221,13 +237,13 @@ export default function StudioPage() {
         <div className="wrap">
           <div className="sec-head">
             <span className="meta" data-reveal>
-              <span className="index">(01)</span>&nbsp; La personne
+              <span className="index">(01)</span>&nbsp; Qui vous parle
             </span>
             <div data-reveal>
               <h2 className="t">
-                Une seule personne,
+                Vous parlez à qui
                 <br />
-                et vous lui parlez.
+                fait le travail.
               </h2>
             </div>
           </div>
@@ -237,8 +253,8 @@ export default function StudioPage() {
               Ayoub Bensalem, designer et développeur, à Genève. Le studio
               n&apos;a ni commercial ni chargé de compte : personne ne vous vend
               le travail pour passer ensuite le dossier à quelqu&apos;un
-              d&apos;autre. La voix au téléphone et la main sur le clavier sont
-              la même.
+              d&apos;autre. Vous parlez à qui fait le travail, du premier
+              message à la mise en ligne.
             </p>
             <p>
               Pas de bureaux non plus, et c&apos;est assumé. On se voit chez
@@ -249,14 +265,15 @@ export default function StudioPage() {
             <p>
               Une exception, et elle est écrite : la production des réseaux
               sociaux se fait avec un partenaire de production du studio. Le
-              calendrier, les réponses et le rendu du travail restent de mon
+              calendrier, les réponses et le rendu du travail restent de notre
               côté — vous n&apos;avez qu&apos;une conversation à suivre.
             </p>
             <p>
               Un an après la mise en ligne, l&apos;adresse à qui écrire n&apos;a
-              pas changé, et la personne derrière non plus. Un tarif qui bouge,
-              une affiche pour la rentrée, une question de plus dans le
-              formulaire : c&apos;est le même fil de discussion.
+              pas changé, et le studio qui a fait le site est toujours celui qui
+              répond. Un tarif qui bouge, une affiche pour la rentrée, une
+              question de plus dans le formulaire : c&apos;est le même fil de
+              discussion.
             </p>
           </div>
         </div>
@@ -291,25 +308,24 @@ export default function StudioPage() {
             <p>
               WhatsApp, téléphone, formulaire, ou l&apos;assistant en bas de
               l&apos;écran. Vous dites ce que vous avez et ce qui ne va pas ; le
-              message arrive sur mon téléphone.
+              message arrive sur notre téléphone.
             </p>
 
             <h3 className="sm-grp">L&apos;état des lieux</h3>
             <p>
               On regarde ensemble ce qui est en ligne aujourd&apos;hui : le
-              site, la fiche Google, ce qu&apos;un client trouve quand il
-              cherche votre métier à Genève. Vous dites ce que vous voulez
-              recevoir — des devis, des rendez-vous, des appels. C&apos;est le
-              seul moment où vous avez quelque chose à donner, et ça se donne en
-              parlant.
+              site, et ce qu&apos;un client trouve quand il cherche votre
+              métier à Genève. Vous dites ce que vous voulez recevoir — des
+              devis, des rendez-vous, des appels. C&apos;est le seul moment où
+              vous avez quelque chose à donner, et ça se donne en parlant.
             </p>
 
             <h3 className="sm-grp">Votre feu vert</h3>
             <p>
               Le délai part de là, et de nulle part ailleurs : une semaine, du
-              feu vert à la mise en ligne. Vous n&apos;avez rien à préparer — je
-              reprends les textes de votre site actuel, et je rédige la maquette
-              si vous partez de zéro.
+              feu vert à la mise en ligne. Vous n&apos;avez rien à préparer —
+              nous reprenons les textes de votre site actuel, et nous rédigeons
+              la maquette si vous partez de zéro.
             </p>
 
             <h3 className="sm-grp">La maquette, en début de semaine</h3>
@@ -356,17 +372,17 @@ export default function StudioPage() {
             </span>
             <div data-reveal>
               <h2 className="t">
-                Six lignes de travail,
+                Cinq lignes de travail,
                 <br />
-                une seule main.
+                un seul endroit.
               </h2>
             </div>
           </div>
 
           <p className="lede" data-reveal>
             Le site est le produit d&apos;entrée, pas le catalogue. Voici le
-            reste — et c&apos;est le fait qu&apos;une seule personne les tienne
-            toutes qui fait l&apos;argument.
+            reste — et c&apos;est le fait que tout sorte du même endroit qui
+            fait l&apos;argument.
           </p>
 
           <ul className="prest-inc" data-reveal style={{ marginTop: 34 }}>
@@ -384,16 +400,12 @@ export default function StudioPage() {
             </li>
             <li>
               Photographie — vos locaux, votre équipe, vos produits : pour le
-              site comme pour la fiche Google.
-            </li>
-            <li>
-              Fiche Google — photos, horaires exacts, zone d&apos;intervention,
-              réponses aux avis.
+              site comme pour vos imprimés.
             </li>
             <li>
               Réseaux sociaux — calendrier du mois, visuels, textes,
               publication. Produits avec un partenaire de production du studio,
-              et rendus par moi.
+              et rendus par nous.
             </li>
           </ul>
 
@@ -424,16 +436,16 @@ export default function StudioPage() {
             </span>
             <div data-reveal>
               <h2 className="t">
-                Ce que je
+                Ce que nous
                 <br />
-                ne prends pas.
+                ne prenons pas.
               </h2>
             </div>
           </div>
 
           <p className="lede" data-reveal>
             Une page qui ne sait rien refuser ne dit rien. Ces quatre-là partent
-            ailleurs, et je le dis au premier message plutôt qu&apos;au
+            ailleurs, et nous le disons au premier message plutôt qu&apos;au
             troisième rendez-vous.
           </p>
 
@@ -445,7 +457,7 @@ export default function StudioPage() {
             <li>
               Les appels d&apos;offres, les grands comptes et les
               administrations. Les procédures et les délais de paiement ne vont
-              pas avec une structure d&apos;une personne.
+              pas avec une structure aussi légère.
             </li>
             <li>
               Les sociétés qui ont déjà des développeurs. Elles font leur site
@@ -460,9 +472,9 @@ export default function StudioPage() {
 
           <div className="studio-txt" data-reveal style={{ marginTop: 34 }}>
             <p>
-              Le refus n&apos;est pas une posture. Une structure d&apos;une
-              personne qui accepte tout ne tient plus aucune de ses dates, et
-              c&apos;est le client d&apos;après qui paie le retard.
+              Le refus n&apos;est pas une posture. Un studio qui accepte tout ne
+              tient plus aucune de ses dates, et c&apos;est le client
+              d&apos;après qui paie le retard.
             </p>
           </div>
         </div>
@@ -494,10 +506,10 @@ export default function StudioPage() {
             </p>
             <p>
               Le reste du produit est derrière : quand la conversation se
-              termine, la demande part sur mon téléphone, et je la retrouve dans
-              un tableau de bord avec ce qui a été dit et le numéro laissé.
-              C&apos;est exactement ce qui serait installé chez vous, avec vos
-              prestations et vos tarifs à la place des miens.
+              termine, la demande part sur notre téléphone, et nous la
+              retrouvons dans un tableau de bord avec ce qui a été dit et le
+              numéro laissé. C&apos;est exactement ce qui serait installé chez
+              vous, avec vos prestations et vos tarifs à la place des nôtres.
             </p>
             <p>
               Pour celui-là, vous n&apos;avez donc personne à croire sur parole.

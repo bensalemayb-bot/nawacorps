@@ -1,5 +1,6 @@
 import { dictionnaire } from "@/lib/dictionnaires";
 import { lien, type Locale } from "@/lib/i18n";
+import { CONTACT } from "@/lib/site";
 
 // Section Le studio — reference/binacore.html lignes 1084-1102, copie verbatim.
 //
@@ -14,9 +15,13 @@ import { lien, type Locale } from "@/lib/i18n";
 // site, photographie — et le second porte ce qu il est seul a pouvoir dire :
 // l apres-livraison, avec un exemple qui n est pas un site.
 //
-// « Vous parlez a une seule personne » est devenu « la meme personne » : le h1
-// du hero dit desormais « Une seule personne. », et la formule serait lue deux
-// fois sur la meme page.
+// « Vous parlez a une seule personne » est devenu « la meme personne », et il
+// n y revient pas. La raison a change le 31 aout 2026 : ce n etait qu un
+// doublon avec le h1 du hero, qui disait alors « Une seule personne. » ; ce h1
+// dit maintenant « Un studio à Genève. », et la revendication d etre seul est
+// retiree du site public en entier (voice-guide.md §4). « La meme personne »,
+// elle, RESTE : c est le pilier 3 — celui qui repond l annee suivante — et non
+// une declaration d effectif.
 //
 // UN TROISIEME PARAGRAPHE A ETE INSERE AU MILIEU, et c est celui qui manquait.
 // La section disait QUI fait le travail, deux fois, sans jamais dire ce que ca
@@ -42,13 +47,27 @@ import { lien, type Locale } from "@/lib/i18n";
 // dessine et construit par la meme personne. Meme correction dans la cinquieme
 // reponse de components/Faq.tsx.
 //
-// EN ANGLAIS, LA MEME SECTION SE DIT A LA PREMIERE PERSONNE DU SINGULIER — ou
-// plus exactement, comme en francais, a la troisieme personne pour parler de
-// « la meme personne ». Ce qui est proscrit, c est `we` / `our team` / `the
-// agency` : le studio est une personne, et l anglais commercial met « we »
-// partout (glossaire §2).
+// LA VOIX EST AU PLURIEL DEPUIS LE 31 AOUT 2026, DANS LES DEUX LANGUES —
+// « nous », `we` / `us` / `our` (voice-guide.md §4, glossaire anglais §2). Les
+// trois paragraphes de cette section n ont pas bouge pour autant : ils parlent
+// deja a la TROISIEME personne (« la personne qui repond a votre message »,
+// « the person who answers your message »), ce qui est la formulation du
+// pilier 3 et n a jamais ete un « je ». CE QUI RESTE PROSCRIT, et c est
+// desormais le seul piege : `our team of X`, `our offices`, `since 20XX` —
+// un pluriel n autorise aucun effectif, aucun bureau, aucune anciennete qui
+// n existe pas. La LCD art. 3 ne s arrete pas a la frontiere de la langue.
+//
+// LA LOCALITE VIENT DE `CONTACT`, PAS DU DICTIONNAIRE, ET LES DEUX GRAPHIES NE
+// SERVENT PAS AU MEME USAGE. `CONTACT.ville` (« Genève ») est du NAP : c est
+// elle, et elle seule, qui part en donnee structuree — `areaServed`,
+// `addressLocality` — DANS LES DEUX LANGUES, parce que deux graphies de la
+// meme localite brouillent le rapprochement avec la fiche Google (lib/site.ts,
+// docblock de CONTACT). `CONTACT.villeEn` (« Geneva ») ne sert qu a ce qu un
+// HUMAIN lit, et c est ce que fait la bande de faits ci-dessous. Ne pas
+// intervertir les deux, et ne jamais brancher `villeEn` sur un JSON-LD.
 export default function Studio({ locale = "fr" }: { locale?: Locale }) {
   const t = dictionnaire(locale);
+  const ville = locale === "en" ? CONTACT.villeEn : CONTACT.ville;
 
   return (
     <section id="studio" style={{ paddingTop: 0 }}>
@@ -73,7 +92,7 @@ export default function Studio({ locale = "fr" }: { locale?: Locale }) {
                 langues : « Une semaine / Refonte livrée », « One week /
                 Rebuild delivered ». Seule, elle contreviendrait au §5. */}
             <div className="facts">
-              <div><b>{t.studio.faitLieu}</b><span>{t.studio.faitLieuNote}</span></div>
+              <div><b>{ville}</b><span>{t.studio.faitLieuNote}</span></div>
               <div><b>{t.studio.faitDelai}</b><span>{t.studio.faitDelaiNote}</span></div>
               <div><b>{t.studio.faitLangues}</b><span>{t.studio.faitLanguesNote}</span></div>
             </div>

@@ -40,7 +40,7 @@ import { formatChfAmount } from "@/lib/format";
  */
 export async function generateMetadata(): Promise<Metadata> {
   const socle =
-    "Nawa Corps refait le site des PME genevoises en une semaine : demande de devis, prise de rendez-vous, fiche Google. Vous n'avez rien à préparer.";
+    "Nawa Corps refait le site des PME genevoises en une semaine : demande de devis, prise de rendez-vous, mise en ligne comprise. Vous n'avez rien à préparer.";
   try {
     // Base vide, formules masquees depuis /admin, toutes passees sur devis :
     // l extrait se referme sans le montant plutot que d en inventer un.

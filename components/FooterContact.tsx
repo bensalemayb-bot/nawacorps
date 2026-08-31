@@ -2,7 +2,7 @@ import ContactForm from "@/components/ContactForm";
 import { dictionnaire } from "@/lib/dictionnaires";
 import { MENTION_REPONSE, MENTION_REPONSE_EN } from "@/lib/familles";
 import { lien, type Locale } from "@/lib/i18n";
-import { CONTACT, WHATSAPP_HREF } from "@/lib/site";
+import { CONTACT, whatsappHref } from "@/lib/site";
 
 // Footer Contact — reference/binacore.html lignes 1136-1153, copie verbatim.
 //
@@ -35,11 +35,14 @@ type FooterContactProps = {
    */
   indexSection?: string;
   /**
-   * La langue de la page. « fr » par defaut, et ce defaut EST utilise
-   * aujourd hui : ce pied de page est rendu par les PAGES, pas par le layout,
-   * et aucune ne passe encore sa langue — app/(site)/en/page.tsx compris, qui
-   * n est pas de ce chantier. Il rend donc du francais partout, exactement
-   * comme avant, jusqu a ce que l agent des pages fasse descendre la locale.
+   * La langue de la page. « fr » par defaut.
+   *
+   * CE DEFAUT N EST PLUS LE CAS GENERAL, contrairement a ce que disait cette
+   * note : ce pied de page est rendu par les PAGES et non par le layout, et
+   * les deux accueils passent desormais leur langue explicitement
+   * (`<FooterContact locale="fr" />` et `locale="en"`). Le defaut ne sert plus
+   * qu aux pages qui n ont pas encore de jumelle anglaise ; il reste parce que
+   * le supprimer obligerait a toucher les seize pages francaises pour rien.
    */
   locale?: Locale;
 };
@@ -61,7 +64,11 @@ export default function FooterContact({
         {/* « Montrez-moi votre site » fermait la page sur le seul produit
             d entree, et renvoyait le visiteur venu pour un logotype ou des
             cartes de visite. « Ce que vous avez » couvre le site, l imprime et
-            la fiche Google sans rien perdre de l invitation. Le decoupage en
+            les reseaux sociaux sans rien perdre de l invitation — la fiche
+            Google figurait dans cette liste jusqu au 31 aout 2026, date a
+            laquelle elle est sortie de l offre. Le titre est passe au pluriel
+            le meme jour (« Montrez-nous », « Nous vous disons ») : c est une
+            chaine du dictionnaire, elle ne se lit pas ici. Le decoupage en
             deux lignes ne bouge pas : Interactions.tsx scinde ce h2 sur ses
             <br />, et la seconde ligne garde son .serif-i. */}
         <h2 data-reveal style={{ marginTop: 26 }}>{t.pied.titreLigne1}<br />{t.pied.titreLigne2Debut}<span className="serif-i">{t.pied.titreLigne2Italique}</span></h2>
@@ -69,11 +76,13 @@ export default function FooterContact({
           {/* L ESPACE FINAL EST DANS L EXPRESSION, meme raison qu au-dessus :
               `{libelle} <span>` aurait fabrique deux noeuds texte adjacents et
               donc un `<!-- -->` de plus dans le HTML francais.
-              `WHATSAPP_HREF` porte un message d amorce ECRIT EN FRANCAIS
-              (lib/site.ts) : il partira tel quel depuis la page anglaise. Le
-              traduire suppose une seconde amorce dans lib/site.ts, qui est la
-              source unique des coordonnees et n est pas de ce chantier. */}
-          <a className="btn" href={WHATSAPP_HREF} target="_blank" rel="noopener">{`${t.pied.ecrireWhatsapp} `}<span className="ar">→</span></a>
+              L AMORCE WHATSAPP SUIT DESORMAIS LA LANGUE DE LA PAGE. Elle
+              partait en francais depuis le pied de page anglais : le visiteur
+              ouvrait WhatsApp sur une phrase qu il n avait pas ecrite. La
+              seconde amorce vit dans lib/site.ts, source unique des
+              coordonnees, sous `whatsappHref(locale)` — le numero, lui,
+              n existe toujours qu a un seul endroit. */}
+          <a className="btn" href={whatsappHref(locale)} target="_blank" rel="noopener">{`${t.pied.ecrireWhatsapp} `}<span className="ar">→</span></a>
           {/* BR : adresse A CONFIRMER avant la mise en ligne — lib/site.ts. */}
           <a className="btn btn-line" href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
         </div>
@@ -108,7 +117,7 @@ export default function FooterContact({
       <div className="giant" aria-hidden="true">NAWA CORPS</div>
       {/* BR — le slogan de marque, a UN SEUL endroit du site. Ici et pas dans
           le hero : celui-ci porte deja son titre, « Site, imprimes, photos,
-          reseaux. Une seule personne. », et deux formules cote a cote se
+          reseaux. Un studio à Genève. », et deux formules cote a cote se
           seraient affaiblies l une l autre. En pied de page il signe, il ne
           plaide pas. */}
       <p className="br-slogan">{t.pied.slogan}</p>

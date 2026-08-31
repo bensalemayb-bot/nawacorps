@@ -141,6 +141,38 @@ export function estLocale(valeur: string | null | undefined): valeur is Locale {
 }
 
 /**
+ * LA LANGUE LUE DANS LE CORPS D'UNE REQUÊTE JSON, avant toute validation.
+ *
+ * POURQUOI ELLE EXISTE, ET POURQUOI ICI. Les trois routes POST du site —
+ * `/api/contact`, `/api/chat`, `/api/chat/finalize` — ont besoin d'une langue
+ * AVANT d'analyser leur schéma : il en faut une pour rédiger le refus du
+ * schéma lui-même, et à ce moment-là `analyse.data` n'existe pas encore. Les
+ * trois portaient la même fonction de quatre lignes, recopiée. Trois copies de
+ * la même lecture divergent à la première correction faite d'un seul côté, et
+ * la divergence serait invisible : elle ne se voit que dans la LANGUE d'un
+ * message d'erreur.
+ *
+ * ELLE NE VALIDE RIEN, ET C'EST LE POINT. Elle reconnaît une locale connue —
+ * via `estLocale`, pour qu'il n'existe qu'une seule définition de ce qu'est
+ * une langue connue — ou RETOMBE SUR LE FRANÇAIS. Absent, mal typé, en
+ * majuscules, inconnu : tout donne « fr ». Aucune requête n'est jamais
+ * acceptée ni rejetée à cause d'elle ; elle habille des réponses, elle n'en
+ * décide aucune.
+ *
+ * C'est le même comportement que le `.catch(LOCALE_DEFAUT)` que les trois
+ * schémas zod posent sur leur champ `locale`, et les deux lectures DOIVENT
+ * dire la même chose — d'où le rappel dans chacun des trois schémas.
+ *
+ * `brut` est `unknown` parce que c'est ce que rend `await req.json()` : le
+ * corps vient du réseau, il n'a aucune forme garantie, et la double assertion
+ * ci-dessous est le seul endroit du site qui a le droit de le supposer.
+ */
+export function localeDuCorps(brut: unknown): Locale {
+  const valeur = (brut as { locale?: unknown } | null)?.locale;
+  return typeof valeur === "string" && estLocale(valeur) ? valeur : LOCALE_DEFAUT;
+}
+
+/**
  * La langue d'un chemin d'URL.
  *
  * `/en` et `/en/...` sont anglais ; TOUT LE RESTE est français, y compris les

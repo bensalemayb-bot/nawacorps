@@ -7,6 +7,23 @@
 
 ---
 
+> ## Deux décisions du 31 août 2026 — elles priment sur ce qui suit
+>
+> **1. Google sort de l'offre.** Le studio ne vend plus « fiche Google
+> complétée » ni le sticker vitrine « Avis Google ». Ces lignes ont été
+> retirées de la grille des formules, du catalogue et de la liste des maux du
+> client. Le mot « Google » ne doit plus désigner **une prestation** nulle part
+> sur le site ; il peut encore décrire un fait (« vos clients vous cherchent
+> sur Google »), jamais une chose vendue.
+>
+> **2. « Nous » remplace « je », et « une seule personne » disparaît.** La
+> revendication d'être seul ne se lit plus nulle part sur le site public. Voir
+> `docs/agents/brand/voice-guide.md` §4 pour la règle et, surtout, pour sa
+> limite : un pluriel n'autorise **aucun** effectif, bureau ou ancienneté
+> inventé. Ce qui suit dans ce document décrit encore par endroits une
+> structure d'une personne — c'est un fait interne exact, qui ne s'écrit plus
+> côté public.
+
 ## 1. Le produit
 
 **Studio de création digitale** indépendant à Genève, opéré par **Ayoub Bensalem**
@@ -47,7 +64,6 @@ Le prospect qualifié coche au moins deux de ces cases :
 - pas de formulaire de devis, ou un formulaire qui ne fonctionne plus
 - pas de prise de rendez-vous alors que son métier en vit
 - illisible ou cassé sur téléphone
-- une fiche Google incomplète ou sans photos
 
 ### Les métiers
 
@@ -194,7 +210,6 @@ Trois formules, et trois seulement, sur la grille d'accueil.
 | Domaine + hébergement 1ʳᵉ année | ✓ | ✓ | ✓ |
 | **Prise de rendez-vous en ligne** | — | ✓ | ✓ |
 | **Devis automatisé** (estimation immédiate) | — | ✓ | ✓ |
-| Fiche Google complétée | — | ✓ | ✓ |
 | Photos de l'entreprise | — | ✓ | ✓ |
 | **Assistant IA personnalisé** — formé sur vos prestations et vos tarifs, répond 24/7 | — | — | ✓ |
 | **Alerte instantanée** sur votre téléphone à chaque demande | — | — | ✓ |
@@ -285,7 +300,6 @@ Conservée, hors de la grille principale.
 | Carte de fidélité à tampons | 220.– |
 | Bons cadeaux | dès 250.– |
 | Chevalets de table | 140.– |
-| Sticker vitrine « Avis Google » + QR | 120.– |
 | Traduction de carte FR / EN | dès 220.– |
 | Pack saisonnier | 490.– |
 

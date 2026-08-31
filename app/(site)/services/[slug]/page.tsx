@@ -212,7 +212,7 @@ const TEXTES: Record<Locale, TextesFormule> = {
     sections: {
       inclus: { meta: "Inclus", h2: ["Ce que vous", "recevez."] },
       perimetre: { meta: "Périmètre", h2: ["Ce qui n'est", "pas inclus."] },
-      questions: { meta: "Questions", h2: ["Ce qu'on me", "demande."] },
+      questions: { meta: "Questions", h2: ["Ce qu'on nous", "demande."] },
     },
     monterA: "Il faut monter à ",
     voirPalier: ["Voir ", " →"],
@@ -261,7 +261,7 @@ const TEXTES: Record<Locale, TextesFormule> = {
     sections: {
       inclus: { meta: "Included", h2: ["What you", "get."] },
       perimetre: { meta: "Scope", h2: ["What is not", "included."] },
-      questions: { meta: "Questions", h2: ["What I get", "asked."] },
+      questions: { meta: "Questions", h2: ["What we get", "asked."] },
     },
     monterA: "You need to move up to ",
     voirPalier: ["See ", " →"],

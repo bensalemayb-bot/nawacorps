@@ -84,8 +84,6 @@ type Libelles = {
   afficheVotre: string;
   afficheMot: string;
   afficheFormats: string;
-  votreAvis: string;
-  scannez: string;
   calendrier: string;
   carnet: string;
   entretien: readonly string[];
@@ -127,8 +125,6 @@ const LIBELLES: Record<Locale, Libelles> = {
     afficheVotre: "votre",
     afficheMot: "AFFICHE",
     afficheFormats: "Vitrine · A4 · carré",
-    votreAvis: "Votre avis",
-    scannez: "Scannez — 30 secondes",
     calendrier: "Calendrier du mois",
     carnet: "Carnet d'entretien",
     entretien: [
@@ -164,8 +160,6 @@ const LIBELLES: Record<Locale, Libelles> = {
     // Glossaire §3 : « affiche » ⇒ `poster`, jamais `flyer`.
     afficheMot: "POSTER",
     afficheFormats: "Window · A4 · square",
-    votreAvis: "Your review",
-    scannez: "Scan — 30 seconds",
     calendrier: "The month's calendar",
     // Glossaire §3 : « suivi » ⇒ `upkeep`. C est bien l abonnement mensuel
     // qu illustre cette vignette, donc le mot est a sa place ici — a la
@@ -286,21 +280,20 @@ const AfficheEvenement = ({ t }: { t: Libelles }): ReactElement => (
   </div>
 );
 
-/* PHOTO REELLE ICI — le sticker pose sur une vraie vitrine remplacera ce
-   bloc. Le QR dessine ici n encode rien : c est une trame. */
-const StickerAvis = ({ t }: { t: Libelles }): ReactElement => (
-  <div className="vg vg-sticker" aria-hidden="true">
-    <div className="vg-sticker-p">
-      <span className="vg-qr" />
-      <div className="vg-sticker-txt">
-        <span className="vg-over">{t.votreAvis}</span>
-        <i className="vg-bar" style={{ width: "82%" }} />
-        <i className="vg-bar vg-thin" style={{ width: "58%" }} />
-        <span className="vg-micro">{t.scannez}</span>
-      </div>
-    </div>
-  </div>
-);
+/* LA VIGNETTE `StickerAvis` A ETE RETIREE LE 31 AOUT 2026, AVEC SA PRESTATION.
+   Elle dessinait le sticker vitrine « avis Google » — un QR, « Votre avis »,
+   « Scannez — 30 secondes ». La ligne `sticker-avis` est sortie de l offre le
+   meme jour, en meme temps que la fiche Google : le mot Google ne designe plus
+   une prestation nulle part sur le site. Ses deux libelles (`votreAvis`,
+   `scannez`) sont partis avec elle des deux colonnes de `LIBELLES`, et son
+   entree a quitte la table `VIGNETTES` ci-dessous.
+   CE QUI RESTE, ET QUI N EST PAS A MOI : les regles `.vg-sticker`,
+   `.vg-sticker-p` et `.vg-sticker-txt` d app/services.css n ont plus de
+   markup a styler. Elles sont inertes, pas fausses ; leur suppression appartient
+   a qui tient les CSS.
+   SI LA LIGNE SURVIVAIT EN BASE, la page ne casserait pas : `VignettePrestation`
+   rend `null` pour un slug sans vignette, et la colonne de texte reprend toute
+   la largeur. */
 
 /* -------------------------------------------------------------------- */
 /*  Réseaux sociaux                                                      */
@@ -545,7 +538,6 @@ const VIGNETTES: Record<string, (props: { t: Libelles }) => ReactElement> = {
   photos: Photos,
   "carte-visite": CarteVisite,
   "affiche-evenement": AfficheEvenement,
-  "sticker-avis": StickerAvis,
   "reseaux-sociaux": ReseauxSociaux,
   hebergement: Hebergement,
   "suivi-assistant": SuiviAssistant,

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { buildSystemPrompt } from "@/lib/chat-prompt";
-import { LOCALES, LOCALE_DEFAUT, type Locale, estLocale } from "@/lib/i18n";
+import { LOCALES, LOCALE_DEFAUT, type Locale, localeDuCorps } from "@/lib/i18n";
 import { clientIp, hashIp } from "@/lib/iphash";
 import { askLlm } from "@/lib/llm";
 import { prisma } from "@/lib/prisma";
@@ -65,8 +65,9 @@ const SchemaChat = z.object({
    * couvre que l ABSENCE ; une valeur presente mais inconnue (« de », « EN »)
    * ferait echouer l enum, donc un 400, donc une conversation perdue a cause
    * d un champ decoratif. `.catch()` couvre les deux et retombe sur le
-   * francais — exactement ce que fait `localeDuCorps` plus bas, et les deux
-   * lectures doivent dire la meme chose.
+   * francais — exactement ce que fait `localeDuCorps` (lib/i18n.ts), qui lit
+   * le meme champ avant le schema, et les deux lectures doivent dire la meme
+   * chose.
    */
   locale: z.enum(LOCALES).catch(LOCALE_DEFAUT),
 });
@@ -115,20 +116,6 @@ const MESSAGES: Record<Locale, Refus> = {
     debit: "Too many messages, please try again later.",
   },
 };
-
-/**
- * La langue AVANT la validation du schema.
- *
- * Il en faut une pour rediger le refus du schema lui-meme, et a ce moment-la
- * `analyse.data` n existe pas encore. Cette lecture ne valide rien : elle lit
- * un champ, le reconnait ou retombe sur le francais. C est `estLocale`
- * (lib/i18n.ts) qui tranche — la meme garde que celle du layout, pour qu il
- * n existe qu une seule definition de ce qu est une langue connue.
- */
-function localeDuCorps(brut: unknown): Locale {
-  const valeur = (brut as { locale?: unknown } | null)?.locale;
-  return typeof valeur === "string" && estLocale(valeur) ? valeur : LOCALE_DEFAUT;
-}
 
 function budgetQuotidien(): number {
   const brut = Number(process.env.CHAT_DAILY_LIMIT);

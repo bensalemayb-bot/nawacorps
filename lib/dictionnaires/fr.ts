@@ -88,7 +88,10 @@ const fr = {
     tousLesServices: "Tous les services",
     studio: "Le studio",
     contact: "Contact",
-    /** La pastille pleine, à droite — elle mène à /devis. */
+    /**
+     * La pastille pleine, à droite — elle mène à /devis.
+     * « mon site » EST CELUI DU VISITEUR : voir `formulaire.envoyer`.
+     */
     devis: "Refaire mon site",
     /** aria-label du bouton burger. */
     ouvrirMenu: "Ouvrir le menu",
@@ -153,13 +156,13 @@ const fr = {
      * romain de l'italique, et il n'y a pas d'espace dans le JSX autour du
      * `<span>`.
      */
-    titreLigne1: "Montrez-moi ce que vous avez.",
-    titreLigne2Debut: "Je vous dis ",
+    titreLigne1: "Montrez-nous ce que vous avez.",
+    titreLigne2Debut: "Nous vous disons ",
     titreLigne2Italique: "ce qui manque.",
     /** Le bouton plein. Le « → » qui suit est décoratif, il n'est pas ici. */
     ecrireWhatsapp: "Écrire sur WhatsApp",
     /** L'amorce du formulaire, juste au-dessus de lui. */
-    ouParEcrit: "ou dites-moi en deux lignes ce qu'il vous faut",
+    ouParEcrit: "ou dites-nous en deux lignes ce qu'il vous faut",
     /** La bande de quatre colonnes sous le formulaire. */
     lieu: "Genève, Suisse",
     horaires: "Lu–Sa · 9h–19h",
@@ -195,6 +198,13 @@ const fr = {
     messageLabel: "Votre message",
     /** Le libellé du champ leurre anti-robot, hors écran et hors tabulation. */
     leurre: "Ne remplissez pas ce champ",
+    /**
+     * LE « MA » EST CELUI DU VISITEUR, pas celui du studio, et c'est pour ça
+     * qu'il survit au passage au pluriel du 31 août 2026 : c'est SA demande
+     * qu'il envoie. Même chose pour `nav.devis`, les trois `offres.*Cta` et
+     * `hero.ctaPrincipal` — un CTA se lit à la première personne de celui qui
+     * clique (guide de voix §7). La voix DU STUDIO, elle, dit « nous ».
+     */
     envoyer: "Envoyer ma demande",
     /** L'état du bouton pendant la requête. */
     envoiEnCours: "Envoi…",
@@ -205,11 +215,11 @@ const fr = {
      * surtout AUCUN délai de réponse : le seul engagement autorisé est
      * `MENTION_REPONSE` (lib/familles.ts), affiché au-dessus du formulaire.
      */
-    succes: "Message reçu — il arrive directement sur mon téléphone.",
+    succes: "Message reçu — il arrive directement sur notre téléphone.",
     /** Le serveur a répondu, mais en erreur, et sans message exploitable. */
-    erreurEnvoi: "Envoi impossible pour le moment. Écrivez-moi sur WhatsApp en attendant.",
+    erreurEnvoi: "Envoi impossible pour le moment. Écrivez-nous sur WhatsApp en attendant.",
     /** Le `fetch` lui-même a échoué : réseau coupé, requête interrompue. */
-    erreurReseau: "Connexion interrompue. Écrivez-moi sur WhatsApp en attendant.",
+    erreurReseau: "Connexion interrompue. Écrivez-nous sur WhatsApp en attendant.",
   },
 
   /**
@@ -222,7 +232,7 @@ const fr = {
    *     plus** chacune. binacore.css révèle les `.l` une par une et le CSS les
    *     désigne par `:nth-child(1|2|3)` — il y en a donc EXACTEMENT trois, ni
    *     deux ni quatre. Une ligne qui déborde repousse `hero-foot` sous le pli.
-   *     Décompte actuel : fr 15 / 16 / 19, en 16 / 15 / 16.
+   *     Décompte actuel : fr 15 / 16 / 19, en 16 / 15 / 19.
    *  2. `sousTitre` + le fragment de prix : budgété en LIGNES RENDUES, pas en
    *     signes. `.hero-sub` fait 42ch et une 3ᵉ ligne pousse `hero-foot` hors
    *     de l'écran. Deux lignes tiennent jusqu'à ~87 signes tout compris —
@@ -242,9 +252,20 @@ const fr = {
     kickerCible: "Pour les PME",
     h1Ligne1: "Site, imprimés,",
     h1Ligne2: "photos, réseaux.",
-    /** La ligne 3 est coupée autour de son `.serif-i` — l'espace est dans la chaîne. */
-    h1Ligne3Debut: "Une seule ",
-    h1Ligne3Italique: "personne",
+    /**
+     * La ligne 3 est coupée autour de son `.serif-i` — l'espace est dans la
+     * chaîne.
+     *
+     * ELLE DISAIT « Une seule personne. » JUSQU'AU 31 AOÛT 2026. C'était la
+     * revendication d'être seul, écrite au plus gros caractère du site ; la
+     * décision du propriétaire l'a retirée du site public en même temps
+     * qu'elle faisait passer la voix au pluriel (voice-guide.md §4). Ce qui la
+     * remplace dit le fait qui restait vrai et qui vend autant : d'où vient le
+     * travail. 19 signes recollés, comme la ligne d'avant — le budget de 21 est
+     * tenu sans nouvelle mesure.
+     */
+    h1Ligne3Debut: "Un studio à ",
+    h1Ligne3Italique: "Genève",
     h1Ligne3Fin: ".",
     sousTitre: "Le site refait en une semaine, et vous n'avez rien à préparer.",
     /**
@@ -254,7 +275,10 @@ const fr = {
      * lib/format.ts : ce sont eux qui ont valeur légale.
      */
     sousTitrePrixDes: "Dès",
-    /** Espace final : la flèche `.ar` suit immédiatement dans le JSX. */
+    /**
+     * Espace final : la flèche `.ar` suit immédiatement dans le JSX.
+     * « mon site » EST CELUI DU VISITEUR — voir `formulaire.envoyer`.
+     */
     ctaPrincipal: "Faire refaire mon site ",
     ctaSecondaire: "Voir les démonstrations",
     defiler: "Défiler",
@@ -262,13 +286,22 @@ const fr = {
     /** Temps 2 — l'étiquette « (001) » n'est pas ici : c'est un chiffre. */
     temps2Section: "Le noyau",
     phraseDebut: "Le site, le logo, les cartes, les photos. Vous dites oui, ",
-    phraseItalique: "je fais le reste",
+    phraseItalique: "nous faisons le reste",
     phraseFin: ".",
 
-    /** Temps 3 — le grand mot, son unité, et le tableau de cinq lignes. */
+    /**
+     * Temps 3 — le grand mot, son unité, et le tableau de cinq lignes.
+     *
+     * L'UNITÉ DISAIT « d'une seule main » JUSQU'AU 31 AOÛT 2026, et c'était la
+     * même revendication que la troisième ligne du `h1` : le studio ne se
+     * présente plus comme une personne seule. « de bout en bout » qualifie le
+     * même « Tout » — l'étendue de l'offre, du premier geste au dernier — sans
+     * rien dire de l'effectif. 15 signes contre 16 : l'unité tient dans la même
+     * ligne de petites capitales espacées, elle a même un signe de marge.
+     */
     temps3Section: "Le cœur",
     grandMot: "Tout",
-    grandMotUnite: "d'une seule main",
+    grandMotUnite: "de bout en bout",
     specAtelier: "Atelier",
     specAtelierValeur: "Genève",
     specSite: "Le site",
@@ -291,28 +324,38 @@ const fr = {
   /**
    * components/Strip.tsx — la bande défilante, `aria-hidden`.
    *
-   * >>> `delai` DIT « Une semaine » TOUT COURT, ET C'EST À TRANCHER. <<<
+   * `delai` DISAIT « Une semaine » TOUT COURT, C'EST TRANCHÉ.
    *
    * La règle §5 du guide de voix veut que chaque occurrence du délai porte,
    * dans la même unité de lecture, son point de départ ou ce qui est livré ; et
    * une vignette de marquee est bien une unité de lecture, décorative mais
-   * lisible. La chaîne ci-dessous enfreint donc la règle, et elle l'enfreignait
-   * déjà avant le chantier anglais : elle est reprise **au mot près** du JSX
+   * lisible. La chaîne enfreignait donc la règle, et elle l'enfreignait déjà
+   * avant le chantier anglais : elle avait été reprise **au mot près** du JSX
    * d'origine, parce que le branchement du dictionnaire ne devait pas changer
-   * un caractère à l'écran.
+   * un caractère à l'écran. Le propriétaire a validé la correction.
    *
-   * L'anglais, lui, naît conforme : `strip.delai` y vaut « One week from your
-   * go-ahead ». Les deux langues disent donc deux choses différentes à cet
-   * endroit précis, et c'est le seul du site. Si le français est corrigé —
-   * « Une semaine dès votre feu vert » —, les deux se rejoignent et ce
-   * paragraphe disparaît.
+   * `delai` porte désormais son POINT DE DÉPART, comme l'anglais le faisait
+   * déjà — « One week from your go-ahead ». C'était le seul endroit du site où
+   * les deux langues ne disaient pas la même chose ; elles se rejoignent.
+   *
+   * C'est aussi la seule vignette de la bande qui compte plus d'un souffle, et
+   * c'est voulu : la règle §5 prime sur la régularité du défilé.
    */
   strip: {
     refonte: "Refonte de site",
     devis: "Demande de devis",
     rendezVous: "Prise de rendez-vous",
-    ficheGoogle: "Fiche Google",
-    delai: "Une semaine",
+    /**
+     * LA VIGNETTE DISAIT « Fiche Google » JUSQU'AU 31 AOÛT 2026. La fiche
+     * Google a cessé d'être une prestation du studio ce jour-là : elle sort
+     * donc de la bande, qui n'énumère que ce qui se vend. Ce qui la remplace
+     * est la ligne de vitrine que la bande ne nommait pas — et que le `h1`
+     * annonce pourtant depuis le premier écran (« Site, imprimés, photos,
+     * réseaux »). La CLÉ a suivi le contenu : `ficheGoogle` désignait la
+     * prestation, pas l'emplacement.
+     */
+    reseauxSociaux: "Réseaux sociaux",
+    delai: "Une semaine dès votre feu vert",
     lieu: "Genève",
   },
 
@@ -337,10 +380,10 @@ const fr = {
   services: {
     section: "Services",
     titreLigne1: "Six gestes,",
-    titreLigne2: "la même main.",
+    titreLigne2: "le même endroit.",
     titre01: "Refonte de site",
     corps01:
-      "Votre site actuel, repris et refait : une page, lisible sur téléphone, rapide, à jour. Les textes existants sont récupérés puis réécrits — vous signalez ce qui a changé depuis. Une semaine dès votre feu vert, deux allers-retours compris ; le site fini vous est présenté et validé avant d'être mis en ligne. C'est le produit d'entrée, et celui qui porte tout le reste : le formulaire, les rendez-vous, la fiche Google et l'assistant s'y branchent.",
+      "Votre site actuel, repris et refait : une page, lisible sur téléphone, rapide, à jour. Les textes existants sont récupérés puis réécrits — vous signalez ce qui a changé depuis. Une semaine dès votre feu vert, deux allers-retours compris ; le site fini vous est présenté et validé avant d'être mis en ligne. C'est le produit d'entrée, et celui qui porte tout le reste : le formulaire, les rendez-vous et l'assistant s'y branchent.",
     lien01: "Voir les trois formules →",
     titre02: "Devis et rendez-vous directement sur le site",
     corps02:
@@ -354,13 +397,23 @@ const fr = {
     corps04:
       "Un logotype si vous n'en avez pas, une palette et des typographies qui tiennent du site aux véhicules, et les règles qui disent où va quoi. Puis ce que vos clients gardent en main : cartes de visite 85 × 55 recto-verso, affiches, stickers vitrine. Les photos de votre entreprise sont prises sur place, un jour où vous travaillez — il n'y a rien à mettre en scène. Ces lignes se chiffrent sur devis : un tirage, un format et un papier ne se devinent pas.",
     lien04: "Voir le logo et les photos →",
-    titre05: "Fiche Google et réseaux sociaux",
+    /**
+     * LE GESTE 05 S'APPELAIT « Fiche Google et réseaux sociaux », ET IL PORTAIT
+     * DEUX PRESTATIONS DONT L'UNE N'EXISTE PLUS. La fiche Google est sortie de
+     * l'offre le 31 août 2026 : le geste ne garde donc que la seconde moitié,
+     * qui était de toute façon celle vers laquelle son renvoi pointait
+     * (`/services/reseaux-sociaux`). Le corps est repris de la matière de cette
+     * page-là (lib/familles.ts, famille « reseaux-sociaux ») pour que les deux
+     * disent la même chose au mot près — le partenaire de production compris,
+     * qui doit rester nommé.
+     */
+    titre05: "Réseaux sociaux, tenus pour vous",
     corps05:
-      "Votre fiche Google complétée : photos, horaires exacts, zone d'intervention, réponses aux avis. C'est ce que voient vos futurs clients avant votre site, et souvent à sa place. Les réseaux sociaux, eux, se prennent en entier — le calendrier du mois vous est proposé, vous le validez, et il part : visuels, textes, publication et réponses aux messages. La production est faite avec un partenaire du studio, et le travail vous est rendu par moi. Sur devis.",
+      "Les réseaux sociaux se prennent en entier : le calendrier du mois vous est proposé, vous le validez, et il part — visuels, textes, publication aux heures utiles, réponses aux commentaires et aux messages. Publier une fois ne coûte rien ; publier chaque semaine pendant un an, c'est un métier, et c'est celui-là qui est repris. La production est faite avec un partenaire du studio, et c'est nous qui vous rendons le travail. Sur devis.",
     lien05: "Voir les réseaux sociaux →",
     titre06: "Restaurants et cafés",
     corps06:
-      "Pour les cafés et les restaurants : la carte reprise en entier — l'ordre des sections, la lisibilité des prix, la place des mentions obligatoires —, avec ses fichiers d'impression, sa version en ligne et son QR. Puis ce qui tient la salle : chevalets de table, carte de fidélité, bons cadeaux et supports de saison. Une ligne à part, tenue depuis le début, et ouverte à qui n'a pas de site chez moi. Sur devis.",
+      "Pour les cafés et les restaurants : la carte reprise en entier — l'ordre des sections, la lisibilité des prix, la place des mentions obligatoires —, avec ses fichiers d'impression, sa version en ligne et son QR. Puis ce qui tient la salle : chevalets de table, carte de fidélité, bons cadeaux et supports de saison. Une ligne à part, tenue depuis le début, et ouverte à qui n'a pas de site chez nous. Sur devis.",
     lien06: "Voir la ligne restaurant →",
   },
 
@@ -378,11 +431,11 @@ const fr = {
     etape01Moment: "En amont",
     etape01Titre: "L'état des lieux",
     etape01Texte:
-      "On regarde ensemble ce que vous montrez aujourd'hui : votre site, vos imprimés, votre fiche Google. Ce qui manque, ce qui bloque, ce que vos clients ne trouvent pas. Chez vous ou par téléphone.",
+      "On regarde ensemble ce que vous montrez aujourd'hui : votre site, vos imprimés, vos réseaux sociaux. Ce qui manque, ce qui bloque, ce que vos clients ne trouvent pas. Chez vous ou par téléphone.",
     etape02Moment: "Début de semaine",
     etape02Titre: "La maquette",
     etape02Texte:
-      "Vous voyez l'avant / après en début de semaine. Vous validez ou on ajuste — deux allers-retours sont compris.",
+      "Vous voyez l'avant / après en début de semaine. Vous validez ou nous ajustons — deux allers-retours sont compris.",
     etape03Moment: "Fin de semaine",
     etape03Titre: "La mise en ligne",
     etape03Texte:
@@ -390,7 +443,7 @@ const fr = {
     etape04Moment: "Ensuite",
     etape04Titre: "Le suivi",
     etape04Texte:
-      "Un tarif change, une prestation s'ajoute, un horaire bouge ? Vous m'écrivez, et c'est moi qui corrige. Une affiche pour la rentrée, des cartes à réimprimer : vous m'écrivez aussi. La deuxième année, c'est encore la même personne.",
+      "Un tarif change, une prestation s'ajoute, un horaire bouge ? Vous nous écrivez, et c'est nous qui corrigeons. Une affiche pour la rentrée, des cartes à réimprimer : vous nous écrivez aussi. La deuxième année, c'est encore le même studio.",
     /** Espace final : la flèche `.ar` suit. */
     cta: "Voir les formules et les prix ",
   },
@@ -414,8 +467,17 @@ const fr = {
     paragraphe2:
       "Ce que ça change se voit à l'usage. Le travail commence à votre feu vert, pas à la réception de vos textes. Le site fini vous est présenté et validé avant d'être mis en ligne. Deux allers-retours sont compris, et ils sont écrits — une prestation qu'on borne est une prestation qu'on tient.",
     paragraphe3:
-      "Pas de bureaux, pas d'équipe commerciale : votre site est dessiné et construit par la même personne, et vous traitez avec elle du premier message à la livraison. C'est encore elle l'année suivante, quand un tarif change, qu'il faut une affiche pour la rentrée ou qu'un formulaire doit poser une question de plus.",
-    faitLieu: "Genève",
+      "Pas de bureaux, pas d'équipe commerciale : votre site est dessiné et construit au même endroit, et vous parlez à qui le fait, du premier message à la livraison. C'est encore nous l'année suivante, quand un tarif change, qu'il faut une affiche pour la rentrée ou qu'un formulaire doit poser une question de plus.",
+    /**
+     * `faitLieu` A QUITTÉ CE DICTIONNAIRE, ET IL NE FAUT PAS L'Y REMETTRE.
+     * Il portait « Genève » / « Geneva », c'est-à-dire la LOCALITÉ DU STUDIO —
+     * une donnée, pas un texte, au même titre que l'e-mail et le téléphone. Sa
+     * source unique est `CONTACT` dans lib/site.ts, où elle existe en deux
+     * graphies : `ville` pour tout ce qui part en donnée structurée, dans les
+     * DEUX langues, et `villeEn` pour ce qu'un humain lit. C'est
+     * components/Studio.tsx qui choisit, et son docblock dit pourquoi.
+     * La note, elle, est bien du texte : elle reste ici.
+     */
     faitLieuNote: "Basé ici",
     /** « une semaine » porte ici ce qui est livré — règle §5, comme partout. */
     faitDelai: "Une semaine",
@@ -452,7 +514,15 @@ const fr = {
     sitePuce1: "Tout La Vitrine, plus :",
     sitePuce2: "Prise de rendez-vous en ligne",
     sitePuce3: "Devis chiffré automatiquement",
-    sitePuce4: "Fiche Google et photos comprises",
+    /**
+     * LA PUCE DISAIT « Fiche Google et photos comprises ». La fiche Google
+     * n'est plus vendue depuis le 31 août 2026 ; ce que Le Site apporte de plus
+     * que La Vitrine est écrit dans lib/formules.ts (`apporte`), et la photo en
+     * est le troisième point. La puce n'annonce donc plus que ce qui est
+     * réellement au contrat.
+     */
+    sitePuce4: "Photos de votre entreprise comprises",
+    /** « mes demandes » est celui du visiteur — voir `formulaire.envoyer`. */
     siteCta: "Recevoir mes demandes",
     assistantPuce1: "Tout Le Site, plus :",
     assistantPuce2: "L'assistant de ce site, sur le vôtre",
@@ -490,7 +560,7 @@ const fr = {
   carte: {
     titreDebut: "Tout ce que ",
     titreItalique: "fait le studio",
-    lede: "Le site est le produit d'entrée ; il n'est pas le seul atelier. Ce qui s'imprime et ce qui se publie chaque semaine passent devant : ce sont les deux que le studio met en vitrine à côté des formules. Le reste suit, entier, et se commande avec un site chez moi comme sans — les supports de restaurant compris.",
+    lede: "Le site est le produit d'entrée ; il n'est pas le seul atelier. Ce qui s'imprime et ce qui se publie chaque semaine passent devant : ce sont les deux que le studio met en vitrine à côté des formules. Le reste suit, entier, et se commande avec un site chez nous comme sans — les supports de restaurant compris.",
     rang: "Également à l'atelier",
     rangDescription:
       "Logo et photos, hébergement du site, restaurants et cafés : trois pages entières, qui gardent leur prix et leur devis. Elles passent après, pas au rabais.",
@@ -525,13 +595,20 @@ const fr = {
     titreCache: "Questions fréquentes",
     question1: "Une semaine, vraiment ?",
     reponse1:
-      "Oui, et c'est la même semaine que vous ayez déjà un site ou non. Je reprends vos textes, je refais la mise en page, je branche le formulaire et les rendez-vous. Le délai court dès votre feu vert, pas dès que vous m'avez envoyé quelque chose : vous n'avez rien à préparer.",
+      "Oui, et c'est la même semaine que vous ayez déjà un site ou non. Nous reprenons vos textes, nous refaisons la mise en page, nous branchons le formulaire et les rendez-vous. Le délai court dès votre feu vert, pas dès que vous nous avez envoyé quelque chose : vous n'avez rien à préparer.",
+    /**
+     * LES QUESTIONS SONT DITES PAR LE VISITEUR, LES RÉPONSES PAR LE STUDIO.
+     * D'où le « je » de celle-ci et de `question4`, qui restent au singulier
+     * après le passage de la voix au pluriel : c'est le lecteur qui parle, et
+     * le mettre au pluriel lui prêterait une entreprise à plusieurs têtes qu'on
+     * ne connaît pas. Les réponses, elles, disent « nous ».
+     */
     question2: "Je n'ai ni textes ni photos. C'est bloquant ?",
     reponse2:
-      "Non, et c'est compris dans le prix. Si un site existe, je récupère ce qui s'y trouve et je le réécris ; vous me dites ce qui a changé. Sinon je vous propose une maquette rédigée, vous corrigez. Les photos de votre entreprise font partie du Site et de L'Assistant.",
+      "Non, et c'est compris dans le prix. Si un site existe, nous récupérons ce qui s'y trouve et nous le réécrivons ; vous nous dites ce qui a changé. Sinon nous vous proposons une maquette rédigée, vous corrigez. Les photos de votre entreprise font partie du Site et de L'Assistant.",
     question3: "Qui gère l'hébergement et le nom de domaine ?",
     reponse3Avant:
-      "Moi. Domaine et hébergement de la première année sont compris dans les trois formules. ",
+      "Nous. Domaine et hébergement de la première année sont compris dans les trois formules. ",
     reponse3Apres: " Le domaine reste à votre nom : il vous appartient.",
     tarifsAvant: "Ensuite, ",
     tarifsMilieu:
@@ -543,10 +620,10 @@ const fr = {
       "Ensuite, le suivi mensuel prend le relais : hébergement, mises à jour et sauvegardes — et l'assistant quand votre site en a un, auquel cas le suivi est obligatoire.",
     question4: "Et après, si j'ai besoin d'autre chose ?",
     reponse4:
-      "Deux allers-retours sont compris pendant la conception. Une fois en ligne, un message suffit : un tarif qui bouge, une prestation qui s'ajoute, un horaire qui change. Les modifications de contenu sont comprises dans le suivi de L'Assistant ; sur les deux autres formules, elles sont facturées à la demande. Et vous n'êtes pas limité au site : logotype, cartes de visite, affiche, photos de votre entreprise, fiche Google, réseaux sociaux, supports de restaurant — sur devis, avec un site chez moi comme sans.",
+      "Deux allers-retours sont compris pendant la conception. Une fois en ligne, un message suffit : un tarif qui bouge, une prestation qui s'ajoute, un horaire qui change. Les modifications de contenu sont comprises dans le suivi de L'Assistant ; sur les deux autres formules, elles sont facturées à la demande. Et vous n'êtes pas limité au site : logotype, cartes de visite, affiche, photos de votre entreprise, réseaux sociaux, supports de restaurant — sur devis, avec un site chez nous comme sans.",
     question5: "À ce prix-là, qu'est-ce qui n'est pas fait ?",
     reponse5:
-      "Une page, pas dix. Deux allers-retours, pas trois. Vos textes sont repris de votre site actuel et réécrits, pas rédigés de zéro. Il n'y a ni bureaux, ni équipe commerciale : votre site est dessiné et construit par la même personne, celle à qui vous parlez, et c'est encore elle qui répond l'année suivante.",
+      "Une page, pas dix. Deux allers-retours, pas trois. Vos textes sont repris de votre site actuel et réécrits, pas rédigés de zéro. Il n'y a ni bureaux, ni équipe commerciale : votre site est dessiné et construit au même endroit, et vous parlez à qui le fait. C'est encore nous qui répondons l'année suivante.",
     /** Espace final : la flèche `.ar` suit. */
     ctaDevis: "Demander un devis ",
     ctaFormules: "Voir les formules",

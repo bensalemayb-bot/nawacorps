@@ -156,7 +156,9 @@ const CHROME: Record<Locale, Chrome> = {
     ailleurs: "Ailleurs au catalogue, ou nulle part",
     voirCatalogue: "Voir tout le catalogue →",
     questions: "Questions",
-    questionsTitre: ["Ce qu'on me", "demande."],
+    // La voix du studio est passee au pluriel le 31 aout 2026 (voice-guide.md
+    // §4) : « Ce qu on me demande » etait un « me » de studio, pas de visiteur.
+    questionsTitre: ["Ce qu'on nous", "demande."],
     demanderDevis: "Demander un devis",
     tousLesServices: "Tous les services",
   },
@@ -186,9 +188,11 @@ const CHROME: Record<Locale, Chrome> = {
     ailleurs: "Elsewhere in the catalogue, or nowhere",
     voirCatalogue: "See the whole catalogue →",
     questions: "Questions",
-    // « I », jamais « we » : le studio est tenu par une seule personne
-    // (glossaire §2).
-    questionsTitre: ["What I get", "asked."],
+    // `we`, jamais `I` — LA REGLE A ETE RENVERSEE LE 31 AOUT 2026 (glossaire
+    // anglais §2). Ce qu elle interdit desormais est plus dur : `our team of X`,
+    // `our offices`, `since 20XX`. Un pluriel n autorise aucun effectif, aucun
+    // bureau, aucune anciennete qui n existe pas.
+    questionsTitre: ["What we get", "asked."],
     // Glossaire §3 : « devis » ⇒ `a quote`, jamais `an estimate` ni
     // `a proposal`.
     demanderDevis: "Ask for a quote",

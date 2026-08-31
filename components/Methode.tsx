@@ -24,9 +24,13 @@ import { lien, type Locale } from "@/lib/i18n";
 //
 // LA METHODE RESTE CELLE DU SITE — c est le seul produit qui porte un delai —
 // mais elle ne presume plus que le visiteur n a qu un site. L etape 1 regarde
-// « ce que vous montrez aujourd hui », site, imprimes et fiche Google
+// « ce que vous montrez aujourd hui », site, imprimes et reseaux sociaux
 // compris ; l etape 4 rappelle que la meme porte sert pour une affiche ou une
 // reimpression, pas seulement pour une correction de site.
+// LA FICHE GOOGLE FIGURAIT DANS CE TRIPLET jusqu au 31 aout 2026. Elle en est
+// sortie le jour ou elle a cesse d etre une prestation : l etat des lieux
+// n inventorie que ce sur quoi le studio peut ensuite travailler, sinon
+// l etape 1 promet en creux un geste qui ne se vend plus.
 export default function Methode({ locale = "fr" }: { locale?: Locale }) {
   const t = dictionnaire(locale);
 

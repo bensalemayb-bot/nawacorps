@@ -383,10 +383,39 @@ section.offres.green{display:flow-root}
 /* ---------- services ---------- */
 .rows{border-top:1px solid var(--line)}
 .row{border-bottom:1px solid var(--line);cursor:pointer}
-.row-h{display:grid;grid-template-columns:70px 1fr auto;align-items:center;gap:20px;padding:30px 4px;transition:padding .35s var(--ease)}
+/* `position:relative` NE DEPLACE RIEN — il n y a aucun decalage a cote. Il est
+   la pour servir de bloc conteneur a `.row-t::after`, dix lignes plus bas. */
+.row-h{display:grid;grid-template-columns:70px 1fr auto;align-items:center;gap:20px;padding:30px 4px;transition:padding .35s var(--ease);position:relative}
 .row:hover .row-h{padding-left:14px}
 .row .n{font-size:.72rem;font-weight:600;letter-spacing:.18em;color:var(--brass)}
 .row h3{font-weight:550;font-size:clamp(1.5rem,3.4vw,2.5rem);letter-spacing:-.02em;line-height:1.05}
+/* LE BOUTON DE L EN-TETE VIT DANS LE <h3>, ET NON L INVERSE.
+   `.row-h` etait un <button> qui contenait le <h3> : modele de contenu
+   invalide, et ARIA rend les descendants d un bouton presentationnels — les six
+   titres sortaient du plan de titres d un lecteur d ecran. La grille `.row-h`
+   n a PAS bouge pour autant : elle reste un <div> a trois colonnes, et c est le
+   texte du titre, lui seul, qui est devenu le bouton. Le clic reste attache a
+   `.row-h` (Interactions.tsx), donc toute la ligne repond toujours a la souris ;
+   le clavier, lui, atteint enfin le bouton.
+   CE BLOC NE FAIT QUE NEUTRALISER L AGENT UTILISATEUR. `font` d abord — la
+   police d un bouton n est PAS heritee, et sans elle le titre repassait en
+   Arial ; `letter-spacing` ensuite, que le raccourci `font` ne porte pas.
+   `display:block` plutot que l `inline-block` natif : un bouton en ligne est
+   aligne sur la ligne de base et decalerait la hauteur du <h3> de quelques
+   dixiemes de pixel. Ni `padding` ni `margin` ici : `*` les met deja a zero. */
+.row h3 .row-t{display:block;width:100%;appearance:none;background:transparent;border:0;border-radius:0;font:inherit;letter-spacing:inherit;color:inherit;text-align:left}
+/* LA ZONE DE SURVOL DU BOUTON REDEVIENT TOUTE LA LIGNE, et ce n est pas du
+   confort : Interactions.tsx grossit le curseur maison sur « a, button, .row-h,
+   summary » via pointerenter/pointerleave, qui ne bouillonnent pas. Le bouton
+   etant desormais IMBRIQUE dans `.row-h`, sortir du titre pour aller vers le
+   « + » declenchait un pointerleave sur le bouton alors qu on n a pas quitte la
+   ligne : le curseur retombait de 56 px a 10 px au milieu du geste. Ce calque
+   transparent rend au bouton l emprise que `.row-h` avait quand il ETAIT le
+   bouton — une seule region de survol, donc un seul couple entree/sortie.
+   Il ne masque aucune cible : rien d autre n est cliquable dans l en-tete, et
+   `.row:hover` continue de piloter le « + » puisque le survol remonte aux
+   ancetres. Le contour de focus, lui, reste sur le texte du titre. */
+.row h3 .row-t::after{content:"";position:absolute;inset:0}
 .row .pl{width:38px;height:38px;border:1px solid var(--line);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:400;font-size:1.1rem;transition:transform .45s var(--ease),background .3s,color .3s;flex:none}
 .row:hover .pl{background:var(--ink);color:var(--bone)}
 .row.open .pl{transform:rotate(45deg)}

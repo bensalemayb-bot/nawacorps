@@ -59,7 +59,17 @@ model Service {
 model Lead {
   id            String        @id @default(cuid())
   name          String
-  phone         String
+  // NULLABLE depuis b13, et c est une correction, pas un assouplissement.
+  // Le formulaire demande « un telephone OU un e-mail » — c est son .refine()
+  // final (app/api/contact/route.ts) qui impose l un des deux. La colonne,
+  // elle, etait NOT NULL : quand le visiteur ne laissait que son e-mail, la
+  // route ecrivait une CHAINE VIDE. Deux consequences visibles, toutes deux
+  // constatees : /admin affichait une cellule vide sous un lien wa.me pointant
+  // sur https://wa.me/ — un numero qui n existe pas —, et la notification
+  // Telegram annoncait un contact qu Ayoub ne pouvait pas rappeler.
+  // Un champ vide en base se lit tout de suite comme « on ne sait pas » ;
+  // une chaine vide se lit comme un bug. Meme raison que `email` juste dessous.
+  phone         String?
   email         String?
   commerceName  String?
   commerceType  String?

@@ -22,12 +22,20 @@ un texte courant. Les dates s'écrivent `31 August 2026`.
 **Le marché ne change pas.** On dit **Geneva**. Jamais « Switzerland's
 leading », jamais « across Europe », jamais « Suisse romande » traduit.
 
-## 2. Une seule personne
+## 2. Première personne du pluriel
 
-Le studio est tenu par une seule personne. En anglais comme en français :
-**`I`, `me`, `my`** — **jamais `we`, `our`, `our team`, `the agency`**.
-C'est la règle la plus facile à enfreindre par réflexe : l'anglais commercial
-met « we » partout.
+**Renversé le 31 août 2026**, sur décision d'Ayoub. La règle disait `I`, `me`,
+`my` et interdisait `we` ; c'est l'inverse désormais, en anglais comme en
+français : **`we`, `us`, `our`**.
+
+**Ce que `we` ne doit jamais devenir.** Le studio travaille avec un partenaire
+de production, donc le pluriel n'est pas un mensonge — il le deviendrait à la
+première phrase qui annonce un effectif, une équipe, des bureaux ou une
+ancienneté. **Jamais `our team of X`, `our offices`, `since 20XX`, `our
+designers`.** L'anglais commercial fabrique ce genre de phrase tout seul : c'est
+maintenant le piège principal de cette langue, et il est plus grave que
+l'ancien. La LCD art. 3 vise les indications trompeuses et ne s'arrête pas à la
+frontière de la langue.
 
 ## 3. Les termes fixés
 

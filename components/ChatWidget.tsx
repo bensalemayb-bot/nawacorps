@@ -3,7 +3,7 @@
 import { whatsapp } from "@/lib/site";
 import { NAWA_CHAT_OUVRIR, type DetailOuverture } from "@/lib/chat-ouvrir";
 import { type Locale, lien } from "@/lib/i18n";
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 
 /**
  * Widget de chat — bloc B9.
@@ -31,6 +31,10 @@ import { useEffect, useRef, useState } from "react";
  *     sans lui, un panneau entierement anglais recevrait des reponses
  *     francaises, ce qui est pire que pas de traduction du tout.
  *
+ * Et ce que le modele ecrit passe desormais par `enSegments` avant d atteindre
+ * la bulle : il y glissait du markdown que `.chat-msg` affichait en clair.
+ * Voir le bloc de ce helper — il dit pourquoi c est du JSX et jamais du HTML.
+ *
  * LES CHAINES NE VIENNENT PAS DE lib/dictionnaires/. Ce dictionnaire tient le
  * CHROME partage — nav, menu, pied de page, formulaire — et il est charge par
  * plusieurs composants. Les phrases ci-dessous n appartiennent qu a ce
@@ -39,16 +43,132 @@ import { useEffect, useRef, useState } from "react";
  * ajoutee a lib/i18n.ts casse la compilation ici tant que sa colonne est vide.
  *
  * LE VOCABULAIRE ANGLAIS SUIT docs/agents/brand/glossaire-anglais.md : `an
- * enquiry`, `a quote`, `the next working day`, anglais britannique, `I` et
- * jamais `we`.
+ * enquiry`, `a quote`, `the next working day`, anglais britannique, et `we`
+ * jamais `I` depuis le 31 aout 2026 (§2).
+ *
+ * >>> LE PANNEAU DIT « NOUS », DANS SES DEUX COLONNES. <<<
+ *
+ * Decision du proprietaire, 31 aout 2026, renversant la precedente : le studio
+ * travaille avec un partenaire de production, il ne se raconte plus a la
+ * premiere personne du singulier. Ces phrases-ci sont celles du PANNEAU ; le
+ * modele, lui, tient la meme regle par lib/chat-prompt.ts, et les deux doivent
+ * dire la meme chose — un accueil au « je » suivi de reponses au « nous » se
+ * lit comme deux interlocuteurs.
+ *
+ * CE QUE LE PLURIEL N AUTORISE PAS, ICI COMME AILLEURS : aucun effectif, aucune
+ * equipe, aucun bureau, aucune anciennete. Le panneau n en annoncait aucun ; il
+ * ne doit jamais commencer.
+ *
+ * AYOUB N EST PLUS NOMME DANS LES ETATS. Il l etait six fois par langue —
+ * accueil, accueil cible, sous-titre, cloture, bouton d envoi, conversation
+ * complete — ce qui ecrivait a chaque coin du panneau la structure d une seule
+ * personne, celle-la meme que le site ne revendique plus. Le nom reste public
+ * (mentions legales, section « Le studio ») et le prompt le garde pour y
+ * renvoyer les questions d effectif ; ce sont les libelles du panneau qui
+ * passent au « nous ». « Envoyer ma demande » est en outre le CTA exact du
+ * guide de voix §7 — « Envoyer » seul y est proscrit.
  */
 
 type Message = { role: "user" | "assistant"; content: string };
 
+/**
+ * >>> LES BRETELLES DU MARKDOWN. LA CEINTURE EST DANS LE PROMPT. <<<
+ *
+ * Le modele ecrivait « **Le Site — 1'499.–** » et la bulle affichait les
+ * asterisques : `.chat-msg` rend du TEXTE, pas du HTML. lib/chat-prompt.ts le
+ * lui interdit desormais dans les deux langues — mais un prompt n est jamais
+ * une garantie, et le jour ou le modele change, la faute revient a l ecran
+ * sans qu une ligne du depot ne bouge. D ou ce second filet, deterministe.
+ *
+ * PAS DE dangerouslySetInnerHTML, ET CE N EST PAS NEGOCIABLE. Ce texte vient
+ * d un modele, donc d un inconnu : le passer en HTML brut ferait de chaque
+ * reponse une injection possible. On DECOUPE en segments et on rend du JSX —
+ * React echappe tout ce qui n est pas un element qu on a fabrique nous-memes.
+ *
+ * MINIMAL, DELIBEREMENT : le gras et les retours a la ligne, rien de plus.
+ * Les retours a la ligne sont deja rendus par `white-space: pre-wrap`
+ * (app/chat.css) — il n y a donc rien a faire pour eux ici, et surtout pas a
+ * fabriquer des <br>. Le reste des marqueurs est simplement RETIRE : afficher
+ * un titre ou une liste dans une bulle de conversation n a aucun sens, et
+ * chaque forme rendue serait une forme a maintenir.
+ *
+ * LE SOULIGNE (`_`) N EST PAS TRAITE, VOLONTAIREMENT. Un `_` traine dans les
+ * adresses e-mail et dans les URL que le visiteur colle ; le prendre pour de
+ * l italique mangerait le caractere au milieu d une adresse. Les modeles
+ * ecrivent le gras en asterisques dans la quasi-totalite des cas — on traite
+ * ce cas-la, et on laisse tranquille celui qui abime des donnees.
+ */
+type Segment = { texte: string; gras: boolean };
+
+/** Le gras markdown, non gourmand, retours a la ligne compris. */
+const MD_GRAS = /\*\*([\s\S]+?)\*\*/g;
+
+/**
+ * Les marqueurs qui ne valent qu en debut de ligne. Traites ligne par ligne
+ * parce que c est la seule facon de ne pas confondre un tiret de liste avec
+ * le tiret cadratin des prix (« Le Site — 1'499.– »), qui, lui, doit rester.
+ */
+function nettoyerLigne(ligne: string): string {
+  return ligne
+    .replace(/^\s{0,3}#{1,6}\s+/, "") // # Titre
+    .replace(/^(\s*)[-*+]\s+/, "$1• ") // - puce, * puce
+    .replace(/^\s*(?:[-*_]\s*){3,}$/, "") // --- separateur horizontal
+    .replace(/`/g, ""); // marqueurs de code
+}
+
+/**
+ * Les asterisques qui survivent au decoupage du gras — une paire depareillee,
+ * « **Le Site » sans fermeture — laisseraient la faute a l ecran, c est-a-dire
+ * exactement ce qu on repare. On les retire donc.
+ *
+ * MAIS PAS TOUTES : une asterisque ISOLEE entre deux espaces n est pas un
+ * marqueur, c est une multiplication (« 85 * 55 mm »). La retirer laisserait
+ * une double espace au milieu d une phrase, soit un second defaut d affichage
+ * pour en corriger un premier. Elle est donc gardee.
+ *
+ * PAS DE LOOKBEHIND `(?<=\S)` ICI, VOLONTAIREMENT. Il n existe qu a partir de
+ * Safari 16.4 ; sur un iPhone plus ancien, la seule ECRITURE de ce littéral
+ * jetterait une SyntaxError au chargement du module, et le widget entier
+ * disparaitrait pour une asterisque. Une fonction de remplacement fait le
+ * meme travail partout.
+ */
+function sansEtoiles(s: string): string {
+  return s.replace(/\*/g, (_m, i: number, tout: string) => {
+    const avant = tout[i - 1];
+    const apres = tout[i + 1];
+    const isolee =
+      (avant === undefined || /\s/.test(avant)) && (apres === undefined || /\s/.test(apres));
+    return isolee ? "*" : "";
+  });
+}
+
+/** Decoupe un message du modele en segments affichables. */
+function enSegments(brut: string): Segment[] {
+  const texte = brut.split("\n").map(nettoyerLigne).join("\n");
+  const segments: Segment[] = [];
+  let curseur = 0;
+
+  MD_GRAS.lastIndex = 0;
+  for (let m = MD_GRAS.exec(texte); m !== null; m = MD_GRAS.exec(texte)) {
+    if (m.index > curseur) {
+      segments.push({ texte: sansEtoiles(texte.slice(curseur, m.index)), gras: false });
+    }
+    segments.push({ texte: sansEtoiles(m[1]), gras: true });
+    curseur = m.index + m[0].length;
+  }
+  if (curseur < texte.length) {
+    segments.push({ texte: sansEtoiles(texte.slice(curseur)), gras: false });
+  }
+  const nets = segments.filter((s) => s.texte !== "");
+  // Un message qui ne serait QUE des marqueurs viderait la bulle. Une bulle
+  // vide se lit comme une panne : on rend alors le brut, faute avouee.
+  return nets.length > 0 ? nets : [{ texte: brut, gras: false }];
+}
+
 /** Le schema de la route plafonne le tableau envoye a 16 entrees. */
 const MAX_MESSAGES = 16;
 
-/** A partir de ce nombre de messages, le bouton « Envoyer ma demande à Ayoub » apparait. */
+/** A partir de ce nombre de messages, le bouton « Envoyer ma demande » apparait. */
 const SEUIL_BOUTON = 6;
 
 /** En dessous, un abandon ne vaut pas la peine d etre finalise. */
@@ -127,7 +247,7 @@ const TEXTES: Record<
 > = {
   fr: {
     accueil:
-      "Bonjour. Je prépare votre proposition avec Ayoub. Qu'est-ce que vous cherchez à faire faire ?",
+      "Bonjour. Nous préparons votre proposition. Qu'est-ce que vous cherchez à faire faire ?",
     /**
      * L ACCUEIL QUAND ON SAIT DEJA CE QUE LE VISITEUR EST VENU CHERCHER.
      *
@@ -141,20 +261,28 @@ const TEXTES: Record<
      * ELLE NE PROMET RIEN DE PLUS que l accueil ordinaire : pas de delai, pas
      * de prix, pas de methode. Le seul engagement du site est « Réponse le jour
      * ouvrable suivant », et il est deja ecrit dans l en-tete du panneau.
+     *
+     * ELLE NE POSE QU UNE QUESTION, ET ELLE NE PRESUME PLUS LE SITE. Elle en
+     * posait deux d un coup — le metier ET l adresse du site actuel — alors que
+     * le prompt interdit l enchainement au modele et lui interdit de presumer
+     * qu on vient pour un site. Le libelle clique peut etre « Cartes de
+     * visite » : demander l adresse d un site y est hors sujet, et le panneau
+     * n a pas a s autoriser ce que le modele a interdit. L adresse du site se
+     * demande a l etape 2 du deroule, quand elle a un sens.
      */
     accueilCible: (libelle) =>
-      `Bonjour. Votre demande porte sur « ${libelle} » — c'est noté, je prépare votre proposition avec Ayoub. Pour commencer : quel est votre métier, et l'adresse de votre site actuel s'il y en a un ?`,
+      `Bonjour. Votre demande porte sur « ${libelle} » — c'est noté, nous préparons votre proposition. Pour commencer : quel est votre métier ?`,
     bulle: "Décrivez votre besoin — réponse le jour ouvrable suivant",
     titre: "Assistant Nawa Corps",
-    sousTitre: "Réponse d'Ayoub le jour ouvrable suivant",
+    sousTitre: "Réponse le jour ouvrable suivant",
     fermer: "Fermer la conversation",
     note: "Conversation enregistrée pour traiter votre demande — voir ",
     ecrit: "L'assistant écrit",
     indispo: "Assistant indisponible — utilisez le formulaire juste en dessous ou ",
     allerFormulaire: "Aller au formulaire",
-    clos: "C'est noté — Ayoub revient vers vous le jour ouvrable suivant.",
-    terminer: "Envoyer ma demande à Ayoub",
-    completeDebut: "Conversation complète — la suite avec Ayoub directement sur ",
+    clos: "C'est noté — nous revenons vers vous le jour ouvrable suivant.",
+    terminer: "Envoyer ma demande",
+    completeDebut: "Conversation complète — la suite directement sur ",
     completeMilieu: ", ou par le ",
     completeFin: ".",
     formulaire: "formulaire",
@@ -165,21 +293,21 @@ const TEXTES: Record<
   },
   en: {
     accueil:
-      "Hello. I'm preparing your quote with Ayoub. What are you looking to have done?",
+      "Hello. We're preparing your quote. What are you looking to have done?",
     /** Meme role et memes limites que la version francaise ci-dessus. */
     accueilCible: (libelle) =>
-      `Hello. Your enquiry is about “${libelle}” — noted, I'm preparing your quote with Ayoub. To start: what do you do, and the address of your current site if you have one?`,
-    bulle: "Tell me what you need — an answer on the next working day",
+      `Hello. Your enquiry is about “${libelle}” — noted, we're preparing your quote. To start: what do you do?`,
+    bulle: "Tell us what you need — an answer on the next working day",
     titre: "Nawa Corps assistant",
-    sousTitre: "Ayoub answers on the next working day",
+    sousTitre: "An answer on the next working day",
     fermer: "Close the conversation",
     note: "This conversation is recorded so that your enquiry can be handled — see ",
     ecrit: "The assistant is typing",
     indispo: "Assistant unavailable — use the form just below, or ",
     allerFormulaire: "Go to the form",
-    clos: "Noted — Ayoub will come back to you on the next working day.",
-    terminer: "Send my enquiry to Ayoub",
-    completeDebut: "Conversation complete — carry on with Ayoub directly on ",
+    clos: "Noted — we'll come back to you on the next working day.",
+    terminer: "Send my enquiry",
+    completeDebut: "Conversation complete — carry on directly on ",
     completeMilieu: ", or through the ",
     completeFin: ".",
     formulaire: "form",
@@ -423,7 +551,19 @@ export default function ChatWidget({ locale = "fr" }: { locale?: Locale }) {
       <div className="chat-log">
         {messages.map((m, i) => (
           <div key={i} className={`chat-msg ${m.role === "user" ? "user" : "bot"}`}>
-            {m.content}
+            {/* LE TEXTE DU VISITEUR N EST PAS TOUCHE : il s affiche tel qu il
+                l a tape, asterisques comprises s il en met. Le nettoyage ne
+                vise que ce que le MODELE ecrit — c est lui, et lui seul, qui
+                glisse du markdown dans une bulle qui rend du texte. */}
+            {m.role === "user"
+              ? m.content
+              : enSegments(m.content).map((s, j) =>
+                  s.gras ? (
+                    <strong key={j}>{s.texte}</strong>
+                  ) : (
+                    <Fragment key={j}>{s.texte}</Fragment>
+                  ),
+                )}
           </div>
         ))}
         {envoi ? (

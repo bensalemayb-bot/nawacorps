@@ -5,11 +5,12 @@ import { whatsapp } from "@/lib/site";
  * LES TROIS FORMULES DE SITE — la matiere editoriale des pages
  * /services/<slug>.
  *
- * POURQUOI TROIS PAGES ET PAS DIX-HUIT. Le catalogue compte dix-huit lignes en
- * base, mais quinze d entre elles n ont qu un nom, une description d une ligne
- * et un prix. Une page batie sur si peu est du contenu mince : elle DESSERT le
- * referencement au lieu de le servir, parce qu un moteur qui trouve quinze
- * pages interchangeables cesse de faire confiance aux quinze. Les trois
+ * POURQUOI TROIS PAGES ET PAS DIX-SEPT. Le catalogue compte dix-sept lignes en
+ * base, mais quatorze d entre elles n ont qu un nom, une description d une
+ * ligne et un prix. Une page batie sur si peu est du contenu mince : elle
+ * DESSERT le referencement au lieu de le servir, parce qu un moteur qui trouve
+ * quatorze pages interchangeables cesse de faire confiance aux quatorze. Les
+ * trois
  * formules, elles, ont de la vraie matiere — ce qu elles resolvent, ce qu elles
  * contiennent, ce qu elles ne contiennent pas, a qui elles s adressent. Ce
  * fichier porte cette matiere, et rien d autre.
@@ -39,7 +40,7 @@ import { whatsapp } from "@/lib/site";
  *  - « chez les autres, le compteur part quand… » : c est une comparaison
  *    publiee. Le positionnement §8 les interdit, nommees ou non. Le fait se
  *    dit desormais sur NOUS, en nommant l attente par defaut du lecteur
- *    (« pas des que vous m aurez envoye vos textes ») — ce qui decrit une
+ *    (« pas des que vous nous aurez envoye vos textes ») — ce qui decrit une
  *    croyance, pas la pratique de quelqu un d autre.
  *  - « synchronisée avec votre agenda » : aucune source dans le
  *    positionnement, et l affirmation avait deja ete retiree ailleurs. Ce qui
@@ -72,11 +73,16 @@ import { whatsapp } from "@/lib/site";
  * ne s ecrivent nulle part. Les noms eux-memes viennent de la base, ou
  * `nameEn` reste null pour cette raison exacte.
  *
- * L ANGLAIS EST BRITANNIQUE, ET IL PARLE A LA PREMIERE PERSONNE DU SINGULIER.
- * `enquiry` jamais `inquiry`, `organisation`, `personalise` ; `I` / `me` /
- * `my`, jamais `we` / `our` / `our team`. Le studio est une personne, et
- * l anglais commercial met « we » partout par reflexe : c est la faute la plus
- * facile a commettre en relisant ce fichier.
+ * L ANGLAIS EST BRITANNIQUE, ET IL PARLE A LA PREMIERE PERSONNE DU PLURIEL.
+ * `enquiry` jamais `inquiry`, `organisation`, `personalise` ; `we` / `us` /
+ * `our`, jamais `I` / `me` / `my`. LA REGLE A ETE RENVERSEE LE 31 AOUT 2026 :
+ * elle imposait le singulier au motif que le studio est une personne, et le
+ * proprietaire a tranche l inverse. Le studio travaille avec un partenaire de
+ * production, le pluriel n est donc pas un mensonge — mais il le deviendrait a
+ * la premiere phrase qui annoncerait un effectif, une equipe, des bureaux ou
+ * une anciennete : jamais `our team of X`, `our offices`, `our designers`,
+ * `since 20XX`. Un pluriel n autorise rien de plus qu un singulier, et c est
+ * desormais LA faute la plus facile a commettre en relisant ce fichier.
  * (docs/agents/brand/glossaire-anglais.md, §1 et §2.)
  *
  * LES TROIS REGLES DE FOND NE CHANGENT PAS DE LANGUE : aucun delai en heures
@@ -318,20 +324,21 @@ export const FORMULES: Record<FormuleSlug, Formule> = {
     questions: [
       {
         q: "Une semaine — à partir de quand exactement ?",
-        r: "Dès votre feu vert. Pas dès que vous m'aurez envoyé vos textes et vos photos — c'est ce qu'on attend d'habitude, et c'est précisément ce que vous n'avez pas à faire ici. Je reprends ce qui est déjà en ligne, je le réécris, et vous me signalez ce qui a changé.",
+        r: "Dès votre feu vert. Pas dès que vous nous aurez envoyé vos textes et vos photos — c'est ce qu'on attend d'habitude, et c'est précisément ce que vous n'avez pas à faire ici. Nous reprenons ce qui est déjà en ligne, nous le réécrivons, et vous nous signalez ce qui a changé.",
         qEn: "One week — starting exactly when?",
         // « that is what people expect » nomme l attente du lecteur, pas la
         // pratique d un concurrent : la comparaison reste interdite en anglais
         // comme en francais.
-        rEn: "From your go-ahead. Not from the moment you send me your text and your photos — that is what people expect, and it is exactly what you do not have to do here. I take what is already online, I rewrite it, and you tell me what has changed.",
+        rEn: "From your go-ahead. Not from the moment you send us your text and your photos — that is what people expect, and it is exactly what you do not have to do here. We take what is already online, we rewrite it, and you tell us what has changed.",
       },
       {
         q: "Je n'ai ni textes ni photos à jour. C'est bloquant ?",
-        r: "Non, et c'est compris dans le prix. Si un site existe, je récupère ce qui s'y trouve et je le remets en forme. S'il n'y a rien, je vous propose une maquette rédigée que vous corrigez. Vous n'avez rien à préparer avant de commencer.",
+        r: "Non, et c'est compris dans le prix. Si un site existe, nous récupérons ce qui s'y trouve et nous le remettons en forme. S'il n'y a rien, nous vous proposons une maquette rédigée que vous corrigez. Vous n'avez rien à préparer avant de commencer.",
         qEn: "I have no up-to-date text or photos. Is that a problem?",
-        // « before the work starts » et non « before we start » : « we » est
-        // interdit, meme quand il englobe le client.
-        rEn: "No, and it is included in the price. If a site exists, I take what is on it and put it back into shape. If there is nothing, I propose a mock-up with the wording already written, which you then correct. You have nothing to prepare before the work starts.",
+        // « before the work starts » et non « before we start » : depuis le
+        // 31 aout 2026 « we » designe LE STUDIO, et lui seul. Un « we » qui
+        // engloberait aussi le client ferait lire deux choses sous un mot.
+        rEn: "No, and it is included in the price. If a site exists, we take what is on it and put it back into shape. If there is nothing, we propose a mock-up with the wording already written, which you then correct. You have nothing to prepare before the work starts.",
       },
       {
         q: "Et après la première année ?",
@@ -364,14 +371,12 @@ export const FORMULES: Record<FormuleSlug, Formule> = {
     apporte: [
       "Prise de rendez-vous en ligne : le visiteur choisit son créneau et reçoit sa confirmation",
       "Devis chiffré automatiquement : le visiteur repart avec une estimation",
-      "Fiche Google complétée — photos, horaires, zone d'intervention",
-      "Photos de votre entreprise, cadrées pour le site comme pour Google",
+      "Photos de votre entreprise, cadrées pour le site",
     ],
     apporteEn: [
       "Online appointments: the visitor picks a slot and gets a confirmation",
       "A priced quote worked out automatically: the visitor leaves with a figure",
-      "Google listing completed — photos, opening hours, area covered",
-      "Photos of your business, framed for the site as well as for Google",
+      "Photos of your business, framed for the site",
     ],
     cta: "Recevoir mes demandes",
     ctaEn: "Receive my enquiries",
@@ -403,9 +408,9 @@ export const FORMULES: Record<FormuleSlug, Formule> = {
       },
       {
         q: "Combien de temps, et à partir de quand ?",
-        r: "Une semaine, dès votre feu vert. Les textes de votre site actuel sont repris et réécrits, la fiche Google est complétée par mes soins et les photos sont prises sur place : vous n'avez rien à réunir avant de démarrer.",
+        r: "Une semaine, dès votre feu vert. Les textes de votre site actuel sont repris et réécrits par nos soins, et les photos sont prises sur place : vous n'avez rien à réunir avant de démarrer.",
         qEn: "How long, and starting when?",
-        rEn: "One week, from your go-ahead. The text of your current site is reused and rewritten, I complete the Google listing myself and the photos are taken on site: you have nothing to gather before the work starts.",
+        rEn: "One week, from your go-ahead. The text of your current site is reused and rewritten by us, and the photos are taken on site: you have nothing to gather before the work starts.",
       },
     ],
   },
@@ -495,11 +500,11 @@ export const FORMULES: Record<FormuleSlug, Formule> = {
       },
       {
         q: "Combien de temps, et à partir de quand ?",
-        r: "Une semaine, dès votre feu vert. L'assistant est formé sur vos prestations et vos tarifs pendant cette semaine-là : ce que vous m'auriez dit au téléphone suffit, il n'y a pas de document à préparer.",
+        r: "Une semaine, dès votre feu vert. L'assistant est formé sur vos prestations et vos tarifs pendant cette semaine-là : ce que vous nous auriez dit au téléphone suffit, il n'y a pas de document à préparer.",
         // Meme question que sur Le Site, donc meme traduction au mot pres :
         // un delai qui change de mots change de sens (guide de voix §8).
         qEn: "How long, and starting when?",
-        rEn: "One week, from your go-ahead. The assistant is trained on your services and your prices during that same week: what you would have told me on the phone is enough, there is no document to prepare.",
+        rEn: "One week, from your go-ahead. The assistant is trained on your services and your prices during that same week: what you would have told us on the phone is enough, there is no document to prepare.",
       },
     ],
   },

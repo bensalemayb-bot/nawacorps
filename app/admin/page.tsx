@@ -50,6 +50,37 @@ function versWhatsapp(telephone: string): string {
   return chiffres;
 }
 
+/**
+ * LA CELLULE DE CONTACT — ce par quoi on rappelle, et rien d autre.
+ *
+ * ELLE S APPELAIT « Telephone », ET C ETAIT LE BUG. La colonne rendait
+ * TOUJOURS un lien wa.me, alors que le formulaire du site demande « un
+ * telephone OU un e-mail ». Une demande laissee avec le seul e-mail affichait
+ * donc une cellule vide, cliquable, pointant sur `https://wa.me/` — un lien
+ * mort au moment precis ou l on cherche a joindre quelqu un. Et l e-mail, lui,
+ * n etait affiche NULLE PART : il fallait ouvrir la base pour rappeler.
+ *
+ * L ORDRE EST CELUI DU RAPPEL, pas celui de la table : WhatsApp d abord —
+ * c est le canal du studio —, l e-mail sinon, et « — » quand on n a ni l un ni
+ * l autre. Ce dernier cas ne devrait pas exister (le schema de /api/contact
+ * impose l un des deux) ; il est rendu quand meme, parce qu un lead de 2026
+ * ecrit avant le bloc B13 peut porter une chaine vide, et qu une cellule
+ * honnete vaut mieux qu un lien qui ne mene nulle part.
+ */
+function Contact({ phone, email }: { phone: string | null; email: string | null }) {
+  const tel = phone?.trim();
+  if (tel) {
+    return (
+      <a href={`https://wa.me/${versWhatsapp(tel)}`} target="_blank" rel="noopener">
+        {tel}
+      </a>
+    );
+  }
+  const mail = email?.trim();
+  if (mail) return <a href={`mailto:${mail}`}>{mail}</a>;
+  return <>—</>;
+}
+
 function messagesDe(brut: unknown): Message[] {
   if (!Array.isArray(brut)) return [];
   return brut.filter(
@@ -92,7 +123,10 @@ export default async function PageAdmin() {
               <th>Source</th>
               <th>Score</th>
               <th>Nom</th>
-              <th>Téléphone</th>
+              {/* « Contact » et non « Téléphone » : la colonne rend le numéro
+                  quand il existe, l'e-mail sinon — voir le composant du même
+                  nom plus haut. Le formulaire n'exige que l'un des deux. */}
+              <th>Contact</th>
               <th>Commerce</th>
               {/* CE QUE LA DEMANDE CONCERNE. Sans cette colonne, la table ne
                   disait rien de l intention : un visiteur cliquait « Le Site »
@@ -115,13 +149,7 @@ export default async function PageAdmin() {
                   <td className="score">{etoiles(lead.score)}</td>
                   <td>{lead.name}</td>
                   <td>
-                    <a
-                      href={`https://wa.me/${versWhatsapp(lead.phone)}`}
-                      target="_blank"
-                      rel="noopener"
-                    >
-                      {lead.phone}
-                    </a>
+                    <Contact phone={lead.phone} email={lead.email} />
                   </td>
                   <td>
                     {lead.commerceName ?? "—"}

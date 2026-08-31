@@ -86,7 +86,34 @@ export const CONTACT = {
    * Les separer evite qu une demande client se perde dans le tout-venant.
    */
   emailGeneral: "contact@nawacorps.ch",
+  /**
+   * LA LOCALITE DU NAP. Elle s ecrit « Genève », et cette graphie-la est la
+   * seule que voient les donnees structurees — voir `villeEn` juste dessous.
+   */
   ville: "Genève",
+  /**
+   * LA LOCALITE POUR LA PROSE ANGLAISE, ET RIEN D AUTRE.
+   *
+   * Elle existe parce qu une page anglaise qui ecrit « Genève » au milieu d une
+   * phrase anglaise change de langue en cours de route. Mais elle ne doit
+   * JAMAIS remplacer `ville` dans un JSON-LD ni dans un `areaServed` : le
+   * docblock de CONTACT ci-dessus dit pourquoi — ce triplet est du NAP, et
+   * DEUX GRAPHIES DE LA MEME LOCALITE BROUILLENT LE RAPPROCHEMENT AVEC LA
+   * FICHE GOOGLE. Un moteur qui lit « Geneva » sur la version anglaise et
+   * « Genève » sur la francaise voit deux etablissements possibles la ou il
+   * n y en a qu un.
+   *
+   * Donc : `villeEn` pour ce qu un humain lit ; `ville` partout ou la valeur
+   * part en donnee structuree, dans les deux langues. `region` et `pays` n ont
+   * pas de jumeau anglais pour la meme raison — ils ne servent qu au JSON-LD.
+   *
+   * ELLE N ETAIT LUE PAR PERSONNE jusqu au 31 aout 2026 : les pages anglaises
+   * ecrivaient « Geneva » en dur, et une constante que rien n appelle finit par
+   * diverger de l usage sans que personne s en apercoive. Son premier lecteur
+   * est components/Studio.tsx, ou la bande de faits affiche la localite du
+   * studio — la, et pas dans le JSON-LD de la meme page, qui garde `ville`.
+   */
+  villeEn: "Geneva",
   region: "Genève",
   pays: "CH",
 } as const;
@@ -113,8 +140,41 @@ export function whatsapp(message?: string): string {
   return message ? `${base}?text=${encodeURIComponent(message)}` : base;
 }
 
-/** Le lien par defaut : les deux CTA principaux du hero et du pied de page. */
-export const WHATSAPP_HREF = whatsapp("Bonjour, j'aimerais faire refaire le site de mon entreprise.");
+/**
+ * L AMORCE PAR DEFAUT, DANS LES DEUX LANGUES.
+ *
+ * `whatsapp()` reste volontairement sans langue : c est l appelant qui ecrit sa
+ * phrase, et les amorces editoriales vivent chez lui (lib/formules.ts,
+ * lib/familles.ts, lib/devis.ts, qui ont deja leur couple `amorce` /
+ * `amorceEn`). Seule celle-ci n avait pas de jumeau anglais, et elle est
+ * pourtant la plus visible : le CTA du pied de page, rendu sur toutes les
+ * pages, anglaises comprises. Le message partait donc en francais depuis une
+ * page anglaise — le visiteur ouvrait WhatsApp sur une phrase qu il n avait
+ * pas ecrite et ne comprenait pas forcement.
+ *
+ * Glossaire §3 : « refonte » se dit `rebuild`, jamais `revamp`.
+ */
+const AMORCE_DEFAUT: Record<Locale, string> = {
+  fr: "Bonjour, j'aimerais faire refaire le site de mon entreprise.",
+  en: "Hello, I'd like my company's website rebuilt.",
+};
+
+/**
+ * Le lien par defaut : le CTA WhatsApp du pied de page.
+ *
+ * LA LANGUE EST OPTIONNELLE ET VAUT « fr » : un appelant qui ne la passe pas
+ * obtient exactement l URL qu il obtenait avant, au caractere pres.
+ */
+export function whatsappHref(locale: Locale = LOCALE_DEFAUT): string {
+  return whatsapp(AMORCE_DEFAUT[locale]);
+}
+
+/**
+ * L ANCIENNE FORME, SANS LANGUE — conservee pour les appelants qui vivent hors
+ * de ce chantier. Elle est DERIVEE de `whatsappHref` et non recopiee : les deux
+ * ne peuvent pas diverger. Tout nouveau code appelle `whatsappHref(locale)`.
+ */
+export const WHATSAPP_HREF = whatsappHref();
 
 /**
  * Horaires — « Lu–Sa · 9h–19h », tels qu affiches en pied de page.

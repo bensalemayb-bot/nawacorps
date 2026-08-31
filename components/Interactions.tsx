@@ -24,6 +24,10 @@ declare global {
  *  - garde window.__bncInit en tete d'effet (cf. commentaire ci-dessous) ;
  *  - annotations de type (querySelectorAll<HTMLElement>, `as HTMLElement`) ;
  *  - String(...) sur deux affectations que JS coercait implicitement ;
+ *  - UNE LIGNE AJOUTEE dans « services depliables » : elle recopie la classe
+ *    `open` dans l attribut aria-expanded des en-tetes. La maquette ne
+ *    connaissait pas cet attribut ; ServicesRows.tsx, si. Sans elle, la valeur
+ *    rendue reste l etat initial et l accordeon ment aux lecteurs d ecran ;
  *  - closeMenu cible `.menu a[href*="#"]` la ou la maquette ecrivait
  *    `[href^="#"]`. Depuis B7 le site a plusieurs pages : les liens du menu
  *    sont `/#ancre`, que `^=` ne matchait plus — le menu ne se serait plus
@@ -92,11 +96,16 @@ export default function Interactions() {
 
     /* ---------- horloge ---------- */
     var clock = document.getElementById("clock") as HTMLElement;
+    // Adaptation signalee : la ville etait ecrite EN DUR (« Geneve — »), donc
+    // sur /en la nav affichait « Geneva » au rendu serveur puis repassait au
+    // francais au premier tick, une minute plus tard. On relit la ville dans
+    // l element lui-meme, que Nav a deja rendu dans la bonne langue.
+    var ville = String(clock.textContent || "Genève").split(" — ")[0];
     function tick() {
       try {
         var t = new Intl.DateTimeFormat("fr-CH", { timeZone: "Europe/Zurich", hour: "2-digit", minute: "2-digit" }).format(new Date());
-        clock.textContent = "Genève — " + t;
-      } catch (e) { clock.textContent = "Genève"; }
+        clock.textContent = ville + " — " + t;
+      } catch (e) { clock.textContent = ville; }
     }
     tick(); setInterval(tick, 30000);
 
@@ -234,6 +243,16 @@ export default function Interactions() {
         var open = row.classList.contains("open");
         document.querySelectorAll("[data-row].open").forEach(function (r) { r.classList.remove("open"); });
         if (!open) row.classList.add("open");
+        /* ADAPTATION SIGNALEE — la seule ligne de ce bloc qui ne vient pas de
+           la maquette. L en-tete de chaque ligne est un <button aria-expanded>,
+           mais l etat ouvert/ferme vit dans la classe `open` posee juste
+           au-dessus : sans cette synchronisation, l attribut garde sa valeur de
+           rendu et un lecteur d ecran annonce « replie » sur une ligne depliee,
+           pour toujours. La boucle porte sur TOUTES les lignes, pas sur la
+           seule cliquee : un clic en referme d autres. Le selecteur vise
+           l attribut plutot que `.row-h`, pour rester juste que le bouton soit
+           l en-tete lui-meme ou un bouton a l interieur du <h3>. */
+        document.querySelectorAll("[data-row]").forEach(function (r) { r.querySelector("[aria-expanded]")!.setAttribute("aria-expanded", String(r.classList.contains("open"))); });
       });
     });
 

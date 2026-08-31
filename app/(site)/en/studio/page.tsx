@@ -22,16 +22,28 @@ import {
  * perdrait son sens.
  *
  * ELLE N'EST PAS UN CALQUE MOT A MOT. Le francais tient sa voix de tournures
- * qui n'ont pas d'equivalent — « une seule main », « la rentrée » — et le
- * glossaire (docs/agents/brand/glossaire-anglais.md §7) tranche les deux :
- * « one pair of hands », et la rentree se dit par son moment,
- * « when September comes round ».
+ * qui n'ont pas d'equivalent — « la rentrée » — et le glossaire
+ * (docs/agents/brand/glossaire-anglais.md §7) la tranche : elle se dit par son
+ * moment, « when September comes round ».
+ *
+ * DEUX DECISIONS DU 31 AOUT 2026 GOUVERNENT CE FICHIER.
+ *  1. « NOUS » REMPLACE « JE » — `we`, `us`, `our` (glossaire §2, renverse).
+ *     Cette page-ci ne s'est pas contentee de changer de personne : elle
+ *     vendait le fait qu'UNE SEULE personne fasse tout — h1, section (01),
+ *     « one pair of hands » en (03). Ces phrases-la sont REECRITES. Ce qui
+ *     reste : le travail, ce qui est refuse, l'absence de bureau. Ce qui n'est
+ *     PAS ajoute : aucun effectif, aucune equipe, aucun bureau, aucune
+ *     anciennete — jamais `our team of X`, `our offices`, `since 20XX`.
+ *  2. GOOGLE SORT DE L'OFFRE. La sixieme ligne de travail — « Google
+ *     listing » — est retiree de la section (03), qui en compte donc cinq. Le
+ *     mot peut decrire un fait ; il ne nomme plus une chose vendue.
  *
  * LES REGLES DE VOIX QUI GOUVERNENT CE FICHIER, et qu'un relecteur doit
  * pouvoir verifier ligne par ligne :
- *  - `I`, `me`, `my`. JAMAIS `we`, `our`, `our team`, `the agency`. C'est la
- *    regle la plus facile a enfreindre par reflexe : l'anglais commercial met
- *    « we » partout, et le studio est UNE personne.
+ *  - `we`, `us`, `our`. `I`, `me`, `my` ne s'ecrivent plus dans la voix du
+ *    studio. Le piege a change de bord : l'anglais commercial fabrique tout
+ *    seul « our team », « our offices », « since 2019 » — et ceux-la restent
+ *    interdits, parce qu'un pluriel n'autorise rien de plus qu'un singulier.
  *  - Anglais BRITANNIQUE : `enquiry`, jamais `inquiry`.
  *  - `La Vitrine`, `Le Site`, `L'Assistant` NE SE TRADUISENT PAS, article
  *    compris — ce sont des noms propres (glossaire §5). Cette page n'en nomme
@@ -97,7 +109,7 @@ const VILLE = t.nav.horlogeVille;
  */
 const TITRE = "Ayoub Bensalem, digital design studio in Geneva";
 const DESCRIPTION =
-  "Who does the work: one person, in Geneva. What the studio can do, what it does not take on, and how a rebuild runs from the first message to going live.";
+  "Who does the work, in Geneva. What the studio can do, what it does not take on, and how a rebuild runs from the first message to going live.";
 
 export const metadata: Metadata = {
   title: TITRE,
@@ -179,17 +191,16 @@ export default function StudioEn() {
                 lignes restent courtes, comme en francais — une ligne longue
                 casse la mise en page a la revelation. */}
             <h1 className="t">
-              The studio is
+              Who does the work,
               <br />
-              one person, in {VILLE}.
+              and how.
             </h1>
           </div>
 
           <p className="lede" data-reveal>
-            Nawa Corps is Ayoub Bensalem&apos;s digital design studio. The
-            person who reads your message is the one who draws the mockup,
-            writes the code and calls you back. This page says what that
-            changes, and what it rules out.
+            Nawa Corps is Ayoub Bensalem&apos;s digital design studio, in{" "}
+            {VILLE}. This page says how a rebuild runs, what we can do, and what
+            we do not take on.
           </p>
 
           {/* .facts : le meme bandeau que la page francaise. « One week » NE
@@ -221,13 +232,13 @@ export default function StudioEn() {
         <div className="wrap">
           <div className="sec-head">
             <span className="meta" data-reveal>
-              <span className="index">(01)</span>&nbsp; The person
+              <span className="index">(01)</span>&nbsp; Who you talk to
             </span>
             <div data-reveal>
               <h2 className="t">
-                One person,
+                You talk to whoever
                 <br />
-                and you talk to me.
+                does the work.
               </h2>
             </div>
           </div>
@@ -236,18 +247,16 @@ export default function StudioEn() {
             <p>
               Ayoub Bensalem, designer and developer, in {VILLE}. The studio has
               no sales person and no account manager: nobody sells you the work
-              and then hands the file to someone else. The voice on the phone
-              and the hand on the keyboard are the same one.
+              and then hands the file to someone else. You talk to whoever does
+              the work, from the first message to going live.
             </p>
-            {/* LE FRANCAIS DIT « on se voit chez vous » ; L'ANGLAIS NE PEUT
-                PAS DIRE « we meet ». Le glossaire §2 proscrit `we` sans
-                exception, et il a raison meme quand le « we » est reciproque :
-                sur une page qui vend le fait qu'une seule personne fait le
-                travail, le lecteur lit d'abord le « we » d'entreprise. La
-                phrase se tourne donc a la premiere personne, ce qui dit
-                exactement la meme chose. */}
+            {/* « On se voit chez vous » ⇒ « We come to you ». Le glossaire §2
+                proscrivait `we` ; il est renverse depuis le 31 aout 2026, et
+                c'est desormais la forme normale. Ce que le pluriel n'autorise
+                toujours pas : un bureau. La phrase dit donc l'inverse — il n'y
+                en a pas, et on se deplace. */}
             <p>
-              No offices either, and that is said plainly. I come to you: that
+              No offices either, and that is said plainly. We come to you: that
               is where your trade is, and often the photographs that will have
               to be taken. Or the phone, if that is easier for you.
             </p>
@@ -260,14 +269,14 @@ export default function StudioEn() {
             <p>
               One exception, and it is written down: social media production is
               done with a production partner of the studio. The calendar, the
-              replies and the finished work stay on my side — you have only one
+              replies and the finished work stay on our side — you have only one
               conversation to follow.
             </p>
             <p>
               A year after going live, the address to write to has not changed,
-              and neither has the person behind it. A price that moves, a poster
-              for when September comes round, one more question on the form: it
-              is the same thread.
+              and the studio that built the site is still the one that answers.
+              A price that moves, a poster for when September comes round, one
+              more question on the form: it is the same thread.
             </p>
           </div>
         </div>
@@ -303,26 +312,27 @@ export default function StudioEn() {
             <p>
               WhatsApp, the phone, the form, or the assistant at the bottom of
               the screen. You say what you have and what is wrong with it; the
-              message lands on my phone.
+              message lands on our phone.
             </p>
 
             <h3 className="sm-grp">The stocktake</h3>
-            {/* « On regarde ensemble » ⇒ « I go through … with you » : meme
-                idee de reciprocite, sans le `we` que le glossaire §2 interdit
-                (voir la note plus haut). */}
+            {/* « On regarde ensemble » ⇒ « We go through … with you ». Et
+                « the Google listing » a quitte cette liste le 31 aout 2026 :
+                l'etat des lieux regarde ce que le client trouve, ce qui est un
+                fait — pas une prestation a vendre. */}
             <p>
-              I go through what is online today with you: the site, the Google
-              listing, what a customer finds when they search for your trade in{" "}
-              {VILLE}. You say what you want to receive — quotes, appointments,
-              calls. It is the only moment where you have something to give, and
-              it is given by talking.
+              We go through what is online today with you: the site, and what a
+              customer finds when they search for your trade in {VILLE}. You say
+              what you want to receive — quotes, appointments, calls. It is the
+              only moment where you have something to give, and it is given by
+              talking.
             </p>
 
             <h3 className="sm-grp">Your go-ahead</h3>
             <p>
               The clock starts there, and nowhere else: one week, from the
-              go-ahead to going live. You have nothing to prepare — I take the
-              words from your current site, and I write the mockup if you are
+              go-ahead to going live. You have nothing to prepare — we take the
+              words from your current site, and we write the mockup if you are
               starting from nothing.
             </p>
 
@@ -373,16 +383,17 @@ export default function StudioEn() {
             </span>
             <div data-reveal>
               <h2 className="t">
-                Six lines of work,
+                Five lines of work,
                 <br />
-                one pair of hands.
+                one place.
               </h2>
             </div>
           </div>
 
           <p className="lede" data-reveal>
             The site is the way in, not the catalogue. Here is the rest — and it
-            is the fact that one person holds all of it that makes the argument.
+            is the fact that all of it comes out of the same place that makes
+            the argument.
           </p>
 
           <ul className="prest-inc" data-reveal style={{ marginTop: 34 }}>
@@ -400,16 +411,12 @@ export default function StudioEn() {
             </li>
             <li>
               Photography — your premises, your team, your products: for the
-              site as much as for the Google listing.
-            </li>
-            <li>
-              Google listing — photos, exact opening hours, the area you cover,
-              replies to reviews.
+              site as much as for your print.
             </li>
             <li>
               Social media — the month&apos;s calendar, the images, the words,
               the posting. Produced with a production partner of the studio, and
-              delivered by me.
+              delivered by us.
             </li>
           </ul>
 
@@ -439,7 +446,7 @@ export default function StudioEn() {
             </span>
             <div data-reveal>
               <h2 className="t">
-                What I
+                What we
                 <br />
                 do not take on.
               </h2>
@@ -448,7 +455,7 @@ export default function StudioEn() {
 
           <p className="lede" data-reveal>
             A page that can refuse nothing says nothing. These four go
-            elsewhere, and I say so on the first message rather than at the
+            elsewhere, and we say so on the first message rather than at the
             third meeting.
           </p>
 
@@ -459,7 +466,7 @@ export default function StudioEn() {
             </li>
             <li>
               Tenders, large accounts and public bodies. The procedures and the
-              payment terms do not go with a one-person studio.
+              payment terms do not go with a studio this small.
             </li>
             <li>
               Companies that already have developers. They build their site
@@ -473,9 +480,9 @@ export default function StudioEn() {
 
           <div className="studio-txt" data-reveal style={{ marginTop: 34 }}>
             <p>
-              Refusing is not a pose. A one-person studio that accepts
-              everything stops holding any of its dates, and it is the next
-              customer who pays for the delay.
+              Refusing is not a pose. A studio that accepts everything stops
+              holding any of its dates, and it is the next customer who pays for
+              the delay.
             </p>
           </div>
         </div>
@@ -507,10 +514,10 @@ export default function StudioEn() {
             </p>
             <p>
               The rest of the product is behind it: when the conversation ends,
-              the enquiry lands on my phone, and I find it again in a dashboard
-              with what was said and the number left behind. That is exactly
-              what would be installed at your place, with your services and your
-              rates instead of mine.
+              the enquiry lands on our phone, and we find it again in a
+              dashboard with what was said and the number left behind. That is
+              exactly what would be installed at your place, with your services
+              and your rates instead of ours.
             </p>
             <p>
               So for that one you have nobody to take at their word. It is at

@@ -95,7 +95,17 @@ export default async function NoyauHero({
                   sous la ligne de flottaison). La maquette tient 21 caracteres
                   au plus large ; s'y tenir en reecrivant, DANS LES DEUX
                   LANGUES. Decompte, serif-i compris : fr 15 / 16 / 19,
-                  en 16 / 15 / 16. */}
+                  en 16 / 15 / 19.
+
+                  LA TROISIEME LIGNE A CHANGE LE 31 AOUT 2026. Elle disait
+                  « Une seule personne. » / « Just one person. » : c etait la
+                  revendication d etre seul, ecrite au plus gros caractere du
+                  site, et le proprietaire l a retiree du site public en meme
+                  temps qu il faisait passer la voix au pluriel
+                  (voice-guide.md §4). « Un studio à Genève. » /
+                  « A studio in Geneva. » font 19 signes recollés l une comme
+                  l autre — le budget de 21 est tenu, et le francais ne change
+                  meme pas de decompte. */}
               <span className="l"><span>{t.hero.h1Ligne1}</span></span>
               <span className="l"><span>{t.hero.h1Ligne2}</span></span>
               <span className="l"><span>{t.hero.h1Ligne3Debut}<span className="serif-i">{t.hero.h1Ligne3Italique}</span>{t.hero.h1Ligne3Fin}</span></span>
@@ -241,9 +251,9 @@ export default async function NoyauHero({
                 Or le studio ne vend pas que des sites. La revendication de
                 categorie (.agents/product-marketing.md §3) couvre « sites,
                 cartes, affiches, identite, photographie », et le pilier n°3 est
-                « un interlocuteur, a Geneve, qui reste » — le prospect a deja
-                ete abandonne une fois, son site actuel en est la preuve.
-                « Tout », suivi de « d une seule main », dit les deux d un coup,
+                « quelqu un, a Geneve, qui reste » — le prospect a deja ete
+                abandonne une fois, son site actuel en est la preuve.
+                « Tout », suivi de « de bout en bout », dit les deux d un coup,
                 et le tableau ci-dessous le detaille ligne par ligne.
                 RIEN N EST PERDU DE CE QUI PART D ICI. Le delai reste dans le
                 sous-titre du hero, dans la ligne « Le site » ci-dessous, dans
@@ -257,23 +267,34 @@ export default async function NoyauHero({
                 L ANGLAIS DIT « All », TROIS GLYPHES : plus court encore, donc
                 la contrainte tient a fortiori. « Everything » y serait
                 illisible sur un telephone, et le sens complet est porte par
-                l unite qui suit — « from one pair of hands ». */}
+                l unite qui suit — « from start to finish ». */}
             <div className="noyau-spec">
               <p className="noyau-fig">
                 <span className="noyau-num">{t.hero.grandMot}</span>
-                {/* « D UNE SEULE MAIN » QUALIFIE LE MOT QUI EST AU-DESSUS, et
-                    c est pour cela qu elle a change avec lui. Cette unite
-                    disait « a preparer » : la formule du glossaire (entree 4)
-                    au mot pres pour le benefice n°1, « vous n avez rien a
-                    preparer », dont ce bloc etait l echo — et un echo qui
-                    change de mot n en est plus un. Le grand mot ne dit plus ce
-                    benefice mais l etendue de l offre ; garder « a preparer »
-                    aurait qualifie un mot disparu et donne « Tout a preparer »,
-                    soit l inverse exact de la promesse. L unite suit donc le
-                    mot et nomme l interlocuteur unique (pilier n°3). Le
-                    benefice n°1, lui, reste ecrit en toutes lettres dans le
-                    sous-titre du hero et dans la ligne « Vos textes » du
-                    tableau ci-dessous. */}
+                {/* L UNITE QUALIFIE LE MOT QUI EST AU-DESSUS, et elle a change
+                    deux fois avec lui. Elle a d abord dit « a preparer » : la
+                    formule du glossaire (entree 4) au mot pres pour le benefice
+                    n°1, dont ce bloc etait l echo. Quand le grand mot est passe
+                    a « Tout » — l etendue de l offre, et non plus ce benefice —
+                    garder « a preparer » aurait donne « Tout a preparer », soit
+                    l inverse exact de la promesse ; l unite est devenue
+                    « d une seule main ».
+                    ELLE DIT MAINTENANT « de bout en bout », ET C EST LA
+                    DECISION DU 31 AOUT 2026. « D une seule main » etait la
+                    revendication d etre seul, la meme que « Une seule
+                    personne. » a la troisieme ligne du h1, et elle disparait du
+                    site public avec elle (voice-guide.md §4). Ce qui la
+                    remplace qualifie le meme « Tout » par l etendue du travail
+                    — du premier geste au dernier — sans rien dire d un
+                    effectif. `end-to-end` est le calque anglais evident, et il
+                    est PROSCRIT (glossaire anglais §4) : l anglais dit « from
+                    start to finish ».
+                    L unite est en petites capitales espacees et tient sur une
+                    ligne : 15 signes en francais contre 16, 20 en anglais
+                    contre 22 — plus court dans les deux langues, la contrainte
+                    tient donc sans nouvelle mesure. Le benefice n°1, lui, reste
+                    ecrit en toutes lettres dans le sous-titre du hero et dans
+                    la ligne « Vos textes » du tableau ci-dessous. */}
                 <span className="noyau-unit">{t.hero.grandMotUnite}</span>
               </p>
               <ul className="noyau-specs">

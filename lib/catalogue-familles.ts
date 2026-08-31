@@ -21,7 +21,7 @@ import { FAMILLES, FAMILLE_SLUGS, type FamilleSlug } from "@/lib/familles";
  * divergeraient au premier ajout en base.
  *
  * LE RATTACHEMENT EST NOMME PUIS, A DEFAUT, DEDUIT DE LA CATEGORIE.
- * lib/familles.ts nomme deja, piece par piece, les quatorze lignes des cinq
+ * lib/familles.ts nomme deja, piece par piece, les treize lignes des cinq
  * pages : c est la source, et elle est exacte parce que ces pages RENDENT ces
  * lignes. Mais elle est FERMEE — une prestation ajoutee en base demain n y
  * figure pas, et disparaitrait en silence des deux grilles. La categorie sert
@@ -73,7 +73,7 @@ const FAMILLE_PAR_SERVICE: Record<string, FamilleSlug> = Object.fromEntries(
  * derriere.
  *
  * POURQUOI ELLE EXISTE. Le catalogue traitait ses familles a EGALITE : cinq
- * blocs de meme poids sur /services, quatorze cartes de meme dessin sur
+ * blocs de meme poids sur /services, treize cartes de meme dessin sur
  * l accueil. Ce n est pas ce que le studio vend vraiment. Trois lignes portent
  * l activite — les sites, les cartes et imprimes, les reseaux sociaux — et le
  * reste, sans etre secondaire par la qualite, ne se dispute pas la vitrine.
@@ -142,7 +142,7 @@ export function hrefFamille(slug: FamilleSlug): string {
  * basse du catalogue envoyait le visiteur dans le mur — releve route par
  * route, `docs/agents/reviews/brand-review-2026-08-31.md`, constat 10.
  *
- * LA CORRECTION NE CREE AUCUNE PAGE, et c est deliberé : quatorze pages baties
+ * LA CORRECTION NE CREE AUCUNE PAGE, et c est deliberé : treize pages baties
  * sur une ligne de base seraient du contenu mince, qui dessert le referencement
  * au lieu de le servir (meme raisonnement qu en tete de lib/formules.ts). Le
  * contenu EXISTE DEJA — chaque ligne est une `piece` de lib/familles.ts, et la
@@ -176,7 +176,7 @@ export function hrefService(slug: string): string {
  * `libelleEn` SUIT LE MOTIF `En` DE lib/familles.ts : optionnel, et absent il
  * fait retomber sur `libelle`. Le `href`, lui, n a pas de jumeau — c est une
  * URL, et les slugs des cinq familles ne se traduisent pas sous peine de
- * casser les dix-sept ancres que `hrefService` pointe.
+ * casser les seize ancres que `hrefService` pointe.
  */
 export type EntreeNav = { href: string; libelle: string; libelleEn?: string };
 

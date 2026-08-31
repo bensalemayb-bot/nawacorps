@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { buildExtractPrompt } from "@/lib/extract-prompt";
 import { Prisma } from "@/lib/generated/prisma/client";
-import { LOCALES, LOCALE_DEFAUT, type Locale, estLocale } from "@/lib/i18n";
+import { LOCALES, LOCALE_DEFAUT, type Locale, localeDuCorps } from "@/lib/i18n";
 import { clientIp, hashIp } from "@/lib/iphash";
 import { askLlmJson } from "@/lib/llm";
 import { prisma } from "@/lib/prisma";
@@ -77,6 +77,12 @@ const SchemaRequete = z.object({
    * ELLE ARRIVE AUSSI PAR `sendBeacon`, a la fermeture de l onglet — c est
    * pourquoi elle est dans le CORPS et non dans un en-tete : sendBeacon ne
    * permet pas de poser d en-tete autre que le type de contenu.
+   *
+   * `.catch()` ET NON `.default()` : `.default()` ne couvre que l ABSENCE, et
+   * une valeur presente mais inconnue (« de », « EN ») ferait echouer l enum,
+   * donc un 400, donc une conversation — et parfois un lead — perdue a cause
+   * d un champ decoratif. `.catch()` retombe sur le francais dans les deux cas,
+   * comme `localeDuCorps` (lib/i18n.ts), qui lit le meme champ avant le schema.
    */
   locale: z.enum(LOCALES).catch(LOCALE_DEFAUT),
 });
@@ -132,17 +138,6 @@ const MESSAGES: Record<
     debit: "Too many submissions, please try again later.",
   },
 };
-
-/**
- * La langue AVANT la validation du schema — il en faut une pour rediger le
- * refus du schema lui-meme. Identique a celle de app/api/chat/route.ts, et
- * comme elle elle s appuie sur `estLocale` (lib/i18n.ts) plutot que sur une
- * comparaison recopiee.
- */
-function localeDuCorps(brut: unknown): Locale {
-  const valeur = (brut as { locale?: unknown } | null)?.locale;
-  return typeof valeur === "string" && estLocale(valeur) ? valeur : LOCALE_DEFAUT;
-}
 
 /**
  * Reponse du chemin « deja finalise ». STRICTEMENT identique a celle que rend
@@ -279,6 +274,13 @@ export async function POST(req: Request) {
   }
 
   const d = extrait.data;
+  // LA REGLE DU LEAD NE CHANGE PAS AVEC LE BLOC B13 : l assistant ne cree un
+  // Lead que s il a un NOM ET UN TELEPHONE. `Lead.phone` est devenu nullable
+  // pour le FORMULAIRE, qui accepte « telephone ou e-mail » ; l assistant, lui,
+  // est conduit a demander le telephone (lib/extract-prompt.ts) et une
+  // conversation sans numero reste rangee en Conversation, pas en Lead.
+  // Elargir cette condition serait une decision commerciale, pas un
+  // rangement de dette — elle n est pas prise ici.
   const avecCoordonnees = d.name !== null && d.phone !== null;
 
   // 5. Ecriture. Transaction : un Lead sans sa Conversation, ou l inverse,
@@ -291,7 +293,10 @@ export async function POST(req: Request) {
         const lead = await tx.lead.create({
           data: {
             name: d.name as string,
-            phone: d.phone as string,
+            // Plus d assertion sur le telephone : la colonne est nullable
+            // depuis b13, et `avecCoordonnees` garantit de toute facon qu il
+            // est renseigne dans cette branche.
+            phone: d.phone,
             email: d.email,
             commerceName: d.commerce_name,
             commerceType: d.commerce_type,

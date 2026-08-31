@@ -49,8 +49,15 @@ import {
  * langue — deux tournures anglaises du meme engagement seraient lues comme
  * deux engagements.
  *
- * REGLES DE VOIX : `I`, `me`, `my`, jamais `we` ni `our team` ; anglais
- * britannique (`enquiry`, jamais `inquiry`) ; `Geneva` ; aucune comparaison.
+ * REGLES DE VOIX, RENVERSEES LE 31 AOUT 2026 : `we`, `us`, `our` — `I`,
+ * `me`, `my` ne s'ecrivent plus dans la voix du studio, mais `our team`,
+ * `our offices` et `since 20XX` restent interdits : le pluriel grammatical
+ * n'autorise aucun effectif invente. Anglais britannique (`enquiry`, jamais
+ * `inquiry`) ; `Geneva` ; aucune comparaison.
+ *
+ * ET « GOOGLE » NE NOMME PLUS UNE PRESTATION (meme decision) : il a quitte la
+ * liste de ce qu'on peut ecrire a cette adresse, et la liste des maux du
+ * lecteur. Le mot peut decrire un fait, jamais une chose vendue.
  *
  * AUCUN MONTANT ICI, donc aucune mention de TVA a porter : les prix vivent en
  * base et se lisent sur /en/services. La page ne lit pas Postgres et reste
@@ -177,7 +184,13 @@ const SCHEMA = {
   mainEntity: { "@id": `${SITE_URL}/#studio` },
 };
 
-/** Amorce propre a cette page : elle dit d'ou vient le message. */
+/**
+ * Amorce propre a cette page : elle dit d'ou vient le message.
+ *
+ * ELLE RESTE A LA PREMIERE PERSONNE DU SINGULIER, et ce n'est pas un oubli du
+ * passage a `we` le 31 aout 2026 : c'est le VISITEUR qui parle ici, pas le
+ * studio.
+ */
 const AMORCE_WHATSAPP = whatsapp(
   "Hello, I'd like to talk about a project for my business.",
 );
@@ -210,13 +223,13 @@ export default function ContactEn() {
             <h1 className="t">
               Four ways
               <br />
-              to reach me.
+              to reach us.
             </h1>
           </div>
 
           <p className="lede" data-reveal>
             WhatsApp, the phone, email, the form: they all land in the same
-            place, with me. What follows says which one is for what, and what is
+            place, with us. What follows says which one is for what, and what is
             worth putting in your message.
           </p>
 
@@ -271,7 +284,7 @@ export default function ContactEn() {
                 target="_blank"
                 rel="noopener"
               >
-                Message me on WhatsApp →
+                Message us on WhatsApp →
               </a>
             </p>
 
@@ -294,9 +307,9 @@ export default function ContactEn() {
                 la loi la demande. */}
             <h3 className="sm-grp">{CONTACT.email}</h3>
             <p>
-              My inbox, and it is the only one to write to: a site rebuild,
-              identity, print, photography, the Google listing, social media, a
-              quote. It lands on my phone like the rest.{" "}
+              Our inbox, and it is the only one to write to: a site rebuild,
+              identity, print, photography, social media, a quote. It lands on
+              our phone like the rest.{" "}
               <a className="lnk" href={`mailto:${CONTACT.email}`}>
                 Write to {CONTACT.email} →
               </a>
@@ -306,7 +319,7 @@ export default function ContactEn() {
             <p>
               If you would rather not open anything else. It is just below: your
               name, your phone number, two lines. It lands in the same place as
-              the rest — on my phone.
+              the rest — on our phone.
             </p>
           </div>
 
@@ -317,7 +330,7 @@ export default function ContactEn() {
               target="_blank"
               rel="noopener"
             >
-              Message me on WhatsApp <span className="ar">→</span>
+              Message us on WhatsApp <span className="ar">→</span>
             </a>
             <a className="btn btn-line" href={`tel:${CONTACT.telephone}`}>
               {CONTACT.telephoneAffiche}
@@ -335,7 +348,7 @@ export default function ContactEn() {
             </span>
             <div data-reveal>
               <h2 className="t">
-                Five lines, and I
+                Five lines, and we
                 <br />
                 can already price it.
               </h2>
@@ -350,8 +363,8 @@ export default function ContactEn() {
 
           <ul className="prest-inc" data-reveal style={{ marginTop: 34 }}>
             <li>
-              The address of your current site, if there is one. That is where I
-              take your words from.
+              The address of your current site, if there is one. That is where
+              we take your words from.
             </li>
             <li>
               Your trade and the area you cover: a garage and an accountancy
@@ -362,8 +375,8 @@ export default function ContactEn() {
             </li>
             <li>
               What bothers you today, even in one sentence — the site that is
-              not readable on a phone, the form that no longer works, the Google
-              listing with no photos.
+              not readable on a phone, the form that no longer works, the
+              photographs that have aged.
             </li>
             <li>Your deadline, if you have one.</li>
           </ul>

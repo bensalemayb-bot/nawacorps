@@ -8,6 +8,7 @@ import { dictionnaire } from "@/lib/dictionnaires";
 import {
   MENTION_DEVIS_COURTE_EN,
   MENTION_REPONSE_EN,
+  MENTION_TVA_EN,
 } from "@/lib/familles";
 import { formatServicePrice, isQuote, mentionTva } from "@/lib/format";
 import { lien, type Locale } from "@/lib/i18n";
@@ -79,24 +80,20 @@ const t = dictionnaire(LOCALE);
 const VILLE = t.nav.horlogeVille;
 
 /**
- * LA MENTION LONGUE, ASSEMBLEE ICI FAUTE DE JUMELLE EN BASE DE TEXTE.
+ * LA MENTION LONGUE EST IMPORTEE, ET NON PLUS ASSEMBLEE ICI.
  *
- * lib/familles.ts porte `MENTION_TVA` (« Prix en francs suisses, TVA
- * comprise. ») et explique en toutes lettres pourquoi sa version anglaise n'y
- * est PAS ecrite en dur : les deux mots qui portent l'obligation vivent dans
- * lib/format.ts, a cote du formatage du montant, et une mention a valeur
- * legale ne se recopie pas. Le docblock annonce la forme exacte que prendra la
- * constante le jour ou elle sera ecrite — `Prices in Swiss francs, ${…}.` —,
- * et c'est celle-ci, construite depuis `mentionTva("en")`.
- *
- * A DEPLACER dans lib/familles.ts, en `MENTION_TVA_EN`, a la prochaine passe
- * qui y touche : ce chantier n'a pas la main sur ce fichier.
+ * Elle a vecu quelques jours dans ce fichier, sous le meme nom, faute d'avoir
+ * la main sur lib/familles.ts. C'etait la seconde graphie d'une mention a
+ * VALEUR LEGALE, ecrite loin de sa jumelle francaise `MENTION_TVA` — dont le
+ * docblock annoncait mot pour mot la forme attendue. Les deux vivent
+ * desormais cote a cote dans lib/familles.ts, et `MENTION_TVA_EN` s'y
+ * construit depuis `mentionTva("en")` (lib/format.ts) : les deux mots qui
+ * portent l'obligation ne s'ecrivent toujours qu'a un seul endroit.
  */
-const MENTION_TVA_EN = `Prices in Swiss francs, ${mentionTva(LOCALE)}.`;
 
 const TITRE = "Ask for a quote";
 const DESCRIPTION =
-  "Describe what you need to the assistant, or fill in the form: both land in the same place, with Ayoub, in Geneva. A reply the next working day.";
+  "Describe what you need to the assistant, or fill in the form: both land in the same place, with us, in Geneva. A reply the next working day.";
 
 /**
  * La canonique est `/en/devis` NU, sans le `?p=`.
@@ -260,7 +257,7 @@ export default async function DevisEn({
             </span>
             <div data-reveal>
               <h2 className="t">
-                Four lines, and I
+                Four lines, and we
                 <br />
                 can already price it.
               </h2>
@@ -269,7 +266,7 @@ export default async function DevisEn({
 
           <div className="studio-txt" data-reveal>
             <p>
-              You have nothing to prepare: I take what is already online. These
+              You have nothing to prepare: we take what is already online. These
               four things, given straight away, only stop the first reply being
               one more question.
             </p>
@@ -277,8 +274,8 @@ export default async function DevisEn({
 
           <ul className="prest-inc" data-reveal style={{ marginTop: 26 }}>
             <li>
-              The address of your current site, if there is one. That is where I
-              take your words from.
+              The address of your current site, if there is one. That is where
+              we take your words from.
             </li>
             <li>
               Your trade and the area you cover: a garage and an accountancy
@@ -310,7 +307,7 @@ export default async function DevisEn({
               (lib/devis.ts). */}
           <div className="c-row" data-reveal>
             <a className="btn btn-line" href={demande.amorce} target="_blank" rel="noopener">
-              Message me on WhatsApp
+              Message us on WhatsApp
             </a>
             <a className="btn btn-line" href={lien(LOCALE, "/services")}>
               See all the services

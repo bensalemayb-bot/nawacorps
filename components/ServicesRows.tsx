@@ -24,8 +24,10 @@ import { lien, type Locale } from "@/lib/i18n";
 // six gestes sur les seules FONCTIONS D'UN SITE — recevoir, chiffrer, prendre
 // rendez-vous, repondre. Le site est bien le produit d'entree, et il reste en
 // tete de liste ; mais le studio vend aussi de l'identite, des imprimes, des
-// photos, la fiche Google, la production des reseaux sociaux et une ligne
-// restauration. Une section de services qui n'en montre rien laisse croire que
+// photos, la production des reseaux sociaux et une ligne restauration — la
+// fiche Google figurait dans cette liste jusqu'au 31 aout 2026, date a laquelle
+// elle est sortie de l'offre. Une section de services qui n'en montre rien
+// laisse croire que
 // le catalogue s'arrete au site, et le visiteur qui cherche des cartes de
 // visite repart. Les deux lignes « devis » et « rendez-vous » ont donc fusionne
 // pour liberer deux places : elles decrivaient deux faces du meme geste.
@@ -42,6 +44,13 @@ import { lien, type Locale } from "@/lib/i18n";
 // valide avant d'etre mis en ligne », positionnement §5), le format des cartes
 // (85 x 55 recto-verso), le calendrier propose puis valide, le tableau de bord.
 // Un professionnel se reconnait a sa precision, pas a son vocabulaire.
+//
+// LE GESTE 05 A PERDU SA PREMIERE MOITIE. Il s'intitulait « Fiche Google et
+// reseaux sociaux » et vendait les deux ; la fiche Google est sortie de l'offre
+// le 31 aout 2026, et le mot Google ne designe plus une prestation nulle part
+// sur le site. Le geste ne garde donc que les reseaux sociaux — ce vers quoi
+// son renvoi pointait deja (/services/reseaux-sociaux). Le titre et le corps
+// vivent dans lib/dictionnaires, ou le changement est documente.
 //
 // LE PARTENAIRE DE PRODUCTION EST NOMME au geste 05, et il doit le rester :
 // « vous ne touchez a rien » laissait entendre que tout se fait ici. La
@@ -74,59 +83,40 @@ import { lien, type Locale } from "@/lib/i18n";
 // `/en/services/le-site` : ce sont des identifiants de route, et les traduire
 // casserait les dix-sept ancres que lib/catalogue-familles.ts pointe.
 //
-// L'EN-TETE EST UN <button>, PAS UN <div>. Les six .row-h portaient un « + »,
-// changeaient le curseur et ouvraient un panneau : ils ressemblaient a des
-// boutons sans en etre. Consequence, ils etaient hors de l'ordre de tabulation
-// et morts au clavier. Le passage a <button type="button"> les y remet sans
-// toucher a Interactions.tsx : le selecteur qui attache le clic reste `.row-h`,
-// la classe ne bouge pas, et Entree comme Espace declenchent nativement le
-// meme evenement click. Les styles natifs du bouton sont neutralises par
-// STYLE_ENTETE ci-dessous — surtout `font`, que le bouton n'herite PAS.
+// LE BOUTON EST DANS LE <h3>, ET NON L'INVERSE. Les six .row-h portaient un
+// « + », changeaient le curseur et ouvraient un panneau : ils ressemblaient a
+// des boutons sans en etre, donc hors de l'ordre de tabulation et morts au
+// clavier. Une premiere passe avait fait de `.row-h` LUI-MEME un <button>, ce
+// qui reglait le clavier mais mettait le <h3> DANS le bouton : modele de
+// contenu invalide, et surtout ARIA rend les descendants d'un bouton
+// presentationnels — les six titres sortaient du plan de titres d'un lecteur
+// d'ecran, qui n'avait plus aucun moyen de parcourir la section.
 //
-// LE PRIX DE CE CHOIX EST CONNU : le <h3> se retrouve DANS le bouton. Le
-// modele de contenu de <button> n'admet que du contenu de phrase, et ARIA rend
-// les descendants d'un bouton presentationnels — les six titres restent dans le
-// DOM et lisibles par un moteur, mais ils sortent du plan de titres d'un
-// lecteur d'ecran. Le marche est assume : l'accordeon etait jusqu'ici TOTALEMENT
-// inoperable au clavier, et son contenu reste expose de toute facon (`.row-b`
-// n'est jamais `display:none`). La forme sans compromis — <h3><button>titre
-// </button></h3> — reclame de redecouper la grille `.row-h` en trois colonnes
-// dans app/binacore.css, hors du perimetre de ce chantier.
+// LA FORME EST DESORMAIS <h3><button>titre</button></h3>, et elle n'a rien
+// coute a la mise en page. La grille `.row-h` n'a PAS eu a etre redecoupee,
+// contrairement a ce que cette note annoncait : elle redevient un <div> a trois
+// colonnes — le rang, le titre, le « + » — exactement comme avant le passage au
+// bouton. Seul le TEXTE du titre est devenu le bouton, a l'interieur du <h3>
+// qui reste le deuxieme element de la grille. Les styles natifs du bouton sont
+// neutralises par `.row h3 .row-t` dans app/binacore.css, pas ici : le bouton
+// est maintenant une feuille sans regle concurrente, et un style en ligne n'y
+// a plus de raison d'etre.
 //
-// RESERVE ASSUMEE SUR aria-expanded : l'etat ouvert/ferme est ecrit par
-// Interactions.tsx, qui pose la classe `open` sur `.row` et ne connait pas cet
-// attribut. La valeur rendue ici est donc l'etat INITIAL, et elle ne se met pas
-// a jour au depliage. Le contenu, lui, reste lisible d'un lecteur d'ecran en
-// toutes circonstances : `.row-b` n'est jamais `display:none`, il est reduit a
-// une hauteur nulle. Synchroniser l'attribut demande de toucher Interactions.tsx
-// — hors du perimetre de ce chantier, a reprendre avec lui.
+// CE QUE LA SOURIS ET LE CLAVIER FONT, ET POURQUOI C'EST DIFFERENT. Le clic
+// reste attache a `.row-h` par Interactions.tsx : toute la ligne repond donc
+// toujours a la souris, jusqu'au « + ». Le clavier, lui, atteint le bouton du
+// titre, et Entree comme Espace y declenchent un click qui remonte a `.row-h`.
+// Les deux chemins passent par le meme ecouteur.
+//
+// aria-expanded EST DESORMAIS TENU A JOUR. Il l'est par Interactions.tsx, qui
+// recopie la classe `open` de `.row` dans l'attribut a chaque clic. La valeur
+// ecrite ici n'est plus qu'un ETAT INITIAL — les six lignes naissent repliees —
+// et non plus un mensonge permanent. Le contenu, lui, reste lisible d'un
+// lecteur d'ecran en toutes circonstances : `.row-b` n'est jamais
+// `display:none`, il est reduit a une hauteur nulle.
 //
 // Le depliage est pilote par Interactions.tsx, qui attache un click sur
 // `.row-h` de chaque `[data-row]` — code deja en place depuis B4.
-
-/** Neutralisation des styles que l'agent utilisateur applique a <button> et
- *  que `.row-h` ne couvre pas. `font` est le plus important — la police d'un
- *  bouton n'est PAS heritee, et `.pl` n'en declare aucune : sans cette ligne le
- *  « + » repassait en Arial.
- *
- *  DEUX PROPRIETES SONT VOLONTAIREMENT ABSENTES, et doivent le rester : un
- *  style en ligne l'emporte sur toute regle de feuille, il ne peut donc porter
- *  que ce que le CSS ne dispute pas.
- *   - `padding` : pose par `.row-h`, anime par `.row:hover .row-h` — le figer
- *     supprimerait le decalage au survol ;
- *   - `cursor` : `html.cursor-on .row-h` le met a `none` pour laisser passer le
- *     curseur maison ; le forcer a `pointer` ferait apparaitre DEUX curseurs.
- *     La valeur utile vient de `.row{cursor:pointer}`, dont le bouton herite. */
-const STYLE_ENTETE: CSSProperties = {
-  appearance: "none",
-  background: "transparent",
-  border: 0,
-  borderRadius: 0,
-  width: "100%",
-  textAlign: "left",
-  font: "inherit",
-  color: "inherit",
-};
 
 /** Le renvoi herite sinon du gris de `.row-b p` et se confond avec le texte.
  *  Meme correction que `.pf-hors .lnk` dans app/services.css. */
@@ -168,7 +158,7 @@ export default function ServicesRows({ locale = "fr" }: { locale?: Locale }) {
         <div className="rows" data-reveal>
           {gestes.map((geste) => (
             <div className="row" data-row key={geste.n}>
-              <button type="button" className="row-h" style={STYLE_ENTETE} aria-expanded="false"><span className="n">{geste.n}</span><h3>{geste.titre}</h3><span className="pl">+</span></button>
+              <div className="row-h"><span className="n">{geste.n}</span><h3><button type="button" className="row-t" aria-expanded="false">{geste.titre}</button></h3><span className="pl">+</span></div>
               <div className="row-b"><div><p>{geste.corps}</p><p><a className="lnk" style={STYLE_RENVOI} href={lien(locale, geste.chemin)}>{geste.renvoi}</a></p></div></div>
             </div>
           ))}

@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import BoutonDevis from "@/components/BoutonDevis";
+import CarteService from "@/components/CarteService";
 import SchemaPage from "@/components/SchemaPage";
 import FooterContact from "@/components/FooterContact";
 import {
@@ -18,6 +20,7 @@ import {
   MENTION_REPONSE,
   MENTION_REPONSE_EN,
   MENTION_TVA,
+  MENTION_TVA_EN,
 } from "@/lib/familles";
 import {
   CATEGORIES_FAMILLES,
@@ -117,7 +120,28 @@ import { SITE_NAME, alternatesPage, openGraphPage } from "@/lib/site";
  * la production. Ce qui n est PAS dans cette table vient d ailleurs et doit y
  * rester — les noms, descriptions et prix sont en base (`nomService`,
  * `descriptionService`, `lib/format.ts`), les accroches de famille sont dans
- * lib/familles.ts, les libelles de formule dans lib/formules.ts.
+ * lib/familles.ts, les libelles de formule dans lib/formules.ts, la mention de
+ * TVA dans lib/familles.ts (`MENTION_TVA`, `MENTION_TVA_EN`) et l affordance
+ * des cartes dans lib/dictionnaires (`carte.voirLeDetail`), lue par le
+ * composant qui la rend.
+ *
+ * ---------------------------------------------------------------------------
+ * LES DEUX COMPOSANTS RECOPIES ONT ETE SUPPRIMES.
+ *
+ * Cette page portait deux fonctions locales, `CarteCatalogue` et `LienDevis`,
+ * qui recopiaient a l octet pres components/CarteService.tsx et
+ * components/BoutonDevis.tsx. Elles n existaient que parce que ces deux
+ * composants ne prenaient pas de `locale` et rendaient donc « sur devis » et
+ * « TVA comprise » sous les prix d une page anglaise. Les deux en prennent une
+ * desormais : la page appelle `<CarteService versSaPage locale=… />` et
+ * `<BoutonDevis locale=… />`, et les copies sont parties.
+ *
+ * LA DIVERGENCE QU ELLES AVAIENT DEJA CREEE, relevee au moment du repli : la
+ * copie ecrivait « See the details » au pied des cartes anglaises, la source
+ * (`lib/dictionnaires/en.ts`) dit « See the detail ». C est le mot du
+ * dictionnaire qui s affiche maintenant — une chaine editoriale ne se decide
+ * pas dans une page. C est exactement le genre d ecart qu une seconde copie
+ * produit sans que personne le voie.
  */
 
 // Rendu a chaque requete, meme raison qu app/(site)/page.tsx : cette page lit
@@ -177,8 +201,6 @@ type TextesCatalogue = {
   mentionTvaPhrase: string;
   /** Le libelle des huit CTA de devis de la page. */
   devisLabel: string;
-  /** Le pied des cartes de catalogue : ce que la carte ouvre. */
-  carteVoir: string;
   /**
    * Ce qui suit le montant dans la grille des formules.
    *
@@ -289,8 +311,8 @@ const TEXTES: Record<Locale, TextesCatalogue> = {
     delai: (
       <>
         Le délai est d&apos;<strong>une semaine</strong>, et il court dès votre
-        feu vert — pas dès que vous m&apos;aurez envoyé vos textes. Vous
-        n&apos;avez rien à préparer : je reprends ce qui est déjà en ligne.
+        feu vert — pas dès que vous nous aurez envoyé vos textes. Vous
+        n&apos;avez rien à préparer : nous reprenons ce qui est déjà en ligne.
       </>
     ),
     comptePrixFerme: " lignes portent un prix ferme, ",
@@ -299,7 +321,6 @@ const TEXTES: Record<Locale, TextesCatalogue> = {
     mentionReponse: MENTION_REPONSE,
     mentionTvaPhrase: MENTION_TVA,
     devisLabel: "Demander un devis →",
-    carteVoir: "Voir le détail",
     uniteMontant: `${CHF_UNIT} CHF`,
     formules: {
       meta: "Les formules",
@@ -332,8 +353,8 @@ const TEXTES: Record<Locale, TextesCatalogue> = {
     delai: (
       <>
         The work takes <strong>one week</strong>, and it starts from your
-        go-ahead — not from the day you send me your text. You have nothing to
-        prepare: I take what is already online.
+        go-ahead — not from the day you send us your text. You have nothing to
+        prepare: we take what is already online.
       </>
     ),
     // Le libelle du prix libre est celui de lib/format.ts (« on request ») : la
@@ -344,13 +365,15 @@ const TEXTES: Record<Locale, TextesCatalogue> = {
     compteSurDevis: " are priced on request.",
     mentionDevis: MENTION_DEVIS_EN,
     mentionReponse: MENTION_REPONSE_EN,
-    // La phrase francaise vit dans lib/familles.ts, qui explique pourquoi sa
-    // jumelle anglaise n y est PAS : les deux mots a valeur legale sont dans
-    // lib/format.ts, et les recopier ici creerait la seconde graphie que le
-    // francais s interdit d avoir. On les lit donc, on ne les ecrit pas.
-    mentionTvaPhrase: `Prices in Swiss francs, ${mentionTva("en")}.`,
+    // Les deux mentions sont IMPORTEES, jamais assemblees ici. La phrase
+    // anglaise etait construite sur place (`Prices in Swiss francs, …`) alors
+    // que sa jumelle francaise vivait deja dans lib/familles.ts : deux
+    // graphies d une mention a valeur legale, dont une hors de la source
+    // unique. `MENTION_TVA_EN` les reunit, et elle se construit elle-meme
+    // depuis `mentionTva("en")` (lib/format.ts) — les deux mots qui portent
+    // l obligation ne s ecrivent toujours qu a un seul endroit.
+    mentionTvaPhrase: MENTION_TVA_EN,
     devisLabel: "Request a quote →",
-    carteVoir: "See the details",
     uniteMontant: CHF_UNIT,
     formules: {
       // « the site packages » : §7 renverse le §6 et tranche pour `package`,
@@ -414,111 +437,6 @@ export function metadataServices(locale: Locale): Metadata {
 }
 
 export const metadata: Metadata = metadataServices("fr");
-
-/**
- * LE CTA DE DEVIS, EN LIEN, ET LOCALISE.
- *
- * C est components/BoutonDevis.tsx au caractere pres — meme balise, meme
- * classe par defaut, meme encodage du sujet —, A UNE DIFFERENCE PRES : le
- * chemin passe par `lien(locale, …)`. Le composant partage ecrit `/devis?p=…`
- * en dur ; sur `/en/services` cela renverrait le lecteur anglophone dans le
- * parcours francais.
- *
- * >>> IL A VOCATION A DISPARAITRE. Le jour ou components/BoutonDevis.tsx prend
- * >>> une `locale` — comme l ont deja fait Nav, MenuOverlay, FooterContact et
- * >>> ContactForm —, ces quelques lignes se suppriment et les huit appels
- * >>> ci-dessous repassent sur le composant. Ce fichier ne pouvait pas le
- * >>> modifier : d autres agents y travaillaient au meme moment.
- *
- * En francais `lien("fr", x)` rend `x` a l octet pres : le HTML des huit CTA
- * de cette page est donc rigoureusement celui d avant.
- */
-function LienDevis({
-  locale,
-  sujet,
-  className = "lnk",
-  children,
-}: {
-  locale: Locale;
-  sujet: string;
-  className?: string;
-  children: React.ReactNode;
-}) {
-  // volontaire — next/link casserait les reveals (Interactions ne tourne qu'une fois), voir décision B7
-  return (
-    <a
-      className={className}
-      href={lien(locale, `/devis?p=${encodeURIComponent(sujet)}`)}
-    >
-      {children}
-    </a>
-  );
-}
-
-/**
- * UNE PRESTATION EN CARTE, LOCALISEE.
- *
- * C est components/CarteService.tsx dans son seul mode utilise ici
- * (`versSaPage`) — meme balise, memes classes, meme ordre d elements —, AVEC
- * LA LANGUE EN PLUS. Le composant partage lit `service.name`,
- * `service.description`, `QUOTE_LABEL` et `TVA_LABEL`, c est-a-dire quatre
- * chaines francaises : rendu tel quel sur `/en/services`, il afficherait
- * « sur devis » et « TVA comprise » sous chaque prix d une page anglaise. La
- * seconde de ces deux mentions a valeur legale.
- *
- * >>> IL A VOCATION A DISPARAITRE, exactement comme `LienDevis` ci-dessus.
- * >>> Le jour ou components/CarteService.tsx prend une `locale` — l accueil
- * >>> anglais en aura besoin lui aussi, pour la meme raison —, ces lignes se
- * >>> suppriment et la page repasse sur le composant partage. Ce fichier ne
- * >>> pouvait pas le modifier : d autres agents y travaillaient au meme
- * >>> moment. Tant que les deux coexistent, TOUTE correction de l un doit
- * >>> etre reportee sur l autre.
- *
- * `sobre` N EST PAS REPRIS : c est le second rang de la vitrine de l accueil,
- * et /services ne le passe jamais — le catalogue garde toutes ses
- * descriptions. Un parametre qu aucun appelant n emploie est une divergence
- * qui attend.
- */
-function CarteCatalogue({
-  service,
-  locale,
-}: {
-  service: ServiceCatalogue;
-  locale: Locale;
-}) {
-  const t = TEXTES[locale];
-  // Pas de next/link sur le site public : les revelations au scroll ne
-  // s initialisent qu une fois (cf. CLAUDE.md).
-  return (
-    <a
-      className="cat-it"
-      href={lien(locale, hrefService(service.slug))}
-      data-reveal
-    >
-      <h3>{nomService(service, locale)}</h3>
-      <p className="d">{descriptionService(service, locale)}</p>
-      {/* LE PRIX RESTE EN BAS DE CARTE, ET IL PORTE SA MENTION : la regle vaut
-          par UNITE DE LECTURE, et un dirigeant qui compare deux cartes ne lit
-          pas le bas de page. Le raisonnement complet est dans le docblock de
-          components/CarteService.tsx. */}
-      {isQuote(service) || service.priceCents === null ? (
-        <p className="px px-devis">{libelleDevis(locale)}</p>
-      ) : (
-        <p className="px">
-          {service.priceFrom ? <small>{prefixeDes(locale)}</small> : null}
-          {`${formatChfAmount(service.priceCents)}${CHF_UNIT}`}
-          {service.isMonthly ? (
-            <small className="per">{suffixeMensuel(locale)}</small>
-          ) : null}
-          <small className="px-note px-tva">{mentionTva(locale)}</small>
-        </p>
-      )}
-      <span className="go">
-        {t.carteVoir} <span className="ar">→</span>
-      </span>
-    </a>
-  );
-}
 
 /** « Les formules » ouvre la page en (01) ; les familles suivent. */
 const numero = (rang: number) => `(${String(rang).padStart(2, "0")})`;
@@ -591,7 +509,12 @@ function BlocFamille({
             en dessous ; la carte le redirait une troisieme fois. */}
         <div className="cat-grid">
           {lignes.map((service) => (
-            <CarteCatalogue key={service.id} service={service} locale={locale} />
+            <CarteService
+              key={service.id}
+              service={service}
+              versSaPage
+              locale={locale}
+            />
           ))}
         </div>
         <div className="cat-tout" data-reveal>
@@ -601,9 +524,9 @@ function BlocFamille({
         </div>
         <div className="sm-foot">
           <span>{t.mentionTvaPhrase}</span>
-          <LienDevis locale={locale} sujet={famille.contenu.sujet}>
+          <BoutonDevis locale={locale} sujet={famille.contenu.sujet}>
             {t.devisLabel}
-          </LienDevis>
+          </BoutonDevis>
         </div>
       </div>
     </section>
@@ -805,9 +728,9 @@ export async function corpsServices(locale: Locale) {
 
           <div className="p-note" data-reveal>
             <span>{t.mentionTvaPhrase}</span>
-            <LienDevis locale={locale} sujet="devis-formules">
+            <BoutonDevis locale={locale} sujet="devis-formules">
               {t.devisLabel}
-            </LienDevis>
+            </BoutonDevis>
           </div>
         </div>
       </section>

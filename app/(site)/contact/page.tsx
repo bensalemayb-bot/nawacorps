@@ -187,7 +187,14 @@ const SCHEMA = {
   },
 };
 
-/** Amorce propre a cette page : elle dit d ou vient le message. */
+/**
+ * Amorce propre a cette page : elle dit d ou vient le message.
+ *
+ * ELLE RESTE AU SINGULIER, et ce n est pas un oubli du passage a « nous » le
+ * 31 aout 2026 : c est le VISITEUR qui parle dans cette phrase, pas le studio.
+ * La mettre au pluriel lui ferait dire « nous aimerions », ce qu il n a pas
+ * demande.
+ */
 const AMORCE_WHATSAPP = whatsapp(
   "Bonjour, j'aimerais parler d'un projet pour mon entreprise.",
 );
@@ -219,13 +226,13 @@ export default function ContactPage() {
             <h1 className="t">
               Quatre façons
               <br />
-              de me joindre.
+              de nous joindre.
             </h1>
           </div>
 
           <p className="lede" data-reveal>
             WhatsApp, téléphone, e-mail, formulaire : tous arrivent au même
-            endroit, chez moi. Ce qui suit dit lequel sert à quoi, et ce
+            endroit, chez nous. Ce qui suit dit lequel sert à quoi, et ce
             qu&apos;il est utile de mettre dans votre message.
           </p>
 
@@ -303,9 +310,9 @@ export default function ContactPage() {
                 ou la loi la demande. */}
             <h3 className="sm-grp">{CONTACT.email}</h3>
             <p>
-              Ma boîte, et c&apos;est la seule à écrire : refonte de site,
-              identité, imprimés, photographie, fiche Google, réseaux sociaux,
-              devis. Elle arrive sur mon téléphone comme le reste.{" "}
+              Notre boîte, et c&apos;est la seule à écrire : refonte de site,
+              identité, imprimés, photographie, réseaux sociaux, devis. Elle
+              arrive sur notre téléphone comme le reste.{" "}
               <a className="lnk" href={`mailto:${CONTACT.email}`}>
                 Écrire à {CONTACT.email} →
               </a>
@@ -315,7 +322,7 @@ export default function ContactPage() {
             <p>
               Si vous préférez ne rien ouvrir d&apos;autre. Il est juste en
               dessous : votre nom, votre téléphone, deux lignes. Il arrive au
-              même endroit que le reste — sur mon téléphone.
+              même endroit que le reste — sur notre téléphone.
             </p>
           </div>
 
@@ -344,9 +351,9 @@ export default function ContactPage() {
             </span>
             <div data-reveal>
               <h2 className="t">
-                Cinq lignes, et
+                Cinq lignes, et nous
                 <br />
-                je peux déjà chiffrer.
+                chiffrons déjà.
               </h2>
             </div>
           </div>
@@ -360,7 +367,7 @@ export default function ContactPage() {
           <ul className="prest-inc" data-reveal style={{ marginTop: 34 }}>
             <li>
               L&apos;adresse de votre site actuel, s&apos;il y en a un.
-              C&apos;est de là que je reprends vos textes.
+              C&apos;est de là que nous reprenons vos textes.
             </li>
             <li>
               Votre métier et la zone que vous couvrez : un garage et une
@@ -372,8 +379,8 @@ export default function ContactPage() {
             </li>
             <li>
               Ce qui vous gêne aujourd&apos;hui, même en une phrase — le site
-              illisible sur téléphone, le formulaire qui ne fonctionne plus, la
-              fiche Google sans photos.
+              illisible sur téléphone, le formulaire qui ne fonctionne plus, les
+              photos qui datent.
             </li>
             <li>Votre échéance, si vous en avez une.</li>
           </ul>

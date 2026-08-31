@@ -182,7 +182,7 @@ export default function DemonstrationsEn() {
             </p>
             <p>
               That is exactly what would be installed at your place, with your
-              services and your rates instead of mine.{" "}
+              services and your rates instead of ours.{" "}
               <a className="lnk" href={lien(LOCALE, "/services")}>
                 See the packages and the prices →
               </a>
@@ -215,7 +215,7 @@ export default function DemonstrationsEn() {
             <p>
               These pieces are drawn for a bar, but the gesture does not change
               with the trade: a garage, a practice and an accountancy firm have
-              the same need to be legible. Tell me what you have online today
+              the same need to be legible. Tell us what you have online today
               and what you want to receive — quotes, appointments, calls.
             </p>
           </div>

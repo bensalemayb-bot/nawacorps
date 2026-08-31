@@ -56,6 +56,11 @@ import {
 /**
  * Les prestations, dans l ordre de ServicesRows.
  *
+ * « FICHE GOOGLE » A QUITTE CETTE LISTE LE 31 AOUT 2026, avec la decision qui
+ * la sort de l offre : le mot Google ne designe plus une prestation nulle part
+ * sur le site, et un OfferCatalog qui la declarerait encore vendrait a un
+ * moteur ce que les pages ne vendent plus.
+ *
  * ELLES NE SUIVENT PLUS LE DECOUPAGE EDITORIAL DES SIX LIGNES. « Identite,
  * imprimes et photographie » et « Fiche Google et reseaux sociaux » sont des
  * titres de section : ils groupent des metiers distincts pour tenir sur une
@@ -72,7 +77,6 @@ const PRESTATIONS = [
   "Identité visuelle et logotype",
   "Cartes de visite, affiches et stickers vitrine",
   "Photographie d'entreprise",
-  "Fiche Google",
   "Réseaux sociaux",
   "Supports pour la restauration",
 ];
@@ -85,7 +89,7 @@ export default function SchemaStudio() {
     name: SITE_NAME,
     url: SITE_URL,
     description:
-      "Studio de création digitale indépendant à Genève : sites, identité et logotype, imprimés, photographie d'entreprise, fiche Google, réseaux sociaux et supports pour la restauration. Une seule personne les fait. Le site des PME genevoises est refait en une semaine, sans que le client ait de contenu à fournir.",
+      "Studio de création digitale indépendant à Genève : sites, identité et logotype, imprimés, photographie d'entreprise, réseaux sociaux et supports pour la restauration. Le site des PME genevoises est refait en une semaine, sans que le client ait de contenu à fournir.",
     slogan: "L'essentiel. Bien conçu.",
     image: `${SITE_URL}/brand/nawa-corps-logo-principal-transparent.png`,
     logo: `${SITE_URL}/brand/nawa-corps-logo-principal-transparent.png`,

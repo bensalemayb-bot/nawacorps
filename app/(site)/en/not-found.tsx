@@ -12,14 +12,16 @@ import { lien, type Locale } from "@/lib/i18n";
  * `<html lang="en-CH">` — une contradiction que le visiteur voit avant le
  * moteur.
  *
- * CE QU'ELLE NE COUVRE PAS : une URL qui ne correspond a AUCUNE route, du
- * genre `/en/blog`. Celle-la ne traverse aucun segment et tombe sur la 404
- * RACINE (app/not-found.tsx), qui est francaise et hors du perimetre de ce
- * chantier. Voir
+ * CE QU'ELLE NE COUVRE PAS, ET QUI EST DESORMAIS COUVERT AILLEURS : une URL
+ * qui ne correspond a AUCUNE route, du genre `/en/blog`. Celle-la ne traverse
+ * aucun segment et tombe sur la 404 RACINE (app/not-found.tsx). Voir
  * node_modules/next/dist/docs/01-app/03-api-reference/03-file-conventions/not-found.md :
  * seule la 404 racine, ou `global-not-found.js`, attrape les URL sans route.
- * C'est un manque connu, et il se comblera le jour ou la racine saura lire la
- * langue du chemin.
+ * Ce manque n'en est plus un — la racine lit maintenant `x-nawa-locale`, l'
+ * en-tete que `proxy.ts` pose avant le routage, et repond en anglais sur un
+ * chemin `/en`. Son docblock detaille les trois pistes et pourquoi c'est
+ * celle-la qui tient. Ce fichier-ci reste indispensable pour l'autre moitie du
+ * probleme : les `notFound()` leves DANS `/en/*`, qu'aucune 404 racine ne voit.
  *
  * ELLE VIT DANS (site)/en, PAS A LA RACINE. Placee ici, elle est rendue A
  * L'INTERIEUR de app/(site)/layout.tsx : loader, curseur, navigation, menu et

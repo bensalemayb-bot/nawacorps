@@ -241,22 +241,6 @@ const services: ServiceSeed[] = [
     sortOrder: 13,
   },
   {
-    slug: "sticker-avis",
-    name: "Sticker vitrine — avis Google",
-    // « fiche Google » (glossaire n°10) se rend par « Google listing », jamais
-    // par « Google My Business » ni « Business Profile » : le nom commercial du
-    // produit Google a deja change deux fois, le mot courant non.
-    nameEn: "Window sticker — Google reviews",
-    description: "Un QR en vitrine ou au comptoir, qui ouvre le formulaire d'avis de votre fiche Google sans rien chercher.",
-    descriptionEn: "A QR code in the window or on the counter that opens the review form on your Google listing, with nothing to search for.",
-    category: "annee",
-    priceType: "QUOTE",
-    priceCents: null,
-    priceFrom: false,
-    isMonthly: false,
-    sortOrder: 14,
-  },
-  {
     slug: "affiche-evenement",
     name: "Affiche — événement, promotion, recrutement",
     nameEn: "Poster — event, promotion, hiring",
@@ -351,6 +335,17 @@ const services: ServiceSeed[] = [
  * en base, visible, a 2'900.– — affiche dans la grille et cite par le chatbot,
  * qui lit la meme table.
  *
+ * C'EST LA SEULE FACON DE RETIRER UNE LIGNE, et il faut l'ecrire parce que
+ * l'intuition dit l'inverse : effacer une entree du tableau `services`
+ * ci-dessus ne supprime RIEN en base. La ligne y reste, `visible` a true, et le
+ * site continue de la vendre. Un retrait se fait donc en DEUX gestes — sortir
+ * l'entree de `services`, ET ajouter son slug ici.
+ *
+ * « Sticker vitrine — avis Google » est retire le 31 aout 2026 : le studio ne
+ * vend plus rien qui porte ce nom, la fiche Google sortant de l'offre en meme
+ * temps (.agents/product-marketing.md, encadre en tete). Le mot « Google » ne
+ * designe plus une prestation nulle part.
+ *
  * `visible: false` plutot qu'un delete : la ligne reste consultable depuis
  * /admin. Mais la remettre en service NE demande PAS qu'une case a cocher :
  * l'updateMany ci-dessous s'execute a chaque seed et remasquerait la case
@@ -358,7 +353,7 @@ const services: ServiceSeed[] = [
  * retirer de `retires` PUIS de la recocher : tant que son slug est liste ici,
  * chaque seed la remasque.
  */
-const retires = ["pack-complet"];
+const retires = ["pack-complet", "sticker-avis"];
 
 const connectionString = process.env.DATABASE_URL;
 if (!connectionString) {
@@ -374,7 +369,7 @@ async function main() {
   //
   // LES CHAMPS ANGLAIS PARTENT DANS LES DEUX BRANCHES, `update` COMME `create`.
   // Sans cela, un re-seed creerait bien les nouvelles lignes traduites mais
-  // laisserait les 18 lignes deja en base avec leur `nameEn` a null : les
+  // laisserait les 17 lignes deja en base avec leur `nameEn` a null : les
   // traductions n arriveraient jamais sur une base existante, et le bug serait
   // invisible en developpement — sur une base vide, tout passe par `create`.
   //

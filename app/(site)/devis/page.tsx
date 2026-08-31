@@ -61,7 +61,7 @@ import { CONTACT, SITE_NAME, alternatesPage, openGraphPage } from "@/lib/site";
 
 const TITRE = "Demander un devis";
 const DESCRIPTION =
-  "Décrivez votre besoin à l'assistant, ou remplissez le formulaire : les deux arrivent au même endroit, chez Ayoub, à Genève. Réponse le jour ouvrable suivant.";
+  "Décrivez votre besoin à l'assistant, ou remplissez le formulaire : les deux arrivent au même endroit, chez nous, à Genève. Réponse le jour ouvrable suivant.";
 
 /**
  * La canonique est `/devis` NU, sans le `?p=`.
@@ -230,15 +230,15 @@ export default async function DevisPage({
               <h2 className="t">
                 Quatre lignes, et
                 <br />
-                je peux déjà chiffrer.
+                nous chiffrons déjà.
               </h2>
             </div>
           </div>
 
           <div className="studio-txt" data-reveal>
             <p>
-              Vous n&apos;avez rien à préparer : je reprends ce qui est déjà en
-              ligne. Ces quatre éléments-là, donnés tout de suite, évitent
+              Vous n&apos;avez rien à préparer : nous reprenons ce qui est déjà
+              en ligne. Ces quatre éléments-là, donnés tout de suite, évitent
               seulement que la première réponse soit une question de plus.
             </p>
           </div>
@@ -246,7 +246,7 @@ export default async function DevisPage({
           <ul className="prest-inc" data-reveal style={{ marginTop: 26 }}>
             <li>
               L&apos;adresse de votre site actuel, s&apos;il y en a un.
-              C&apos;est de là que je reprends vos textes.
+              C&apos;est de là que nous reprenons vos textes.
             </li>
             <li>
               Votre métier et la zone que vous couvrez : un garage et une

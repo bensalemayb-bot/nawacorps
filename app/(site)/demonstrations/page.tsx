@@ -173,7 +173,7 @@ export default function DemonstrationsPage() {
             </p>
             <p>
               C&apos;est exactement ce qui serait installé chez vous, avec vos
-              prestations et vos tarifs à la place des miens.{" "}
+              prestations et vos tarifs à la place des nôtres.{" "}
               <a className="lnk" href="/services">
                 Voir les formules et les prix →
               </a>
@@ -205,7 +205,7 @@ export default function DemonstrationsPage() {
             <p>
               Ces pièces sont dessinées pour un bar, mais le geste ne change pas
               avec le métier : un garage, un cabinet et une fiduciaire ont les
-              mêmes besoins de lisibilité. Dites-moi ce que vous avez en ligne
+              mêmes besoins de lisibilité. Dites-nous ce que vous avez en ligne
               aujourd&apos;hui et ce que vous voulez recevoir — des devis, des
               rendez-vous, des appels.
             </p>

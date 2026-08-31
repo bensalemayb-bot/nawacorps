@@ -89,7 +89,7 @@ export const metadata: Metadata = {
     template: `%s — ${SITE_NAME}`,
   },
   description:
-    "Studio de création digitale à Genève : sites, identité, imprimés, photos, fiche Google, réseaux sociaux. Le site des PME refait en une semaine, vous n'avez rien à préparer.",
+    "Studio de création digitale à Genève : sites, identité, imprimés, photos, réseaux sociaux. Le site des PME refait en une semaine, vous n'avez rien à préparer.",
   alternates: alternatesPage("/"),
   openGraph: {
     type: "website",
@@ -98,13 +98,13 @@ export const metadata: Metadata = {
     url: "/",
     title: "Refonte de site pour PME à Genève — en une semaine",
     description:
-      "Site, identité, imprimés, photos, fiche Google, réseaux sociaux : une seule personne les fait, à Genève. Le site est refait en une semaine et vous n'avez rien à préparer — je reprends les textes de votre site actuel.",
+      "Site, identité, imprimés, photos, réseaux sociaux : le tout au même endroit, à Genève. Le site est refait en une semaine et vous n'avez rien à préparer — nous reprenons les textes de votre site actuel.",
   },
   twitter: {
     card: "summary_large_image",
     title: "Refonte de site pour PME à Genève — en une semaine",
     description:
-      "Site, identité, imprimés, photos, fiche Google, réseaux sociaux : une seule personne les fait, à Genève. Le site est refait en une semaine et vous n'avez rien à préparer — je reprends les textes de votre site actuel.",
+      "Site, identité, imprimés, photos, réseaux sociaux : le tout au même endroit, à Genève. Le site est refait en une semaine et vous n'avez rien à préparer — nous reprenons les textes de votre site actuel.",
   },
 };
 

@@ -22,7 +22,10 @@ export default function Strip({ locale = "fr" }: { locale?: Locale }) {
     t.strip.refonte,
     t.strip.devis,
     t.strip.rendezVous,
-    t.strip.ficheGoogle,
+    // « Fiche Google » jusqu au 31 aout 2026, remplacee par « Réseaux sociaux »
+    // le jour ou la fiche est sortie de l offre : la bande n enumere que ce qui
+    // se vend. Voir le docblock de la cle dans lib/dictionnaires/fr.ts.
+    t.strip.reseauxSociaux,
     t.strip.delai,
     t.strip.lieu,
   ];
