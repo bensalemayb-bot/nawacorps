@@ -26,6 +26,14 @@ const eslintConfig = defineConfig([
       "components/MenuOverlay.tsx",
       "app/(site)/mentions-legales/page.tsx",
       "app/(site)/confidentialite/page.tsx",
+      // Les deux pages ouvertes par le proprietaire : « qui on est » et le
+      // contact. Meme decision que les pages legales ci-dessus, et pour la
+      // meme raison — /studio renvoie au catalogue, /contact renvoie a /studio
+      // et aux pages legales, et un next/link y ferait une navigation
+      // client-side qui ne rejouerait pas Interactions : les [data-reveal] de
+      // la page d arrivee resteraient a opacity:0.
+      "app/(site)/studio/page.tsx",
+      "app/(site)/contact/page.tsx",
       // La 404 du site public. Meme decision, meme raison exactement que les
       // deux pages legales au-dessus : un next/link y ferait une navigation
       // client-side, Interactions ne rejouerait pas, et les [data-reveal] de
