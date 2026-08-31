@@ -163,6 +163,13 @@ de la deuxième année — la première est comprise dans le prix du site.
   aucune adresse de bureau, aucun « notre équipe de X »** — la LCD art. 3 vise
   les indications trompeuses, et un pluriel n'autorise rien de plus qu'un
   singulier. On écrit « nous » ; on ne décrit jamais un « nous » inventé.
+  **Ce qui SE DIT, en revanche, parce que c'est vrai** — précision du 31 août,
+  après une correction d'Ayoub : le studio est **fondé par Ayoub Bensalem**,
+  et il **produit les réseaux sociaux avec un partenaire de production**. Ces
+  deux faits sont exacts, ils se nomment, et ils n'ont pas à être gommés au
+  nom de la règle ci-dessus. La frontière est simple : **on nomme un partenaire
+  réel, on n'invente pas un effectif.** « avec un partenaire de production » est
+  vrai ; « notre équipe de six designers » ne l'est pas.
 - **On nomme le point de départ et la condition.** « dès votre feu vert »,
   « à partir de la 2ᵉ année », « avec L'Assistant ».
 - **On dit la contrainte quand elle vend.** L'abonnement obligatoire du palier 3,

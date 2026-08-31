@@ -256,7 +256,7 @@ const en: Dictionnaire = {
 
   services: {
     section: "Services",
-    titreLigne1: "Six kinds of work,",
+    titreLigne1: "Five kinds of work,",
     /**
      * « the same hands » DIT CE QUE DIT LE FRANÇAIS SANS REPRENDRE LE MOT DE
      * QUELQU'UN D'AUTRE : `single point of contact` est interdit par le
@@ -267,31 +267,27 @@ const en: Dictionnaire = {
     corps01:
       "Your current site, taken over and rebuilt: one page, readable on a phone, fast, up to date. The existing text is recovered and rewritten — you point out what has changed since. One week from your go-ahead, two rounds of corrections included; the finished site is shown to you and approved before it goes live. It is the entry product, and the one that carries all the rest: the form, the appointments and the assistant all plug into it.",
     lien01: "See the three packages →",
-    titre02: "Quotes and appointments straight from the site",
+    titre02: "AI bot integration",
     corps02:
-      "A form that asks the right questions — the job, the surface area, the timing, the address — and reaches you filled in rather than in three vague lines. On the packages that include them, the visitor leaves with a figure and books their own appointment, at 11 at night or on a Sunday. What lands with you is no longer a “call me back”: it is an enquiry you can price without picking up the phone three times.",
-    lien02: "See Le Site →",
-    titre03: "An AI assistant that answers in your place",
+      "A bot that takes the enquiry in your place, from the first message to the booked appointment. It asks the right questions — the job, the surface area, the timing, the address — returns a figure, and lets the visitor pick a slot at 11 at night or on a Sunday. It answers the common questions day and night, takes the name and the number, alerts you on your phone, and follows up on its own with those who never came back. What lands with you is no longer a 'call me back': it is an enquiry you can price. It runs on this site — the bubble at the bottom of the screen is it: open it, that is the demonstration. The form that prices and books starts with Le Site; the assistant that answers and follows up, with L'Assistant.",
+    lien02: "See the packages →",
+    titre03: "Logo, print and photos",
     corps03:
-      "An assistant trained on your services and your prices answers the usual questions day and night, takes down the name and the number, and alerts you on your phone. Enquiries left unanswered are followed up on their own, and everything that comes in lines up in a dashboard. It runs on this site: the bubble at the bottom of the screen is it — open it, that is the demonstration.",
-    lien03: "See L'Assistant →",
-    titre04: "Logo, print and photos",
-    corps04:
       "A logotype if you do not have one, a palette and typefaces that hold from the site to the vehicles, and the rules that say what goes where. Then what your customers keep in hand: business cards, 85 × 55, both sides, posters, window stickers. The photographs of your business are taken on site, on a day when you are working — there is nothing to stage. These lines are priced on request: a print run, a size and a paper cannot be guessed.",
-    lien04: "See the logo and the photos →",
+    lien03: "See the logo and the photos →",
     /** Voir le docblock de `titre05` dans fr.ts : le geste a perdu sa moitié
      *  « fiche Google », qui n'est plus une prestation depuis le 31 août 2026.
      *  Le corps reprend la matière de `/services/reseaux-sociaux`
      *  (lib/familles.ts, `resoutEn` et `quoiEn`), partenaire de production
      *  compris — il doit rester nommé dans les deux langues. */
-    titre05: "Social media, run for you",
-    corps05:
+    titre04: "Social media, run for you",
+    corps04:
       "Social media is taken on whole: you are shown the month's calendar, you approve it, and it goes out — visuals, wording, posting at the hours that matter, replies to comments and messages. Posting once costs nothing; posting every week for a year is a job in itself, and that is the job taken on here. The production is done with a partner of the studio, and we are the ones who hand the work back to you. On request.",
-    lien05: "See social media →",
-    titre06: "Restaurants and cafés",
-    corps06:
+    lien04: "See social media →",
+    titre05: "Restaurants and cafés",
+    corps05:
       "For cafés and restaurants: the menu reworked in full — the order of the sections, how legible the prices are, where the compulsory notices go — with its print files, its online version and its QR code. Then what holds the room: table tents, loyalty card, gift vouchers and seasonal pieces. A line of its own, kept up since the start, and open to anyone who has no site with us. On request.",
-    lien06: "See the restaurant line →",
+    lien05: "See the restaurant line →",
   },
 
   /**
@@ -336,15 +332,15 @@ const en: Dictionnaire = {
   studio: {
     section: "The studio",
     titreCache: "The studio",
-    citationDebut: "“You speak to the person who ",
-    citationItalique: "does",
+    citationDebut: "“You speak to the people who ",
+    citationItalique: "do",
     citationFin: " the work.”",
     paragraphe1:
-      "Nawa Corps is the digital design studio of Ayoub Bensalem, designer and developer in Geneva. No sales staff, no account manager, no brief passed from hand to hand: the person who answers your message is the one who draws your logotype, codes your site and photographs your workshop.",
+      "Nawa Corps is the digital design studio founded by Ayoub Bensalem, designer and developer in Geneva. The studio brings together the trades your project needs — design, development, photography — and produces your social media with a production partner. No sales staff, no account manager, no brief passed from hand to hand.",
     paragraphe2:
       "What that changes shows up in practice. The work starts at your go-ahead, not when your text arrives. The finished site is shown to you and approved before it goes live. Two rounds of corrections are included, and they are written down — a job with a boundary is a job that gets kept.",
     paragraphe3:
-      "No offices, no sales team: your site is drawn and built in one place, and you talk to whoever does the work, from the first message to delivery. It is still us the following year, when a price changes, when a poster is needed for when September comes round, or when a form has to ask one more question.",
+      "Your site is drawn and built in one place, and you talk to the people who do the work, from the first message to delivery. It is still us the following year, when a price changes, when a poster is needed for when September comes round, or when a form has to ask one more question.",
     /** `faitLieu` a quitté le dictionnaire — voir fr.ts, même endroit : la
      *  localité est une donnée de `CONTACT` (lib/site.ts), et c'est
      *  components/Studio.tsx qui choisit entre `ville` et `villeEn`. */

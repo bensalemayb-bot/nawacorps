@@ -379,24 +379,20 @@ const fr = {
    */
   services: {
     section: "Services",
-    titreLigne1: "Six gestes,",
+    titreLigne1: "Cinq gestes,",
     titreLigne2: "le même endroit.",
     titre01: "Refonte de site",
     corps01:
       "Votre site actuel, repris et refait : une page, lisible sur téléphone, rapide, à jour. Les textes existants sont récupérés puis réécrits — vous signalez ce qui a changé depuis. Une semaine dès votre feu vert, deux allers-retours compris ; le site fini vous est présenté et validé avant d'être mis en ligne. C'est le produit d'entrée, et celui qui porte tout le reste : le formulaire, les rendez-vous et l'assistant s'y branchent.",
     lien01: "Voir les trois formules →",
-    titre02: "Devis et rendez-vous directement sur le site",
+    titre02: "Intégration d'un bot IA",
     corps02:
-      "Un formulaire qui pose les bonnes questions — prestation, surface, délai, adresse — et qui vous arrive rempli plutôt qu'en trois lignes vagues. Sur les formules qui les incluent, le visiteur repart avec une estimation chiffrée et pose lui-même son rendez-vous, à 23 h comme le dimanche. Ce qui atterrit chez vous n'est plus un « rappelez-moi » : c'est une demande que vous pouvez chiffrer sans décrocher trois fois.",
-    lien02: "Voir Le Site →",
-    titre03: "Un assistant IA qui répond à votre place",
+      "Un bot qui prend la demande à votre place, du premier message au rendez-vous posé. Il pose les bonnes questions — prestation, surface, délai, adresse — rend une estimation chiffrée, et laisse le visiteur choisir son créneau à 23 h comme le dimanche. Il répond aux questions courantes jour et nuit, note le nom et le numéro, vous alerte sur votre téléphone, et relance seul ceux qui n'ont pas donné suite. Ce qui atterrit chez vous n'est plus un « rappelez-moi » : c'est une demande que vous pouvez chiffrer. Il tourne sur ce site — la bulle en bas de l'écran, c'est lui : ouvrez-la, c'est la démonstration. Le formulaire qui chiffre et prend les rendez-vous commence avec Le Site ; l'assistant qui répond et relance, avec L'Assistant.",
+    lien02: "Voir les formules →",
+    titre03: "Logo, imprimés et photos",
     corps03:
-      "Un assistant formé sur vos prestations et vos tarifs répond aux questions courantes jour et nuit, note le nom et le numéro, et vous alerte sur votre téléphone. Les demandes restées sans réponse sont relancées seules, et tout ce qui entre s'aligne dans un tableau de bord. Il tourne sur ce site : la bulle en bas de l'écran, c'est lui — ouvrez-la, c'est la démonstration.",
-    lien03: "Voir L'Assistant →",
-    titre04: "Logo, imprimés et photos",
-    corps04:
       "Un logotype si vous n'en avez pas, une palette et des typographies qui tiennent du site aux véhicules, et les règles qui disent où va quoi. Puis ce que vos clients gardent en main : cartes de visite 85 × 55 recto-verso, affiches, stickers vitrine. Les photos de votre entreprise sont prises sur place, un jour où vous travaillez — il n'y a rien à mettre en scène. Ces lignes se chiffrent sur devis : un tirage, un format et un papier ne se devinent pas.",
-    lien04: "Voir le logo et les photos →",
+    lien03: "Voir le logo et les photos →",
     /**
      * LE GESTE 05 S'APPELAIT « Fiche Google et réseaux sociaux », ET IL PORTAIT
      * DEUX PRESTATIONS DONT L'UNE N'EXISTE PLUS. La fiche Google est sortie de
@@ -407,14 +403,14 @@ const fr = {
      * disent la même chose au mot près — le partenaire de production compris,
      * qui doit rester nommé.
      */
-    titre05: "Réseaux sociaux, tenus pour vous",
-    corps05:
+    titre04: "Réseaux sociaux, tenus pour vous",
+    corps04:
       "Les réseaux sociaux se prennent en entier : le calendrier du mois vous est proposé, vous le validez, et il part — visuels, textes, publication aux heures utiles, réponses aux commentaires et aux messages. Publier une fois ne coûte rien ; publier chaque semaine pendant un an, c'est un métier, et c'est celui-là qui est repris. La production est faite avec un partenaire du studio, et c'est nous qui vous rendons le travail. Sur devis.",
-    lien05: "Voir les réseaux sociaux →",
-    titre06: "Restaurants et cafés",
-    corps06:
+    lien04: "Voir les réseaux sociaux →",
+    titre05: "Restaurants et cafés",
+    corps05:
       "Pour les cafés et les restaurants : la carte reprise en entier — l'ordre des sections, la lisibilité des prix, la place des mentions obligatoires —, avec ses fichiers d'impression, sa version en ligne et son QR. Puis ce qui tient la salle : chevalets de table, carte de fidélité, bons cadeaux et supports de saison. Une ligne à part, tenue depuis le début, et ouverte à qui n'a pas de site chez nous. Sur devis.",
-    lien06: "Voir la ligne restaurant →",
+    lien05: "Voir la ligne restaurant →",
   },
 
   /**
@@ -459,15 +455,15 @@ const fr = {
     section: "Le studio",
     /** Le `<h2>` de la section est en `.sr-only` : lu, jamais vu. */
     titreCache: "Le studio",
-    citationDebut: "« Vous parlez à celui qui ",
-    citationItalique: "fait",
+    citationDebut: "« Vous parlez à ceux qui ",
+    citationItalique: "font",
     citationFin: " le travail. »",
     paragraphe1:
-      "Nawa Corps est le studio de création digitale d'Ayoub Bensalem, designer et développeur à Genève. Pas de commerciaux, pas de chargé de compte, pas de brief qui passe de main en main : la personne qui répond à votre message est celle qui dessine votre logotype, code votre site et photographie votre atelier.",
+      "Nawa Corps est le studio de création digitale fondé par Ayoub Bensalem, designer et développeur à Genève. Le studio réunit les métiers dont votre projet a besoin — conception, développement, photographie — et produit vos réseaux sociaux avec un partenaire de production. Pas de commerciaux, pas de chargé de compte, pas de brief qui passe de main en main.",
     paragraphe2:
       "Ce que ça change se voit à l'usage. Le travail commence à votre feu vert, pas à la réception de vos textes. Le site fini vous est présenté et validé avant d'être mis en ligne. Deux allers-retours sont compris, et ils sont écrits — une prestation qu'on borne est une prestation qu'on tient.",
     paragraphe3:
-      "Pas de bureaux, pas d'équipe commerciale : votre site est dessiné et construit au même endroit, et vous parlez à qui le fait, du premier message à la livraison. C'est encore nous l'année suivante, quand un tarif change, qu'il faut une affiche pour la rentrée ou qu'un formulaire doit poser une question de plus.",
+      "Votre site est dessiné et construit au même endroit, et vous parlez à ceux qui le font, du premier message à la livraison. C'est encore nous l'année suivante, quand un tarif change, qu'il faut une affiche pour la rentrée ou qu'un formulaire doit poser une question de plus.",
     /**
      * `faitLieu` A QUITTÉ CE DICTIONNAIRE, ET IL NE FAUT PAS L'Y REMETTRE.
      * Il portait « Genève » / « Geneva », c'est-à-dire la LOCALITÉ DU STUDIO —

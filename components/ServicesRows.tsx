@@ -134,12 +134,19 @@ export default function ServicesRows({ locale = "fr" }: { locale?: Locale }) {
    * `/en` ou non.
    */
   const gestes = [
+    // CINQ GESTES, ET NON SIX. « Prise de rendez-vous et devis en ligne » et
+    // « L'assistant qui repond et relance » etaient deux lignes ; le proprietaire
+    // a tranche le 31 aout 2026 : c'est UNE SEULE CHOSE, l'integration d'un bot
+    // qui prend la demande a sa place. Les deux corps ont fusionne dans le 02, et
+    // le compte annonce par le titre de section a suivi.
+    // Le 02 pointe sur /services et non sur une formule : le formulaire qui
+    // chiffre commence avec Le Site, l'assistant qui repond avec L'Assistant —
+    // renvoyer vers une seule des deux promettrait au mauvais palier.
     { n: "01", titre: t.services.titre01, corps: t.services.corps01, renvoi: t.services.lien01, chemin: "/services" },
-    { n: "02", titre: t.services.titre02, corps: t.services.corps02, renvoi: t.services.lien02, chemin: "/services/le-site" },
-    { n: "03", titre: t.services.titre03, corps: t.services.corps03, renvoi: t.services.lien03, chemin: "/services/l-assistant" },
-    { n: "04", titre: t.services.titre04, corps: t.services.corps04, renvoi: t.services.lien04, chemin: "/services/identite" },
-    { n: "05", titre: t.services.titre05, corps: t.services.corps05, renvoi: t.services.lien05, chemin: "/services/reseaux-sociaux" },
-    { n: "06", titre: t.services.titre06, corps: t.services.corps06, renvoi: t.services.lien06, chemin: "/services/restauration" },
+    { n: "02", titre: t.services.titre02, corps: t.services.corps02, renvoi: t.services.lien02, chemin: "/services" },
+    { n: "03", titre: t.services.titre03, corps: t.services.corps03, renvoi: t.services.lien03, chemin: "/services/identite" },
+    { n: "04", titre: t.services.titre04, corps: t.services.corps04, renvoi: t.services.lien04, chemin: "/services/reseaux-sociaux" },
+    { n: "05", titre: t.services.titre05, corps: t.services.corps05, renvoi: t.services.lien05, chemin: "/services/restauration" },
   ];
 
   return (
