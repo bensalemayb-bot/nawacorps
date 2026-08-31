@@ -183,11 +183,24 @@ section.offres.green{display:flow-root}
 @media(max-width:520px){.hero h1{font-size:clamp(1.7rem,8.9vw,2.9rem)}}
 @keyframes up{to{transform:translateY(0)}}
 @keyframes fade{to{opacity:1}}
+/* LA BULLE DU CHAT PASSE DEVANT — il faut lui laisser sa bande.
+   .chat-fab est en position:fixed, en bas a gauche (left:var(--pad),
+   bottom:22px), et le pied du hero est le seul bloc du site dont le contenu
+   soit ancre en bas d ecran. Les deux se disputaient donc le meme coin :
+   mesure a 1446x850, la bulle recouvrait le sous-titre sur 357 des 383px de
+   sa largeur et 41px de sa hauteur — elle etait posee sur le texte.
+   Aucun autre coin n est libre : les deux boutons occupent le centre et
+   « Defiler » la droite. On degage donc la hauteur de la bulle (45px) plus son
+   retrait (22px), arrondi a 72px, en padding bas.
+   Le hero dispose de 91px de marge sous 100svh depuis que le sous-titre est
+   passe a deux lignes : la place existe. Sous 760px la bulle s elargit et le
+   hero se resserre — la regle mobile plus bas y remet une valeur tenable. */
 .hero-foot{
   display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;
-  margin-top:clamp(40px,6vw,80px);padding:26px 0;border-top:1px solid var(--line);
+  margin-top:clamp(40px,6vw,80px);padding:26px 0 72px;border-top:1px solid var(--line);
   opacity:0;animation:fade 1s var(--ease) .7s forwards;
 }
+@media(max-width:760px){.hero-foot{padding-bottom:88px}}
 .hero-sub{max-width:42ch;color:var(--muted);font-size:1.02rem;line-height:1.7}
 .hero-cta{display:flex;gap:12px;flex-wrap:wrap}
 .hero-scroll{font-size:.68rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:.9em}
