@@ -120,7 +120,20 @@ type Famille = {
   seoDescription: string;
   /** `serviceType` du JSON-LD. */
   serviceType: string;
-  /** Ce que la famille resout, en deux ou trois phrases. */
+  /**
+   * Ce que la famille resout, en trois ou quatre phrases.
+   *
+   * ELLE EST RENDUE A DEUX ENDROITS — la page de la famille et le bloc
+   * correspondant de /prestations — et c est voulu : l index annonce, la page
+   * developpe, et les deux ne peuvent pas se contredire.
+   *
+   * LES CINQ ONT ETE ETOFFEES D UNE PHRASE. Elles decrivaient le probleme du
+   * lecteur, tres bien, puis s arretaient avant de dire ce qu il obtient. La
+   * phrase ajoutee nomme le LIVRABLE, en reprenant les champs `quoi` et
+   * `produit` des pieces juste en dessous — jamais une promesse de plus.
+   * Un dirigeant de PME qui compare avec des agences a quatre ou huit mille
+   * francs a besoin du concret, pas d un adjectif de plus.
+   */
   resout: string;
   /** Les prestations, dans l ordre de lecture. */
   pieces: readonly Piece[];
@@ -186,7 +199,7 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
       "Logotype, palette et photos de votre entreprise à Genève. La même identité du site à l'enseigne, et des images cadrées pour le site et la fiche Google.",
     serviceType: "Identité visuelle et photographie d'entreprise",
     resout:
-      "Votre logo a été fait une fois, il y a longtemps, et il ne ressemble plus à ce que vous faites aujourd'hui. Vos devis, votre site et votre enseigne ne se ressemblent pas non plus, et les seules photos disponibles sont celles d'un téléphone, prises un jour de pluie. Ici on remet tout d'accord : une identité qui tient, et des images qui montrent votre travail.",
+      "Votre logotype a été dessiné une fois, il y a longtemps, et il ne dit plus ce que vous faites aujourd'hui. Vos devis, votre site et votre enseigne ne se ressemblent pas entre eux, et les seules images disponibles sortent d'un téléphone. Deux choses se règlent ici : une identité qui tient du site à l'enseigne — logotype, palette, typographies, et les règles qui disent où va quoi —, et des photographies prises sur votre lieu de travail, le jour où vous travaillez.",
     pieces: [
       {
         slug: "identite-logo",
@@ -264,7 +277,7 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
       "Cartes de visite 85 × 55, affiches d'événement et sticker vitrine avec QR, à Genève. Conception, fichiers prêts à imprimer et tirage, sur devis.",
     serviceType: "Conception d'imprimés et de signalétique",
     resout:
-      "Vous n'avez plus de cartes à donner, ou celles qui restent ne ressemblent plus à votre entreprise. Une affiche doit partir en vitrine la semaine prochaine et personne dans la maison ne sait la faire. Et les clients contents repartent sans laisser d'avis, faute d'un endroit où cliquer. Trois petits objets, qu'on croise tous les jours.",
+      "Vous n'avez plus de cartes à donner, ou celles qui restent ne ressemblent plus à votre entreprise. Une affiche doit partir en vitrine la semaine prochaine et personne dans la maison ne sait la faire. Et les clients contents repartent sans laisser d'avis, faute d'un endroit où cliquer. Trois objets qu'on croise tous les jours, et qui font l'essentiel du contact hors écran : la carte qu'on garde, l'affiche qu'on lit de la rue, le QR qu'on scanne au comptoir.",
     pieces: [
       {
         slug: "carte-visite",
@@ -352,7 +365,7 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
       "Calendrier, création, rédaction, publication et suivi de vos réseaux sociaux, depuis Genève. Vous validez le mois, vous ne produisez rien. Sur devis.",
     serviceType: "Production et gestion de réseaux sociaux",
     resout:
-      "Votre page existe, elle n'a pas bougé depuis des mois, et vous savez très bien pourquoi : ce n'est jamais la priorité de la semaine. Publier une fois ne coûte rien ; publier chaque semaine pendant un an, c'est un métier. Ici la ligne est prise en entier — vous validez le mois, vous ne produisez rien.",
+      "Votre page existe, elle n'a pas bougé depuis des mois, et vous savez très bien pourquoi : ce n'est jamais la priorité de la semaine. Publier une fois ne coûte rien ; publier chaque semaine pendant un an, c'est un métier. Ici la ligne est prise en entier : le calendrier du mois vous est proposé, vous le validez, et il part — visuels, textes, publication aux heures utiles, réponses aux commentaires et aux messages. Vous validez le mois, vous ne produisez rien.",
     pieces: [
       {
         slug: "reseaux-sociaux",
@@ -419,7 +432,7 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
       "Hébergement, domaine, mises à jour, sauvegardes et version anglaise de votre site, à Genève. Le suivi démarre la 2ᵉ année, prix TVA comprise.",
     serviceType: "Hébergement, maintenance et traduction de site web",
     resout:
-      "Un site n'est pas un objet qu'on pose et qu'on oublie : il s'héberge, il se met à jour, il se sauvegarde, et le nom de domaine se renouvelle chaque année sous peine de tout perdre d'un coup. Le suivi prend ça en charge pour que vous n'ayez plus à y penser — et pour qu'il reste quelqu'un à qui écrire l'année d'après. La version anglaise du site se prend ici aussi : elle s'ajoute à ce qui est en ligne, sans rien refaire.",
+      "Un site n'est pas un objet qu'on pose et qu'on oublie : il s'héberge, il se met à jour, il se sauvegarde, et le nom de domaine se renouvelle chaque année sous peine de tout perdre d'un coup. Le suivi prend ça en charge pour que vous n'ayez plus à y penser — et pour qu'il reste quelqu'un à qui écrire l'année d'après, quand un tarif change ou qu'une prestation s'ajoute. Il démarre la deuxième année : la première est comprise dans le prix du site. La version anglaise se prend ici aussi, et elle s'ajoute à ce qui est en ligne sans rien refaire.",
     pieces: [
       {
         slug: "hebergement",
@@ -516,7 +529,7 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
       "La carte repensée avec sa version en ligne et son QR, chevalets, carte de fidélité, bons cadeaux et supports de saison, pour un établissement genevois.",
     serviceType: "Supports imprimés et numériques pour la restauration",
     resout:
-      "La carte est le document le plus lu de votre établissement, et c'est souvent celui qu'on refait le plus vite, entre deux services. Les prix ont bougé trois fois, des plats retirés y figurent encore, et la version en ligne date de l'an dernier. Cette ligne existe pour que la salle se tienne : la carte, ce qu'il y a sur les tables, et ce qu'on donne au client avant qu'il parte.",
+      "La carte est le document le plus lu de votre établissement, et c'est souvent celui qu'on refait le plus vite, entre deux services. Les prix ont bougé trois fois, des plats retirés y figurent encore, et la version en ligne date de l'an dernier. Cette ligne existe pour que la salle se tienne : la carte reprise en entier, avec ses fichiers d'impression et son QR ; ce qu'il y a sur les tables ; et ce qu'on donne au client avant qu'il parte. Elle se commande avec un site chez moi comme sans.",
     pieces: [
       {
         slug: "la-carte",

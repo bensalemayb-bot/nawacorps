@@ -15,6 +15,21 @@
 // du hero dit desormais « Une seule personne. », et la formule serait lue deux
 // fois sur la meme page.
 //
+// UN TROISIEME PARAGRAPHE A ETE INSERE AU MILIEU, et c est celui qui manquait.
+// La section disait QUI fait le travail, deux fois, sans jamais dire ce que ca
+// change pour celui qui achete. Elle en est le meilleur endroit : c est ici que
+// le lecteur decide s il a affaire a un professionnel. Ce qu on lui donne sont
+// trois faits d exploitation, tous ecrits au positionnement §5 — le depart au
+// feu vert, la validation avant mise en ligne, les deux allers-retours bornes.
+// Le guide de voix §4 le dit : celui qui ecrit ce qu il ne fait pas est cru sur
+// ce qu il fait.
+//
+// CE PARAGRAPHE NE PLAIDE PAS LE PRIX, et ne doit jamais s y mettre. Les faits
+// de structure — pas de bureau, pas d equipe commerciale — restent ecrits, mais
+// jamais suivis d une charniere causale vers le tarif (« et c est ce qui
+// permet… ») : une justification attire l attention sur le doute qu elle veut
+// lever.
+//
 // « AUCUNE SOUS-TRAITANCE » A ETE RETIRE, ET NE DOIT PAS REVENIR. L affirmation
 // est fausse : la production des reseaux sociaux est faite avec un partenaire,
 // et /prestations/reseaux-sociaux comme lib/familles.ts l ecrivent en toutes
@@ -34,8 +49,9 @@ export default function Studio() {
         <div className="studio-grid">
           <p className="studio-quote" data-reveal>« Vous parlez à celui qui <em>fait</em> le travail. »</p>
           <div className="studio-txt" data-reveal>
-            <p>Nawa Corps est le studio de création digitale d&apos;Ayoub Bensalem, designer et développeur à Genève. Pas de commerciaux, pas de chargé de compte : la personne qui répond à votre message est celle qui dessine votre logotype, code votre site et photographie votre atelier.</p>
-            <p>Pas de bureaux, pas d&apos;équipe commerciale : votre site est dessiné et construit par la même personne. Vous traitez avec elle du premier message à la livraison — et c&apos;est encore elle l&apos;année suivante, quand un tarif change ou qu&apos;il faut une affiche pour la rentrée.</p>
+            <p>Nawa Corps est le studio de création digitale d&apos;Ayoub Bensalem, designer et développeur à Genève. Pas de commerciaux, pas de chargé de compte, pas de brief qui passe de main en main : la personne qui répond à votre message est celle qui dessine votre logotype, code votre site et photographie votre atelier.</p>
+            <p>Ce que ça change se voit à l&apos;usage. Le travail commence à votre feu vert, pas à la réception de vos textes. Le site fini vous est présenté et validé avant d&apos;être mis en ligne. Deux allers-retours sont compris, et ils sont écrits — une prestation qu&apos;on borne est une prestation qu&apos;on tient.</p>
+            <p>Pas de bureaux, pas d&apos;équipe commerciale : votre site est dessiné et construit par la même personne, et vous traitez avec elle du premier message à la livraison. C&apos;est encore elle l&apos;année suivante, quand un tarif change, qu&apos;il faut une affiche pour la rentrée ou qu&apos;un formulaire doit poser une question de plus.</p>
             <div className="facts">
               <div><b>Genève</b><span>Basé ici</span></div>
               <div><b>1 sem.</b><span>Refonte livrée</span></div>
