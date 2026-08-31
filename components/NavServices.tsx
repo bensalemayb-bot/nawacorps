@@ -2,6 +2,8 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import type { EntreeNav } from "@/lib/catalogue-familles";
+import { dictionnaire } from "@/lib/dictionnaires";
+import { lien, type Locale } from "@/lib/i18n";
 
 /**
  * « SERVICES » DANS LA BARRE DE NAV — la page generale, puis une famille par
@@ -42,12 +44,20 @@ import type { EntreeNav } from "@/lib/catalogue-familles";
 export default function NavServices({
   general,
   familles,
+  locale = "fr",
 }: {
   /** La page generale, en tete de liste. */
   general: EntreeNav;
   /** Les cinq familles, dans l ordre du catalogue. */
   familles: readonly EntreeNav[];
+  /**
+   * La langue de la page. « fr » par defaut pour que tout appelant qui ne la
+   * connait pas encore rende exactement ce qu il rendait avant le chantier
+   * anglais — c est la condition d une bascule sans regression.
+   */
+  locale?: Locale;
 }) {
+  const t = dictionnaire(locale);
   const [ouvert, setOuvert] = useState(false);
   const enveloppe = useRef<HTMLDivElement>(null);
   const bouton = useRef<HTMLButtonElement>(null);
@@ -116,7 +126,7 @@ export default function NavServices({
         aria-controls={panneauId}
         onClick={() => setOuvert((o) => !o)}
       >
-        Services
+        {t.nav.services}
         <svg
           className="nav-drop-c"
           viewBox="0 0 10 6"
@@ -138,13 +148,30 @@ export default function NavServices({
       <div className="nav-drop-p" id={panneauId}>
         {/* La page generale d abord : c est elle qui tient la promesse
             « on y voit tout ce qui est vendu ». Les familles sont des
-            raccourcis vers un morceau de cette page-la, pas des concurrentes. */}
-        <a className="nav-drop-g" href={general.href}>
+            raccourcis vers un morceau de cette page-la, pas des concurrentes.
+
+            LES CHEMINS PASSENT PAR `lien` ICI, la ou le `<a>` s ecrit, et non
+            chez l appelant : c est la regle du chantier i18n — un href se
+            prefixe a l endroit ou il devient un lien. `lien` est idempotente,
+            un chemin deja prefixe la traverse sans changer, si bien qu un
+            appelant qui prefixerait aussi de son cote ne casserait rien.
+
+            LES LIBELLES DES FAMILLES, EUX, RESTENT EN FRANCAIS meme sur la
+            page anglaise : ils viennent de `lib/familles.ts` via
+            `lib/catalogue-familles.ts`, qui porte la matiere editoriale des
+            cinq pages de famille et n est pas encore traduite. Ce n est pas un
+            oubli de ce composant — le jour ou ces pages passent a l anglais,
+            c est la source qui rendra les deux langues, et cette boucle-ci
+            n aura pas a bouger. */}
+        <a className="nav-drop-g" href={lien(locale, general.href)}>
           {general.libelle}
         </a>
         {familles.map((f) => (
-          <a key={f.href} href={f.href}>
-            {f.libelle}
+          <a key={f.href} href={lien(locale, f.href)}>
+            {/* libelleEn est derive de FAMILLES[slug] dans lib/catalogue-familles.ts :
+                la nav ne peut donc pas rebaptiser une page autrement que la page
+                elle-meme. Repli sur le francais, jamais un trou. */}
+            {(locale === "en" && f.libelleEn) || f.libelle}
           </a>
         ))}
       </div>

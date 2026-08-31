@@ -1,15 +1,7 @@
-/* eslint-disable @next/next/no-html-link-for-pages --
-   volontaire — next/link casserait les reveals (Interactions ne tourne qu'une
-   fois), voir décision B7. La place canonique de cette exception est la liste
-   nommee d'eslint.config.mjs, ou figurent deja /studio, /contact, les pages
-   legales et app/(site)/services/** ; elle est ecrite ici parce que ce chantier
-   n'a pas la main sur la config. A DEPLACER dans eslint.config.mjs a la
-   prochaine passe qui y touche, pour que l'exception reste au meme endroit
-   pour toutes les pages publiques. */
 import type { Metadata } from "next";
 import SchemaPage from "@/components/SchemaPage";
 import FeatureCarousel from "@/components/ui/feature-carousel";
-import { SITE_NAME, openGraphPage } from "@/lib/site";
+import { SITE_NAME, alternatesPage, openGraphPage } from "@/lib/site";
 
 /**
  * /demonstrations — LES CINQ PIECES, ET CE QU ELLES SONT VRAIMENT.
@@ -62,6 +54,14 @@ import { SITE_NAME, openGraphPage } from "@/lib/site";
  * la fusion des metadata de Next ne descend pas dans les objets. Sans lui,
  * cette page porterait le titre et la description de l accueil sur sa carte de
  * partage — c est-a-dire la promesse commerciale la ou on annonce des pieces.
+ *
+ * `alternates` PASSE PAR `alternatesPage` DEPUIS QUE LA JUMELLE ANGLAISE
+ * EXISTE. La canonique ne bouge pas ; la fonction AJOUTE les `hreflang`, et
+ * LES DEUX SENS SONT OBLIGATOIRES — une page anglaise qui declare sa jumelle
+ * francaise sans que celle-ci lui rende la pareille voit son groupe ignore par
+ * Google, et les deux versions se remettent a se concurrencer. `en-CH` n est
+ * emis que si ce chemin figure dans `CHEMINS_TRADUITS` (lib/i18n.ts) :
+ * annoncer une jumelle qui repond 404 est pire que de ne rien annoncer.
  */
 const TITRE = "Démonstrations du studio";
 const DESCRIPTION =
@@ -70,7 +70,7 @@ const DESCRIPTION =
 export const metadata: Metadata = {
   title: TITRE,
   description: DESCRIPTION,
-  alternates: { canonical: "/demonstrations" },
+  alternates: alternatesPage("/demonstrations"),
   openGraph: openGraphPage({
     titre: `${TITRE} — ${SITE_NAME}`,
     description: DESCRIPTION,

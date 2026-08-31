@@ -1,7 +1,8 @@
-import type { ServiceCatalogue } from "@/lib/catalogue";
+import { nomService, type ServiceCatalogue } from "@/lib/catalogue";
 import { familleDuService } from "@/lib/catalogue-familles";
 import { FAMILLES, FAMILLE_SLUGS } from "@/lib/familles";
 import { FORMULES, FORMULE_SLUGS, estFormule } from "@/lib/formules";
+import type { Locale } from "@/lib/i18n";
 import { whatsapp } from "@/lib/site";
 
 /**
@@ -38,15 +39,41 @@ import { whatsapp } from "@/lib/site";
  * encore, comme repli si l'assistant ne demarre pas. Celles des formules et des
  * familles sont LUES dans lib/formules.ts et lib/familles.ts ; seules les
  * quatre qui n'appartenaient a aucun des deux sont ecrites plus bas.
+ *
+ * CE FICHIER EST BILINGUE DEPUIS /en/devis, ET LE PARAMETRE `locale` EST EN
+ * DERNIERE POSITION AVEC « fr » POUR DEFAUT — meme convention que
+ * lib/format.ts. app/(site)/devis/page.tsx appelle `resoudreDevis` sans
+ * troisieme argument et rend donc exactement ce qu'il rendait avant.
+ *
+ * TROIS CHOSES CHANGENT DE LANGUE, ET TROIS SEULEMENT :
+ *  - le LIBELLE d'une ligne de catalogue, lu par `nomService(service, locale)`
+ *    (lib/catalogue.ts) — c'est-a-dire `nameEn` quand la base en porte un. Les
+ *    trois formules ont `nameEn = null` VOLONTAIREMENT : « La Vitrine »,
+ *    « Le Site » et « L'Assistant » sont des noms propres et le repli sur le
+ *    francais est ici le comportement voulu, pas un trou a boucher ;
+ *  - le libelle d'une FAMILLE, qui n'a pas de ligne en base et vit dans
+ *    lib/familles.ts (`libelleEn`) ;
+ *  - l'AMORCE WhatsApp, deja ecrite en anglais dans lib/formules.ts et
+ *    lib/familles.ts (`amorceEn`). Les quatre sujets qui n'appartiennent a
+ *    aucun des deux recoivent la leur plus bas.
+ * Le SUJET, lui, ne change jamais : c'est un identifiant, il part en base
+ * (`Lead.subject`) et le traduire ferait deux cles pour une seule conversation.
  */
 
 /**
  * Le repli quand la demande ne designe rien de precis — et le seul endroit ou
- * cette phrase est ecrite.
+ * cette phrase est ecrite, dans chaque langue.
+ *
+ * L'enregistrement est indexe par `Locale` : ajouter une langue a lib/i18n.ts
+ * casse la compilation ICI tant que sa colonne n'est pas remplie. C'est la
+ * meme garde que `PREFIXE` et `LANGUE_HTML` — une amorce manquante ouvrirait
+ * WhatsApp sur un message vide, ce qui ne se voit qu'une fois le visiteur
+ * parti.
  */
-const AMORCE_GENERALE = whatsapp(
-  "Bonjour, j'aimerais un devis pour mon entreprise.",
-);
+const AMORCES_GENERALES: Record<Locale, string> = {
+  fr: whatsapp("Bonjour, j'aimerais un devis pour mon entreprise."),
+  en: whatsapp("Hello, I'd like a quote for my business."),
+};
 
 /** Ce qu'un sujet de CTA designe. */
 type Entree = {
@@ -61,9 +88,23 @@ type Entree = {
    * depuis /admin.
    */
   libelle?: string;
+  /** Idem en anglais. Absent = la demande retombe sur `libelle`. */
+  libelleEn?: string;
   /** Amorce WhatsApp : le repli si l'assistant ne demarre pas. */
   amorce: string;
+  /**
+   * Idem en anglais. C'EST UN LIEN COMPLET, pas une phrase : il se construit
+   * avec `whatsapp()` comme son jumeau francais, sinon le message pre-rempli
+   * n'est pas encode et WhatsApp s'ouvre vide. Absent = repli sur `amorce`,
+   * c'est-a-dire une amorce francaise — visible, donc corrigible.
+   */
+  amorceEn?: string;
 };
+
+/** Le champ anglais s'il existe, le francais sinon. */
+function selon<T>(locale: Locale, fr: T, en: T | undefined): T {
+  return locale === "en" ? (en ?? fr) : fr;
+}
 
 /**
  * Les trois formules, DERIVEES de lib/formules.ts. Une formule ajoutee la-bas
@@ -72,7 +113,11 @@ type Entree = {
 const DES_FORMULES: Record<string, Entree> = Object.fromEntries(
   FORMULE_SLUGS.map((slug) => [
     FORMULES[slug].sujet,
-    { service: slug, amorce: FORMULES[slug].amorce },
+    {
+      service: slug,
+      amorce: FORMULES[slug].amorce,
+      amorceEn: FORMULES[slug].amorceEn,
+    },
   ]),
 );
 
@@ -84,7 +129,12 @@ const DES_FORMULES: Record<string, Entree> = Object.fromEntries(
 const DES_FAMILLES: Record<string, Entree> = Object.fromEntries(
   FAMILLE_SLUGS.map((slug) => [
     FAMILLES[slug].sujet,
-    { libelle: FAMILLES[slug].libelle, amorce: FAMILLES[slug].amorce },
+    {
+      libelle: FAMILLES[slug].libelle,
+      libelleEn: FAMILLES[slug].libelleEn,
+      amorce: FAMILLES[slug].amorce,
+      amorceEn: FAMILLES[slug].amorceEn,
+    },
   ]),
 );
 
@@ -108,18 +158,33 @@ const AUTRES: Record<string, Entree> = {
     amorce: whatsapp(
       "Bonjour, j'aimerais un devis pour un site à plusieurs pages.",
     ),
+    amorceEn: whatsapp(
+      "Hello, I'd like a quote for a site with several pages.",
+    ),
   },
   "devis-formules": {
     libelle: "Les formules de site",
+    // Glossaire anglais §7 : « formule » se dit `package`, et non `option` ni
+    // `plan` — ce dernier sent l'abonnement logiciel. Le §6 impose par-dessus
+    // de NOMMER la formule quand la phrase le permet ; ici elle ne le permet
+    // pas, le bouton designe les trois a la fois.
+    libelleEn: "The site packages",
     amorce: whatsapp(
       "Bonjour, j'aimerais un devis pour la refonte du site de mon entreprise.",
+    ),
+    amorceEn: whatsapp(
+      "Hello, I'd like a quote to rebuild my company's website.",
     ),
   },
   "devis-carte-du-studio": {
     amorce: whatsapp("Bonjour, j'aimerais un devis pour une prestation."),
+    amorceEn: whatsapp("Hello, I'd like a quote for one of your services."),
   },
   "devis-studio": {
     amorce: whatsapp("Bonjour, j'ai lu la page du studio et j'aimerais un devis."),
+    amorceEn: whatsapp(
+      "Hello, I have read the studio page and I'd like a quote.",
+    ),
   },
 };
 
@@ -156,9 +221,14 @@ export type DemandeDevis = {
 };
 
 /** L'amorce qui accompagne une ligne de catalogue, selon ou elle est rangee. */
-function amorceDuService(service: ServiceCatalogue): string {
-  if (estFormule(service.slug)) return FORMULES[service.slug].amorce;
-  return familleDuService(service)?.contenu.amorce ?? AMORCE_GENERALE;
+function amorceDuService(service: ServiceCatalogue, locale: Locale): string {
+  if (estFormule(service.slug)) {
+    const formule = FORMULES[service.slug];
+    return selon(locale, formule.amorce, formule.amorceEn);
+  }
+  const famille = familleDuService(service)?.contenu;
+  if (!famille) return AMORCES_GENERALES[locale];
+  return selon(locale, famille.amorce, famille.amorceEn);
 }
 
 /**
@@ -171,12 +241,13 @@ function amorceDuService(service: ServiceCatalogue): string {
 export function resoudreDevis(
   brut: string | string[] | undefined,
   catalogue: readonly ServiceCatalogue[],
+  locale: Locale = "fr",
 ): DemandeDevis {
   const inconnu: DemandeDevis = {
     sujet: null,
     libelle: null,
     service: null,
-    amorce: AMORCE_GENERALE,
+    amorce: AMORCES_GENERALES[locale],
   };
 
   // `?p=a&p=b` rend un tableau : on prend la premiere valeur plutot que de
@@ -189,9 +260,12 @@ export function resoudreDevis(
   if (direct) {
     return {
       sujet: direct.slug,
-      libelle: direct.name,
+      // Le nom vient de la base, dans la langue demandee — jamais de ce
+      // fichier. `nomService` porte le repli sur le francais, qui est le
+      // comportement VOULU pour les trois formules (noms propres).
+      libelle: nomService(direct, locale),
       service: direct,
-      amorce: amorceDuService(direct),
+      amorce: amorceDuService(direct, locale),
     };
   }
 
@@ -207,8 +281,11 @@ export function resoudreDevis(
 
   return {
     sujet: p,
-    libelle: service?.name ?? entree.libelle ?? null,
+    libelle:
+      (service ? nomService(service, locale) : null) ??
+      selon(locale, entree.libelle, entree.libelleEn) ??
+      null,
     service,
-    amorce: entree.amorce,
+    amorce: selon(locale, entree.amorce, entree.amorceEn),
   };
 }

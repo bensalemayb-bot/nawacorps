@@ -1,3 +1,5 @@
+import type { Locale } from "@/lib/i18n";
+
 /**
  * Formatage des prix, aligne au caractere pres sur reference/binacore.html.
  *
@@ -10,6 +12,24 @@
  *    avec l'ICU moderne et casserait la fidelite.
  *  - unite monetaire : U+2013, tiret demi-cadratin (`.–`), et non un trait
  *    d'union U+002D.
+ *
+ * CE FICHIER EST BILINGUE DEPUIS LE CHANTIER ANGLAIS, ET IL L EST D UNE SEULE
+ * FACON : les MOTS changent de langue, les CHIFFRES jamais.
+ *
+ *  - « TVA comprise » devient « VAT included », « sur devis » devient « on
+ *    request » — termes IMPOSES par docs/agents/brand/glossaire-anglais.md §3,
+ *    qui interdit explicitement « incl. VAT », « TTC » et « plus VAT ».
+ *  - `699.–` et `1'499.–` s ecrivent PAREIL en anglais : meme apostrophe de
+ *    milliers, meme suffixe `.–`. Ni `CHF 699`, ni `699 CHF`, ni `€`. C est
+ *    une regle du glossaire (§5) et non une commodite : le montant est un
+ *    montant suisse, pas une somme convertie, et le lecteur anglophone de
+ *    Geneve lit deja ce format sur toutes ses factures.
+ *
+ * LE PARAMETRE `locale` EST TOUJOURS EN DERNIERE POSITION ET VAUT « fr » PAR
+ * DEFAUT. Une quarantaine d appels existent deja dans le site francais ; aucun
+ * n a eu a bouger. Un appel sans locale rend donc exactement ce qu il rendait
+ * avant ce chantier, a l octet pres — c est la condition qui rendait la bascule
+ * sure.
  */
 
 export type ServicePriceType = "FIXED" | "FROM" | "QUOTE";
@@ -24,12 +44,44 @@ export type ServicePrice = {
 /** U+0027 — apostrophe droite, comme dans la maquette. */
 const THOUSANDS_SEPARATOR = "'";
 
-/** U+002E + U+2013 — le suffixe monetaire de la maquette. */
+/**
+ * U+002E + U+2013 — le suffixe monetaire de la maquette.
+ *
+ * IL N A PAS DE VARIANTE ANGLAISE, et ce n est pas un oubli : voir l en-tete,
+ * glossaire §5. C est pourquoi il reste une constante et non un enregistrement
+ * par langue.
+ */
 export const CHF_UNIT = ".–";
 
-export const QUOTE_LABEL = "sur devis";
-export const FROM_PREFIX = "dès";
-export const MONTHLY_SUFFIX = "/mois";
+/**
+ * LES QUATRE MENTIONS QUI ACCOMPAGNENT UN MONTANT, dans les deux langues.
+ *
+ * Chaque enregistrement est indexe par `Locale` : ajouter une langue a
+ * `lib/i18n.ts` casse la compilation ICI tant que sa colonne n est pas
+ * remplie. C est la meme garde que `PREFIXE` et `LANGUE_HTML` — une mention de
+ * prix manquante ne doit jamais tomber en production, elle a valeur legale.
+ *
+ * Les quatre constantes historiques (`QUOTE_LABEL`, `FROM_PREFIX`,
+ * `MONTHLY_SUFFIX`, `TVA_LABEL`) SURVIVENT et sont derivees de ces tables :
+ * six fichiers les importent, dont `lib/familles.ts`. Les garder evite de
+ * toucher a six fichiers ; les DERIVER evite qu une valeur francaise existe a
+ * deux endroits et diverge.
+ */
+const LIBELLES_DEVIS: Record<Locale, string> = {
+  fr: "sur devis",
+  // Glossaire §3 : « on request ». Ni « on quote », ni « price on application ».
+  en: "on request",
+};
+
+const PREFIXES_DES: Record<Locale, string> = {
+  fr: "dès",
+  en: "from",
+};
+
+const SUFFIXES_MENSUELS: Record<Locale, string> = {
+  fr: "/mois",
+  en: "/month",
+};
 
 /**
  * LA MENTION QUI ACCOMPAGNE UN MONTANT, ecrite une seule fois pour tout le
@@ -43,8 +95,49 @@ export const MONTHLY_SUFFIX = "/mois";
  *
  * lib/familles.ts la reprend telle quelle dans sa phrase longue. Deux copies
  * du meme mot divergent toujours, et celle-ci a valeur legale.
+ *
+ * EN ANGLAIS C EST « VAT included », ET RIEN D AUTRE. Le glossaire §3 proscrit
+ * nommement « incl. VAT », « TTC » et « plus VAT ». « plus VAT » dirait meme
+ * l inverse du francais : hors taxe au lieu de toutes taxes comprises.
  */
-export const TVA_LABEL = "TVA comprise";
+const MENTIONS_TVA: Record<Locale, string> = {
+  fr: "TVA comprise",
+  en: "VAT included",
+};
+
+/** Le libelle du prix libre, dans la langue demandee. */
+export function libelleDevis(locale: Locale = "fr"): string {
+  return LIBELLES_DEVIS[locale];
+}
+
+/** Le prefixe d un prix plancher (« dès 120.– »), dans la langue demandee. */
+export function prefixeDes(locale: Locale = "fr"): string {
+  return PREFIXES_DES[locale];
+}
+
+/** Le suffixe d un prix mensuel (« 390.–/mois »), dans la langue demandee. */
+export function suffixeMensuel(locale: Locale = "fr"): string {
+  return SUFFIXES_MENSUELS[locale];
+}
+
+/** La mention de TVA, dans la langue demandee. Jamais un montant sans elle. */
+export function mentionTva(locale: Locale = "fr"): string {
+  return MENTIONS_TVA[locale];
+}
+
+/**
+ * LES QUATRE CONSTANTES FRANCAISES, conservees pour les appelants existants.
+ *
+ * Elles ne sont PAS depreciees : dans un composant qui ne connait pas encore
+ * sa langue, elles disent au moins la verite du site francais. Un composant
+ * qui recoit une `locale` doit en revanche appeler la fonction — sinon la page
+ * anglaise affiche « TVA comprise » sous un prix, ce qui est exactement le
+ * genre de detail que personne ne relit.
+ */
+export const QUOTE_LABEL = LIBELLES_DEVIS.fr;
+export const FROM_PREFIX = PREFIXES_DES.fr;
+export const MONTHLY_SUFFIX = SUFFIXES_MENSUELS.fr;
+export const TVA_LABEL = MENTIONS_TVA.fr;
 
 /**
  * IL N Y A PLUS DE NOTE SOUS « sur devis », ET C EST VOULU.
@@ -68,30 +161,50 @@ export const TVA_LABEL = "TVA comprise";
  * avoir posees quelque part.
  */
 
-/** 195000 -> "1'950" ; 4900 -> "49" ; 45000 -> "450" */
+/**
+ * 195000 -> "1'950" ; 4900 -> "49" ; 45000 -> "450"
+ *
+ * PAS DE PARAMETRE `locale`, ET C EST LA REGLE, PAS UN OUBLI. Le montant
+ * s ecrit pareil dans les deux langues (glossaire §5) ; lui donner une locale
+ * laisserait croire qu il existe une variante anglaise a trouver, et le
+ * premier agent qui chercherait a « corriger » `1'499.–` en `CHF 1,499`
+ * casserait la regle.
+ */
 export function formatChfAmount(cents: number): string {
   const francs = Math.round(cents / 100);
   return String(francs).replace(/\B(?=(\d{3})+(?!\d))/g, THOUSANDS_SEPARATOR);
 }
 
-/** Vrai si le service se traite sur devis : aucun chiffre ne doit s'afficher. */
+/**
+ * Vrai si le service se traite sur devis : aucun chiffre ne doit s'afficher.
+ *
+ * Predicat sur des donnees, pas sur du texte : aucune locale ici non plus.
+ */
 export function isQuote(service: ServicePrice): boolean {
   return service.priceType === "QUOTE" || service.priceCents === null;
 }
 
 /**
  * Chaine canonique complete.
- *   { FIXED, 45000 }                        -> "450.–"
- *   { FROM, 12000, priceFrom }              -> "dès 120.–"
- *   { FIXED, 39000, isMonthly }             -> "390.–/mois"
- *   { QUOTE, null }                         -> "sur devis"
+ *   { FIXED, 45000 }                        -> "450.–"           / "450.–"
+ *   { FROM, 12000, priceFrom }              -> "dès 120.–"       / "from 120.–"
+ *   { FIXED, 39000, isMonthly }             -> "390.–/mois"      / "390.–/month"
+ *   { QUOTE, null }                         -> "sur devis"       / "on request"
+ *
+ * SEULS LES MOTS CHANGENT. Le nombre, son apostrophe de milliers et son
+ * suffixe `.–` traversent la fonction identiques — c est verifiable ligne par
+ * ligne dans le tableau ci-dessus, et c est le point a ne pas perdre de vue en
+ * relisant.
  */
-export function formatServicePrice(service: ServicePrice): string {
-  if (isQuote(service)) return QUOTE_LABEL;
+export function formatServicePrice(
+  service: ServicePrice,
+  locale: Locale = "fr",
+): string {
+  if (isQuote(service)) return libelleDevis(locale);
 
   const amount = formatChfAmount(service.priceCents as number);
-  const prefix = service.priceFrom ? `${FROM_PREFIX} ` : "";
-  const suffix = service.isMonthly ? MONTHLY_SUFFIX : "";
+  const prefix = service.priceFrom ? `${prefixeDes(locale)} ` : "";
+  const suffix = service.isMonthly ? suffixeMensuel(locale) : "";
 
   return `${prefix}${amount}${CHF_UNIT}${suffix}`;
 }

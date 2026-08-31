@@ -1,3 +1,6 @@
+import type { Metadata } from "next";
+import { LOCALE_DEFAUT, LANGUE_HTML, type Locale, estTraduit, lien } from "@/lib/i18n";
+
 /**
  * IDENTITE DU SITE — source unique de verite pour tout ce qui est « la marque
  * vue de l exterieur » : URL publique, coordonnees, horaires, langues.
@@ -166,16 +169,41 @@ export const FONDE_EN = "2026";
  */
 export const OG_IMAGE = `${SITE_URL}/brand/og-nawa-corps.png`;
 
-export function openGraphPage(page: {
-  titre: string;
-  description: string;
-  chemin: string;
-}) {
+/**
+ * `og:locale` — le meme couple langue/region que `<html lang>`, ecrit avec le
+ * separateur d Open Graph.
+ *
+ * Open Graph veut un underscore (`fr_CH`), HTML et hreflang veulent un tiret
+ * (`fr-CH`). C est la SEULE difference, et elle se derive : ecrire les deux
+ * tables a la main serait se donner deux occasions de diverger.
+ */
+const OG_LOCALE: Record<Locale, string> = {
+  fr: LANGUE_HTML.fr.replace("-", "_"),
+  en: LANGUE_HTML.en.replace("-", "_"),
+};
+
+/**
+ * @param locale la langue de la page. LE PARAMETRE EST OPTIONNEL ET VAUT
+ *   `"fr"` PAR DEFAUT : les seize pages existantes appellent cette fonction
+ *   sans lui, et elles doivent continuer a rendre exactement le meme objet
+ *   qu avant — `lien("fr", chemin)` rend `chemin` inchange, et `OG_LOCALE.fr`
+ *   vaut « fr_CH ». Aucune de ces pages n a a etre touchee.
+ * @param page.chemin le chemin SANS prefixe de langue (`/studio`), jamais
+ *   `/en/studio` : c est cette fonction qui pose le prefixe.
+ */
+export function openGraphPage(
+  page: {
+    titre: string;
+    description: string;
+    chemin: string;
+  },
+  locale: Locale = LOCALE_DEFAUT,
+) {
   return {
     type: "website" as const,
-    locale: "fr_CH",
+    locale: OG_LOCALE[locale],
     siteName: SITE_NAME,
-    url: page.chemin,
+    url: lien(locale, page.chemin),
     title: page.titre,
     description: page.description,
     images: [
@@ -183,10 +211,72 @@ export function openGraphPage(page: {
         url: OG_IMAGE,
         width: 1200,
         height: 630,
-        alt: `${SITE_NAME} — studio de création digitale à Genève`,
+        // L alt voyage avec l image de partage sur les reseaux : il est LU par
+        // les lecteurs d ecran et indexe. Le laisser francais sur une page
+        // anglaise decrit l entreprise dans une langue que le lecteur n a pas
+        // choisie.
+        alt:
+          locale === "en"
+            ? `${SITE_NAME} — digital design studio in Geneva`
+            : `${SITE_NAME} — studio de création digitale à Genève`,
       },
     ],
   };
+}
+
+/**
+ * CANONIQUE ET `hreflang` D UNE PAGE, dans les deux langues.
+ *
+ * A QUOI SERT `hreflang`, ET POURQUOI C EST LA PIECE QUI MANQUAIT. Deux pages
+ * qui disent la meme chose dans deux langues se font concurrence : le moteur
+ * doit choisir laquelle indexer, et il peut choisir la mauvaise, ou n en garder
+ * qu une. `hreflang` lui dit que ce sont deux versions d UNE page, pas deux
+ * pages — chacune est alors servie a son public, et l anciennete de la version
+ * francaise profite a l anglaise. Sans lui, la page anglaise part de zero et,
+ * au pire, prend la place de la francaise sur une requete francophone.
+ *
+ * LES TROIS DECLARATIONS, et pourquoi il en faut trois :
+ *  - `fr-CH` — la version francaise. Chaque page se declare ELLE-MEME en plus
+ *    de declarer sa jumelle : c est ce que demande la documentation de Google,
+ *    et une page qui ne s auto-declare pas voit son groupe hreflang ignore.
+ *  - `en-CH` — la version anglaise. Anglais DE SUISSE, pas anglais du
+ *    Royaume-Uni : la page s adresse aux anglophones de Geneve.
+ *  - `x-default` — la version servie a qui ne correspond a aucune des deux.
+ *    Elle pointe sur le FRANCAIS : le marche est genevois, le francais est la
+ *    langue du canton, c est le repli le plus juste.
+ *
+ * `en-CH` N EST DECLARE QUE SI LA PAGE ANGLAISE EXISTE VRAIMENT. La liste
+ * `CHEMINS_TRADUITS` (lib/i18n.ts) tranche, et c est la garde la plus
+ * importante de ce helper : annoncer une jumelle qui repond 404 est PIRE que
+ * de ne rien annoncer — Google cesse alors d associer les deux versions, et le
+ * groupe entier est ignore. Le jour ou une page est traduite, on l ajoute a
+ * cette liste et les `hreflang` suivent, ici comme dans le sitemap.
+ *
+ * LES URL SONT RELATIVES, et c est volontaire : `metadataBase` (declaree dans
+ * app/(site)/layout.tsx) les rend absolues au rendu. Ecrire SITE_URL ici
+ * doublerait le domaine le jour ou il change.
+ *
+ * @param chemin le chemin SANS prefixe de langue — `/studio`, jamais
+ *   `/en/studio`. `cheminSansLocale()` (lib/i18n.ts) rend cette forme-la
+ *   depuis n importe quel chemin.
+ * @param locale la langue de la page qui appelle. Elle ne change QUE la
+ *   canonique : les `languages` sont les memes des deux cotes, par definition.
+ */
+export function alternatesPage(
+  chemin: string,
+  locale: Locale = LOCALE_DEFAUT,
+): NonNullable<Metadata["alternates"]> {
+  const versionFr = lien("fr", chemin);
+  // Le type vient de Next lui-meme plutot que d un Record<string, string> : il
+  // n accepte que de vrais codes hreflang, et il refuserait donc une coquille
+  // comme « fr_CH » ou « x-defaut ».
+  const languages: NonNullable<NonNullable<Metadata["alternates"]>["languages"]> = {
+    "fr-CH": versionFr,
+    "x-default": versionFr,
+  };
+  if (estTraduit(chemin)) languages["en-CH"] = lien("en", chemin);
+
+  return { canonical: lien(locale, chemin), languages };
 }
 
 /**

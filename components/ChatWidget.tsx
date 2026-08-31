@@ -2,6 +2,7 @@
 
 import { whatsapp } from "@/lib/site";
 import { NAWA_CHAT_OUVRIR, type DetailOuverture } from "@/lib/chat-ouvrir";
+import { type Locale, lien } from "@/lib/i18n";
 import { useEffect, useRef, useState } from "react";
 
 /**
@@ -17,6 +18,29 @@ import { useEffect, useRef, useState } from "react";
  * parce qu il vaut mieux l annoncer trop tot que trop tard.
  *
  * La cle du modele ne touche jamais ce fichier : tout passe par /api/chat.
+ *
+ * >>> LA LANGUE : UNE PROP, ET ELLE PART AUSSI DANS LE CORPS DES POST. <<<
+ *
+ * Deux moities qu il ne faut pas confondre :
+ *
+ *  1. CE QUE LE WIDGET ECRIT LUI-MEME — accueil, boutons, alertes, mention de
+ *     confidentialite — vient de la table `TEXTES` ci-dessous.
+ *  2. CE QUE LE MODELE ECRIT vient du prompt systeme, bati cote serveur dans
+ *     la langue que ces requetes transportent (lib/chat-prompt.ts). D ou le
+ *     champ `locale` ajoute aux corps de /api/chat et /api/chat/finalize :
+ *     sans lui, un panneau entierement anglais recevrait des reponses
+ *     francaises, ce qui est pire que pas de traduction du tout.
+ *
+ * LES CHAINES NE VIENNENT PAS DE lib/dictionnaires/. Ce dictionnaire tient le
+ * CHROME partage — nav, menu, pied de page, formulaire — et il est charge par
+ * plusieurs composants. Les phrases ci-dessous n appartiennent qu a ce
+ * panneau ; les y ranger aurait fait grossir un module commun pour un seul
+ * lecteur. Le `Record<Locale, …>` joue le meme role de garde-fou : une langue
+ * ajoutee a lib/i18n.ts casse la compilation ici tant que sa colonne est vide.
+ *
+ * LE VOCABULAIRE ANGLAIS SUIT docs/agents/brand/glossaire-anglais.md : `an
+ * enquiry`, `a quote`, `the next working day`, anglais britannique, `I` et
+ * jamais `we`.
  */
 
 type Message = { role: "user" | "assistant"; content: string };
@@ -45,31 +69,136 @@ const WA_LINK = whatsapp();
  * pilotee depuis /devis (lib/chat-ouvrir.ts), et cette page est la seule a
  * porter l ancre `#formulaire`. Ailleurs, rien ne change : `/#contact` reste le
  * seul formulaire atteignable.
+ *
+ * `#formulaire` EST UNE ANCRE PURE et ne se prefixe donc jamais — elle designe
+ * la page courante, quelle qu elle soit. `/#contact`, lui, passe par `lien()` :
+ * en anglais c est `/en#contact`, et l ancre existe bien la-bas puisque
+ * app/(site)/en/page.tsx rend le meme `FooterContact` (id="contact").
  */
 const ANCRE_FORMULAIRE = "#formulaire";
 const HREF_ACCUEIL_CONTACT = "/#contact";
 
-const ACCUEIL =
-  "Bonjour. Je prépare votre proposition avec Ayoub. Qu'est-ce que vous cherchez à faire faire ?";
+/**
+ * LA MENTION DE CONFIDENTIALITE POINTE SUR LA PAGE DE LA BONNE LANGUE.
+ * `app/(site)/en/confidentialite/page.tsx` existe : le lien passe donc par
+ * `lien()` et vaut `/en/confidentialite` en anglais.
+ *
+ * LE LIBELLE DU LIEN EST LE CHEMIN LUI-MEME, et il l est dans les deux langues
+ * parce que c est le meme calcul qui le produit. C etait deja la convention du
+ * panneau en francais (« voir /confidentialite ») ; la recopier a la main dans
+ * la colonne anglaise aurait fait une seconde source pour le prefixe, qui
+ * aurait menti le jour ou l URL bouge.
+ */
+const HREF_CONFIDENTIALITE = "/confidentialite";
 
 /**
- * L ACCUEIL QUAND ON SAIT DEJA CE QUE LE VISITEUR EST VENU CHERCHER.
+ * TOUT CE QUE LE PANNEAU ECRIT DE LUI-MEME.
  *
- * Il arrive de /devis, qui a resolu le nom de la prestation en base et le
- * transmet dans l evenement d ouverture. Lui reposer « qu est-ce que vous
- * cherchez a faire faire ? » apres qu il vient de cliquer « Le Site » lui
- * apprend une seule chose : que personne n a regarde. La phrase NOMME donc ce
- * qu il a clique, puis pose la premiere vraie question — celle dont la reponse
- * n est nulle part dans l URL.
- *
- * ELLE NE PROMET RIEN DE PLUS que l accueil ordinaire : pas de delai, pas de
- * prix, pas de methode. Le seul engagement du site est « Réponse le jour
- * ouvrable suivant », et il est deja ecrit dans l en-tete du panneau.
+ * `accueilCible` est une FONCTION parce qu elle intercale le nom de la
+ * prestation ; les autres entrees sont des chaines. La forme du
+ * `Record<Locale, …>` est la meme que celle de lib/format.ts et de
+ * lib/dictionnaires : une colonne par langue, et la compilation casse s il en
+ * manque une.
  */
-const accueilCible = (libelle: string) =>
-  `Bonjour. Votre demande porte sur « ${libelle} » — c'est noté, je prépare votre proposition avec Ayoub. Pour commencer : quel est votre métier, et l'adresse de votre site actuel s'il y en a un ?`;
+const TEXTES: Record<
+  Locale,
+  {
+    accueil: string;
+    accueilCible: (libelle: string) => string;
+    bulle: string;
+    titre: string;
+    sousTitre: string;
+    fermer: string;
+    note: string;
+    ecrit: string;
+    indispo: string;
+    allerFormulaire: string;
+    clos: string;
+    terminer: string;
+    completeDebut: string;
+    completeMilieu: string;
+    completeFin: string;
+    formulaire: string;
+    placeholderTermine: string;
+    placeholder: string;
+    labelSaisie: string;
+    envoyer: string;
+  }
+> = {
+  fr: {
+    accueil:
+      "Bonjour. Je prépare votre proposition avec Ayoub. Qu'est-ce que vous cherchez à faire faire ?",
+    /**
+     * L ACCUEIL QUAND ON SAIT DEJA CE QUE LE VISITEUR EST VENU CHERCHER.
+     *
+     * Il arrive de /devis, qui a resolu le nom de la prestation en base et le
+     * transmet dans l evenement d ouverture. Lui reposer « qu est-ce que vous
+     * cherchez a faire faire ? » apres qu il vient de cliquer « Le Site » lui
+     * apprend une seule chose : que personne n a regarde. La phrase NOMME donc
+     * ce qu il a clique, puis pose la premiere vraie question — celle dont la
+     * reponse n est nulle part dans l URL.
+     *
+     * ELLE NE PROMET RIEN DE PLUS que l accueil ordinaire : pas de delai, pas
+     * de prix, pas de methode. Le seul engagement du site est « Réponse le jour
+     * ouvrable suivant », et il est deja ecrit dans l en-tete du panneau.
+     */
+    accueilCible: (libelle) =>
+      `Bonjour. Votre demande porte sur « ${libelle} » — c'est noté, je prépare votre proposition avec Ayoub. Pour commencer : quel est votre métier, et l'adresse de votre site actuel s'il y en a un ?`,
+    bulle: "Décrivez votre besoin — réponse le jour ouvrable suivant",
+    titre: "Assistant Nawa Corps",
+    sousTitre: "Réponse d'Ayoub le jour ouvrable suivant",
+    fermer: "Fermer la conversation",
+    note: "Conversation enregistrée pour traiter votre demande — voir ",
+    ecrit: "L'assistant écrit",
+    indispo: "Assistant indisponible — utilisez le formulaire juste en dessous ou ",
+    allerFormulaire: "Aller au formulaire",
+    clos: "C'est noté — Ayoub revient vers vous le jour ouvrable suivant.",
+    terminer: "Envoyer ma demande à Ayoub",
+    completeDebut: "Conversation complète — la suite avec Ayoub directement sur ",
+    completeMilieu: ", ou par le ",
+    completeFin: ".",
+    formulaire: "formulaire",
+    placeholderTermine: "Conversation terminée",
+    placeholder: "Votre réponse…",
+    labelSaisie: "Votre message",
+    envoyer: "Envoyer",
+  },
+  en: {
+    accueil:
+      "Hello. I'm preparing your quote with Ayoub. What are you looking to have done?",
+    /** Meme role et memes limites que la version francaise ci-dessus. */
+    accueilCible: (libelle) =>
+      `Hello. Your enquiry is about “${libelle}” — noted, I'm preparing your quote with Ayoub. To start: what do you do, and the address of your current site if you have one?`,
+    bulle: "Tell me what you need — an answer on the next working day",
+    titre: "Nawa Corps assistant",
+    sousTitre: "Ayoub answers on the next working day",
+    fermer: "Close the conversation",
+    note: "This conversation is recorded so that your enquiry can be handled — see ",
+    ecrit: "The assistant is typing",
+    indispo: "Assistant unavailable — use the form just below, or ",
+    allerFormulaire: "Go to the form",
+    clos: "Noted — Ayoub will come back to you on the next working day.",
+    terminer: "Send my enquiry to Ayoub",
+    completeDebut: "Conversation complete — carry on with Ayoub directly on ",
+    completeMilieu: ", or through the ",
+    completeFin: ".",
+    formulaire: "form",
+    placeholderTermine: "Conversation ended",
+    placeholder: "Your answer…",
+    labelSaisie: "Your message",
+    envoyer: "Send",
+  },
+};
 
-export default function ChatWidget() {
+/**
+ * `locale` EST OPTIONNELLE ET VAUT « fr », comme dans ContactForm : le
+ * composant est monte par app/(site)/layout.tsx, qui doit lui passer la langue
+ * qu il calcule deja pour Nav et MenuOverlay. Tant que cette ligne n est pas
+ * ecrite, le widget se comporte exactement comme avant.
+ */
+export default function ChatWidget({ locale = "fr" }: { locale?: Locale }) {
+  const t = TEXTES[locale];
+
   // volontaire — next/link casserait les reveals (Interactions ne tourne qu'une fois), voir décision B7
   const [ouvert, setOuvert] = useState(false);
   // Initialiseur paresseux plutot qu un effet. Le rendu serveur produit une
@@ -78,7 +207,7 @@ export default function ChatWidget() {
   // C est la valeur du client qui sert, et il n y a rien a reconcilier.
   const [sessionId] = useState(() => crypto.randomUUID());
   const [messages, setMessages] = useState<Message[]>([
-    { role: "assistant", content: ACCUEIL },
+    { role: "assistant", content: TEXTES[locale].accueil },
   ]);
   const [saisie, setSaisie] = useState("");
   const [envoi, setEnvoi] = useState(false);
@@ -138,6 +267,11 @@ export default function ChatWidget() {
    * LA PHRASE D'ACCUEIL N'EST REMPLACEE QUE SI LA CONVERSATION N'A PAS COMMENCE
    * (`suite.length === 1`). Une ouverture pilotee alors que le visiteur a deja
    * ecrit trois messages effacerait ce qu'il vient de dire.
+   *
+   * LE LIBELLE N EST PAS TRADUIT ICI. Il arrive deja resolu de la page
+   * appelante, qui a lu la base — c est a elle d appeler `nomService` avec sa
+   * langue. Le retraduire ici demanderait au widget de connaitre le catalogue,
+   * ce que tout ce fichier evite depuis le debut.
    */
   useEffect(() => {
     function surDemande(e: Event) {
@@ -152,18 +286,21 @@ export default function ChatWidget() {
       if (!libelle) return;
       setMessages((suite) =>
         suite.length === 1
-          ? [{ role: "assistant", content: accueilCible(libelle) }]
+          ? [{ role: "assistant", content: TEXTES[locale].accueilCible(libelle) }]
           : suite,
       );
     }
     window.addEventListener(NAWA_CHAT_OUVRIR, surDemande);
     return () => window.removeEventListener(NAWA_CHAT_OUVRIR, surDemande);
-  }, []);
+  }, [locale]);
 
   // ABANDON : l onglet se ferme, la page change. On n a plus le temps d un
   // fetch — sendBeacon confie la requete au navigateur, qui la poste apres
   // notre mort. pagehide et non beforeunload : beforeunload ne se declenche
   // pas de facon fiable sur mobile, ou l onglet passe en arriere-plan.
+  //
+  // LA LANGUE PART DANS LE CORPS, et c est la seule voie possible ici :
+  // sendBeacon ne permet de poser aucun en-tete au-dela du type de contenu.
   useEffect(() => {
     function surSortie() {
       const suite = messagesRef.current;
@@ -176,12 +313,13 @@ export default function ChatWidget() {
         messages: suite,
         reason: "abandoned",
         subject: sujetRef.current ?? undefined,
+        locale,
       });
       navigator.sendBeacon("/api/chat/finalize", new Blob([corps], { type: "application/json" }));
     }
     window.addEventListener("pagehide", surSortie);
     return () => window.removeEventListener("pagehide", surSortie);
-  }, [sessionId]);
+  }, [sessionId, locale]);
 
   // CLOTURE explicite. Plus fiable que de deviner, dans la reponse du bot,
   // qu il vient de remercier : cette heuristique se trompe des que le
@@ -199,6 +337,7 @@ export default function ChatWidget() {
           messages,
           reason: "completed",
           subject: sujet ?? undefined,
+          locale,
         }),
       });
     } catch {
@@ -223,10 +362,12 @@ export default function ChatWidget() {
     setReplie(false);
 
     try {
+      // `locale` DECIDE LA LANGUE DU MODELE, pas seulement celle du panneau :
+      // c est elle qui choisit le prompt systeme bati par lib/chat-prompt.ts.
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ sessionId, messages: suite }),
+        body: JSON.stringify({ sessionId, messages: suite, locale }),
       });
 
       if (res.ok) {
@@ -252,22 +393,22 @@ export default function ChatWidget() {
     return (
       <button className="chat-fab" type="button" onClick={() => setOuvert(true)}>
         <span className="dot" aria-hidden="true"></span>
-        Décrivez votre besoin — réponse le jour ouvrable suivant
+        {t.bulle}
       </button>
     );
   }
 
   return (
-    <div className="chat-panel" role="dialog" aria-label="Assistant Nawa Corps">
+    <div className="chat-panel" role="dialog" aria-label={t.titre}>
       <div className="chat-head">
         <div>
-          <b>Assistant Nawa Corps</b>
-          <span>Réponse d&apos;Ayoub le jour ouvrable suivant</span>
+          <b>{t.titre}</b>
+          <span>{t.sousTitre}</span>
         </div>
         <button
           className="chat-close"
           type="button"
-          aria-label="Fermer la conversation"
+          aria-label={t.fermer}
           onClick={() => setOuvert(false)}
         >
           ×
@@ -275,8 +416,8 @@ export default function ChatWidget() {
       </div>
 
       <p className="chat-note">
-        Conversation enregistrée pour traiter votre demande — voir{" "}
-        <a href="/confidentialite">/confidentialite</a>.
+        {t.note}
+        <a href={lien(locale, HREF_CONFIDENTIALITE)}>{lien(locale, HREF_CONFIDENTIALITE)}</a>.
       </p>
 
       <div className="chat-log">
@@ -286,7 +427,7 @@ export default function ChatWidget() {
           </div>
         ))}
         {envoi ? (
-          <div className="chat-typing" aria-label="L'assistant écrit">
+          <div className="chat-typing" aria-label={t.ecrit}>
             <i></i>
             <i></i>
             <i></i>
@@ -297,33 +438,37 @@ export default function ChatWidget() {
 
       {replie ? (
         <p className="chat-alert" role="status">
-          Assistant indisponible — utilisez le formulaire juste en dessous ou{" "}
+          {t.indispo}
           <a href={WA_LINK} target="_blank" rel="noopener">WhatsApp</a>.{" "}
-          <a href={sujet ? ANCRE_FORMULAIRE : HREF_ACCUEIL_CONTACT}>
-            Aller au formulaire
+          <a href={sujet ? ANCRE_FORMULAIRE : lien(locale, HREF_ACCUEIL_CONTACT)}>
+            {t.allerFormulaire}
           </a>
         </p>
       ) : null}
 
       {clos ? (
         <p className="chat-alert" role="status">
-          C&apos;est noté — Ayoub revient vers vous le jour ouvrable suivant.
+          {t.clos}
         </p>
       ) : null}
 
       {!clos && messages.length >= SEUIL_BOUTON ? (
         <div className="chat-end">
           <button type="button" onClick={terminer} disabled={envoi}>
-            Envoyer ma demande à Ayoub
+            {t.terminer}
           </button>
         </div>
       ) : null}
 
       {verrouille && !clos ? (
         <p className="chat-alert" role="status">
-          Conversation complète — la suite avec Ayoub directement sur{" "}
-          <a href={WA_LINK} target="_blank" rel="noopener">WhatsApp</a>, ou par le{" "}
-          <a href={sujet ? ANCRE_FORMULAIRE : HREF_ACCUEIL_CONTACT}>formulaire</a>.
+          {t.completeDebut}
+          <a href={WA_LINK} target="_blank" rel="noopener">WhatsApp</a>
+          {t.completeMilieu}
+          <a href={sujet ? ANCRE_FORMULAIRE : lien(locale, HREF_ACCUEIL_CONTACT)}>
+            {t.formulaire}
+          </a>
+          {t.completeFin}
         </p>
       ) : null}
 
@@ -332,14 +477,14 @@ export default function ChatWidget() {
           type="text"
           value={saisie}
           onChange={(e) => setSaisie(e.target.value)}
-          placeholder={verrouille || clos ? "Conversation terminée" : "Votre réponse…"}
-          aria-label="Votre message"
+          placeholder={verrouille || clos ? t.placeholderTermine : t.placeholder}
+          aria-label={t.labelSaisie}
           maxLength={1500}
           disabled={envoi || verrouille || clos}
           autoComplete="off"
         />
         <button type="submit" disabled={envoi || verrouille || clos || saisie.trim() === ""}>
-          {envoi ? "…" : "Envoyer"}
+          {envoi ? "…" : t.envoyer}
         </button>
       </form>
     </div>

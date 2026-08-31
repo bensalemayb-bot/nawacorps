@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import ChatWidget from "@/components/ChatWidget";
 import Cursor from "@/components/Cursor";
 import Interactions from "@/components/Interactions";
@@ -6,7 +7,8 @@ import Loader from "@/components/Loader";
 import MenuOverlay from "@/components/MenuOverlay";
 import Nav from "@/components/Nav";
 import NoyauStage from "@/components/NoyauStage";
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { EN_TETE_LOCALE, LOCALE_DEFAUT, estLocale } from "@/lib/i18n";
+import { SITE_NAME, SITE_URL, alternatesPage } from "@/lib/site";
 
 /**
  * Layout du SITE PUBLIC — bloc B11.
@@ -65,6 +67,20 @@ import { SITE_NAME, SITE_URL } from "@/lib/site";
  * `canonical` est declaree ICI, au layout, et vaut donc « / » pour l accueil.
  * Chaque page fille redeclare la sienne — une canonique heritee ferait pointer
  * les pages legales vers l accueil, ce qui les desindexerait.
+ *
+ * ELLE PASSE PAR `alternatesPage` DEPUIS LA FONDATION i18n, et cela AJOUTE les
+ * `hreflang` de l accueil sans rien changer a la canonique, qui vaut toujours
+ * « / ». C est la moitie francaise du couple : `/en` declare deja `/` comme sa
+ * version francaise, et un groupe hreflang non reciproque est ignore en entier
+ * par Google — la page anglaise doit etre annoncee d ici, sans quoi tout le
+ * travail de app/(site)/en/page.tsx ne sert a rien.
+ *
+ * CELA NE DEBORDE SUR AUCUNE AUTRE PAGE. La fusion des metadata de Next ne
+ * descend pas dans les objets : les quinze pages filles declarent chacune leur
+ * propre `alternates`, qui REMPLACE celui-ci en entier. Elles n heritent donc
+ * d aucun `hreflang` — ce qui est exactement ce qu il faut tant qu elles n ont
+ * pas de version anglaise. Le jour ou l une est traduite, elle passera a son
+ * tour par `alternatesPage`.
  */
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -74,7 +90,7 @@ export const metadata: Metadata = {
   },
   description:
     "Studio de création digitale à Genève : sites, identité, imprimés, photos, fiche Google, réseaux sociaux. Le site des PME refait en une semaine, vous n'avez rien à préparer.",
-  alternates: { canonical: "/" },
+  alternates: alternatesPage("/"),
   openGraph: {
     type: "website",
     locale: "fr_CH",
@@ -92,7 +108,41 @@ export const metadata: Metadata = {
   },
 };
 
-export default function SiteLayout({ children }: LayoutProps<"/">) {
+/**
+ * LA LANGUE DU CHROME — lue dans le MEME en-tete que celle du `<html lang>`.
+ *
+ * POURQUOI L EN-TETE PLUTOT QUE LE CHEMIN. Un layout ne recoit pas le chemin de
+ * la page qu il enveloppe : ni en prop, ni par une API serveur. `proxy.ts`, lui,
+ * a deja fait le travail — il lit `request.nextUrl.pathname`, appelle
+ * `localeDepuisChemin` et pose `x-nawa-locale`. Le relire ici, c est prendre la
+ * DECISION DEJA PRISE au lieu d en fabriquer une seconde qui pourrait diverger :
+ * `app/layout.tsx` rend `<html lang>` a partir de cet en-tete-la, et il serait
+ * absurde que la barre de nav et l attribut `lang` de la meme page se
+ * contredisent.
+ *
+ * CELA NE COUTE RIEN DE PLUS. `headers()` est une API de temps de requete et
+ * bascule les routes en rendu dynamique — mais `app/layout.tsx` l appelle deja
+ * pour la meme raison, au-dessus de celui-ci : toutes les routes du site sont
+ * DEJA dynamiques. Le releve de mesures est en tete de app/layout.tsx.
+ *
+ * LE REPLI EST LE FRANCAIS, exactement comme la-haut : en-tete absent (le proxy
+ * ne tourne ni sur /admin, ni sur /api, ni sur les fichiers statiques) ou valeur
+ * inconnue fabriquee a la main, et `estLocale` rend `false`.
+ *
+ * TROIS ELEMENTS DE CHROME RECOIVENT LA LANGUE ICI : `Nav`, `MenuOverlay` et
+ * `ChatWidget`. `FooterContact` et `ContactForm` sont rendus par les PAGES,
+ * chacune passe la sienne. `Loader`, `Cursor`, `Interactions` et `NoyauStage`
+ * n affichent aucun mot.
+ *
+ * `ChatWidget` a ete ajoute a cette liste : il portait ses propres chaines en
+ * dur, et sa langue decide AUSSI de celle du prompt systeme envoye au modele
+ * (lib/chat-prompt.ts). Un visiteur anglophone lisait donc une bulle francaise
+ * qui lui repondait en francais. Une seule prop corrige les deux moities.
+ */
+export default async function SiteLayout({ children }: LayoutProps<"/">) {
+  const entete = (await headers()).get(EN_TETE_LOCALE);
+  const locale = estLocale(entete) ? entete : LOCALE_DEFAUT;
+
   return (
     <>
       {/* FILET SANS JAVASCRIPT.
@@ -114,14 +164,14 @@ export default function SiteLayout({ children }: LayoutProps<"/">) {
           sur #smooth, et un ancetre transforme cree un bloc conteneur qui
           casse position:fixed — nav et loader defileraient avec la page. */}
       <div className="grain" aria-hidden="true"></div>
-      <Loader />
+      <Loader locale={locale} />
       <Cursor />
-      <Nav />
-      <MenuOverlay />
+      <Nav locale={locale} />
+      <MenuOverlay locale={locale} />
       <Interactions />
       {/* ChatWidget est en position:fixed — il reste HORS du wrapper,
           pour la meme raison que nav/loader/cursor ci-dessus. */}
-      <ChatWidget />
+      <ChatWidget locale={locale} />
       {/* NoyauStage est en position:fixed : meme raison encore. Il precede
           volontairement #smoothWrap — a z-index egal l ordre du DOM tranche, et
           le noyau doit rester DERRIERE le contenu qui lui passe dessus.

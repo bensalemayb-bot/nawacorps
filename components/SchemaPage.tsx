@@ -1,4 +1,5 @@
 import { SITE_URL, jsonLd } from "@/lib/site";
+import { LANGUE_HTML, type Locale } from "@/lib/i18n";
 
 /**
  * FIL D ARIANE ET Q/R, EN DONNEES STRUCTUREES — un seul emetteur pour toutes
@@ -40,16 +41,29 @@ export type QuestionReponse = {
   r: string;
 };
 
+/**
+ * `locale` est OPTIONNELLE et vaut « fr » par defaut : les huit appels ecrits
+ * avant le chantier anglais continuent de rendre exactement le meme JSON-LD.
+ *
+ * Elle ne sert qu a poser `inLanguage`. Sans lui, deux fils d Ariane — l un
+ * francais, l autre anglais — decrivent la meme entite dans deux langues sans
+ * le dire, et un moteur n a aucun moyen de savoir laquelle repondre a qui.
+ * Les CHEMINS, eux, restent a la charge de l appelant : c est la page qui sait
+ * si son fil passe par « /studio » ou « /en/studio ».
+ */
 export default function SchemaPage({
   fil,
   questions,
+  locale = "fr",
 }: {
   fil: readonly SegmentFil[];
   questions?: readonly QuestionReponse[];
+  locale?: Locale;
 }) {
   const graphe: object[] = [
     {
       "@type": "BreadcrumbList",
+      inLanguage: LANGUE_HTML[locale],
       itemListElement: fil.map((segment, i) => ({
         "@type": "ListItem",
         position: i + 1,
@@ -62,6 +76,7 @@ export default function SchemaPage({
   if (questions && questions.length > 0) {
     graphe.push({
       "@type": "FAQPage",
+      inLanguage: LANGUE_HTML[locale],
       mainEntity: questions.map((item) => ({
         "@type": "Question",
         name: item.q,

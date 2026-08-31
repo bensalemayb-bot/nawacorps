@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import SchemaPage from "@/components/SchemaPage";
-import { CONTACT, openGraphPage } from "@/lib/site";
+import { CONTACT, alternatesPage, openGraphPage } from "@/lib/site";
 
 /**
  * Confidentialite (nLPD).
@@ -17,12 +17,20 @@ import { CONTACT, openGraphPage } from "@/lib/site";
 /**
  * Meme traitement que /mentions-legales : suffixe de marque delegue au
  * `template` du layout (site), description et canonique propres a la page.
+ *
+ * `alternates` PASSE PAR `alternatesPage` DEPUIS QUE LA JUMELLE ANGLAISE
+ * EXISTE. La canonique ne bouge pas ; la fonction AJOUTE les `hreflang`, et
+ * LES DEUX SENS SONT OBLIGATOIRES — une page anglaise qui declare sa jumelle
+ * francaise sans que celle-ci lui rende la pareille voit son groupe ignore par
+ * Google, et les deux versions se remettent a se concurrencer. `en-CH` n est
+ * emis que si ce chemin figure dans `CHEMINS_TRADUITS` (lib/i18n.ts) :
+ * annoncer une jumelle qui repond 404 est pire que de ne rien annoncer.
  */
 export const metadata: Metadata = {
   title: "Confidentialité",
   description:
     "Politique de confidentialité de Nawa Corps (nLPD) : données collectées, finalité, durée de conservation, hébergement des données et vos droits.",
-  alternates: { canonical: "/confidentialite" },
+  alternates: alternatesPage("/confidentialite"),
   openGraph: openGraphPage({
     titre: "Confidentialité — Nawa Corps",
     description:

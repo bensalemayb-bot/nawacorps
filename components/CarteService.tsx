@@ -1,14 +1,20 @@
 import {
   CHF_UNIT,
-  FROM_PREFIX,
-  MONTHLY_SUFFIX,
-  QUOTE_LABEL,
-  TVA_LABEL,
   formatChfAmount,
   isQuote,
+  libelleDevis,
+  mentionTva,
+  prefixeDes,
+  suffixeMensuel,
 } from "@/lib/format";
-import type { ServiceCatalogue } from "@/lib/catalogue";
+import {
+  descriptionService,
+  nomService,
+  type ServiceCatalogue,
+} from "@/lib/catalogue";
 import { type FamilleRangee, hrefService } from "@/lib/catalogue-familles";
+import { dictionnaire } from "@/lib/dictionnaires";
+import { lien, type Locale } from "@/lib/i18n";
 
 /**
  * UNE PRESTATION, EN CARTE — le dessin partage par l accueil et /services.
@@ -25,8 +31,30 @@ import { type FamilleRangee, hrefService } from "@/lib/catalogue-familles";
  * des prestations montrent EXACTEMENT les memes lignes : deux rendus separes
  * divergeraient au premier ajout en base.
  *
+ * >>> AUJOURD HUI IL N EN SERT PLUS QU UNE, ET C EST A REPARER. <<<
+ * app/(site)/services/page.tsx a recopie ce composant sous le nom
+ * `CarteCatalogue` — meme balise, memes classes, meme ordre — parce que
+ * celui-ci ne prenait pas de `locale` et affichait donc « sur devis » et
+ * « TVA comprise » sous les prix d une page anglaise. Le manque est comble
+ * ci-dessous : `CarteCatalogue` peut disparaitre et la page repasser sur ce
+ * composant en lui passant `versSaPage` et `locale`. Son propre docblock
+ * l annonce en toutes lettres. Tant que les deux coexistent, TOUTE correction
+ * de l un doit etre reportee sur l autre — et `versSaPage` reste ici, sans
+ * appelant, en attendant ce repli.
+ *
  * NOM, DESCRIPTION ET PRIX VIENNENT DE POSTGRES. Rien n est ecrit ici :
- * `service` sort de la table Service telle quelle.
+ * `service` sort de la table Service telle quelle, et c est `nomService()` /
+ * `descriptionService()` qui choisissent la colonne selon la langue — jamais
+ * `service.name` en direct, sinon la page anglaise affiche du francais.
+ *
+ * `locale` EST OPTIONNELLE ET VAUT « fr », comme partout ailleurs sur
+ * l accueil : un appelant qui ne la passe pas rend exactement ce qu il rendait
+ * avant le chantier anglais, a l octet pres. C est ce qui rendait la bascule
+ * sure — et non une invitation a l omettre.
+ *
+ * LA MENTION DE TVA SUIT LE MONTANT DANS LES DEUX LANGUES. Elle etait figee sur
+ * `TVA_LABEL`, la constante francaise : une carte anglaise affichait donc
+ * « TVA comprise » sous son prix. Elle vient desormais de `mentionTva(locale)`.
  *
  * `sobre` RETIRE LA DESCRIPTION, ET RIEN D AUTRE. C est le second rang de la
  * vitrine de l accueil : identite et photographie, suivi et hebergement, ligne
@@ -43,32 +71,26 @@ import { type FamilleRangee, hrefService } from "@/lib/catalogue-familles";
  * la page de cette famille, et elle la nomme en toutes lettres au pied, parce
  * qu un lien doit dire ou il mene — cliquer « Cartes de visite » pour atterrir
  * sur « Les imprimés » sans prevenir n est pas une navigation, c est une
- * surprise.
+ * surprise. Le nom de la famille a lui aussi sa version anglaise
+ * (`libelleEn`), et le repli sur le francais est celui que
+ * lib/catalogue-familles.ts prevoit.
  *
- * Sur /services, on lui passe `versSaPage` : la carte ouvre la page de la
- * prestation elle-meme. La destination n a alors pas a etre nommee — le titre
- * de la carte EST le nom de la page. Cette page-la est le catalogue : elle
- * promet qu on y voit tout ce qui est vendu et que chaque ligne s ouvre.
- * Une carte muette y etait une impasse.
+ * Avec `versSaPage`, la carte ouvre la page de la prestation elle-meme. La
+ * destination n a alors pas a etre nommee — le titre de la carte EST le nom de
+ * la page. C est le mode du catalogue /services : il promet qu on y voit tout
+ * ce qui est vendu et que chaque ligne s ouvre, et une carte muette y etait une
+ * impasse. Ce mode n a plus d appelant depuis la copie signalee plus haut ; il
+ * en retrouvera un au repli.
  *
  * Sans l un ni l autre, la carte reste du contenu : mieux vaut une carte sans
  * porte de sortie qu une porte sur le vide.
  */
-/**
- * Le pied de carte quand elle ouvre sa propre page.
- *
- * Il n y a rien a nommer — le titre de la carte est deja le nom de la page —,
- * mais il faut une AFFORDANCE : sans elle, seul le survol dit que la carte est
- * cliquable, et un telephone ne survole rien. Trois mots qui disent ce qu on
- * obtient, pas « En savoir plus », qui ne dit rien.
- */
-const LIBELLE_SA_PAGE = "Voir le détail";
-
 export default function CarteService({
   service,
   famille,
   versSaPage = false,
   sobre = false,
+  locale = "fr",
 }: {
   service: ServiceCatalogue;
   /** Passee UNIQUEMENT quand la carte doit ouvrir la page de sa famille. */
@@ -81,17 +103,34 @@ export default function CarteService({
   versSaPage?: boolean;
   /** Second rang de la vitrine : la description n est pas rendue. */
   sobre?: boolean;
+  /** La langue de la page qui rend la carte. Voir le docblock. */
+  locale?: Locale;
 }) {
+  const t = dictionnaire(locale);
+
+  /**
+   * L affordance de la carte quand elle ouvre sa PROPRE page : il n y a rien a
+   * nommer — le titre de la carte est deja le nom de la page —, mais sans elle
+   * seul le survol dirait que la carte est cliquable, et un telephone ne
+   * survole rien. Trois mots qui disent ce qu on obtient, pas « En savoir
+   * plus », qui ne dit rien.
+   */
   const porte = versSaPage
-    ? { href: hrefService(service.slug), libelle: LIBELLE_SA_PAGE }
+    ? { href: hrefService(service.slug), libelle: t.carte.voirLeDetail }
     : famille
-      ? { href: famille.href, libelle: famille.contenu.libelle }
+      ? {
+          href: famille.href,
+          libelle:
+            locale === "en"
+              ? (famille.contenu.libelleEn ?? famille.contenu.libelle)
+              : famille.contenu.libelle,
+        }
       : null;
 
   const contenu = (
     <>
-      <h3>{service.name}</h3>
-      {sobre ? null : <p className="d">{service.description}</p>}
+      <h3>{nomService(service, locale)}</h3>
+      {sobre ? null : <p className="d">{descriptionService(service, locale)}</p>}
       {/* LE PRIX RESTE EN BAS DE CARTE : sur une grille, les titres n ont pas
           tous la meme hauteur, et un prix qui flotte a mi-hauteur casse la
           ligne de lecture horizontale d une rangee a l autre.
@@ -115,15 +154,15 @@ export default function CarteService({
           que « sur devis » laisse ouverte : quand est-ce que je saurai le
           prix ? */}
       {isQuote(service) || service.priceCents === null ? (
-        <p className="px px-devis">{QUOTE_LABEL}</p>
+        <p className="px px-devis">{libelleDevis(locale)}</p>
       ) : (
         <p className="px">
-          {service.priceFrom ? <small>{FROM_PREFIX}</small> : null}
+          {service.priceFrom ? <small>{prefixeDes(locale)}</small> : null}
           {`${formatChfAmount(service.priceCents)}${CHF_UNIT}`}
           {service.isMonthly ? (
-            <small className="per">{MONTHLY_SUFFIX}</small>
+            <small className="per">{suffixeMensuel(locale)}</small>
           ) : null}
-          <small className="px-note px-tva">{TVA_LABEL}</small>
+          <small className="px-note px-tva">{mentionTva(locale)}</small>
         </p>
       )}
       {porte ? (
@@ -143,9 +182,11 @@ export default function CarteService({
   }
 
   // Pas de next/link sur le site public : les revelations au scroll ne
-  // s initialisent qu une fois (cf. CLAUDE.md).
+  // s initialisent qu une fois (cf. CLAUDE.md). Le `href` passe par `lien()`,
+  // qui laisse le chemin francais intact et prefixe `/en` en anglais — les
+  // ancres de famille (`/services/imprimes#carte-visite`) comprises.
   return (
-    <a className="cat-it" href={porte.href} data-reveal>
+    <a className="cat-it" href={lien(locale, porte.href)} data-reveal>
       {contenu}
     </a>
   );

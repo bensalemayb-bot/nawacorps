@@ -96,7 +96,7 @@ export default function Home() {
     <>
       {/* Donnee structuree du studio. N emet qu un <script> : aucun pixel. */}
       <SchemaStudio />
-      <NoyauHero />
+      <NoyauHero locale="fr" />
       {/* .page-body est OPAQUE, et doit le rester : le noyau est une scene
           position:fixed peinte derriere le contenu (cf. app/noyau.css). Sans
           fond ici, il transparaitrait sous toutes les sections suivantes. */}
@@ -125,12 +125,21 @@ export default function Home() {
           02, Methode 03, Le studio 04, Questions 05, Offres 06, Contact 07.
           La numerotation du MENU (components/MenuOverlay.tsx) est une autre
           suite, dans un autre ordre : elle n a pas a etre alignee. */}
+      {/* `locale="fr"` EST ECRITE, ALORS QUE C EST DEJA LE DEFAUT DE CHAQUE
+          COMPOSANT. Deux raisons, et la seconde est la vraie. D abord, la page
+          jumelle app/(site)/en/page.tsx ecrit `locale="en"` sur exactement les
+          memes composants dans le meme ordre : les deux fichiers se relisent
+          l un a cote de l autre, et une prop presente d un cote et absente de
+          l autre donne a croire a une difference qui n existe pas. Ensuite, le
+          defaut « fr » de chaque composant existe pour les DIX-SEPT AUTRES
+          pages qui les rendent sans connaitre leur langue ; ici, la page la
+          connait, et une page qui connait sa langue la dit. */}
       <div className="page-body">
-        <Travaux />
-        <Strip />
-        <ServicesRows />
-        <Methode />
-        <Studio />
+        <Travaux locale="fr" />
+        <Strip locale="fr" />
+        <ServicesRows locale="fr" />
+        <Methode locale="fr" />
+        <Studio locale="fr" />
         {/* L ORDRE A CHANGE LE 31 AOUT 2026 : les prix passent AVANT les
             questions. L argument n est pas une preference, il est dans la FAQ
             elle-meme — sa cinquieme question demande « À ce prix-là,
@@ -142,10 +151,10 @@ export default function Home() {
             dit « a cote des formules » et suppose de les avoir vues.
             Les index des deux sections suivent l ordre — Offres (05),
             Questions (06). */}
-        <Offres />
-        <CarteDuStudio />
-        <Faq />
-        <FooterContact />
+        <Offres locale="fr" />
+        <CarteDuStudio locale="fr" />
+        <Faq locale="fr" />
+        <FooterContact locale="fr" />
       </div>
     </>
   );

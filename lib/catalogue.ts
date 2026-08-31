@@ -1,4 +1,5 @@
 import { cache } from "react";
+import type { Locale } from "@/lib/i18n";
 import { prisma } from "@/lib/prisma";
 
 /**
@@ -76,4 +77,61 @@ export function prixEntreeCents(catalogue: readonly ServiceCatalogue[]): number 
     .map((s) => s.priceCents)
     .filter((cents): cents is number => cents !== null);
   return montants.length > 0 ? Math.min(...montants) : null;
+}
+
+/**
+ * LE NOM ET LA DESCRIPTION D UNE LIGNE DE CATALOGUE, DANS LA LANGUE DEMANDEE.
+ *
+ * La table `Service` porte `nameEn` et `descriptionEn`, tous deux NULLABLES.
+ * Ces deux fonctions sont la seule facon autorisee de les lire : partout
+ * ailleurs, `service.nameEn ?? service.name` finirait recopie a quinze
+ * endroits, et le quinzieme oublierait le repli.
+ *
+ * >>> LE REPLI SUR LE FRANCAIS N EST PAS UN ACCIDENT A REPARER. <<<
+ *
+ * Trois lignes sur dix-huit ont `nameEn = null` VOLONTAIREMENT : ce sont les
+ * trois formules — `La Vitrine`, `Le Site`, `L'Assistant`. Le guide de voix
+ * (docs/agents/brand/voice-guide.md §10, repris par
+ * docs/agents/brand/glossaire-anglais.md §5) les tient pour des NOMS PROPRES :
+ * « jamais abregees, jamais traduites », article compris. La page anglaise doit
+ * donc afficher « La Vitrine » telle quelle, et c est ce repli-ci qui le
+ * produit.
+ *
+ * A l inverse, une description anglaise absente sur une ligne ORDINAIRE est,
+ * elle, une vraie traduction manquante : le francais s affiche, ce qui se voit
+ * a l ecran et se corrige en base. C est le compromis retenu par le schema
+ * (prisma/schema.prisma, commentaire du champ) — un trou se remarque, une
+ * chaine vide passe inapercue jusqu au client.
+ *
+ * N ALLEZ DONC PAS « COMPLETER » `nameEn` POUR LES TROIS FORMULES : y ecrire
+ * « The Showcase » ou « The Site » casserait la marque sans que la
+ * compilation ne bronche.
+ *
+ * LA `locale` EST OBLIGATOIRE, contrairement a celle de `lib/format.ts`. La
+ * raison est qu il n existe AUCUN appelant historique a menager : ces deux
+ * fonctions naissent avec le chantier anglais. Une locale par defaut ne
+ * protegerait donc rien et rendrait silencieux le seul bug qui compte ici —
+ * un composant qui a oublie de faire descendre sa langue et affiche du
+ * francais sur une page anglaise. Sans defaut, TypeScript le refuse.
+ *
+ * LE TYPE ATTENDU EST STRUCTUREL, pas `ServiceCatalogue` : les appelants
+ * passent tantot une ligne complete de la base, tantot un objet reduit
+ * fabrique par un composant. Deux champs suffisent, en exiger dix ne
+ * protegerait de rien.
+ */
+export function nomService(
+  service: { name: string; nameEn: string | null },
+  locale: Locale,
+): string {
+  return locale === "en" ? (service.nameEn ?? service.name) : service.name;
+}
+
+/** La description, meme regle et meme repli que `nomService`. */
+export function descriptionService(
+  service: { description: string; descriptionEn: string | null },
+  locale: Locale,
+): string {
+  return locale === "en"
+    ? (service.descriptionEn ?? service.description)
+    : service.description;
 }

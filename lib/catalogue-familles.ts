@@ -170,8 +170,15 @@ export function hrefService(slug: string): string {
   return famille ? `${hrefFamille(famille)}#${slug}` : `${RACINE}/${slug}`;
 }
 
-/** Une entree de navigation : ou ca mene, et sous quel nom. */
-export type EntreeNav = { href: string; libelle: string };
+/**
+ * Une entree de navigation : ou ca mene, et sous quel nom.
+ *
+ * `libelleEn` SUIT LE MOTIF `En` DE lib/familles.ts : optionnel, et absent il
+ * fait retomber sur `libelle`. Le `href`, lui, n a pas de jumeau — c est une
+ * URL, et les slugs des cinq familles ne se traduisent pas sous peine de
+ * casser les dix-sept ancres que `hrefService` pointe.
+ */
+export type EntreeNav = { href: string; libelle: string; libelleEn?: string };
 
 /**
  * LES CINQ FAMILLES TELLES QUE LA NAVIGATION LES LISTE.
@@ -180,9 +187,20 @@ export type EntreeNav = { href: string; libelle: string };
  * ecran rendent la meme liste, et une famille ajoutee dans lib/familles.ts doit
  * apparaitre dans les deux sans qu on y revienne. Le libelle est celui de la
  * famille — la nav n a pas a rebaptiser une page qui porte deja son nom.
+ *
+ * ET IL EST DERIVE DANS LES DEUX LANGUES, pour la meme raison. Ce fichier ne
+ * porte AUCUNE chaine visible en propre : ni en francais, ni en anglais. Le
+ * jour ou la nav se rend en anglais, elle lit `libelleEn ?? libelle` et le nom
+ * qu elle affiche reste celui que la page de la famille porte en tete — sans
+ * quoi la nav et la page se mettraient a s appeler autrement, ce qui est
+ * exactement la divergence que ce fichier existe pour empecher.
  */
 export const ENTREES_FAMILLES: readonly EntreeNav[] = FAMILLE_SLUGS.map(
-  (slug) => ({ href: hrefFamille(slug), libelle: FAMILLES[slug].libelle }),
+  (slug) => ({
+    href: hrefFamille(slug),
+    libelle: FAMILLES[slug].libelle,
+    libelleEn: FAMILLES[slug].libelleEn,
+  }),
 );
 
 /** Ce qu il faut savoir d une ligne de catalogue pour la ranger. */

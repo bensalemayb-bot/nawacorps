@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { buildExtractPrompt } from "@/lib/extract-prompt";
 import { Prisma } from "@/lib/generated/prisma/client";
+import { LOCALES, LOCALE_DEFAUT, type Locale, estLocale } from "@/lib/i18n";
 import { clientIp, hashIp } from "@/lib/iphash";
 import { askLlmJson } from "@/lib/llm";
 import { prisma } from "@/lib/prisma";
@@ -21,6 +22,17 @@ import { notifyTelegram } from "@/lib/telegram";
  * notification. L idempotence passe AVANT le debit et l extraction : rejouer
  * une finalisation deja faite ne doit ni consommer de quota, ni compter dans
  * le debit, ni ecrire quoi que ce soit.
+ *
+ * LA LANGUE N EST PAS UNE ETAPE DE CET ORDRE. Comme dans app/api/chat/route.ts,
+ * elle est lue en tete pour REDIGER les refus et pour batir le prompt
+ * d extraction ; elle ne fait accepter ni refuser aucune requete, et une valeur
+ * inconnue retombe sur le francais plutot que de faire perdre une conversation
+ * a l ecriture.
+ *
+ * LES NOTIFICATIONS TELEGRAM RESTENT EN FRANCAIS, DELIBEREMENT. Leur unique
+ * lecteur est Ayoub, sur son telephone. Les traduire en fonction de la langue
+ * du visiteur donnerait un fil de notifications bilingue a une personne qui
+ * n en a qu une — et rendrait deux formulations pour un meme evenement.
  */
 
 const FENETRE_DEBIT_MS = 60 * 60 * 1000;
@@ -57,6 +69,16 @@ const SchemaRequete = z.object({
    * ne se melangent pas.
    */
   subject: z.string().max(80).optional(),
+  /**
+   * LA LANGUE DE LA CONVERSATION — optionnelle, francais par defaut, meme
+   * contrat que dans app/api/chat/route.ts. Elle sert a batir le prompt
+   * d extraction : un fil anglais se resume mieux par un prompt anglais.
+   *
+   * ELLE ARRIVE AUSSI PAR `sendBeacon`, a la fermeture de l onglet — c est
+   * pourquoi elle est dans le CORPS et non dans un en-tete : sendBeacon ne
+   * permet pas de poser d en-tete autre que le type de contenu.
+   */
+  locale: z.enum(LOCALES).catch(LOCALE_DEFAUT),
 });
 
 /**
@@ -81,6 +103,46 @@ const SchemaExtraction = z.object({
 });
 
 const etoiles = (n: number) => "★".repeat(Math.max(1, Math.min(5, n)));
+
+/**
+ * LES REFUS ECRITS A LA MAIN, DANS LES DEUX LANGUES — meme raison qu a
+ * app/api/chat/route.ts : le widget ne les affiche pas, mais ils partent dans
+ * le corps de la reponse et un francais rendu a un appel venu de /en est le
+ * defaut qu on corrige.
+ *
+ * LE TABLEAU `issues` DE ZOD RESTE EN ANGLAIS BRUT, comme la-bas et pour la
+ * meme raison : aucune contrainte de ce schema ne porte sur du texte tape par
+ * le visiteur. Un echec ici est un bug de notre propre client, lu par un
+ * developpeur.
+ */
+const MESSAGES: Record<
+  Locale,
+  { illisible: string; invalide: string; trop: (n: number) => string; debit: string }
+> = {
+  fr: {
+    illisible: "Corps de requête illisible.",
+    invalide: "Requête invalide.",
+    trop: (n) => `Conversation trop longue (${n} caractères, maximum ${MAX_CARACTERES_TOTAL}).`,
+    debit: "Trop de finalisations, réessayez plus tard.",
+  },
+  en: {
+    illisible: "Unreadable request body.",
+    invalide: "Invalid request.",
+    trop: (n) => `Conversation too long (${n} characters, maximum ${MAX_CARACTERES_TOTAL}).`,
+    debit: "Too many submissions, please try again later.",
+  },
+};
+
+/**
+ * La langue AVANT la validation du schema — il en faut une pour rediger le
+ * refus du schema lui-meme. Identique a celle de app/api/chat/route.ts, et
+ * comme elle elle s appuie sur `estLocale` (lib/i18n.ts) plutot que sur une
+ * comparaison recopiee.
+ */
+function localeDuCorps(brut: unknown): Locale {
+  const valeur = (brut as { locale?: unknown } | null)?.locale;
+  return typeof valeur === "string" && estLocale(valeur) ? valeur : LOCALE_DEFAUT;
+}
 
 /**
  * Reponse du chemin « deja finalise ». STRICTEMENT identique a celle que rend
@@ -123,21 +185,25 @@ export async function POST(req: Request) {
   try {
     brut = await req.json();
   } catch {
-    return NextResponse.json({ error: "Corps de requête illisible." }, { status: 400 });
+    // Corps illisible : rien a lire, donc pas de langue. Le francais par
+    // defaut — un corps illisible ne vient jamais du site lui-meme.
+    return NextResponse.json({ error: MESSAGES.fr.illisible }, { status: 400 });
   }
+
+  const t = MESSAGES[localeDuCorps(brut)];
 
   // 1. Schema.
   const analyse = SchemaRequete.safeParse(brut);
   if (!analyse.success) {
     return NextResponse.json(
       {
-        error: "Requête invalide.",
+        error: t.invalide,
         issues: analyse.error.issues.map((i) => ({ path: i.path.join("."), message: i.message })),
       },
       { status: 400 },
     );
   }
-  const { sessionId, messages, reason, subject } = analyse.data;
+  const { sessionId, messages, reason, subject, locale } = analyse.data;
   // Une chaine vide n est pas un sujet : elle devient null. Meme normalisation
   // qu au formulaire (app/api/contact/route.ts) — les deux routes ecrivent dans
   // la MEME colonne, et deux facons de dire « on ne sait pas » y cohabiteraient.
@@ -145,10 +211,7 @@ export async function POST(req: Request) {
 
   const total = messages.reduce((n, m) => n + m.content.length, 0);
   if (total > MAX_CARACTERES_TOTAL) {
-    return NextResponse.json(
-      { error: `Conversation trop longue (${total} caractères, maximum ${MAX_CARACTERES_TOTAL}).` },
-      { status: 400 },
-    );
+    return NextResponse.json({ error: t.trop(total) }, { status: 400 });
   }
 
   // 2. Idempotence — avant tout le reste. Le widget peut appeler deux fois :
@@ -165,12 +228,14 @@ export async function POST(req: Request) {
     where: { ipHash, action: ACTION, createdAt: { gt: new Date(Date.now() - FENETRE_DEBIT_MS) } },
   });
   if (recentes >= MAX_PAR_IP) {
-    return NextResponse.json({ error: "Trop de finalisations, réessayez plus tard." }, { status: 429 });
+    return NextResponse.json({ error: t.debit }, { status: 429 });
   }
   await prisma.rateLimit.create({ data: { ipHash, action: ACTION } });
 
-  // 4. Extraction.
-  const systeme = await buildExtractPrompt();
+  // 4. Extraction. Le prompt est bati dans la langue de la conversation : memes
+  //    neuf cles et memes jetons d urgence des deux cotes, seul le resume suit
+  //    la langue du visiteur (lib/extract-prompt.ts).
+  const systeme = await buildExtractPrompt(locale);
   const resultat = await askLlmJson(systeme, messages);
 
   // 4bis. Modele muet ou illisible : on enregistre quand meme.

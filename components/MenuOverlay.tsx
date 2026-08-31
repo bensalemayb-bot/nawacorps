@@ -1,4 +1,7 @@
+import SelecteurLangue from "@/components/SelecteurLangue";
 import { ENTREES_FAMILLES, HREF_SERVICES } from "@/lib/catalogue-familles";
+import { dictionnaire } from "@/lib/dictionnaires";
+import { lien, type Locale } from "@/lib/i18n";
 import { CONTACT, whatsapp } from "@/lib/site";
 
 // Menu plein ecran — reference/binacore.html lignes 707-720.
@@ -41,8 +44,16 @@ import { CONTACT, whatsapp } from "@/lib/site";
 // L ECHELONNEMENT NE SE COMPTE PLUS EN `nth-child`. Il vit dans `--i`, pose
 // ici sur chaque entree : la sous-liste s intercale entre deux `.m-lnk`, et une
 // cascade indexee sur le rang DOM aurait saute un cran a chaque insertion.
-export default function MenuOverlay() {
+//
+// IL EST BILINGUE COMME LA BARRE, ET PAR LE MEME MECANISME : `locale` a « fr »
+// pour defaut, les libelles viennent du dictionnaire et les chemins passent par
+// `lien`, qui ne touche a rien en francais. Les libelles des CINQ FAMILLES,
+// eux, restent francais dans les deux langues — ils viennent de
+// lib/familles.ts, qui n est pas encore traduit (meme remarque que dans
+// components/NavServices.tsx).
+export default function MenuOverlay({ locale = "fr" }: { locale?: Locale }) {
   // volontaire — next/link casserait les reveals (Interactions ne tourne qu'une fois), voir décision B7
+  const t = dictionnaire(locale);
   return (
     <div className="menu" id="menu" aria-hidden="true">
       <nav>
@@ -50,22 +61,36 @@ export default function MenuOverlay() {
             raisons : « Travaux » promettait des references clients qui
             n existent pas, et l ancre de l accueil obligeait a recharger la page
             d entree depuis n importe quelle autre page. Voir components/Nav.tsx. */}
-        <a className="m-lnk" style={{ "--i": 0 } as React.CSSProperties} href="/demonstrations"><span className="mi">(01)</span><span className="mt">Démonstrations</span></a>
+        <a className="m-lnk" style={{ "--i": 0 } as React.CSSProperties} href={lien(locale, "/demonstrations")}><span className="mi">(01)</span><span className="mt">{t.menu.demonstrations}</span></a>
         <div className="m-grp" style={{ "--i": 1 } as React.CSSProperties}>
-          <a className="m-lnk" href={HREF_SERVICES}><span className="mi">(02)</span><span className="mt">Services</span></a>
+          <a className="m-lnk" href={lien(locale, HREF_SERVICES)}><span className="mi">(02)</span><span className="mt">{t.menu.services}</span></a>
           <div className="m-sub">
             {ENTREES_FAMILLES.map((f) => (
-              <a key={f.href} href={f.href}>{f.libelle}</a>
+              <a key={f.href} href={lien(locale, f.href)}>{(locale === "en" && f.libelleEn) || f.libelle}</a>
             ))}
           </div>
         </div>
-        <a className="m-lnk" style={{ "--i": 2 } as React.CSSProperties} href="/studio"><span className="mi">(03)</span><span className="mt">Le studio</span></a>
-        <a className="m-lnk" style={{ "--i": 3 } as React.CSSProperties} href="/contact"><span className="mi">(04)</span><span className="mt">Contact</span></a>
+        <a className="m-lnk" style={{ "--i": 2 } as React.CSSProperties} href={lien(locale, "/studio")}><span className="mi">(03)</span><span className="mt">{t.menu.studio}</span></a>
+        <a className="m-lnk" style={{ "--i": 3 } as React.CSSProperties} href={lien(locale, "/contact")}><span className="mi">(04)</span><span className="mt">{t.menu.contact}</span></a>
       </nav>
+      {/* LE BAS DU MENU NE PASSE PAS PAR `lien`, et il ne le doit pas : WhatsApp
+          et l e-mail sont des URL EXTERNES. `lien` les laisserait d ailleurs
+          intactes — elle reconnait les schemas d URI —, mais l ecrire ici
+          laisserait croire qu il y a une version anglaise de ces adresses. Il
+          n y en a pas : c est le meme numero et la meme boite. */}
       <div className="m-foot">
-        <a href={whatsapp()} target="_blank" rel="noopener">WhatsApp</a>
+        <a href={whatsapp()} target="_blank" rel="noopener">{t.menu.whatsapp}</a>
         <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
-        <span>Genève, Suisse</span>
+        <span>{t.menu.lieu}</span>
+        {/* LE SELECTEUR MOBILE. C est ici qu il compte : la barre de nav cache
+            ses entrees sous 860px, et le menu plein ecran est le seul endroit
+            ou un visiteur sur telephone peut changer de langue. Contrairement a
+            la barre, il rend ICI sa propre enveloppe — `.m-foot` repartit ses
+            enfants en `space-between`, et sans elle les deux codes seraient
+            partis chacun de son cote. Il ne rend rien du tout tant que la page
+            n existe pas dans l autre langue, enveloppe comprise : un element
+            vide fausserait cette repartition. */}
+        <SelecteurLangue locale={locale} contexte="menu" />
       </div>
     </div>
   );

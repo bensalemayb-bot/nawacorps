@@ -16,11 +16,11 @@ formulaire de contact.
 
 | Fichier | Rôle |
 |---|---|
-| `components/ChatWidget.tsx` | La bulle, le panneau, l'envoi, la clôture. |
+| `components/ChatWidget.tsx` | La bulle, le panneau, l'envoi, la clôture. Ses propres textes, en français et en anglais. |
 | `app/chat.css` | Le style du panneau et de la bulle. |
-| `lib/chat-prompt.ts` | Le prompt de **conversation**, catalogue et prix injectés depuis Postgres. |
-| `lib/extract-prompt.ts` | Le prompt d'**extraction**, qui transforme la conversation en objet JSON. |
-| `lib/llm.ts` | Le seul fichier qui sait qu'il existe deux fournisseurs. |
+| `lib/chat-prompt.ts` | Le prompt de **conversation**, dans les deux langues ; catalogue et prix injectés depuis Postgres. |
+| `lib/extract-prompt.ts` | Le prompt d'**extraction**, dans les deux langues, qui transforme la conversation en objet JSON. |
+| `lib/llm.ts` | Le seul fichier qui sait qu'il existe deux fournisseurs. Il ne sait **rien** de la langue. |
 | `app/api/chat/route.ts` | Un tour de conversation. |
 | `app/api/chat/finalize/route.ts` | La clôture : extraction, écriture, notification. |
 | `app/api/health/chat/route.ts` | Diagnostic, derrière l'authentification admin. |
@@ -234,6 +234,114 @@ quota, ni compter dans le débit, ni écrire quoi que ce soit.
 
 ---
 
+## Le chatbot est bilingue — par où passe la langue
+
+Le français reste la langue par défaut, et **rien ne change pour lui** : une
+requête sans `locale` se comporte exactement comme avant ce chantier, à
+l'octet près.
+
+### Le chemin de la langue, du layout au modèle
+
+```
+proxy.ts  ──(en-tête x-nawa-locale)──▶  app/(site)/layout.tsx
+                                            │  locale = "fr" | "en"
+                                            ▼
+                                    <ChatWidget locale={locale} />
+                                            │  prop
+                                            ▼
+                          POST /api/chat        { …, locale }
+                          POST /api/chat/finalize { …, locale }
+                                            │  zod, optionnel
+                                            ▼
+                     buildSystemPrompt(locale) / buildExtractPrompt(locale)
+```
+
+Quatre choses à savoir sur ce chemin :
+
+- **La langue voyage dans le CORPS, pas dans un en-tête.** `proxy.ts` ne tourne
+  pas sur `/api` : l'en-tête `x-nawa-locale` n'existe pas dans une route d'API.
+  Et la clôture part parfois par `navigator.sendBeacon`, qui ne permet de poser
+  aucun en-tête au-delà du type de contenu. Le corps est la seule voie qui
+  marche dans les deux cas.
+- **Le champ est optionnel et retombe sur le français** — `z.enum(LOCALES)
+  .catch(LOCALE_DEFAUT)`. `.catch()` et non `.default()` : `.default()` ne
+  couvre que l'absence, et une valeur présente mais inconnue (« de », « EN »)
+  ferait échouer le schéma, donc un 400, donc **une conversation ou un lead
+  perdus à cause d'un champ décoratif**.
+- **La langue n'est pas une étape de l'ordre des contrôles.** Elle est lue en
+  tête, avant la validation, parce qu'il faut bien une langue pour *rédiger* le
+  refus du schéma. Elle ne fait accepter ni refuser aucune requête.
+- **Il ne suffit pas de demander au modèle de répondre en anglais.** C'est tout
+  le prompt qui bascule : les règles de prix, de délai et de « feu vert » n'ont
+  d'effet que si elles existent dans la langue où le modèle rédige. Un prompt
+  français suivi de « answer in English » les fait improviser.
+
+### Les deux contrats du prompt
+
+`lib/chat-prompt.ts` contient désormais **deux** blocs verbatim, un par langue,
+et `lib/extract-prompt.ts` aussi. **Toute règle ajoutée, retirée ou reformulée
+dans l'un doit l'être dans l'autre le même jour.** Les règles du prompt
+français ont été gagnées une par une, le plus souvent après une faute du
+modèle ; une version anglaise à qui il en manquerait une referait la même faute
+devant un client anglophone, sans que personne ne relise.
+
+L'anglais porte **une règle de plus**, et il la lui faut : les noms des trois
+formules — `La Vitrine`, `Le Site`, `L'Assistant` — sont des noms propres et ne
+se traduisent pas. En français la question ne se pose pas. En anglais, un
+modèle écrit spontanément « The Showcase » et casse la marque sans qu'une ligne
+du dépôt ne bouge. Le vocabulaire anglais, lui, n'est pas libre :
+`docs/agents/brand/glossaire-anglais.md` l'impose terme par terme
+(`VAT included`, `one week`, `your go-ahead`, `an enquiry`, anglais
+britannique), et il est contraignant.
+
+### Ce qui reste en français, délibérément
+
+- **Les notifications Telegram.** Leur unique lecteur est Ayoub, sur son
+  téléphone. Les traduire selon la langue du visiteur donnerait un fil
+  bilingue à une personne qui n'en a qu'une, et deux formulations pour un même
+  événement.
+- **Le back-office `/admin`.** Il n'hérite pas du chrome public et n'a pas de
+  version anglaise.
+- **Les libellés de services quand `nameEn` est `null` en base.** C'est le
+  repli documenté de `nomService` (`lib/catalogue.ts`), pas un oubli : les
+  trois formules y restent françaises exprès.
+
+En revanche `need_summary` **suit la langue du visiteur** : une conversation
+anglaise se résume en anglais dans `Conversation.summary` et
+`Lead.needSummary`, et cela se voit tel quel dans `/admin`. C'est le compromis
+assumé — mieux vaut un résumé fidèle dans la langue du client qu'une traduction
+faite par un modèle à qui on demande par ailleurs de n'inventer **rien**.
+Même raison pour le tableau `services` de `Conversation.extracted`, qui porte
+les libellés de la langue de la conversation.
+
+### Le schéma d'extraction ne change PAS de langue
+
+Les neuf clés (`name`, `phone`, `email`, `commerce_type`, `commerce_name`,
+`need_summary`, `services`, `urgency`, `quality_score`) et les quatre valeurs
+d'`urgency` (`immediat`, `ce_trimestre`, `plus_tard`, `inconnu`) sont des
+**jetons**, pas des mots. Le même `SchemaExtraction` les relit dans les deux
+langues ; une clé traduite ferait échouer le parse et la conversation partirait
+en « non analysée » sans que rien ne le signale. Le prompt anglais l'écrit
+explicitement, parce qu'un modèle qui rédige en anglais traduit spontanément
+`immediate`.
+
+Et la consigne **« Réponds UNIQUEMENT avec un objet JSON valide »** est
+obligatoire des deux côtés : le mode `json_object` des API au format OpenAI
+(`GROQ_MODE_JSON`) exige que le mot « JSON » figure dans le prompt, sinon la
+requête part en 400. La version anglaise dit « Reply ONLY with a valid JSON
+object » — le mot y est, et il doit y rester.
+
+### `/api/contact` aussi
+
+La même mécanique, pour le formulaire. La route acceptait un corps sans langue
+et répondait toujours en français, y compris au visiteur venu de `/en` — et
+ses messages **zod** étaient, eux, en anglais brut *partout*, y compris sur le
+site français (« Too small: expected string to have >=2 characters »), parce
+qu'aucune contrainte ne portait de message. Chaque contrainte porte désormais
+sa phrase, dans les deux langues, et la route lit `locale` dans le corps.
+
+---
+
 ## Le périmètre du prompt
 
 Le studio ne vend pas que des sites : son métier, c'est **l'image de
@@ -244,7 +352,8 @@ d'ouverture est ouverte, et la liste d'exemples ne sort que si la personne
 hésite.
 
 Trois règles du prompt ont été durement gagnées et ne se réécrivent pas à la
-légère (`lib/chat-prompt.ts`) :
+légère (`lib/chat-prompt.ts`) — **et elles existent à l'identique dans le bloc
+anglais du même fichier** :
 
 - **Les prix** sont recopiés au caractère près depuis le catalogue Postgres,
   apostrophe et suffixe `.–` compris, toujours accompagnés de « TVA
@@ -256,3 +365,7 @@ légère (`lib/chat-prompt.ts`) :
   fourniture de textes ou de photos : le client n'a **rien** à préparer, et
   c'est l'argument de vente. Et l'assistant écrit « je », jamais « nous » — le
   studio est une personne.
+
+En anglais, mot pour mot : `VAT included` (jamais `incl. VAT`, `TTC`,
+`plus VAT`), `one week` (jamais `48h`, `72h`, `7 days`), `your go-ahead` =
+le client dit oui **et rien d'autre**, `I` et jamais `we`.

@@ -1,6 +1,9 @@
 import Image from "next/image";
 import NavServices from "@/components/NavServices";
+import SelecteurLangue from "@/components/SelecteurLangue";
 import { ENTREES_FAMILLES, HREF_SERVICES } from "@/lib/catalogue-familles";
+import { dictionnaire } from "@/lib/dictionnaires";
+import { lien, type Locale } from "@/lib/i18n";
 
 // Barre de navigation — reference/binacore.html lignes 695-705.
 // Composant serveur : les ecouteurs (#nav, #burger, #clock) sont poses par
@@ -49,8 +52,18 @@ import { ENTREES_FAMILLES, HREF_SERVICES } from "@/lib/catalogue-familles";
 // seul de ce fichier a l etre. La liste des familles n est pas ecrite ici — elle
 // est derivee de lib/familles.ts par lib/catalogue-familles.ts, la meme source
 // que le menu plein ecran. Deux listes ecrites a deux endroits divergent.
-export default function Nav() {
+//
+// LA BARRE EST BILINGUE DEPUIS LE CHANTIER ANGLAIS, ET ELLE NE CHANGE RIEN AU
+// FRANCAIS. `locale` vaut « fr » par defaut : un appelant qui ne la passe pas
+// — il n en reste aucun, mais la garantie compte — rend exactement le HTML
+// d avant, a l octet pres. Les libelles viennent du dictionnaire
+// (lib/dictionnaires/), les chemins passent tous par `lien` : en francais
+// celle-ci rend le chemin TEL QUEL, si bien que les huit href de cette barre
+// sont inchanges.
+export default function Nav({ locale = "fr" }: { locale?: Locale }) {
   // volontaire — next/link casserait les reveals (Interactions ne tourne qu'une fois), voir décision B7
+
+  const t = dictionnaire(locale);
 
   // L HORLOGE EST CALCULEE AU RENDU, PAS ECRITE EN DUR. « Genève — 00:00 »
   // etait une chaine fixe : servie telle quelle a n importe quelle heure, et
@@ -60,6 +73,15 @@ export default function Nav() {
   // `fr-CH`, `Europe/Zurich`, heure et minute sur 2 chiffres. Le premier tick
   // cote client ne fait ainsi que rafraichir une valeur deja juste, jamais la
   // corriger.
+  //
+  // LE FORMAT RESTE `fr-CH` EN ANGLAIS AUSSI, ET CE N EST PAS UN OUBLI. Seul le
+  // NOM DE LA VILLE se traduit (« Geneva ») ; l heure garde son horloge de 24 h
+  // a deux chiffres. Deux raisons, et la seconde suffirait : c est la
+  // convention suisse, que lisent aussi les anglophones de Geneve ; et
+  // components/Interactions.tsx rafraichit ce span toutes les minutes avec un
+  // `Intl.DateTimeFormat("fr-CH")` ecrit en dur de son cote. Formater le rendu
+  // serveur autrement ferait sauter l affichage d un format a l autre a la
+  // premiere minute ecoulee.
   const heureGeneve = new Intl.DateTimeFormat("fr-CH", {
     timeZone: "Europe/Zurich",
     hour: "2-digit",
@@ -68,7 +90,7 @@ export default function Nav() {
 
   return (
     <nav className="nav" id="nav">
-      <a className="wordmark" href="/#top" aria-label="Nawa Corps — accueil">
+      <a className="wordmark" href={lien(locale, "/#top")} aria-label={t.nav.accueil}>
         <Image
           className="wm-icone"
           src="/brand/nawa-corps-logo-iconique-transparent.png"
@@ -80,7 +102,7 @@ export default function Nav() {
         <Image
           className="wm-nom"
           src="/brand/nawa-corps-logo-principal-transparent.png"
-          alt="Nawa Corps"
+          alt={t.nav.logoAlt}
           width={634}
           height={90}
           priority
@@ -92,7 +114,7 @@ export default function Nav() {
           entre l instant du rendu et l hydratation, une difference legitime
           qu il ne faut pas signaler comme un bug plutot que de faire de tout
           le composant un client component pour une seule horloge. */}
-      <span className="nav-time" id="clock" suppressHydrationWarning>{`Genève — ${heureGeneve}`}</span>
+      <span className="nav-time" id="clock" suppressHydrationWarning>{`${t.nav.horlogeVille} — ${heureGeneve}`}</span>
       <div className="nav-r">
         {/* « Travaux » DEVIENT « Démonstrations », ET CHANGE DE DESTINATION.
             Le mot promettait des references clients ; le studio a un client et
@@ -103,21 +125,31 @@ export default function Nav() {
             ancre oblige a recharger l accueil entier depuis n importe quelle
             autre page, et depose le visiteur au milieu d un ecran qu il n a pas
             demande. */}
-        <a className="lnk" href="/demonstrations">Démonstrations</a>
+        <a className="lnk" href={lien(locale, "/demonstrations")}>{t.nav.demonstrations}</a>
         <NavServices
-          general={{ href: HREF_SERVICES, libelle: "Tous les services" }}
+          general={{ href: HREF_SERVICES, libelle: t.nav.tousLesServices }}
           familles={ENTREES_FAMILLES}
+          locale={locale}
         />
-        <a className="lnk" href="/studio">Le studio</a>
-        <a className="lnk" href="/contact">Contact</a>
+        <a className="lnk" href={lien(locale, "/studio")}>{t.nav.studio}</a>
+        <a className="lnk" href={lien(locale, "/contact")}>{t.nav.contact}</a>
+        {/* LE SELECTEUR DE LANGUE, entre la derniere entree et la pastille.
+            Il ne rend RIEN tant que la page courante n existe pas dans l autre
+            langue — aujourd hui, tout sauf l accueil. Il ne rend pas non plus
+            d enveloppe : ses deux ancres sont des enfants directs de `.nav-r`,
+            ce qui leur donne le dessin des entrees voisines et, surtout, les
+            fait disparaitre proprement sous 860px. Le detail est explique dans
+            components/SelecteurLangue.tsx — un `<span>` autour aurait pousse le
+            burger de 32px sur telephone. */}
+        <SelecteurLangue locale={locale} contexte="barre" />
         {/* LA PASTILLE MENE AU DEVIS, PLUS A UNE ANCRE. Elle pointait sur
             `/#contact`, c est-a-dire sur le pied de page de l ACCUEIL : depuis
             /services, /studio ou une page de formule, le seul bouton visible en
             permanence rechargeait la page d entree et faisait recommencer le
             visiteur au debut. /devis est une page a elle seule — elle ouvre
             l assistant et rend le formulaire, sans rien faire perdre. */}
-        <a className="pill" href="/devis">Refaire mon site</a>
-        <button className="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false"><i></i><i></i></button>
+        <a className="pill" href={lien(locale, "/devis")}>{t.nav.devis}</a>
+        <button className="burger" id="burger" aria-label={t.nav.ouvrirMenu} aria-expanded="false"><i></i><i></i></button>
       </div>
     </nav>
   );

@@ -1,3 +1,6 @@
+import { dictionnaire } from "@/lib/dictionnaires";
+import { lien, type Locale } from "@/lib/i18n";
+
 // Section Methode — reference/binacore.html lignes 1068-1081, copie verbatim.
 //
 // Contenu editorial pur : les 4 etapes ne sont pas des enregistrements de la
@@ -15,33 +18,43 @@
 // A la place, l etape 4 dit un fait de structure : qui corrige, et qui est
 // encore la l annee suivante.
 //
+// LA REGLE VAUT DANS LES DEUX LANGUES, et l anglais la reprend telle quelle :
+// « Beforehand », « Early in the week », « End of the week », « Afterwards ».
+// « Day 7 » serait exactement le compte de jours que le francais a retire.
+//
 // LA METHODE RESTE CELLE DU SITE — c est le seul produit qui porte un delai —
 // mais elle ne presume plus que le visiteur n a qu un site. L etape 1 regarde
 // « ce que vous montrez aujourd hui », site, imprimes et fiche Google
 // compris ; l etape 4 rappelle que la meme porte sert pour une affiche ou une
 // reimpression, pas seulement pour une correction de site.
-export default function Methode() {
+export default function Methode({ locale = "fr" }: { locale?: Locale }) {
+  const t = dictionnaire(locale);
+
   return (
     <section id="methode">
       <div className="wrap">
         <div className="sec-head">
-          <span className="meta" data-reveal><span className="index">(03)</span>&nbsp; Méthode</span>
-          <div data-reveal><h2 className="t">Du feu vert à la mise<br />en ligne : une semaine.</h2></div>
+          <span className="meta" data-reveal><span className="index">(03)</span>{`\u00A0 ${t.methode.section}`}</span>
+          <div data-reveal><h2 className="t">{t.methode.titreLigne1}<br />{t.methode.titreLigne2}</h2></div>
         </div>
         <div className="steps">
-          <div className="stp" data-reveal><span className="t">En amont</span><span className="n">01</span><h3>L&apos;état des lieux</h3><p>On regarde ensemble ce que vous montrez aujourd&apos;hui : votre site, vos imprimés, votre fiche Google. Ce qui manque, ce qui bloque, ce que vos clients ne trouvent pas. Chez vous ou par téléphone.</p></div>
-          <div className="stp" data-reveal><span className="t">Début de semaine</span><span className="n">02</span><h3>La maquette</h3><p>Vous voyez l&apos;avant / après en début de semaine. Vous validez ou on ajuste — deux allers-retours sont compris.</p></div>
-          <div className="stp" data-reveal><span className="t">Fin de semaine</span><span className="n">03</span><h3>La mise en ligne</h3><p>Domaine, hébergement, formulaire, rendez-vous : tout est branché. Vous n&apos;installez rien, vous ne configurez rien.</p></div>
-          <div className="stp" data-reveal><span className="t">Ensuite</span><span className="n">04</span><h3>Le suivi</h3><p>Un tarif change, une prestation s&apos;ajoute, un horaire bouge ? Vous m&apos;écrivez, et c&apos;est moi qui corrige. Une affiche pour la rentrée, des cartes à réimprimer : vous m&apos;écrivez aussi. La deuxième année, c&apos;est encore la même personne.</p></div>
+          <div className="stp" data-reveal><span className="t">{t.methode.etape01Moment}</span><span className="n">01</span><h3>{t.methode.etape01Titre}</h3><p>{t.methode.etape01Texte}</p></div>
+          <div className="stp" data-reveal><span className="t">{t.methode.etape02Moment}</span><span className="n">02</span><h3>{t.methode.etape02Titre}</h3><p>{t.methode.etape02Texte}</p></div>
+          <div className="stp" data-reveal><span className="t">{t.methode.etape03Moment}</span><span className="n">03</span><h3>{t.methode.etape03Titre}</h3><p>{t.methode.etape03Texte}</p></div>
+          <div className="stp" data-reveal><span className="t">{t.methode.etape04Moment}</span><span className="n">04</span><h3>{t.methode.etape04Titre}</h3><p>{t.methode.etape04Texte}</p></div>
         </div>
         {/* LA METHODE ETAIT UN CUL-DE-SAC. Entre le hero et la grille de
             prix, le lecteur traversait quatre sections sans un seul bouton :
             celui que le deroulement en une semaine venait de convaincre
             devait encore descendre la biographie du studio avant de pouvoir
             agir. Le lien mene aux prix, pas au contact — a ce point de la
-            page il veut savoir combien, pas ecrire. */}
+            page il veut savoir combien, pas ecrire.
+
+            L ANCRE N EST PAS PREFIXEE PAR `lien()`, et c est correct : une
+            ancre pure designe le document courant, qui est deja dans la bonne
+            langue. `lien()` la laisse d ailleurs passer telle quelle. */}
         <div className="c-row" data-reveal style={{ marginTop: 34 }}>
-          <a className="btn btn-line" href="#offres">Voir les formules et les prix <span className="ar">→</span></a>
+          <a className="btn btn-line" href={lien(locale, "#offres")}>{t.methode.cta}<span className="ar">→</span></a>
         </div>
       </div>
     </section>

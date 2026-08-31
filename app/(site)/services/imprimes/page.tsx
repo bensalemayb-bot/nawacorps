@@ -25,6 +25,13 @@ import "@/app/services.css";
  * TOUT LE CORPS EST DANS components/PageFamille.tsx, et toute la matiere
  * editoriale dans lib/familles.ts. Les noms, les descriptions et les prix
  * viennent de Postgres : aucun montant n est ecrit dans ces trois fichiers.
+ *
+ * ELLE A UNE JUMELLE ANGLAISE — app/(site)/en/services/imprimes/page.tsx.
+ * Les deux rendent LE MEME composant et LA MEME matiere ; seule la locale
+ * change. La locale « fr » est desormais passee EXPLICITEMENT ici, alors
+ * qu elle est aussi le defaut : ecrite, elle se voit a la relecture et elle
+ * met les deux pages sur le meme pied. Elle ne change rien a ce que cette
+ * page rend.
  */
 
 // Meme raison qu app/(site)/services/page.tsx : la page lit Postgres, et
@@ -33,8 +40,8 @@ import "@/app/services.css";
 // construction echouerait sur P1001.
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = metadataFamille("imprimes");
+export const metadata: Metadata = metadataFamille("imprimes", "fr");
 
 export default function Imprimes() {
-  return <PageFamille slug="imprimes" />;
+  return <PageFamille slug="imprimes" locale="fr" />;
 }

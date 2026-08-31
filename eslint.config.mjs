@@ -48,6 +48,10 @@ const eslintConfig = defineConfig([
       // la premiere copie. Toutes les pages de services sont concernees par
       // la meme decision de toute facon.
       "app/(site)/services/**",
+      // Les memes pages en anglais, sous /en. Meme decision, meme raison, et
+      // le REPERTOIRE plutot que les fichiers pour la meme raison de glob que
+      // ci-dessus : le voisin dynamique s ecrit `[slug]` de ce cote aussi.
+      "app/(site)/en/services/**",
       // Le corps partage des cinq pages de famille. Il vit dans components/
       // parce que c'est un composant, mais il rend exactement le meme markup
       // que les pages ci-dessus et il est soumis a la meme decision : des <a>
@@ -70,6 +74,27 @@ const eslintConfig = defineConfig([
       // sur /devis?p=<slug> et le nom de chaque carte ouvre sa page produit,
       // qui etait jusque-la inatteignable depuis l accueil.
       "components/Offres.tsx",
+      // La page des demonstrations. L exception y vivait en tete de fichier,
+      // en `/* eslint-disable */`, avec une note demandant explicitement son
+      // deplacement ICI « a la prochaine passe qui y touche » : c est fait.
+      // Une exception qui existe a deux endroits finit par diverger, et celle
+      // de cette page est exactement la meme decision que les huit ci-dessus.
+      "app/(site)/demonstrations/page.tsx",
+      // LES PAGES ANGLAISES DE CONFIANCE ET DE CONVERSION. Meme decision, meme
+      // raison, et elle vaut mot pour mot ce qu elle vaut en francais :
+      // Interactions.tsx ne s initialise qu une fois, et une navigation
+      // client-side laisserait les [data-reveal] de la page d arrivee a
+      // opacity:0. Elles sont nommees une par une plutot que par un glob
+      // `app/(site)/en/**` : les autres pages anglaises appartiennent a
+      // d autres chantiers, et une exception d ESLint ne doit couvrir que ce
+      // que son auteur a relu.
+      "app/(site)/en/studio/page.tsx",
+      "app/(site)/en/contact/page.tsx",
+      "app/(site)/en/mentions-legales/page.tsx",
+      "app/(site)/en/confidentialite/page.tsx",
+      "app/(site)/en/demonstrations/page.tsx",
+      "app/(site)/en/devis/page.tsx",
+      "app/(site)/en/not-found.tsx",
     ],
     rules: {
       // volontaire — next/link casserait les reveals (Interactions ne tourne qu'une fois), voir décision B7

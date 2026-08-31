@@ -1,4 +1,6 @@
 import { Hanken_Grotesk, Instrument_Serif } from "next/font/google";
+import { headers } from "next/headers";
+import { EN_TETE_LOCALE, LANGUE_HTML, LOCALE_DEFAUT, estLocale } from "@/lib/i18n";
 import "./globals.css";
 import "./binacore.css";
 import "./chat.css";
@@ -49,9 +51,47 @@ const instrument = Instrument_Serif({
   variable: "--font-instrument",
 });
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+/**
+ * LA LANGUE DU DOCUMENT — lue dans l'en-tête posé par `proxy.ts`.
+ *
+ * `<html lang>` est le seul attribut du site qui doit changer avec la langue
+ * alors qu'il n'est écrit qu'ICI, dans le layout racine, pour toutes les
+ * routes à la fois. Il n'existe pas de moyen de le faire varier depuis un
+ * layout enfant : `/en` ne rend pas son propre `<html>`, il rend le contenu de
+ * celui-ci. D'où l'en-tête — voir le docblock de `proxy.ts` pour le détail des
+ * autres pistes et pourquoi elles ne tiennent pas.
+ *
+ * `headers()` EST ASYNCHRONE DEPUIS NEXT 15 : ce layout est donc `async`. Voir
+ * `node_modules/next/dist/docs/01-app/03-api-reference/04-functions/headers.md`.
+ *
+ * CE QUE CELA COÛTE, ET IL FAUT LE SAVOIR : `headers()` est une API DE TEMPS
+ * DE REQUÊTE. L'appeler ici bascule TOUTES les routes en rendu dynamique,
+ * y compris les cinq pages qui étaient encore prérendues au build
+ * (/studio, /contact, /demonstrations, /mentions-legales, /confidentialite) et
+ * la 404. Les neuf autres pages du site publiques étaient déjà en
+ * `force-dynamic` parce qu'elles lisent Postgres — pour elles, rien ne change.
+ * Ces cinq-là ne lisent aucune base : ce qu'elles perdent, c'est du HTML
+ * fabriqué une fois au build plutôt qu'à chaque visite, pas un aller-retour
+ * réseau. Le repère mesuré et consigné dans `app/(site)/page.tsx` reste le
+ * bon : 4 ms de TTFB pour une page légale statique, 17 ms pour une page
+ * dynamique qui interroge deux fois la base.
+ *
+ * LE REPLI EST LE FRANÇAIS, et il est atteignable pour de vrai : `proxy.ts`
+ * ne tourne pas sur `/admin`, ni sur les routes d'API, ni sur les fichiers
+ * statiques. L'en-tête est alors absent et `estLocale` rend `false` — le
+ * back-office reçoit `lang="fr-CH"`, ce qui est exactement ce qu'il faut. Ce
+ * repli protège aussi du cas où quelqu'un fabriquerait la requête à la main :
+ * un `x-nawa-locale: de` n'est pas une locale connue, il est ignoré.
+ */
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const entete = (await headers()).get(EN_TETE_LOCALE);
+  const locale = estLocale(entete) ? entete : LOCALE_DEFAUT;
+
   return (
-    <html lang="fr" className={`${hanken.variable} ${instrument.variable}`}>
+    <html
+      lang={LANGUE_HTML[locale]}
+      className={`${hanken.variable} ${instrument.variable}`}
+    >
       <body>{children}</body>
     </html>
   );

@@ -1,18 +1,24 @@
-/* eslint-disable @next/next/no-html-link-for-pages --
-   volontaire — next/link casserait les reveals (Interactions ne tourne qu'une
-   fois), voir decision B7. C'est la meme exception que celle listee dans
-   eslint.config.mjs pour Nav.tsx, PageFamille.tsx et les pages publiques ; elle
-   est posee ICI et non la-bas parce que ce chantier n'ouvre pas la config, et
-   qu'un autre y travaille en parallele. A replier dans la liste de
-   eslint.config.mjs des que les deux chantiers sont poses. */
+/* LA DECISION B7 TIENT TOUJOURS — des <a> classiques, jamais next/link : la
+   navigation client ne rejoue pas les revelations au scroll d'Interactions.tsx,
+   qui ne s'initialisent qu'une fois.
+   CE QUI A DISPARU, C'EST LE `eslint-disable` QUI L'ACCOMPAGNAIT, et il ne faut
+   pas le remettre : `@next/next/no-html-link-for-pages` ne reconnait que les
+   `href` litteraux, et les six renvois de ce fichier passent desormais par
+   `lien(locale, …)`. La directive est devenue inutile, et une directive inutile
+   est elle-meme signalee par ESLint. Si un `href` litteral revient un jour, la
+   regle se remettra a parler — c'est exactement ce qu'on veut d'elle. */
 import type { CSSProperties } from "react";
+import { dictionnaire } from "@/lib/dictionnaires";
+import { lien, type Locale } from "@/lib/i18n";
 
 // Section Services — reference/binacore.html lignes 940-973 pour la structure.
 //
 // Les six lignes sont STATIQUES et le restent : ce sont des categories
 // editoriales du studio, pas les enregistrements de la table Service. Rien
 // ici ne vient de la base, et aucun montant n'y est ecrit — les prix vivent en
-// base et s'affichent dans Offres et la carte du studio.
+// base et s'affichent dans Offres et la carte du studio. Le TEXTE, lui, vit
+// desormais dans lib/dictionnaires : six titres, six corps, six renvois, dans
+// les deux langues.
 //
 // POURQUOI ELLES ONT ETE REECRITES. Le repositionnement PME avait resserre les
 // six gestes sur les seules FONCTIONS D'UN SITE — recevoir, chiffrer, prendre
@@ -40,7 +46,8 @@ import type { CSSProperties } from "react";
 // LE PARTENAIRE DE PRODUCTION EST NOMME au geste 05, et il doit le rester :
 // « vous ne touchez a rien » laissait entendre que tout se fait ici. La
 // production des reseaux sociaux se fait AVEC un partenaire (positionnement
-// §7), lib/familles.ts l'ecrit, et la contradiction se lisait a un clic.
+// §7), lib/familles.ts l'ecrit, et la contradiction se lisait a un clic. La
+// version anglaise le dit aussi, au meme endroit du meme paragraphe.
 //
 // LES TITRES 02 ET 03 ONT ETE REECRITS, ET SEULEMENT LES TITRES. « Prise de
 // rendez-vous et devis en ligne » et « L'assistant qui repond et relance » se
@@ -60,7 +67,12 @@ import type { CSSProperties } from "react";
 // clot maintenant chaque paragraphe deplie, vers la page qui developpe le
 // geste. Ce sont des <a> classiques, jamais next/link (decision B7) : la
 // navigation client ne rejoue pas les revelations au scroll d'Interactions.tsx,
-// qui ne s'initialisent qu'une fois.
+// qui ne s'initialisent qu'une fois. Leur `href` passe par `lien(locale, …)`,
+// qui laisse le chemin francais intact et prefixe `/en` en anglais.
+//
+// LES SLUGS D'URL NE SE TRADUISENT PAS. `/services/le-site` devient
+// `/en/services/le-site` : ce sont des identifiants de route, et les traduire
+// casserait les dix-sept ancres que lib/catalogue-familles.ts pointe.
 //
 // L'EN-TETE EST UN <button>, PAS UN <div>. Les six .row-h portaient un « + »,
 // changeaient le curseur et ouvraient un panneau : ils ressemblaient a des
@@ -120,44 +132,46 @@ const STYLE_ENTETE: CSSProperties = {
  *  Meme correction que `.pf-hors .lnk` dans app/services.css. */
 const STYLE_RENVOI: CSSProperties = { color: "var(--ink)" };
 
-export default function ServicesRows() {
+export default function ServicesRows({ locale = "fr" }: { locale?: Locale }) {
+  const t = dictionnaire(locale);
+
+  /**
+   * Les six gestes, ecrits une fois.
+   *
+   * Le rang (« 01 »…) est un CHIFFRE : il ne passe pas par le dictionnaire, il
+   * ne se traduit pas. Le `chemin` est la forme FRANCAISE, sans prefixe de
+   * langue — c'est ce que `lien()` attend, et c'est elle qui decide de poser
+   * `/en` ou non.
+   */
+  const gestes = [
+    { n: "01", titre: t.services.titre01, corps: t.services.corps01, renvoi: t.services.lien01, chemin: "/services" },
+    { n: "02", titre: t.services.titre02, corps: t.services.corps02, renvoi: t.services.lien02, chemin: "/services/le-site" },
+    { n: "03", titre: t.services.titre03, corps: t.services.corps03, renvoi: t.services.lien03, chemin: "/services/l-assistant" },
+    { n: "04", titre: t.services.titre04, corps: t.services.corps04, renvoi: t.services.lien04, chemin: "/services/identite" },
+    { n: "05", titre: t.services.titre05, corps: t.services.corps05, renvoi: t.services.lien05, chemin: "/services/reseaux-sociaux" },
+    { n: "06", titre: t.services.titre06, corps: t.services.corps06, renvoi: t.services.lien06, chemin: "/services/restauration" },
+  ];
+
   return (
     <section id="services" style={{ paddingTop: 0 }}>
       <div className="wrap">
         <div className="sec-head">
-          <span className="meta" data-reveal><span className="index">(02)</span>&nbsp; Services</span>
+          <span className="meta" data-reveal><span className="index">(02)</span>{`\u00A0 ${t.services.section}`}</span>
           {/* « un seul interlocuteur » a disparu du titre : la formule
               appartient deja a un acteur du panel de veille, et le guide de
               voix l'interdit nommement. « La meme main » dit la meme chose —
               une personne, du site a la carte de visite — sans reprendre le
-              vocabulaire de quelqu'un d'autre. */}
-          <div data-reveal><h2 className="t">Six gestes,<br />la même main.</h2></div>
+              vocabulaire de quelqu'un d'autre. L'anglais suit la meme regle :
+              `single point of contact` est interdit par le glossaire §4. */}
+          <div data-reveal><h2 className="t">{t.services.titreLigne1}<br />{t.services.titreLigne2}</h2></div>
         </div>
         <div className="rows" data-reveal>
-          <div className="row" data-row>
-            <button type="button" className="row-h" style={STYLE_ENTETE} aria-expanded="false"><span className="n">01</span><h3>Refonte de site</h3><span className="pl">+</span></button>
-            <div className="row-b"><div><p>Votre site actuel, repris et refait : une page, lisible sur téléphone, rapide, à jour. Les textes existants sont récupérés puis réécrits — vous signalez ce qui a changé depuis. Une semaine dès votre feu vert, deux allers-retours compris ; le site fini vous est présenté et validé avant d&apos;être mis en ligne. C&apos;est le produit d&apos;entrée, et celui qui porte tout le reste : le formulaire, les rendez-vous, la fiche Google et l&apos;assistant s&apos;y branchent.</p><p><a className="lnk" style={STYLE_RENVOI} href="/services">Voir les trois formules →</a></p></div></div>
-          </div>
-          <div className="row" data-row>
-            <button type="button" className="row-h" style={STYLE_ENTETE} aria-expanded="false"><span className="n">02</span><h3>Devis et rendez-vous directement sur le site</h3><span className="pl">+</span></button>
-            <div className="row-b"><div><p>Un formulaire qui pose les bonnes questions — prestation, surface, délai, adresse — et qui vous arrive rempli plutôt qu&apos;en trois lignes vagues. Sur les formules qui les incluent, le visiteur repart avec une estimation chiffrée et pose lui-même son rendez-vous, à 23 h comme le dimanche. Ce qui atterrit chez vous n&apos;est plus un « rappelez-moi » : c&apos;est une demande que vous pouvez chiffrer sans décrocher trois fois.</p><p><a className="lnk" style={STYLE_RENVOI} href="/services/le-site">Voir Le Site →</a></p></div></div>
-          </div>
-          <div className="row" data-row>
-            <button type="button" className="row-h" style={STYLE_ENTETE} aria-expanded="false"><span className="n">03</span><h3>Un assistant IA qui répond à votre place</h3><span className="pl">+</span></button>
-            <div className="row-b"><div><p>Un assistant formé sur vos prestations et vos tarifs répond aux questions courantes jour et nuit, note le nom et le numéro, et vous alerte sur votre téléphone. Les demandes restées sans réponse sont relancées seules, et tout ce qui entre s&apos;aligne dans un tableau de bord. Il tourne sur ce site : la bulle en bas de l&apos;écran, c&apos;est lui — ouvrez-la, c&apos;est la démonstration.</p><p><a className="lnk" style={STYLE_RENVOI} href="/services/l-assistant">Voir L&apos;Assistant →</a></p></div></div>
-          </div>
-          <div className="row" data-row>
-            <button type="button" className="row-h" style={STYLE_ENTETE} aria-expanded="false"><span className="n">04</span><h3>Logo, imprimés et photos</h3><span className="pl">+</span></button>
-            <div className="row-b"><div><p>Un logotype si vous n&apos;en avez pas, une palette et des typographies qui tiennent du site aux véhicules, et les règles qui disent où va quoi. Puis ce que vos clients gardent en main : cartes de visite 85 × 55 recto-verso, affiches, stickers vitrine. Les photos de votre entreprise sont prises sur place, un jour où vous travaillez — il n&apos;y a rien à mettre en scène. Ces lignes se chiffrent sur devis : un tirage, un format et un papier ne se devinent pas.</p><p><a className="lnk" style={STYLE_RENVOI} href="/services/identite">Voir le logo et les photos →</a></p></div></div>
-          </div>
-          <div className="row" data-row>
-            <button type="button" className="row-h" style={STYLE_ENTETE} aria-expanded="false"><span className="n">05</span><h3>Fiche Google et réseaux sociaux</h3><span className="pl">+</span></button>
-            <div className="row-b"><div><p>Votre fiche Google complétée : photos, horaires exacts, zone d&apos;intervention, réponses aux avis. C&apos;est ce que voient vos futurs clients avant votre site, et souvent à sa place. Les réseaux sociaux, eux, se prennent en entier — le calendrier du mois vous est proposé, vous le validez, et il part : visuels, textes, publication et réponses aux messages. La production est faite avec un partenaire du studio, et le travail vous est rendu par moi. Sur devis.</p><p><a className="lnk" style={STYLE_RENVOI} href="/services/reseaux-sociaux">Voir les réseaux sociaux →</a></p></div></div>
-          </div>
-          <div className="row" data-row>
-            <button type="button" className="row-h" style={STYLE_ENTETE} aria-expanded="false"><span className="n">06</span><h3>Restaurants et cafés</h3><span className="pl">+</span></button>
-            <div className="row-b"><div><p>Pour les cafés et les restaurants : la carte reprise en entier — l&apos;ordre des sections, la lisibilité des prix, la place des mentions obligatoires —, avec ses fichiers d&apos;impression, sa version en ligne et son QR. Puis ce qui tient la salle : chevalets de table, carte de fidélité, bons cadeaux et supports de saison. Une ligne à part, tenue depuis le début, et ouverte à qui n&apos;a pas de site chez moi. Sur devis.</p><p><a className="lnk" style={STYLE_RENVOI} href="/services/restauration">Voir la ligne restaurant →</a></p></div></div>
-          </div>
+          {gestes.map((geste) => (
+            <div className="row" data-row key={geste.n}>
+              <button type="button" className="row-h" style={STYLE_ENTETE} aria-expanded="false"><span className="n">{geste.n}</span><h3>{geste.titre}</h3><span className="pl">+</span></button>
+              <div className="row-b"><div><p>{geste.corps}</p><p><a className="lnk" style={STYLE_RENVOI} href={lien(locale, geste.chemin)}>{geste.renvoi}</a></p></div></div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

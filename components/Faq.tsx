@@ -1,13 +1,17 @@
-/* eslint-disable @next/next/no-html-link-for-pages --
-   volontaire — next/link casserait les reveals (Interactions ne tourne qu'une
-   fois), voir decision B7. Meme exception que celle listee dans
-   eslint.config.mjs pour Nav.tsx, PageFamille.tsx et les pages publiques ; elle
-   est posee ICI et non la-bas parce que ce chantier n'ouvre pas la config, et
-   qu'un autre y travaille en parallele. A replier dans la liste de
-   eslint.config.mjs des que les deux chantiers sont poses. */
+/* LA DECISION B7 TIENT TOUJOURS — des <a> classiques, jamais next/link : la
+   navigation client ne rejoue pas les revelations au scroll d'Interactions.tsx,
+   qui ne s'initialisent qu'une fois.
+   CE QUI A DISPARU, C'EST LE `eslint-disable` QUI L'ACCOMPAGNAIT, et il ne faut
+   pas le remettre : `@next/next/no-html-link-for-pages` ne reconnait que les
+   `href` litteraux, et les deux liens de ce fichier passent desormais par
+   `lien(locale, …)`. La directive est devenue inutile, et une directive inutile
+   est elle-meme signalee par ESLint. Si un `href` litteral revient un jour, la
+   regle se remettra a parler — c'est exactement ce qu'on veut d'elle. */
 import { chargerCatalogue } from "@/lib/catalogue";
-import { CHF_UNIT, MONTHLY_SUFFIX, formatChfAmount } from "@/lib/format";
+import { CHF_UNIT, formatChfAmount, mentionTva, suffixeMensuel } from "@/lib/format";
 import { jsonLd } from "@/lib/site";
+import { dictionnaire, type Dictionnaire } from "@/lib/dictionnaires";
+import { LANGUE_HTML, lien, type Locale } from "@/lib/i18n";
 
 // Section FAQ — reference/binacore.html lignes 1105-1133.
 //
@@ -24,6 +28,12 @@ import { jsonLd } from "@/lib/site";
 //
 // Le composant est devenu ASYNC : les deux prix du suivi sont lus en base au
 // lieu d etre ecrits en dur. Voir le docblock de construireQuestions().
+//
+// PUIS BILINGUE. Le texte des cinq questions vit dans lib/dictionnaires ; ce
+// fichier ne connait plus que leur ordre et la mecanique qui recolle les deux
+// montants. Le JSON-LD suit la langue par `inLanguage` — sans lui, deux
+// FAQPage disant la meme chose dans deux langues sont indistinguables pour un
+// moteur, et c est exactement le cas que `hreflang` existe pour lever.
 /**
  * LES DEUX PRIX DU SUIVI SONT LUS EN BASE, PAS ECRITS ICI.
  *
@@ -35,7 +45,8 @@ import { jsonLd } from "@/lib/site";
  * Si une des deux lignes manque ou passe sur devis, la reponse se referme sans
  * chiffre plutot que d en inventer un.
  *
- * « TVA COMPRISE » EST DANS LA PHRASE, ET DOIT Y RESTER. La regle du depot est
+ * « TVA COMPRISE » EST DANS LA PHRASE, ET DOIT Y RESTER — « VAT included » en
+ * anglais, et il vient de `mentionTva()`, jamais recopie. La regle du depot est
  * absolue (CLAUDE.md) : aucun prix affiche sans la mention. Elle ne pouvait pas
  * etre deleguee aux mentions d Offres ni de CarteDuStudio — depuis que les
  * objections passent avant le prix, la FAQ est rendue AVANT ces deux sections,
@@ -44,14 +55,16 @@ import { jsonLd } from "@/lib/site";
  * FAQPage ci-dessous, que Google republie hors de tout contexte de page.
  */
 function construireQuestions(
+  t: Dictionnaire,
+  locale: Locale,
   prix: (slug: string) => string | null,
 ): { q: string; r: string }[] {
   const suivi = prix("hebergement");
   const suiviAssistant = prix("suivi-assistant");
   const tarifs =
     suivi && suiviAssistant
-      ? `Ensuite, ${suivi} pour l'hébergement, les mises à jour et les sauvegardes — ${suiviAssistant} si votre site a l'assistant, qui tourne en continu, et c'est alors obligatoire. Les deux montants s'entendent TVA comprise.`
-      : "Ensuite, le suivi mensuel prend le relais : hébergement, mises à jour et sauvegardes — et l'assistant quand votre site en a un, auquel cas le suivi est obligatoire.";
+      ? `${t.faq.tarifsAvant}${suivi}${t.faq.tarifsMilieu}${suiviAssistant}${t.faq.tarifsApres}${mentionTva(locale)}.`
+      : t.faq.tarifsSansMontant;
 
   return [
     {
@@ -60,16 +73,16 @@ function construireQuestions(
       // autorise qu une : le depart de zero n a plus de delai distinct, c est
       // la meme semaine. La reponse le dit d une phrase, et la seconde
       // condition disparait avec.
-      q: "Une semaine, vraiment ?",
-      r: "Oui, et c'est la même semaine que vous ayez déjà un site ou non. Je reprends vos textes, je refais la mise en page, je branche le formulaire et les rendez-vous. Le délai court dès votre feu vert, pas dès que vous m'avez envoyé quelque chose : vous n'avez rien à préparer.",
+      q: t.faq.question1,
+      r: t.faq.reponse1,
     },
     {
-      q: "Je n'ai ni textes ni photos. C'est bloquant ?",
-      r: "Non, et c'est compris dans le prix. Si un site existe, je récupère ce qui s'y trouve et je le réécris ; vous me dites ce qui a changé. Sinon je vous propose une maquette rédigée, vous corrigez. Les photos de votre entreprise font partie du Site et de L'Assistant.",
+      q: t.faq.question2,
+      r: t.faq.reponse2,
     },
     {
-      q: "Qui gère l'hébergement et le nom de domaine ?",
-      r: `Moi. Domaine et hébergement de la première année sont compris dans les trois formules. ${tarifs} Le domaine reste à votre nom : il vous appartient.`,
+      q: t.faq.question3,
+      r: `${t.faq.reponse3Avant}${tarifs}${t.faq.reponse3Apres}`,
     },
     {
       // « c'est corrigé dans la journée » est tombe : c etait un engagement de
@@ -81,8 +94,8 @@ function construireQuestions(
       // aussi bien pour une correction que pour une affiche de rentree. Elle
       // s elargit donc, et c est elle qui dit au visiteur venu pour des cartes
       // de visite qu il est au bon endroit.
-      q: "Et après, si j'ai besoin d'autre chose ?",
-      r: "Deux allers-retours sont compris pendant la conception. Une fois en ligne, un message suffit : un tarif qui bouge, une prestation qui s'ajoute, un horaire qui change. Les modifications de contenu sont comprises dans le suivi de L'Assistant ; sur les deux autres formules, elles sont facturées à la demande. Et vous n'êtes pas limité au site : logotype, cartes de visite, affiche, photos de votre entreprise, fiche Google, réseaux sociaux, supports de restaurant — sur devis, avec un site chez moi comme sans.",
+      q: t.faq.question4,
+      r: t.faq.reponse4,
     },
     {
       // ANCIENNE VERSION, RETIREE EN ENTIER : « Pourquoi moins cher qu'une
@@ -92,6 +105,9 @@ function construireQuestions(
       // semaine, et un plaidoyer de prix qui attire l attention sur le doute
       // qu il veut lever. La question devient celle que le lecteur se pose
       // vraiment, et la reponse BORNE la prestation au lieu de la defendre.
+      // La version anglaise obeit au meme interdit : le glossaire §4 proscrit
+      // « faster than », « unlike other agencies », « the only studio in
+      // Geneva » — la LCD art. 3 ne s arrete pas a la frontiere de la langue.
       //
       // « NI SOUS-TRAITANCE » NE REVIENT PAS. C etait faux : la production des
       // reseaux sociaux est faite avec un partenaire, et /services/
@@ -101,22 +117,23 @@ function construireQuestions(
       // exacte est « le site est dessine et construit par la meme personne »,
       // ce qui est vrai, et non une negation en bloc, qui ne l est pas.
       // Meme correction dans components/Studio.tsx, second paragraphe.
-      q: "À ce prix-là, qu'est-ce qui n'est pas fait ?",
-      r: "Une page, pas dix. Deux allers-retours, pas trois. Vos textes sont repris de votre site actuel et réécrits, pas rédigés de zéro. Il n'y a ni bureaux, ni équipe commerciale : votre site est dessiné et construit par la même personne, celle à qui vous parlez, et c'est encore elle qui répond l'année suivante.",
+      q: t.faq.question5,
+      r: t.faq.reponse5,
     },
   ];
 }
 
-export default async function Faq() {
+export default async function Faq({ locale = "fr" }: { locale?: Locale }) {
+  const t = dictionnaire(locale);
   // Lecture PARTAGEE avec Offres, CarteDuStudio et le hero, sur le meme ecran
   // (lib/catalogue.ts memoise par requete) : aucun aller-retour en plus.
   const catalogue = await chargerCatalogue();
   const prix = (slug: string) => {
     const service = catalogue.find((s) => s.slug === slug);
     if (!service || service.priceCents === null) return null;
-    return `${formatChfAmount(service.priceCents)}${CHF_UNIT}${MONTHLY_SUFFIX}`;
+    return `${formatChfAmount(service.priceCents)}${CHF_UNIT}${suffixeMensuel(locale)}`;
   };
-  const QUESTIONS = construireQuestions(prix);
+  const QUESTIONS = construireQuestions(t, locale, prix);
 
   // Le JSON-LD est bati sur la MEME liste que le rendu : une donnee structuree
   // qui promettrait a Google une reponse que la page n affiche pas est
@@ -124,6 +141,7 @@ export default async function Faq() {
   const SCHEMA = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
+    inLanguage: LANGUE_HTML[locale],
     mainEntity: QUESTIONS.map((item) => ({
       "@type": "Question",
       name: item.q,
@@ -139,8 +157,8 @@ export default async function Faq() {
       />
       <div className="wrap">
         <div className="sec-head">
-          <span className="meta" data-reveal><span className="index">(06)</span>&nbsp; Questions</span>
-          <h2 className="sr-only">Questions fréquentes</h2>
+          <span className="meta" data-reveal><span className="index">(06)</span>{`\u00A0 ${t.faq.section}`}</span>
+          <h2 className="sr-only">{t.faq.titreCache}</h2>
         </div>
         <div data-reveal>
           {QUESTIONS.map((item) => (
@@ -164,13 +182,17 @@ export default async function Faq() {
             famille et de formule connaissent la prestation demandee et
             peuvent amorcer la conversation avec son sujet (BoutonDevis) ;
             l accueil, lui, ne sait pas encore ce que le visiteur veut — le
-            formulaire est l endroit ou il le dit. */}
+            formulaire est l endroit ou il le dit.
+
+            L ESPACE AVANT LA FLECHE EST DANS LA CHAINE du dictionnaire, pas
+            dans le JSX : ecrit ici, il ferait un troisieme enfant et React
+            intercalerait un `<!-- -->` dans le HTML francais. */}
         <div className="c-row" data-reveal>
-          <a className="btn" href="/devis">
-            Demander un devis <span className="ar">→</span>
+          <a className="btn" href={lien(locale, "/devis")}>
+            {t.faq.ctaDevis}<span className="ar">→</span>
           </a>
-          <a className="btn btn-line" href="/services">
-            Voir les formules
+          <a className="btn btn-line" href={lien(locale, "/services")}>
+            {t.faq.ctaFormules}
           </a>
         </div>
       </div>

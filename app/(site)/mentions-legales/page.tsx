@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import SchemaPage from "@/components/SchemaPage";
-import { CONTACT, openGraphPage } from "@/lib/site";
+import { CONTACT, alternatesPage, openGraphPage } from "@/lib/site";
 
 /**
  * Mentions legales.
@@ -32,12 +32,20 @@ import { CONTACT, openGraphPage } from "@/lib/site";
  * heritait de celles de l accueil — trois URL pour une seule description, et
  * une canonique pointant vers « / », ce qui revenait a demander aux moteurs
  * d ignorer cette page.
+ *
+ * `alternates` PASSE PAR `alternatesPage` DEPUIS QUE LA JUMELLE ANGLAISE
+ * EXISTE. La canonique ne bouge pas ; la fonction AJOUTE les `hreflang`, et
+ * LES DEUX SENS SONT OBLIGATOIRES — une page anglaise qui declare sa jumelle
+ * francaise sans que celle-ci lui rende la pareille voit son groupe ignore par
+ * Google, et les deux versions se remettent a se concurrencer. `en-CH` n est
+ * emis que si ce chemin figure dans `CHEMINS_TRADUITS` (lib/i18n.ts) :
+ * annoncer une jumelle qui repond 404 est pire que de ne rien annoncer.
  */
 export const metadata: Metadata = {
   title: "Mentions légales",
   description:
     "Mentions légales de Nawa Corps, studio de création digitale indépendant à Genève : éditeur, hébergement, propriété intellectuelle et droit applicable.",
-  alternates: { canonical: "/mentions-legales" },
+  alternates: alternatesPage("/mentions-legales"),
   openGraph: openGraphPage({
     titre: "Mentions légales — Nawa Corps",
     description:

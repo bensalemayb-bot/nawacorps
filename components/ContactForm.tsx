@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { dictionnaire } from "@/lib/dictionnaires";
+import type { Locale } from "@/lib/i18n";
 
 /**
  * Formulaire de contact — bloc B8.
@@ -26,6 +28,28 @@ import { useState } from "react";
  * et il suit exactement le meme chemin que les autres — meme FormData, meme
  * validation cote serveur (app/api/contact/route.ts), meme borne de longueur.
  * Rien ne peut partir que le serveur ne verifie.
+ *
+ * `locale` — LA LANGUE DU FORMULAIRE, « fr » par defaut. Ce composant est le
+ * SEUL du chrome a etre un composant CLIENT, et cela a une consequence sur la
+ * facon dont il lit ses chaines : `dictionnaire(locale)` est appele ICI, dans
+ * le corps du composant, et non recu en prop. C est ce que permet le chargeur
+ * synchrone de lib/dictionnaires/index.ts — le dictionnaire ne contient QUE
+ * des chaines, jamais de fonction, si bien qu il traverse sans probleme la
+ * frontiere serveur/client. Une fonction, elle, ne la traverserait pas : c est
+ * la raison pour laquelle « Genève — 14:32 » se compose chez l appelant a
+ * partir de morceaux, et jamais par un helper range dans le dictionnaire.
+ *
+ * LES MESSAGES DU SERVEUR SONT BILINGUES DEPUIS LE CHANTIER ANGLAIS, et c est
+ * ce formulaire qui rend ca possible : il envoie `locale` dans le corps de la
+ * requete. La route ne devine pas la langue — sans cette ligne, elle repondrait
+ * en francais a un visiteur anglophone. Zod la lit avec `.catch()` plutot que
+ * `.default()` : une valeur inattendue retombe sur le francais AU LIEU de
+ * refuser la demande, parce qu un champ decoratif ne doit jamais coûter un lead.
+ *
+ * RESERVE CONNUE : seul `erreur.error` est affiche, jamais les `issues`. Le
+ * message precis (« Indiquez votre nom (2 caracteres au moins). ») part bien
+ * dans la reponse mais reste invisible ; le visiteur lit « Donnees invalides. ».
+ * C est un choix produit non tranche, pas un defaut de traduction.
  */
 
 type Etat = { statut: "repos" | "envoi" | "succes" | "erreur"; message?: string };
@@ -49,7 +73,14 @@ const leurre: React.CSSProperties = {
   overflow: "hidden",
 };
 
-export default function ContactForm({ subject }: { subject?: string }) {
+export default function ContactForm({
+  subject,
+  locale = "fr",
+}: {
+  subject?: string;
+  locale?: Locale;
+}) {
+  const t = dictionnaire(locale);
   const [etat, setEtat] = useState<Etat>({ statut: "repos" });
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -74,6 +105,11 @@ export default function ContactForm({ subject }: { subject?: string }) {
       message: String(data.get("message") ?? ""),
       website: String(data.get("website") ?? ""),
       subject: sujet === "" ? undefined : sujet,
+      // Sans cette ligne, la route repond en francais a un visiteur anglophone :
+      // elle est bilingue depuis le chantier anglais, mais elle ne devine pas la
+      // langue — c est l appelant qui la porte. Zod la lit avec .catch(), donc une
+      // valeur inattendue retombe sur le francais au lieu de refuser la demande.
+      locale,
     };
 
     // Le studio vend une proposition ecrite : il lui faut un moyen de la
@@ -82,7 +118,7 @@ export default function ContactForm({ subject }: { subject?: string }) {
     // serveur (app/api/contact/route.ts), qui reste la seule verification
     // qui compte ; celle-ci n evite qu un aller-retour reseau inutile.
     if (!corps.phone.trim() && !corps.email.trim()) {
-      setEtat({ statut: "erreur", message: "Indiquez un téléphone ou un e-mail." });
+      setEtat({ statut: "erreur", message: t.formulaire.erreurContact });
       return;
     }
 
@@ -103,10 +139,7 @@ export default function ContactForm({ subject }: { subject?: string }) {
         // une seconde formulation du meme engagement. Le message de succes
         // dit donc un FAIT verifiable a la place : ou arrive le message
         // (lib/telegram.ts).
-        setEtat({
-          statut: "succes",
-          message: "Message reçu — il arrive directement sur mon téléphone.",
-        });
+        setEtat({ statut: "succes", message: t.formulaire.succes });
         form.reset();
         return;
       }
@@ -114,15 +147,10 @@ export default function ContactForm({ subject }: { subject?: string }) {
       const erreur = (await res.json().catch(() => null)) as { error?: string } | null;
       setEtat({
         statut: "erreur",
-        message:
-          erreur?.error ??
-          "Envoi impossible pour le moment. Écrivez-moi sur WhatsApp en attendant.",
+        message: erreur?.error ?? t.formulaire.erreurEnvoi,
       });
     } catch {
-      setEtat({
-        statut: "erreur",
-        message: "Connexion interrompue. Écrivez-moi sur WhatsApp en attendant.",
-      });
+      setEtat({ statut: "erreur", message: t.formulaire.erreurReseau });
     }
   }
 
@@ -136,16 +164,16 @@ export default function ContactForm({ subject }: { subject?: string }) {
           required
           minLength={2}
           maxLength={80}
-          placeholder="Votre nom"
-          aria-label="Votre nom"
+          placeholder={t.formulaire.nom}
+          aria-label={t.formulaire.nom}
           autoComplete="name"
         />
         <input
           style={champ}
           type="tel"
           name="phone"
-          placeholder="Votre téléphone"
-          aria-label="Votre téléphone"
+          placeholder={t.formulaire.telephone}
+          aria-label={t.formulaire.telephone}
           autoComplete="tel"
         />
         <input
@@ -153,8 +181,8 @@ export default function ContactForm({ subject }: { subject?: string }) {
           type="email"
           name="email"
           maxLength={160}
-          placeholder="Votre e-mail"
-          aria-label="Votre e-mail"
+          placeholder={t.formulaire.email}
+          aria-label={t.formulaire.email}
           autoComplete="email"
         />
         <textarea
@@ -162,8 +190,8 @@ export default function ContactForm({ subject }: { subject?: string }) {
           name="message"
           maxLength={1000}
           rows={4}
-          placeholder="Votre besoin, et votre site actuel si vous en avez un"
-          aria-label="Votre message"
+          placeholder={t.formulaire.message}
+          aria-label={t.formulaire.messageLabel}
         />
 
         {/* Le sujet, quand la page en connait un. `type="hidden"` et non le
@@ -175,7 +203,7 @@ export default function ContactForm({ subject }: { subject?: string }) {
         ) : null}
 
         <div style={leurre} aria-hidden="true">
-          <label htmlFor="website">Ne remplissez pas ce champ</label>
+          <label htmlFor="website">{t.formulaire.leurre}</label>
           <input id="website" type="text" name="website" tabIndex={-1} autoComplete="off" />
         </div>
 
@@ -184,7 +212,7 @@ export default function ContactForm({ subject }: { subject?: string }) {
             {/* « Envoyer » seul ne dit pas ce qui part. Le guide de voix
                 impose « Envoyer ma demande » : c est ce que le visiteur
                 envoie, et c est le mot du glossaire (entree 6). */}
-            {etat.statut === "envoi" ? "Envoi…" : "Envoyer ma demande"}
+            {etat.statut === "envoi" ? t.formulaire.envoiEnCours : t.formulaire.envoyer}
             <span className="ar">→</span>
           </button>
         </div>

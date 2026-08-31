@@ -1,4 +1,6 @@
 import FeatureCarousel from "@/components/ui/feature-carousel";
+import { dictionnaire } from "@/lib/dictionnaires";
+import { lien, type Locale } from "@/lib/i18n";
 
 // Section Travaux — reference/binacore.html lignes 756-764 pour l'en-tete,
 // copie verbatim. Le markup .car2 de la maquette (lignes 766-935) est rendu par
@@ -11,17 +13,29 @@ import FeatureCarousel from "@/components/ui/feature-carousel";
 // lien vers /demonstrations, s'ajoute a la suite sans rien decaler.
 //
 // Composant serveur : le carrousel porte son propre "use client".
-export default function Travaux() {
+//
+// `locale` VAUT « fr » PAR DEFAUT, comme dans tous les composants de l'accueil :
+// un appelant qui ne la passe pas rend exactement ce qu'il rendait avant le
+// chantier anglais, a l'octet pres.
+//
+// L'ESPACE INSECABLE DE L'ETIQUETTE EST RECOLLE DANS L'EXPRESSION, et ce n'est
+// pas une coquetterie. Ecrit dans le JSX (`&nbsp; {t.travaux.section}`), il
+// ferait DEUX enfants texte la ou il n'y en avait qu'un, et React intercalerait
+// un `<!-- -->` : le HTML du site francais changerait sans qu'un seul mot
+// bouge. Meme precaution dans les cinq autres sections numerotees.
+export default function Travaux({ locale = "fr" }: { locale?: Locale }) {
+  const t = dictionnaire(locale);
+
   return (
     <section id="travaux">
       <div className="wrap">
         <div className="sec-head">
-          <span className="meta" data-reveal><span className="index">(01)</span>&nbsp; Travaux</span>
+          <span className="meta" data-reveal><span className="index">(01)</span>{`\u00A0 ${t.travaux.section}`}</span>
           <div data-reveal>
-            <h2 className="t">Tout a un avant.<br />Voici les après.</h2>
+            <h2 className="t">{t.travaux.titreLigne1}<br />{t.travaux.titreLigne2}</h2>
           </div>
         </div>
-        <p className="lede" data-reveal style={{ marginBottom: 30 }}>Cinq démonstrations du studio — glissez la poignée de chaque pièce pour comparer l&apos;avant et l&apos;après.</p>
+        <p className="lede" data-reveal style={{ marginBottom: 30 }}>{t.travaux.lede}</p>
 
         <div data-reveal><FeatureCarousel /></div>
 
@@ -35,7 +49,7 @@ export default function Travaux() {
             calcule le delai par `:scope > [data-reveal]`, l'echelonnement des
             deux premiers (p.lede, le carrousel) est donc inchange. */}
         <div className="studio-txt" data-reveal style={{ marginTop: 30 }}>
-          <p><a className="lnk" href="/demonstrations">Voir toutes les démonstrations →</a></p>
+          <p><a className="lnk" href={lien(locale, "/demonstrations")}>{t.travaux.lien}</a></p>
         </div>
       </div>
     </section>

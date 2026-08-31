@@ -10,7 +10,7 @@ import {
   MENTION_TVA,
 } from "@/lib/familles";
 import { TVA_LABEL, formatServicePrice, isQuote } from "@/lib/format";
-import { CONTACT, SITE_NAME, openGraphPage } from "@/lib/site";
+import { CONTACT, SITE_NAME, alternatesPage, openGraphPage } from "@/lib/site";
 
 /**
  * /devis — LE PARCOURS DE DEVIS, QUI N'EXISTAIT PAS.
@@ -71,11 +71,19 @@ const DESCRIPTION =
  * `twitter` est redeclare EN ENTIER pour la meme raison que partout ailleurs —
  * la fusion des metadata de Next ne descend pas dans les objets, et un bloc
  * partiel ferait porter a cette page le titre de l'accueil.
+ *
+ * `alternates` PASSE PAR `alternatesPage` DEPUIS QUE LA JUMELLE ANGLAISE
+ * EXISTE. La canonique ne bouge pas ; la fonction AJOUTE les `hreflang`, et
+ * LES DEUX SENS SONT OBLIGATOIRES — une page anglaise qui declare sa jumelle
+ * francaise sans que celle-ci lui rende la pareille voit son groupe ignore par
+ * Google, et les deux versions se remettent a se concurrencer. `en-CH` n est
+ * emis que si ce chemin figure dans `CHEMINS_TRADUITS` (lib/i18n.ts) :
+ * annoncer une jumelle qui repond 404 est pire que de ne rien annoncer.
  */
 export const metadata: Metadata = {
   title: TITRE,
   description: DESCRIPTION,
-  alternates: { canonical: "/devis" },
+  alternates: alternatesPage("/devis"),
   openGraph: openGraphPage({
     titre: `${TITRE} — ${SITE_NAME}`,
     description: DESCRIPTION,

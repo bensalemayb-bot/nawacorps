@@ -6,6 +6,7 @@ import {
   LANGUES,
   SITE_NAME,
   SITE_URL,
+  alternatesPage,
   jsonLd,
   openGraphPage,
 } from "@/lib/site";
@@ -71,6 +72,16 @@ import {
  * la fusion des metadata de Next ne descend pas dans les objets. Sans lui,
  * cette page heriterait du `twitter` de l accueil — titre et description de
  * l accueil sur la carte de partage de /studio.
+ *
+ * `alternates` PASSE PAR `alternatesPage` DEPUIS QUE /en/studio EXISTE. La
+ * canonique ne bouge pas — « /studio », comme avant —, mais la fonction AJOUTE
+ * les `hreflang` : `fr-CH` et `x-default` sur cette page, `en-CH` sur sa
+ * jumelle. LES DEUX SENS SONT OBLIGATOIRES : une page anglaise qui declare sa
+ * jumelle francaise sans que celle-ci lui rende la pareille voit son groupe
+ * ignore par Google, et les deux versions se remettent a se concurrencer.
+ * `en-CH` n est emis que si « /studio » figure dans `CHEMINS_TRADUITS`
+ * (lib/i18n.ts) — annoncer une jumelle qui repond 404 est pire que de ne rien
+ * annoncer.
  */
 const TITRE = "Ayoub Bensalem, studio de création digitale à Genève";
 const DESCRIPTION =
@@ -79,7 +90,7 @@ const DESCRIPTION =
 export const metadata: Metadata = {
   title: TITRE,
   description: DESCRIPTION,
-  alternates: { canonical: "/studio" },
+  alternates: alternatesPage("/studio"),
   openGraph: openGraphPage({
     titre: `${TITRE} — ${SITE_NAME}`,
     description: DESCRIPTION,

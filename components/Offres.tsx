@@ -1,28 +1,57 @@
 import {
   CHF_UNIT,
-  FROM_PREFIX,
-  MONTHLY_SUFFIX,
-  QUOTE_LABEL,
-  TVA_LABEL,
   formatChfAmount,
   isQuote,
+  libelleDevis,
+  mentionTva,
+  prefixeDes,
+  suffixeMensuel,
 } from "@/lib/format";
-import { chargerCatalogue, parCategories } from "@/lib/catalogue";
-import { POUR_QUI, estFormule } from "@/lib/formules";
+import {
+  chargerCatalogue,
+  descriptionService,
+  nomService,
+  parCategories,
+} from "@/lib/catalogue";
+import { POUR_QUI, POUR_QUI_EN, estFormule } from "@/lib/formules";
+import { dictionnaire, type Dictionnaire } from "@/lib/dictionnaires";
+import { lien, type Locale } from "@/lib/i18n";
 import BoutonDevis from "@/components/BoutonDevis";
 
 /**
  * Section Offres — reference/binacore.html lignes 976-1031.
  *
  * Les PRIX, NOMS et DESCRIPTIONS viennent de Postgres. Rien de chiffre n'est
- * ecrit ici : les seuls montants presents sont les mentions barrees « au lieu
- * de », qui sont du contenu editorial sans equivalent en base.
+ * ecrit ici, et aucun montant non plus.
  *
  * La grille rend les `principal` NON-QUOTE — trois cartes, donc la mise en page
  * repeat(3,1fr) de la maquette est preservee. Chaque `principal` QUOTE devient
  * une ligne pleine largeur sous la grille, au style `.p-note` deja porte en B3 :
  * aucune regle CSS nouvelle. Cette ligne n'existe que parce que le service
  * existe en base.
+ *
+ * ------------------------------------------------------------------------
+ * CE QUI A CHANGE AVEC LE CHANTIER ANGLAIS, et c'etait le defaut le plus
+ * visible de /en : cette grille affichait « TVA comprise » SOUS DES PRIX
+ * ANGLAIS. Elle importait `TVA_LABEL`, `QUOTE_LABEL`, `FROM_PREFIX` et
+ * `MONTHLY_SUFFIX` — les quatre constantes FRANCAISES de lib/format.ts. Elles
+ * ne sont pas depreciees, mais elles n'ont leur place que dans un composant qui
+ * ignore sa langue ; celui-ci la connait, il appelle donc les fonctions
+ * `mentionTva()`, `libelleDevis()`, `prefixeDes()` et `suffixeMensuel()`.
+ *
+ * MEME REGLE POUR LE NOM ET LA DESCRIPTION : `nomService()` et
+ * `descriptionService()` de lib/catalogue.ts, jamais `service.name` en direct.
+ * Le repli sur le francais qu'elles portent n'est pas un accident a reparer —
+ * c'est lui qui fait afficher « La Vitrine », « Le Site » et « L'Assistant »
+ * tels quels sur la page anglaise, parce que les trois formules sont des noms
+ * propres (`nameEn = null` volontairement en base).
+ *
+ * LA MENTION DE TVA VAUT PAR UNITE DE LECTURE, dans les deux langues. Elle est
+ * collee sous chaque montant de carte, et elle est reprise dans la note de bas
+ * de grille — jamais recopiee a la main : les deux mots qui portent
+ * l'obligation viennent de lib/format.ts, ou ils sont ecrits une seule fois
+ * pour tout le site. Ce qui est ici, c'est la moitie NON legale de la phrase
+ * (« Prix en francs suisses » / « Prices in Swiss francs »).
  */
 
 type Editorial = {
@@ -40,51 +69,58 @@ type Editorial = {
  * Un slug qui ne correspond a rien fait simplement disparaitre les puces et le
  * bouton de la carte concernee — pas d'erreur, mais une carte muette.
  *
+ * C'EST DESORMAIS UNE FONCTION DU DICTIONNAIRE, et non plus une constante de
+ * module : les puces et les libelles de bouton sont du texte, et du texte se
+ * traduit. Ce qui reste en dur ici — quelle carte est recommandee, laquelle
+ * porte un bouton plein, laquelle porte une fleche — n'est pas du texte : c'est
+ * la hierarchie visuelle de la grille, et elle est la meme dans les deux
+ * langues.
+ *
  * LES PRIX BARRES ONT DISPARU. Les trois portaient exactement -31 %, ce qui
  * revenait a annoncer que le prix de reference n'avait jamais existe. Le champ
  * `was` est retire du type : il ne peut plus revenir par inadvertance.
  */
-const EDITORIAL: Record<string, Editorial> = {
-  "la-vitrine": {
-    bullets: [
-      "Une page, lisible sur téléphone",
-      "Formulaire de demande qui fonctionne",
-      "Appel, itinéraire et horaires en un geste",
-      "Domaine et hébergement la 1ʳᵉ année",
-    ],
-    ctaLabel: "Rendre mon site présentable",
-    ctaOutline: true,
-  },
-  "le-site": {
-    recommended: true,
-    bullets: [
-      "Tout La Vitrine, plus :",
-      "Prise de rendez-vous en ligne",
-      "Devis chiffré automatiquement",
-      "Fiche Google et photos comprises",
-    ],
-    ctaLabel: "Recevoir mes demandes",
-    ctaOutline: false,
-    ctaArrow: true,
-  },
-  "l-assistant": {
-    bullets: [
-      "Tout Le Site, plus :",
-      "L'assistant de ce site, sur le vôtre",
-      "Alerte sur votre téléphone à chaque demande",
-      "Relance automatique et tableau de bord",
-    ],
-    ctaLabel: "Automatiser mes demandes",
-    ctaOutline: true,
-  },
-};
+function editorial(t: Dictionnaire): Record<string, Editorial> {
+  return {
+    "la-vitrine": {
+      bullets: [
+        t.offres.vitrinePuce1,
+        t.offres.vitrinePuce2,
+        t.offres.vitrinePuce3,
+        t.offres.vitrinePuce4,
+      ],
+      ctaLabel: t.offres.vitrineCta,
+      ctaOutline: true,
+    },
+    "le-site": {
+      recommended: true,
+      bullets: [
+        t.offres.sitePuce1,
+        t.offres.sitePuce2,
+        t.offres.sitePuce3,
+        t.offres.sitePuce4,
+      ],
+      ctaLabel: t.offres.siteCta,
+      ctaOutline: false,
+      ctaArrow: true,
+    },
+    "l-assistant": {
+      bullets: [
+        t.offres.assistantPuce1,
+        t.offres.assistantPuce2,
+        t.offres.assistantPuce3,
+        t.offres.assistantPuce4,
+      ],
+      ctaLabel: t.offres.assistantCta,
+      ctaOutline: true,
+    },
+  };
+}
 
-// Le libelle du CTA de devis, verbatim de la maquette (ligne 1060). L amorce
-// WhatsApp qui l accompagnait a quitte ce fichier : elle vit dans lib/devis.ts,
-// ou la page /devis la ressert en repli — voir components/BoutonDevis.tsx.
-const DEVIS_LABEL = "Demander un devis →";
+export default async function Offres({ locale = "fr" }: { locale?: Locale }) {
+  const t = dictionnaire(locale);
+  const EDITORIAL = editorial(t);
 
-export default async function Offres() {
   // Lecture PARTAGEE avec CarteDuStudio, rendue juste apres sur le meme ecran :
   // les deux tiraient chacune sa requete alors que la seconde contenait deja
   // la premiere. Voir lib/catalogue.ts.
@@ -107,21 +143,26 @@ export default async function Offres() {
    * Chaque morceau ne s ecrit que si sa ligne existe et porte un montant :
    * base injoignable ou ligne masquee depuis /admin, la phrase se referme sans
    * inventer de chiffre.
+   *
+   * LE NOM DE LA FORMULE EST NOMME PLUTOT QUE SA CATEGORIE — « obligatoire avec
+   * L'Assistant », « compulsory with L'Assistant ». C'est la regle du §6 du
+   * glossaire anglais, et elle vaut aussi bien en francais : une categorie
+   * n'annonce rien, un nom propre situe.
    */
   const montant = (slug: string) => {
     const service = catalogue.find((s) => s.slug === slug);
     if (!service || service.priceCents === null) return null;
-    return `${formatChfAmount(service.priceCents)}${CHF_UNIT}${MONTHLY_SUFFIX}`;
+    return `${formatChfAmount(service.priceCents)}${CHF_UNIT}${suffixeMensuel(locale)}`;
   };
   const suiviBase = montant("hebergement");
   const suiviAssistant = montant("suivi-assistant");
   const assistant = services.find((s) => s.slug === "l-assistant");
   const noteSuivi = [
     suiviBase
-      ? `Suivi et hébergement dès ${suiviBase} à partir de la 2ᵉ année`
+      ? `${t.offres.noteSuiviAvant}${suiviBase}${t.offres.noteSuiviApres}`
       : null,
     suiviAssistant && assistant
-      ? `${suiviAssistant} obligatoire avec ${assistant.name}`
+      ? `${suiviAssistant}${t.offres.noteSuiviAssistantAvant}${nomService(assistant, locale)}`
       : null,
   ]
     .filter(Boolean)
@@ -135,8 +176,8 @@ export default async function Offres() {
     <section className="offres green" id="offres" style={{ paddingBottom: 0 }}>
       <div className="wrap">
         <div className="sec-head">
-          <span className="meta" data-reveal><span className="index">(05)</span>&nbsp; Offres</span>
-          <div data-reveal><h2 className="t">Des prix clairs,<br />tout compris.</h2></div>
+          <span className="meta" data-reveal><span className="index">(05)</span>{`\u00A0 ${t.offres.section}`}</span>
+          <div data-reveal><h2 className="t">{t.offres.titreLigne1}<br />{t.offres.titreLigne2}</h2></div>
         </div>
 
         <div className="price-grid">
@@ -150,10 +191,19 @@ export default async function Offres() {
                     rang de tri, pas une information. Le libelle vit dans
                     lib/formules.ts parce que /services rend la meme grille.
                     Un `principal` ajoute en base sans libelle laisse la ligne
-                    vide plutot que d inventer une promesse. */}
+                    vide plutot que d inventer une promesse.
+                    `POUR_QUI_EN` est un `Partial` VOLONTAIRE : un libelle
+                    anglais manquant retombe sur le francais plutot que de vider
+                    la ligne la plus haute de la carte. */}
                 <div className="lab">
-                  <span>{estFormule(service.slug) ? POUR_QUI[service.slug] : ""}</span>
-                  {ed?.recommended ? <span className="rec">Recommandé</span> : null}
+                  <span>
+                    {estFormule(service.slug)
+                      ? locale === "en"
+                        ? (POUR_QUI_EN[service.slug] ?? POUR_QUI[service.slug])
+                        : POUR_QUI[service.slug]
+                      : ""}
+                  </span>
+                  {ed?.recommended ? <span className="rec">{t.offres.recommande}</span> : null}
                 </div>
                 {/* LE NOM OUVRE LA PAGE DE LA FORMULE. Les trois pages
                     /services/<slug> etaient INATTEIGNABLES depuis l accueil :
@@ -161,6 +211,9 @@ export default async function Offres() {
                     la page d entree n y menait — seul le bouton de devis sortait
                     de la carte. Le titre est le lien naturel : c est ce qu on
                     clique pour « en savoir plus ».
+                    LE SLUG NE SE TRADUIT PAS : `lien()` prefixe `/en` et laisse
+                    `/services/le-site` intact. Un slug traduit casserait les
+                    ancres que lib/catalogue-familles.ts pointe.
                     LA CARTE ENTIERE N EST PAS ENVELOPPEE, et c est une regle,
                     pas un gout : elle contient deja un bouton, et un lien dans
                     un lien est du HTML invalide — le navigateur casse
@@ -169,23 +222,23 @@ export default async function Offres() {
                     mesure) n a pas de page : son titre reste du texte. */}
                 <h3>
                   {estFormule(service.slug) ? (
-                    <a className="lnk" href={`/services/${service.slug}`}>
-                      {service.name}
+                    <a className="lnk" href={lien(locale, `/services/${service.slug}`)}>
+                      {nomService(service, locale)}
                     </a>
                   ) : (
-                    service.name
+                    nomService(service, locale)
                   )}
                 </h3>
-                <p className="d">{service.description}</p>
+                <p className="d">{descriptionService(service, locale)}</p>
                 <p className="num">
                   {service.priceCents === null ? (
-                    QUOTE_LABEL
+                    libelleDevis(locale)
                   ) : (
                     <>
-                      {service.priceFrom ? <small>{FROM_PREFIX}</small> : null}
+                      {service.priceFrom ? <small>{prefixeDes(locale)}</small> : null}
                       {formatChfAmount(service.priceCents)}
                       <small>{CHF_UNIT}</small>
-                      {service.isMonthly ? <small className="per">{MONTHLY_SUFFIX}</small> : null}
+                      {service.isMonthly ? <small className="per">{suffixeMensuel(locale)}</small> : null}
                     </>
                   )}
                 </p>
@@ -198,7 +251,7 @@ export default async function Offres() {
                     Rendue seulement quand un montant s affiche : sous « sur
                     devis », elle ne voudrait rien dire. */}
                 {service.priceCents === null ? null : (
-                  <p className="num-tva">{TVA_LABEL}</p>
+                  <p className="num-tva">{mentionTva(locale)}</p>
                 )}
                 {/* LE SUIVI OBLIGATOIRE DE L ASSISTANT, SUR LA CARTE, AVANT LE
                     BOUTON. Il n apparaissait qu apres le bouton, dans la note
@@ -212,7 +265,7 @@ export default async function Offres() {
                     partout ailleurs — rendu seulement si la ligne
                     `suivi-assistant` existe et porte un prix. */}
                 {service.slug === "l-assistant" && suiviAssistant ? (
-                  <p className="num-tva">{`puis ${suiviAssistant} dès la 2ᵉ année — obligatoire, l'assistant tourne en continu`}</p>
+                  <p className="num-tva">{`${t.offres.suiviAssistantAvant}${suiviAssistant}${t.offres.suiviAssistantApres}`}</p>
                 ) : null}
                 {ed ? (
                   <ul>
@@ -231,11 +284,13 @@ export default async function Offres() {
                     lien interne qui ouvre un onglet fait perdre le fil.
                     LES LIBELLES NE BOUGENT PAS : ils viennent du guide de voix
                     §7, un par palier, et promettent le benefice plutot que la
-                    demarche. */}
+                    demarche. Leur version anglaise est celle de
+                    lib/formules.ts (`ctaEn`), au mot pres — la page produit et
+                    cette carte vendent la meme chose sous le meme nom. */}
                 {ed ? (
                   <a
                     className={ed.ctaOutline ? "btn btn-line" : "btn"}
-                    href={`/devis?p=${encodeURIComponent(service.slug)}`}
+                    href={lien(locale, `/devis?p=${encodeURIComponent(service.slug)}`)}
                   >
                     {ed.ctaLabel}
                     {ed.ctaArrow ? <> <span className="ar">→</span></> : null}
@@ -248,9 +303,9 @@ export default async function Offres() {
 
         {quotes.map((service) => (
           <div className="p-note" data-reveal key={service.id}>
-            <span>{`${service.name} — ${QUOTE_LABEL}`}</span>
+            <span>{`${nomService(service, locale)} — ${libelleDevis(locale)}`}</span>
             <BoutonDevis sujet="devis-sur-mesure">
-              {DEVIS_LABEL}
+              {t.offres.ctaDevis}
             </BoutonDevis>
           </div>
         ))}
@@ -260,8 +315,12 @@ export default async function Offres() {
               ce qu on n attendait pas, et attire l attention sur le soupcon
               qu elle veut lever. Elle est en plus saturee chez trois
               concurrents sur six. Ce qui borne vraiment la prestation, ce sont
-              les deux allers-retours et le suivi annonce juste apres. */}
-          <span>Prix en francs suisses, TVA comprise. Deux allers-retours de correction compris.</span>
+              les deux allers-retours et le suivi annonce juste apres.
+              LA MENTION DE TVA N EST PAS RECOPIEE ICI, dans aucune des deux
+              langues : elle vient de `mentionTva()`, ou elle est ecrite une
+              seule fois pour tout le site. Une mention a valeur legale qui
+              existe a deux endroits finit par diverger. */}
+          <span>{`${t.offres.notePrix}, ${mentionTva(locale)}. ${t.offres.noteCorrections}`}</span>
           {noteSuivi ? <span>{`${noteSuivi}.`}</span> : null}
         </div>
       </div>

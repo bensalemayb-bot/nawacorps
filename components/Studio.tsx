@@ -1,3 +1,6 @@
+import { dictionnaire } from "@/lib/dictionnaires";
+import { lien, type Locale } from "@/lib/i18n";
+
 // Section Le studio — reference/binacore.html lignes 1084-1102, copie verbatim.
 //
 // `style="padding-top:0"` de la maquette devient `style={{ paddingTop: 0 }}` :
@@ -38,30 +41,41 @@
 // remplace porte sur ce qui est vrai et suffit a l argument : le site est
 // dessine et construit par la meme personne. Meme correction dans la cinquieme
 // reponse de components/Faq.tsx.
-export default function Studio() {
+//
+// EN ANGLAIS, LA MEME SECTION SE DIT A LA PREMIERE PERSONNE DU SINGULIER — ou
+// plus exactement, comme en francais, a la troisieme personne pour parler de
+// « la meme personne ». Ce qui est proscrit, c est `we` / `our team` / `the
+// agency` : le studio est une personne, et l anglais commercial met « we »
+// partout (glossaire §2).
+export default function Studio({ locale = "fr" }: { locale?: Locale }) {
+  const t = dictionnaire(locale);
+
   return (
     <section id="studio" style={{ paddingTop: 0 }}>
       <div className="wrap">
         <div className="sec-head">
-          <span className="meta" data-reveal><span className="index">(04)</span>&nbsp; Le studio</span>
-          <h2 className="sr-only">Le studio</h2>
+          <span className="meta" data-reveal><span className="index">(04)</span>{`\u00A0 ${t.studio.section}`}</span>
+          <h2 className="sr-only">{t.studio.titreCache}</h2>
         </div>
         <div className="studio-grid">
-          <p className="studio-quote" data-reveal>« Vous parlez à celui qui <em>fait</em> le travail. »</p>
+          <p className="studio-quote" data-reveal>{t.studio.citationDebut}<em>{t.studio.citationItalique}</em>{t.studio.citationFin}</p>
           <div className="studio-txt" data-reveal>
-            <p>Nawa Corps est le studio de création digitale d&apos;Ayoub Bensalem, designer et développeur à Genève. Pas de commerciaux, pas de chargé de compte, pas de brief qui passe de main en main : la personne qui répond à votre message est celle qui dessine votre logotype, code votre site et photographie votre atelier.</p>
-            <p>Ce que ça change se voit à l&apos;usage. Le travail commence à votre feu vert, pas à la réception de vos textes. Le site fini vous est présenté et validé avant d&apos;être mis en ligne. Deux allers-retours sont compris, et ils sont écrits — une prestation qu&apos;on borne est une prestation qu&apos;on tient.</p>
-            <p>Pas de bureaux, pas d&apos;équipe commerciale : votre site est dessiné et construit par la même personne, et vous traitez avec elle du premier message à la livraison. C&apos;est encore elle l&apos;année suivante, quand un tarif change, qu&apos;il faut une affiche pour la rentrée ou qu&apos;un formulaire doit poser une question de plus.</p>
+            <p>{t.studio.paragraphe1}</p>
+            <p>{t.studio.paragraphe2}</p>
+            <p>{t.studio.paragraphe3}</p>
             {/* « 1 sem. » etait la derniere abreviation du delai sur le site.
                 Le glossaire (guide de voix, entree 3) impose une forme unique,
                 « une semaine » : un delai qui change de mots change de sens aux
                 yeux du lecteur. Le meme bandeau sur /studio ecrivait deja
                 « Une semaine » — le commentaire de cette page-la affirme que
-                les deux bandeaux sont identiques, ce qui n etait pas vrai. */}
+                les deux bandeaux sont identiques, ce qui n etait pas vrai.
+                LA MENTION DU DELAI PORTE CE QUI EST LIVRE, dans les deux
+                langues : « Une semaine / Refonte livrée », « One week /
+                Rebuild delivered ». Seule, elle contreviendrait au §5. */}
             <div className="facts">
-              <div><b>Genève</b><span>Basé ici</span></div>
-              <div><b>Une semaine</b><span>Refonte livrée</span></div>
-              <div><b>FR / EN</b><span>Langues</span></div>
+              <div><b>{t.studio.faitLieu}</b><span>{t.studio.faitLieuNote}</span></div>
+              <div><b>{t.studio.faitDelai}</b><span>{t.studio.faitDelaiNote}</span></div>
+              <div><b>{t.studio.faitLangues}</b><span>{t.studio.faitLanguesNote}</span></div>
             </div>
             {/* LA SECTION N AVAIT AUCUN LIEN. Trois paragraphes qui disent qui
                 fait le travail, et rien pour aller le verifier : /studio
@@ -71,8 +85,8 @@ export default function Studio() {
                 sonnerait faux. <a> classique, jamais next/link : la navigation
                 client casse les revelations au scroll (decision B7). */}
             <p style={{ marginTop: "1.8rem", marginBottom: 0 }}>
-              <a className="lnk" href="/studio" style={{ color: "var(--ink)" }}>
-                Voir qui fait le travail →
+              <a className="lnk" href={lien(locale, "/studio")} style={{ color: "var(--ink)" }}>
+                {t.studio.lien}
               </a>
             </p>
           </div>

@@ -1,3 +1,5 @@
+import { dictionnaire } from "@/lib/dictionnaires";
+import type { Locale } from "@/lib/i18n";
 import Image from "next/image";
 
 // Preloader — reference/binacore.html lignes 685-689, copie verbatim.
@@ -13,7 +15,13 @@ import Image from "next/image";
 // LES IMAGES RESTENT DANS LE <span>. C est lui que l animation d origine fait
 // monter (translateY 120% -> 0, ligne 341 de binacore.css). Les sortir aurait
 // casse l entree du preloader, qui n a aucune raison de changer.
-export default function Loader() {
+/**
+ * `locale` : le loader est la PREMIERE chose qu un visiteur lit, avant meme
+ * la page. La servir en francais a un anglophone donne le ton pour tout le
+ * reste. Defaut « fr » — l appel historique du layout est inchange.
+ */
+export default function Loader({ locale = "fr" }: { locale?: Locale }) {
+  const t = dictionnaire(locale);
   return (
     <div className="loader" id="loader" aria-hidden="true">
       <div className="lw">
@@ -36,7 +44,7 @@ export default function Loader() {
           />
         </span>
       </div>
-      <span className="lmeta">Studio de création digitale</span>
+      <span className="lmeta">{t.hero.kickerMetier}</span>
       <span className="pct" id="pct">0</span>
     </div>
   );

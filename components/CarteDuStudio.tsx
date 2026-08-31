@@ -1,8 +1,9 @@
-import { isQuote } from "@/lib/format";
+import { isQuote, mentionTva } from "@/lib/format";
 import {
   MENTION_DEVIS_COURTE,
+  MENTION_DEVIS_COURTE_EN,
   MENTION_REPONSE,
-  MENTION_TVA,
+  MENTION_REPONSE_EN,
 } from "@/lib/familles";
 import { chargerCatalogue, parCategories } from "@/lib/catalogue";
 import {
@@ -12,6 +13,8 @@ import {
   familleDuService,
   parFamilles,
 } from "@/lib/catalogue-familles";
+import { dictionnaire } from "@/lib/dictionnaires";
+import type { Locale } from "@/lib/i18n";
 import BoutonDevis from "@/components/BoutonDevis";
 import CarteService from "@/components/CarteService";
 
@@ -60,7 +63,24 @@ import CarteService from "@/components/CarteService";
  * par components/Offres.tsx juste avant, les quatorze autres ici.
  *
  * TOUT VIENT DE POSTGRES. Aucun nom, aucune description, aucun montant n est
- * ecrit dans ce fichier.
+ * ecrit dans ce fichier — et la carte lit desormais les colonnes `nameEn` /
+ * `descriptionEn` quand la page est anglaise (voir components/CarteService.tsx).
+ *
+ * LES TROIS PHRASES DE PIED VIENNENT CHACUNE DE SA SOURCE, ET AUCUNE N EST
+ * RECOPIEE ICI :
+ *   - le raisonnement sur le devis : `MENTION_DEVIS_COURTE(_EN)`, la phrase
+ *     centrale de la version longue que /services rend en entier ;
+ *   - l engagement de reponse : `MENTION_REPONSE(_EN)`, formulation unique au
+ *     caractere pres dans tout le site et dans les deux langues ;
+ *   - la mention de TVA : `mentionTva()`, ou les deux mots qui portent
+ *     l obligation legale sont ecrits une seule fois.
+ *
+ * `MENTION_TVA` DE lib/familles.ts N EST PLUS IMPORTEE, et c est volontaire :
+ * elle n existe qu en francais, et son propre docblock dit pourquoi elle
+ * attend un `TVA_LABEL_EN` qui n existe pas. La phrase est donc recollee ici a
+ * partir de sa moitie non legale (dictionnaire, `carte.notePrix`) et de sa
+ * moitie legale (`mentionTva(locale)`). En francais elle rend exactement la
+ * meme chaine qu avant, au caractere pres.
  *
  * STRUCTURE : dans la maquette, .studio-menu est un sous-bloc de
  * `section.offres.green` — il herite donc du fond pin et de ses couleurs. Rendu
@@ -74,7 +94,12 @@ import CarteService from "@/components/CarteService";
  * (sections #services, #studio, #faq).
  */
 
-export default async function CarteDuStudio() {
+export default async function CarteDuStudio({
+  locale = "fr",
+}: {
+  locale?: Locale;
+}) {
+  const t = dictionnaire(locale);
   // Lecture PARTAGEE avec Offres, rendue juste avant sur le meme ecran (cf.
   // lib/catalogue.ts). Le filtre par categories reste ici, en memoire.
   const catalogue = await chargerCatalogue();
@@ -105,12 +130,12 @@ export default async function CarteDuStudio() {
       <div className="wrap">
         <div className="studio-menu">
           <div className="sm-head" data-reveal>
-            <h2>Tout ce que <span className="serif-i">fait le studio</span></h2>
+            <h2>{t.carte.titreDebut}<span className="serif-i">{t.carte.titreItalique}</span></h2>
           </div>
           {/* L accroche annonce l ordre de lecture au lieu de le subir : ce
               qui vient d abord, pourquoi, et ce qui suit. « ligne par ligne » a
               quitte cette phrase avec les lignes elles-memes. */}
-          <p className="lede" data-reveal style={{ marginBottom: 30 }}>Le site est le produit d&apos;entrée ; il n&apos;est pas le seul atelier. Ce qui s&apos;imprime et ce qui se publie chaque semaine passent devant : ce sont les deux que le studio met en vitrine à côté des formules. Le reste suit, entier, et se commande avec un site chez moi comme sans — les supports de restaurant compris.</p>
+          <p className="lede" data-reveal style={{ marginBottom: 30 }}>{t.carte.lede}</p>
           {/* AUCUN TITRE DE GROUPE AU-DESSUS DE CETTE PREMIERE GRILLE, et c est
               voulu. Chaque carte porte deja le nom de sa famille au pied, en
               guise de porte de sortie : un intertitre par famille redirait le
@@ -125,11 +150,12 @@ export default async function CarteDuStudio() {
                 key={service.id}
                 service={service}
                 famille={familleDuService(service)}
+                locale={locale}
               />
             ))}
           </div>
           <p className="cat-rang" data-reveal>
-            <span>Également à l&apos;atelier</span>
+            <span>{t.carte.rang}</span>
           </p>
           {/* CETTE PHRASE NE PARLE QUE DE CETTE PAGE, et c est deliberé. Une
               premiere version expliquait le second rang par une habitude des
@@ -138,13 +164,14 @@ export default async function CarteDuStudio() {
               il n a donc aucune source pour decrire un comportement d achat.
               Ce qui reste est verifiable en descendant l ecran : ces trois
               lignes sont entieres, elles gardent page, prix et devis. */}
-          <p className="cat-rang-d" data-reveal>Logo et photos, hébergement du site, restaurants et cafés : trois pages entières, qui gardent leur prix et leur devis. Elles passent après, pas au rabais.</p>
+          <p className="cat-rang-d" data-reveal>{t.carte.rangDescription}</p>
           <div className="cat-grid cat-grid-sobre">
             {second.map((service) => (
               <CarteService
                 key={service.id}
                 service={service}
                 famille={familleDuService(service)}
+                locale={locale}
                 sobre
               />
             ))}
@@ -164,6 +191,12 @@ export default async function CarteDuStudio() {
               CALCULES sur la base : ecrits a la main, ils deviendraient faux au
               premier ajout au catalogue.
 
+              LES QUATRE MORCEAUX RESTENT QUATRE ENFANTS JSX. Recoller la phrase
+              en une seule chaine changerait le HTML rendu — React n intercale un
+              `<!-- -->` qu entre deux noeuds de texte adjacents — sans qu un
+              seul mot bouge. Les espaces sont donc dans les chaines du
+              dictionnaire, pas dans le JSX.
+
               LE RAISONNEMENT, LUI, EST REDUIT A SA PHRASE CENTRALE. Il tenait
               en un paragraphe entier, rendu mot pour mot ici ET sur /services.
               La version longue reste la ou le lecteur compare les treize lignes
@@ -171,16 +204,15 @@ export default async function CarteDuStudio() {
               Les deux viennent de lib/familles.ts, jamais recopiees. */}
           <div className="sm-devis" data-reveal>
             <p className="sm-devis-t">
-              {chiffrees} lignes portent un prix ferme, {surDevis} sont annoncées
-              sur devis.
+              {chiffrees}{t.carte.devisCompteMilieu}{surDevis}{t.carte.devisCompteFin}
             </p>
-            <p>{MENTION_DEVIS_COURTE}</p>
-            <p className="sm-devis-r">{MENTION_REPONSE}</p>
+            <p>{locale === "en" ? MENTION_DEVIS_COURTE_EN : MENTION_DEVIS_COURTE}</p>
+            <p className="sm-devis-r">{locale === "en" ? MENTION_REPONSE_EN : MENTION_REPONSE}</p>
           </div>
           <div className="p-note" data-reveal>
-            <span>{MENTION_TVA}</span>
+            <span>{`${t.carte.notePrix}, ${mentionTva(locale)}.`}</span>
             <BoutonDevis sujet="devis-carte-du-studio">
-              Demander un devis →
+              {t.carte.ctaDevis}
             </BoutonDevis>
           </div>
         </div>

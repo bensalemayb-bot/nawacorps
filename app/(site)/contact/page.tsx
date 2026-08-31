@@ -9,6 +9,7 @@ import {
   NAP_CONFIRME,
   SITE_NAME,
   SITE_URL,
+  alternatesPage,
   jsonLd,
   openGraphPage,
   whatsapp,
@@ -105,6 +106,14 @@ const PLAGE = `${enHeure(HORAIRES.ouverture)}–${enHeure(HORAIRES.fermeture)}`;
  * Le bloc `twitter` est redeclare EN ENTIER : la fusion des metadata de Next ne
  * descend pas dans les objets, et sans lui cette page porterait le titre et la
  * description de l accueil sur sa carte de partage.
+ *
+ * `alternates` PASSE PAR `alternatesPage` DEPUIS QUE LA JUMELLE ANGLAISE
+ * EXISTE. La canonique ne bouge pas ; la fonction AJOUTE les `hreflang`, et
+ * LES DEUX SENS SONT OBLIGATOIRES — une page anglaise qui declare sa jumelle
+ * francaise sans que celle-ci lui rende la pareille voit son groupe ignore par
+ * Google, et les deux versions se remettent a se concurrencer. `en-CH` n est
+ * emis que si ce chemin figure dans `CHEMINS_TRADUITS` (lib/i18n.ts) :
+ * annoncer une jumelle qui repond 404 est pire que de ne rien annoncer.
  */
 const TITRE = "Contacter le studio à Genève";
 const DESCRIPTION =
@@ -113,7 +122,7 @@ const DESCRIPTION =
 export const metadata: Metadata = {
   title: TITRE,
   description: DESCRIPTION,
-  alternates: { canonical: "/contact" },
+  alternates: alternatesPage("/contact"),
   openGraph: openGraphPage({
     titre: `${TITRE} — ${SITE_NAME}`,
     description: DESCRIPTION,

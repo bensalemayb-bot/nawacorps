@@ -1,3 +1,5 @@
+import { lien, type Locale } from "@/lib/i18n";
+
 /**
  * CTA de devis — un LIEN, et plus une interception de clic.
  *
@@ -28,18 +30,29 @@
  * `encodeURIComponent` sur le sujet : nos sujets sont des slugs sans caractere
  * a echapper, mais rien ici ne garantit que le prochain le sera.
  */
+/**
+ * `locale` : le chemin etait ecrit EN DUR (« /devis »), donc un bouton pose sur
+ * une page anglaise renvoyait le visiteur au parcours francais — au moment
+ * precis ou il decide d acheter. Le defaut n apparaissait qu une fois la
+ * version anglaise en place ; il est corrige ici plutot que contourne par un
+ * <a> recopie dans chaque page.
+ * Defaut « fr » : les huit appels ecrits avant le chantier anglais sont
+ * inchanges, et rendent le meme balisage a l octet.
+ */
 export default function BoutonDevis({
   sujet,
   className = "lnk",
+  locale = "fr",
   children,
 }: {
   sujet: string;
   className?: string;
+  locale?: Locale;
   children: React.ReactNode;
 }) {
   // volontaire — next/link casserait les reveals (Interactions ne tourne qu'une fois), voir décision B7
   return (
-    <a className={className} href={`/devis?p=${encodeURIComponent(sujet)}`}>
+    <a className={className} href={lien(locale, `/devis?p=${encodeURIComponent(sujet)}`)}>
       {children}
     </a>
   );

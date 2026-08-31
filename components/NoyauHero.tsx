@@ -1,5 +1,7 @@
 import { chargerCatalogue, prixEntreeCents } from "@/lib/catalogue";
-import { CHF_UNIT, formatChfAmount } from "@/lib/format";
+import { CHF_UNIT, formatChfAmount, mentionTva } from "@/lib/format";
+import { dictionnaire } from "@/lib/dictionnaires";
+import { lien, type Locale } from "@/lib/i18n";
 
 /**
  * LE NOYAU — le texte du hero, en flux normal.
@@ -17,8 +19,20 @@ import { CHF_UNIT, formatChfAmount } from "@/lib/format";
  * Le temps 1 porte la classe .hero : les regles d'entree de binacore.css
  * (kicker, h1 ligne a ligne, hero-foot, et leur mise en pause tant que le loader
  * tourne) s'y appliquent telles quelles, sans etre dupliquees.
+ *
+ * TOUT LE TEXTE VIT DANS lib/dictionnaires, ET LES TROIS BUDGETS DE PLACE SONT
+ * DOCUMENTES LA-BAS, avec leur decompte dans les deux langues. Les commentaires
+ * ci-dessous disent POURQUOI chaque budget existe et comment il a ete mesure ;
+ * le dictionnaire dit ce que chaque langue consomme. Reecrire une de ces
+ * chaines demande de relire les deux.
  */
-export default async function NoyauHero() {
+export default async function NoyauHero({
+  locale = "fr",
+}: {
+  locale?: Locale;
+}) {
+  const t = dictionnaire(locale);
+
   // LE MONTANT DU HERO VIENT DE POSTGRES, comme partout ailleurs sur le site.
   // Il etait ecrit en dur ici, ce qui le rendait faux le jour ou la grille
   // bouge en base, sur l ecran que tout le monde voit en premier. La lecture
@@ -58,10 +72,12 @@ export default async function NoyauHero() {
                   qu il occupait etait decorative, pas informative ; les deux
                   autres puces de ce kicker (« Genève, Suisse », « Pour les
                   PME ») n en portent deja aucune, donc la ligne reste
-                  equilibree sans lui. */}
-              <span className="meta">Studio de création digitale</span>
-              <span className="meta">Genève, Suisse</span>
-              <span className="meta">Pour les PME</span>
+                  equilibree sans lui.
+                  « PME » SE DIT `small business` EN ANGLAIS, jamais `SME` ni
+                  `SMB` — glossaire §3. */}
+              <span className="meta">{t.hero.kickerMetier}</span>
+              <span className="meta">{t.hero.kickerLieu}</span>
+              <span className="meta">{t.hero.kickerCible}</span>
             </div>
             <h1>
               {/* LE TITRE NOMME LE METIER, PAS UN PRODUIT. Il annoncait « Un
@@ -72,15 +88,17 @@ export default async function NoyauHero() {
                   ouvre l enumeration et le sous-titre le chiffre — mais il
                   n est plus le sujet.
 
-                  Chaque .l doit tenir sur UNE ligne : binacore.css les revele
-                  ligne par ligne, et un debordement casse l'animation autant
-                  que la mise en page (le hero-foot passe sous la ligne de
-                  flottaison). La maquette tient 21 caracteres au plus large —
-                  s'y tenir en reecrivant. Decompte des trois lignes ci-dessous,
-                  serif-i compris : 15, 16, 19. */}
-              <span className="l"><span>Site, imprimés,</span></span>
-              <span className="l"><span>photos, réseaux.</span></span>
-              <span className="l"><span>Une seule <span className="serif-i">personne</span>.</span></span>
+                  IL Y A EXACTEMENT TROIS `.l`, ET IL NE PEUT PAS Y EN AVOIR
+                  QUATRE : binacore.css les revele par `:nth-child(1|2|3)`.
+                  Chaque .l doit tenir sur UNE ligne — un debordement casse
+                  l'animation autant que la mise en page (le hero-foot passe
+                  sous la ligne de flottaison). La maquette tient 21 caracteres
+                  au plus large ; s'y tenir en reecrivant, DANS LES DEUX
+                  LANGUES. Decompte, serif-i compris : fr 15 / 16 / 19,
+                  en 16 / 15 / 16. */}
+              <span className="l"><span>{t.hero.h1Ligne1}</span></span>
+              <span className="l"><span>{t.hero.h1Ligne2}</span></span>
+              <span className="l"><span>{t.hero.h1Ligne3Debut}<span className="serif-i">{t.hero.h1Ligne3Italique}</span>{t.hero.h1Ligne3Fin}</span></span>
             </h1>
             <div className="hero-foot">
               {/* LE SOUS-TITRE EST COURT PARCE QU IL N A PAS DE PLACE, et la
@@ -123,6 +141,17 @@ export default async function NoyauHero() {
                   ramene a 746,8px de haut. A 1446 x 850 la derniere ligne de
                   texte s arrete 25,6px au-dessus du pli.
 
+                  L ANGLAIS TIENT LE MEME BUDGET, ET IL A ETE COMPTE : 86
+                  caracteres tout compris contre 87 en francais — un de moins,
+                  donc deux lignes rendues comme le francais. La regle §5 y est
+                  tenue de la meme facon : « one week » et « you have nothing to
+                  prepare » sont dans la meme phrase.
+
+                  LE FRAGMENT DE PRIX EST UN SECOND ENFANT DE TEXTE, et il doit
+                  le rester : recoller les deux en une seule chaine changerait
+                  le HTML rendu (React n intercale un `<!-- -->` qu entre deux
+                  noeuds de texte adjacents) sans qu un seul mot bouge.
+
                   UN RELIQUAT QUI N EST PAS DU TEXTE, et qu il ne faut pas
                   chercher a corriger ici. Le bord BAS de `.hero-foot` tombe
                   toujours pile sur `100svh`, par construction : `.hero` est un
@@ -135,7 +164,7 @@ export default async function NoyauHero() {
                   le texte : ce sont deux unites de mesure differentes, pas une
                   ligne qui deborde. Le seul chiffre qui repond au texte est le
                   seuil ci-dessus. */}
-              <p className="hero-sub">Le site refait en une semaine, et vous n&apos;avez rien à préparer.{entree ? ` Dès ${entree}, TVA comprise.` : ""}</p>
+              <p className="hero-sub">{t.hero.sousTitre}{entree ? ` ${t.hero.sousTitrePrixDes} ${entree}, ${mentionTva(locale)}.` : ""}</p>
               <div className="hero-cta">
                 {/* LE BOUTON PRINCIPAL NE QUITTE PLUS LE SITE.
                     Il ouvrait WhatsApp. Trois raisons de ne plus le faire :
@@ -148,11 +177,17 @@ export default async function NoyauHero() {
                     WhatsApp n est pas retire du site : il reste le premier
                     bouton du bloc contact, et les trois cartes de formule y
                     mènent toujours avec un message pre-rempli — la ou le
-                    visiteur a choisi, donc la ou le canal chaud se justifie. */}
-                <a className="btn" href="#contact">Faire refaire mon site <span className="ar">→</span></a>
-                <a className="btn btn-line" href="/demonstrations">Voir les démonstrations</a>
+                    visiteur a choisi, donc la ou le canal chaud se justifie.
+                    L ANCRE `#contact` N EST PAS PREFIXEE, et c est correct :
+                    une ancre pure designe le document courant, deja dans la
+                    bonne langue. `lien()` la laisse passer telle quelle. */}
+                <a className="btn" href={lien(locale, "#contact")}>{t.hero.ctaPrincipal}<span className="ar">→</span></a>
+                <a className="btn btn-line" href={lien(locale, "/demonstrations")}>{t.hero.ctaSecondaire}</a>
               </div>
-              <span className="hero-scroll"><i></i> Défiler</span>
+              {/* L espace entre l icone et le mot est DANS l expression :
+                  ecrit dans le JSX, il ferait un troisieme enfant et React
+                  intercalerait un `<!-- -->` dans le HTML francais. */}
+              <span className="hero-scroll"><i></i>{` ${t.hero.defiler}`}</span>
             </div>
           </div>
         </div>
@@ -161,7 +196,7 @@ export default async function NoyauHero() {
             Calee a gauche pendant que le noyau derive a droite (piste `x`). */}
         <div className="noyau-beat noyau-beat-2" data-temps="">
           <div className="wrap">
-            <span className="meta"><span className="index">(001)</span>&nbsp; Le noyau</span>
+            <span className="meta"><span className="index">(001)</span>{`\u00A0 ${t.hero.temps2Section}`}</span>
             <div className="noyau-say">
               {/* UNE PHRASE DONT ON SAIT DE QUOI ELLE PARLE, et qui nomme enfin
                   tout ce que le studio fabrique. « Il pose les questions que
@@ -184,9 +219,10 @@ export default async function NoyauHero() {
                   monte a 3.1rem. Une premiere version de 115 caracteres rendait
                   HUIT lignes dans une colonne de 269px — mesure a 1440x900 —
                   soit une colonne de confettis au lieu d une phrase. 83
-                  caracteres tiennent en cinq lignes. Celle-ci en fait 75.
-                  Compter avant de reecrire. */}
-              <p>Le site, le logo, les cartes, les photos. Vous dites oui, <span className="serif-i">je fais le reste</span>.</p>
+                  caracteres tiennent en cinq lignes. Le francais en fait 75,
+                  l anglais 70. Compter avant de reecrire, dans les deux
+                  langues. */}
+              <p>{t.hero.phraseDebut}<span className="serif-i">{t.hero.phraseItalique}</span>{t.hero.phraseFin}</p>
             </div>
           </div>
         </div>
@@ -196,7 +232,7 @@ export default async function NoyauHero() {
             et la nav s'inverse au meme moment via html.noyau-dark. */}
         <div className="noyau-beat noyau-beat-3" data-temps="">
           <div className="wrap">
-            <span className="meta"><span className="index">(002)</span>&nbsp; Le cœur</span>
+            <span className="meta"><span className="index">(002)</span>{`\u00A0 ${t.hero.temps3Section}`}</span>
             {/* LE GRAND MOT DIT L ETENDUE DE L OFFRE, ET C EST UN CHOIX DE
                 POSITIONNEMENT, PAS DE STYLE. Il a porte « 1 semaine », puis
                 « Rien » — pour « rien a preparer ». Les deux parlaient du site
@@ -217,10 +253,14 @@ export default async function NoyauHero() {
                 « Tout » tient dans un emplacement dessine pour UN SEUL MOT
                 COURT (.noyau-num, clamp(5rem,15vw,11rem)) : quatre glyphes
                 comme « Rien » qu il remplace, la contrainte est donc tenue sans
-                nouvelle mesure — a 390 px comme au large. */}
+                nouvelle mesure — a 390 px comme au large.
+                L ANGLAIS DIT « All », TROIS GLYPHES : plus court encore, donc
+                la contrainte tient a fortiori. « Everything » y serait
+                illisible sur un telephone, et le sens complet est porte par
+                l unite qui suit — « from one pair of hands ». */}
             <div className="noyau-spec">
               <p className="noyau-fig">
-                <span className="noyau-num">Tout</span>
+                <span className="noyau-num">{t.hero.grandMot}</span>
                 {/* « D UNE SEULE MAIN » QUALIFIE LE MOT QUI EST AU-DESSUS, et
                     c est pour cela qu elle a change avec lui. Cette unite
                     disait « a preparer » : la formule du glossaire (entree 4)
@@ -234,13 +274,13 @@ export default async function NoyauHero() {
                     benefice n°1, lui, reste ecrit en toutes lettres dans le
                     sous-titre du hero et dans la ligne « Vos textes » du
                     tableau ci-dessous. */}
-                <span className="noyau-unit">d&apos;une seule main</span>
+                <span className="noyau-unit">{t.hero.grandMotUnite}</span>
               </p>
               <ul className="noyau-specs">
-                <li><span className="k">Atelier</span><span className="v">Genève</span></li>
-                <li><span className="k">Le site</span><span className="v">Livré en une semaine</span></li>
-                <li><span className="k">Le reste</span><span className="v">Logo, cartes, affiches, photos</span></li>
-                <li><span className="k">Vos textes</span><span className="v">Repris de votre site</span></li>
+                <li><span className="k">{t.hero.specAtelier}</span><span className="v">{t.hero.specAtelierValeur}</span></li>
+                <li><span className="k">{t.hero.specSite}</span><span className="v">{t.hero.specSiteValeur}</span></li>
+                <li><span className="k">{t.hero.specReste}</span><span className="v">{t.hero.specResteValeur}</span></li>
+                <li><span className="k">{t.hero.specTextes}</span><span className="v">{t.hero.specTextesValeur}</span></li>
                 {/* LE MONTANT EST PARTI, ET C EST LA REGLE QUI LE DIT.
                     Cette ligne affichait « Dès 49.–/mois » sans « TVA
                     comprise » — interdit par CLAUDE.md, et la mention vaut PAR
@@ -252,7 +292,7 @@ export default async function NoyauHero() {
                     compte a cet instant n est pas le montant, c est que rien
                     n est du la premiere annee. Le prix, lui, vit dans la grille
                     (05) avec sa mention. */}
-                <li><span className="k">Suivi</span><span className="v">Dès la 2ᵉ année</span></li>
+                <li><span className="k">{t.hero.specSuivi}</span><span className="v">{t.hero.specSuiviValeur}</span></li>
               </ul>
             </div>
           </div>
@@ -268,8 +308,9 @@ export default async function NoyauHero() {
                   qui est le positionnement entier (.agents/product-marketing.md
                   §1). C est aussi le vouvoiement que le guide impose partout
                   ailleurs. Maintenant que cette ligne est la plus grande du
-                  hero, elle ne peut pas parler de personne. */}
-              <p>Votre site ne se regarde pas. Il travaille, ou il ne sert à rien.</p>
+                  hero, elle ne peut pas parler de personne. L anglais dit
+                  « Your site », pour exactement la meme raison. */}
+              <p>{t.hero.sortie}</p>
               {/* DEUX SORTIES, PARCE QUE C EST LE DERNIER ECRAN. Il n y avait
                   qu un bouton, vers #travaux — la meme ancre que le CTA
                   secondaire du temps 1. Or a cet endroit le visiteur a tout lu :
@@ -277,17 +318,16 @@ export default async function NoyauHero() {
                   demandent pas la meme chose, et le second n avait aucun chemin.
                   Les demonstrations sortent donc de l ancre pour devenir une
                   page (/demonstrations), et le devis en a une aussi (/devis).
-                  Ces deux routes sont posees par un autre chantier du meme
-                  plan : si elles rendent 404, c est ce chantier qui manque, pas
-                  ces liens. Le CTA secondaire du temps 1 suit la premiere.
+                  Le CTA secondaire du temps 1 suit la premiere.
                   Meme libelle qu au temps 1, pour la meme raison qu avant : deux
                   mots differents pour un meme geste font croire a deux
                   contenus. « demonstration » est le terme du glossaire
-                  (entree 14) — « avant / apres » decrivait le dispositif, pas
-                  ce qu on va voir. */}
+                  (entree 14, et §3 du glossaire anglais) — « avant / apres »
+                  decrivait le dispositif, pas ce qu on va voir, et `case study`
+                  comme `portfolio` sont proscrits en anglais. */}
               <div className="noyau-out-cta">
-                <a className="btn" href="/demonstrations">Voir les démonstrations <span className="ar">→</span></a>
-                <a className="btn btn-line" href="/devis">Demander un devis</a>
+                <a className="btn" href={lien(locale, "/demonstrations")}>{t.hero.sortieCtaPrincipal}<span className="ar">→</span></a>
+                <a className="btn btn-line" href={lien(locale, "/devis")}>{t.hero.sortieCtaSecondaire}</a>
               </div>
             </div>
           </div>

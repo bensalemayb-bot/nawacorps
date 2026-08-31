@@ -1,22 +1,22 @@
 import type { Metadata } from "next";
 import SchemaPage from "@/components/SchemaPage";
-import BoutonDevis from "@/components/BoutonDevis";
-import CarteService from "@/components/CarteService";
 import FooterContact from "@/components/FooterContact";
 import {
   CHF_UNIT,
-  FROM_PREFIX,
-  MONTHLY_SUFFIX,
-  QUOTE_LABEL,
-  TVA_LABEL,
   formatChfAmount,
   isQuote,
+  libelleDevis,
+  mentionTva,
+  prefixeDes,
+  suffixeMensuel,
 } from "@/lib/format";
-import { POUR_QUI, estFormule } from "@/lib/formules";
+import { POUR_QUI, POUR_QUI_EN, estFormule } from "@/lib/formules";
 import {
   type FamilleSlug,
   MENTION_DEVIS,
+  MENTION_DEVIS_EN,
   MENTION_REPONSE,
+  MENTION_REPONSE_EN,
   MENTION_TVA,
 } from "@/lib/familles";
 import {
@@ -30,9 +30,12 @@ import {
 import {
   type ServiceCatalogue,
   chargerCatalogue,
+  descriptionService,
+  nomService,
   parCategories,
 } from "@/lib/catalogue";
-import { openGraphPage } from "@/lib/site";
+import { type Locale, lien } from "@/lib/i18n";
+import { SITE_NAME, alternatesPage, openGraphPage } from "@/lib/site";
 
 /**
  * /services — LE CATALOGUE EN ENTIER.
@@ -91,6 +94,30 @@ import { openGraphPage } from "@/lib/site";
  * gardent leur accroche, leur lien, leur mention de TVA et leur devis. Ce qui
  * change tient au titre, qui descend d une echelle, et au bloc, qui respire
  * moins. Un catalogue qui coupe ses lignes n est plus un catalogue.
+ *
+ * ---------------------------------------------------------------------------
+ * DEPUIS LE CHANTIER ANGLAIS : CE FICHIER REND DEUX PAGES, PAS UNE.
+ *
+ * `corpsServices(locale)` porte le corps ; `/services` l appelle en francais,
+ * `/en/services` en anglais (app/(site)/en/services/page.tsx). Les deux pages
+ * ne partagent pas seulement leur mise en page : elles partagent leur ORDRE de
+ * blocs, leur numerotation et leurs mentions legales. Deux corps recopies
+ * auraient diverge au premier arbitrage editorial, et la divergence aurait ete
+ * invisible — personne ne relit deux pages cote a cote dans deux langues.
+ *
+ * C EST UNE FONCTION, PAS UN COMPOSANT, et ce n est pas un detail : appelee
+ * (`return corpsServices("fr")`) plutot que rendue (`<CorpsServices />`), elle
+ * n introduit AUCUNE frontiere de composant supplementaire dans l arbre. Le
+ * HTML rendu en francais est donc rigoureusement celui d avant le chantier —
+ * c est la condition qui rendait la bascule sure, et elle se verifie par diff.
+ *
+ * TOUTES LES CHAINES VISIBLES VIVENT DANS `TEXTES`, indexe par `Locale`. Une
+ * langue ajoutee a lib/i18n.ts casse la compilation ici tant que sa colonne
+ * n est pas remplie : un bloc de catalogue muet ne doit pas pouvoir atteindre
+ * la production. Ce qui n est PAS dans cette table vient d ailleurs et doit y
+ * rester — les noms, descriptions et prix sont en base (`nomService`,
+ * `descriptionService`, `lib/format.ts`), les accroches de famille sont dans
+ * lib/familles.ts, les libelles de formule dans lib/formules.ts.
  */
 
 // Rendu a chaque requete, meme raison qu app/(site)/page.tsx : cette page lit
@@ -103,54 +130,82 @@ import { openGraphPage } from "@/lib/site";
 // pourquoi du renoncement a l ISR sont dans le docblock d app/(site)/page.tsx.
 export const dynamic = "force-dynamic";
 
-const DESCRIPTION =
-  "Le catalogue du studio genevois : trois formules de site, le suivi mensuel, le logo et les imprimés, les réseaux sociaux et les supports de restaurant.";
-
-export const metadata: Metadata = {
-  title: "Services et tarifs à Genève",
-  description: DESCRIPTION,
-  alternates: { canonical: "/services" },
-  openGraph: openGraphPage({
-    titre: "Services et tarifs à Genève — Nawa Corps",
-    description: DESCRIPTION,
-    chemin: "/services",
-  }),
-  /**
-   * LE BLOC TWITTER EST OBLIGATOIRE ICI, et pour une raison de fond, pas de
-   * cosmetique. Next fusionne les metadata champ par champ mais SANS descendre
-   * dans les objets : un `twitter` partiel n herite pas des cles manquantes,
-   * et une page qui n en declare aucun herite integralement de celui du layout
-   * — titre et description de l accueil compris. La carte de partage de ce
-   * catalogue annoncerait donc la refonte de site, c est-a-dire un tiers de ce
-   * que la page presente. Meme mecanique que `openGraph`, meme parade : on
-   * redeclare le bloc EN ENTIER.
-   * L image, elle, vient du fichier app/opengraph-image et n a pas a etre
-   * redeclaree.
-   */
-  twitter: {
-    card: "summary_large_image",
-    title: "Services et tarifs à Genève — Nawa Corps",
-    description: DESCRIPTION,
-  },
-};
+/**
+ * Le chemin SANS prefixe de langue — la forme qu attendent `lien()`,
+ * `alternatesPage()` et `openGraphPage()`. Il ne s ecrit qu ici : c est de lui
+ * que sortent la canonique francaise, la canonique anglaise et les `hreflang`
+ * qui les croisent.
+ */
+const CHEMIN = "/services";
 
 /**
- * LA MENTION TVA VIENT DE lib/familles.ts, ou vivent aussi les cinq pages de
- * famille : la meme phrase doit se lire mot pour mot d une page a l autre, et
- * deux copies divergent toujours.
+ * TOUT CE QUE LA PAGE ECRIT ELLE-MEME, DANS LES DEUX LANGUES.
  *
- * Elle est obligatoire sous CHAQUE bloc de prix, pas une fois en bas de page :
- * en Suisse un prix annonce a un consommateur s entend TVA comprise, et un
- * visiteur qui arrive par l ancre d une famille ne voit que cette famille.
+ * L ANGLAIS SUIT docs/agents/brand/glossaire-anglais.md, ET IL EST CONTRAIGNANT.
+ * Les quatre regles qui se verifient ligne par ligne ci-dessous :
+ *  - « I / me / my », jamais « we », « our », « the agency » (§2) ;
+ *  - anglais BRITANNIQUE — `enquiry`, `organisation`, `catalogue` (§1) ;
+ *  - « une formule » se dit `package` et non `option` ni `tier` (§7), et quand
+ *    la phrase le permet on nomme la formule plutot que la categorie ;
+ *  - aucun delai en heures : seul `one week`, et jamais seul — il porte son
+ *    point de depart `from your go-ahead` dans la meme unite de lecture (§5).
  *
- * « sans frais cachés » en a ete retire. La formule promet l absence de ce
- * qu on n attendait pas : elle installe le soupcon qu elle pretend lever, et
- * elle est saturee chez trois concurrents sur six. Ce qui borne reellement une
- * prestation — deux allers-retours, le suivi obligatoire de L Assistant — se
- * dit la ou il s applique, pas dans une mention legale generique.
+ * AUCUN PRIX N EST ECRIT ICI, dans aucune des deux langues. Les montants
+ * viennent de la base et leur mise en forme de lib/format.ts ; la mention
+ * « TVA comprise » / « VAT included » vient de `mentionTva`, jamais d une
+ * chaine de ce fichier — elle a valeur legale et une seconde graphie finirait
+ * par diverger.
  */
-
-const DEVIS_LABEL = "Demander un devis →";
+type TextesCatalogue = {
+  seoTitre: string;
+  seoDescription: string;
+  /** Le sur-titre de la page, au-dessus du h1. */
+  meta: string;
+  /** Le h1, en deux lignes separees par un <br>. */
+  h1: readonly [string, string];
+  /** Le chapo : il annonce l ORDRE REEL des blocs, et doit le suivre. */
+  chapo: string;
+  /** Le delai et son point de depart. Contient un <strong>. */
+  delai: React.ReactNode;
+  /** Les deux moities de la phrase qui compte les deux regimes de prix. */
+  comptePrixFerme: string;
+  compteSurDevis: string;
+  /** Le raisonnement du devis, puis le seul engagement de reactivite admis. */
+  mentionDevis: string;
+  mentionReponse: string;
+  /** La mention de TVA en phrase complete, sous chaque bloc de prix. */
+  mentionTvaPhrase: string;
+  /** Le libelle des huit CTA de devis de la page. */
+  devisLabel: string;
+  /** Le pied des cartes de catalogue : ce que la carte ouvre. */
+  carteVoir: string;
+  /**
+   * Ce qui suit le montant dans la grille des formules.
+   *
+   * EN FRANCAIS C EST « .– CHF », EN ANGLAIS « .– » SEUL, et c est une regle,
+   * pas une omission : le glossaire §5 proscrit `699 CHF` comme `CHF 699` en
+   * anglais, tout en imposant de garder le format suisse `699.–`. La devise
+   * n est donc pas perdue pour autant — elle est nommee en toutes lettres par
+   * `mentionTvaPhrase` au pied de la meme grille (« Prices in Swiss francs »).
+   */
+  uniteMontant: string;
+  formules: {
+    meta: string;
+    h2: readonly [string, string];
+    lede: string;
+    /** Le lien de chaque carte vers sa page de formule. */
+    voir: string;
+  };
+  bascule: { titre: string; texte: string };
+  /**
+   * L habillage des cinq blocs de famille — voir le docblock de `BLOCS`.
+   * Le Record est indexe par FamilleSlug DANS LES DEUX LANGUES : une famille
+   * ajoutee sans titre anglais ne compile pas.
+   */
+  blocs: Record<FamilleSlug, { titre: readonly [string, string]; lien: string }>;
+  /** Les deux segments du fil d Ariane, en donnee structuree. */
+  fil: { accueil: string; services: string };
+};
 
 /**
  * L HABILLAGE DES CINQ BLOCS DE FAMILLE, PROPRE A CETTE PAGE.
@@ -172,10 +227,7 @@ const DEVIS_LABEL = "Demander un devis →";
  * lib/familles.ts sans lui donner de titre ici ne compile pas. Une erreur de
  * build vaut mieux qu un bloc muet en production.
  */
-const BLOCS: Record<
-  FamilleSlug,
-  { titre: readonly [string, string]; lien: string }
-> = {
+const BLOCS: TextesCatalogue["blocs"] = {
   identite: {
     titre: ["Ce qui fait", "qu'on vous reconnaît."],
     lien: "Voir l'identité",
@@ -197,6 +249,276 @@ const BLOCS: Record<
     lien: "Voir la restauration",
   },
 };
+
+/** Les memes cinq blocs en anglais. Meme regle, meme garde de type. */
+const BLOCS_EN: TextesCatalogue["blocs"] = {
+  identite: {
+    titre: ["What makes you", "recognisable."],
+    lien: "See identity and photographs",
+  },
+  imprimes: {
+    // « print », jamais « printed collateral » (glossaire §3).
+    titre: ["What is seen", "away from a screen."],
+    lien: "See print and signage",
+  },
+  "reseaux-sociaux": {
+    // « kept up », et non « upkeep » : ce dernier ne vaut que pour
+    // l abonnement mensuel du site (glossaire §7).
+    titre: ["Your social media,", "kept up by the month."],
+    lien: "See social media",
+  },
+  suivi: {
+    titre: ["The site lives on,", "and it is looked after."],
+    lien: "See hosting and upkeep",
+  },
+  restauration: {
+    titre: ["The restaurant", "line."],
+    lien: "See restaurants and cafés",
+  },
+};
+
+const TEXTES: Record<Locale, TextesCatalogue> = {
+  fr: {
+    seoTitre: "Services et tarifs à Genève",
+    seoDescription:
+      "Le catalogue du studio genevois : trois formules de site, le suivi mensuel, le logo et les imprimés, les réseaux sociaux et les supports de restaurant.",
+    meta: "Catalogue",
+    h1: ["Tout ce que fait", "le studio, à Genève."],
+    chapo:
+      "Trois lignes en vitrine. Le site d'abord — c'est le produit d'entrée, et ce sur quoi tout le reste vient se brancher. Puis les cartes de visite et les imprimés, ce que vos clients gardent en main. Puis les réseaux sociaux, tenus au mois. Le logo, l'hébergement et les supports de restaurant suivent plus bas, entiers.",
+    delai: (
+      <>
+        Le délai est d&apos;<strong>une semaine</strong>, et il court dès votre
+        feu vert — pas dès que vous m&apos;aurez envoyé vos textes. Vous
+        n&apos;avez rien à préparer : je reprends ce qui est déjà en ligne.
+      </>
+    ),
+    comptePrixFerme: " lignes portent un prix ferme, ",
+    compteSurDevis: " sont annoncées sur devis.",
+    mentionDevis: MENTION_DEVIS,
+    mentionReponse: MENTION_REPONSE,
+    mentionTvaPhrase: MENTION_TVA,
+    devisLabel: "Demander un devis →",
+    carteVoir: "Voir le détail",
+    uniteMontant: `${CHF_UNIT} CHF`,
+    formules: {
+      meta: "Les formules",
+      h2: ["Trois paliers,", "un seul site."],
+      lede: "Pour la PME genevoise dont le site a plus de cinq ans. Du site simplement présentable à celui qui répond et relance tout seul — chaque palier contient le précédent en entier. Livré en une semaine, dès votre feu vert.",
+      voir: "Voir la formule",
+    },
+    bascule: {
+      titre: "Le reste du catalogue",
+      texte:
+        "Logo et photos, hébergement du site, restaurants et cafés. Trois lignes entières, avec leurs prestations, leurs prix et leur devis — elles passent après, pas au rabais.",
+    },
+    blocs: BLOCS,
+    fil: { accueil: "Accueil", services: "Services" },
+  },
+
+  en: {
+    seoTitre: "Services and prices in Geneva",
+    // « small business » et non « SME », « print » et non « printed
+    // collateral », « upkeep » et non « maintenance » : glossaire §3.
+    seoDescription:
+      "The Geneva studio's catalogue: three site packages, monthly upkeep, logo and print, social media and the pieces a restaurant needs.",
+    meta: "Catalogue",
+    h1: ["Everything the studio", "does, in Geneva."],
+    chapo:
+      "Three lines up front. The site first — it is the entry product, and what everything else plugs into. Then business cards and print, what your customers keep in their hands. Then social media, kept up by the month. Logo, hosting and the restaurant pieces follow further down, in full.",
+    // « one week » ne voyage jamais seul : « from your go-ahead » est dans la
+    // meme phrase, et la phrase suivante dit ce que le client n a pas a faire.
+    // « turnaround » est proscrit (glossaire §3, entree « une semaine »).
+    delai: (
+      <>
+        The work takes <strong>one week</strong>, and it starts from your
+        go-ahead — not from the day you send me your text. You have nothing to
+        prepare: I take what is already online.
+      </>
+    ),
+    // Le libelle du prix libre est celui de lib/format.ts (« on request ») : la
+    // phrase qui compte les lignes et l etiquette des cartes doivent dire le
+    // meme mot, sinon le lecteur cherche deux regimes de prix la ou il n y en
+    // a qu un.
+    comptePrixFerme: " lines carry a firm price, ",
+    compteSurDevis: " are priced on request.",
+    mentionDevis: MENTION_DEVIS_EN,
+    mentionReponse: MENTION_REPONSE_EN,
+    // La phrase francaise vit dans lib/familles.ts, qui explique pourquoi sa
+    // jumelle anglaise n y est PAS : les deux mots a valeur legale sont dans
+    // lib/format.ts, et les recopier ici creerait la seconde graphie que le
+    // francais s interdit d avoir. On les lit donc, on ne les ecrit pas.
+    mentionTvaPhrase: `Prices in Swiss francs, ${mentionTva("en")}.`,
+    devisLabel: "Request a quote →",
+    carteVoir: "See the details",
+    uniteMontant: CHF_UNIT,
+    formules: {
+      // « the site packages » : §7 renverse le §6 et tranche pour `package`,
+      // qui est l usage normal d un studio de creation britannique.
+      meta: "The site packages",
+      h2: ["Three packages,", "one site."],
+      lede: "For the Geneva small business whose site is more than five years old. From a site that is simply presentable to one that answers and follows up on its own — each package contains the one before it, in full. Delivered in one week, from your go-ahead.",
+      voir: "See the package",
+    },
+    bascule: {
+      titre: "The rest of the catalogue",
+      texte:
+        "Logo and photographs, site hosting, restaurants and cafés. Three full lines, with their services, their prices and their quotes — they come later, not cut down.",
+    },
+    blocs: BLOCS_EN,
+    fil: { accueil: "Home", services: "Services" },
+  },
+};
+
+/**
+ * LES METADONNEES DES DEUX PAGES, ecrites une seule fois.
+ *
+ * `alternatesPage` REMPLACE LA CANONIQUE ECRITE A LA MAIN, et c est la seule
+ * modification volontaire du `<head>` francais. Une canonique seule ne dit pas
+ * qu il existe une jumelle anglaise ; et un `hreflang` declare d un seul cote
+ * est IGNORE par Google — l annotation doit etre confirmee par la page cible.
+ * La page francaise s auto-declare donc en `fr-CH` et en `x-default` des
+ * aujourd hui ; le `en-CH` apparaitra des deux cotes le jour ou `/services`
+ * entrera dans `CHEMINS_TRADUITS` (lib/i18n.ts). Sans cette ligne, la page
+ * anglaise partirait seule et pourrait prendre la place de la francaise sur
+ * une requete francophone.
+ *
+ * LE BLOC TWITTER EST OBLIGATOIRE ICI, et pour une raison de fond, pas de
+ * cosmetique. Next fusionne les metadata champ par champ mais SANS descendre
+ * dans les objets : un `twitter` partiel n herite pas des cles manquantes,
+ * et une page qui n en declare aucun herite integralement de celui du layout
+ * — titre et description de l accueil compris. La carte de partage de ce
+ * catalogue annoncerait donc la refonte de site, c est-a-dire un tiers de ce
+ * que la page presente. Meme mecanique que `openGraph`, meme parade : on
+ * redeclare le bloc EN ENTIER.
+ * L image, elle, vient du fichier app/opengraph-image et n a pas a etre
+ * redeclaree.
+ */
+export function metadataServices(locale: Locale): Metadata {
+  const t = TEXTES[locale];
+  const titreComplet = `${t.seoTitre} — ${SITE_NAME}`;
+  return {
+    title: t.seoTitre,
+    description: t.seoDescription,
+    alternates: alternatesPage(CHEMIN, locale),
+    openGraph: openGraphPage(
+      { titre: titreComplet, description: t.seoDescription, chemin: CHEMIN },
+      locale,
+    ),
+    twitter: {
+      card: "summary_large_image",
+      title: titreComplet,
+      description: t.seoDescription,
+    },
+  };
+}
+
+export const metadata: Metadata = metadataServices("fr");
+
+/**
+ * LE CTA DE DEVIS, EN LIEN, ET LOCALISE.
+ *
+ * C est components/BoutonDevis.tsx au caractere pres — meme balise, meme
+ * classe par defaut, meme encodage du sujet —, A UNE DIFFERENCE PRES : le
+ * chemin passe par `lien(locale, …)`. Le composant partage ecrit `/devis?p=…`
+ * en dur ; sur `/en/services` cela renverrait le lecteur anglophone dans le
+ * parcours francais.
+ *
+ * >>> IL A VOCATION A DISPARAITRE. Le jour ou components/BoutonDevis.tsx prend
+ * >>> une `locale` — comme l ont deja fait Nav, MenuOverlay, FooterContact et
+ * >>> ContactForm —, ces quelques lignes se suppriment et les huit appels
+ * >>> ci-dessous repassent sur le composant. Ce fichier ne pouvait pas le
+ * >>> modifier : d autres agents y travaillaient au meme moment.
+ *
+ * En francais `lien("fr", x)` rend `x` a l octet pres : le HTML des huit CTA
+ * de cette page est donc rigoureusement celui d avant.
+ */
+function LienDevis({
+  locale,
+  sujet,
+  className = "lnk",
+  children,
+}: {
+  locale: Locale;
+  sujet: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  // volontaire — next/link casserait les reveals (Interactions ne tourne qu'une fois), voir décision B7
+  return (
+    <a
+      className={className}
+      href={lien(locale, `/devis?p=${encodeURIComponent(sujet)}`)}
+    >
+      {children}
+    </a>
+  );
+}
+
+/**
+ * UNE PRESTATION EN CARTE, LOCALISEE.
+ *
+ * C est components/CarteService.tsx dans son seul mode utilise ici
+ * (`versSaPage`) — meme balise, memes classes, meme ordre d elements —, AVEC
+ * LA LANGUE EN PLUS. Le composant partage lit `service.name`,
+ * `service.description`, `QUOTE_LABEL` et `TVA_LABEL`, c est-a-dire quatre
+ * chaines francaises : rendu tel quel sur `/en/services`, il afficherait
+ * « sur devis » et « TVA comprise » sous chaque prix d une page anglaise. La
+ * seconde de ces deux mentions a valeur legale.
+ *
+ * >>> IL A VOCATION A DISPARAITRE, exactement comme `LienDevis` ci-dessus.
+ * >>> Le jour ou components/CarteService.tsx prend une `locale` — l accueil
+ * >>> anglais en aura besoin lui aussi, pour la meme raison —, ces lignes se
+ * >>> suppriment et la page repasse sur le composant partage. Ce fichier ne
+ * >>> pouvait pas le modifier : d autres agents y travaillaient au meme
+ * >>> moment. Tant que les deux coexistent, TOUTE correction de l un doit
+ * >>> etre reportee sur l autre.
+ *
+ * `sobre` N EST PAS REPRIS : c est le second rang de la vitrine de l accueil,
+ * et /services ne le passe jamais — le catalogue garde toutes ses
+ * descriptions. Un parametre qu aucun appelant n emploie est une divergence
+ * qui attend.
+ */
+function CarteCatalogue({
+  service,
+  locale,
+}: {
+  service: ServiceCatalogue;
+  locale: Locale;
+}) {
+  const t = TEXTES[locale];
+  // Pas de next/link sur le site public : les revelations au scroll ne
+  // s initialisent qu une fois (cf. CLAUDE.md).
+  return (
+    <a
+      className="cat-it"
+      href={lien(locale, hrefService(service.slug))}
+      data-reveal
+    >
+      <h3>{nomService(service, locale)}</h3>
+      <p className="d">{descriptionService(service, locale)}</p>
+      {/* LE PRIX RESTE EN BAS DE CARTE, ET IL PORTE SA MENTION : la regle vaut
+          par UNITE DE LECTURE, et un dirigeant qui compare deux cartes ne lit
+          pas le bas de page. Le raisonnement complet est dans le docblock de
+          components/CarteService.tsx. */}
+      {isQuote(service) || service.priceCents === null ? (
+        <p className="px px-devis">{libelleDevis(locale)}</p>
+      ) : (
+        <p className="px">
+          {service.priceFrom ? <small>{prefixeDes(locale)}</small> : null}
+          {`${formatChfAmount(service.priceCents)}${CHF_UNIT}`}
+          {service.isMonthly ? (
+            <small className="per">{suffixeMensuel(locale)}</small>
+          ) : null}
+          <small className="px-note px-tva">{mentionTva(locale)}</small>
+        </p>
+      )}
+      <span className="go">
+        {t.carteVoir} <span className="ar">→</span>
+      </span>
+    </a>
+  );
+}
 
 /** « Les formules » ouvre la page en (01) ; les familles suivent. */
 const numero = (rang: number) => `(${String(rang).padStart(2, "0")})`;
@@ -222,21 +544,26 @@ function BlocFamille({
   famille,
   lignes,
   rang,
+  locale,
   sobre = false,
 }: {
   famille: FamilleRangee;
   lignes: ServiceCatalogue[];
   rang: number;
+  locale: Locale;
   sobre?: boolean;
 }) {
-  const bloc = BLOCS[famille.slug];
+  const t = TEXTES[locale];
+  const bloc = t.blocs[famille.slug];
   return (
     <section id={famille.slug} className={sobre ? "prest-second" : undefined}>
       <div className="wrap">
         <div className="sec-head">
           <span className="meta" data-reveal>
             <span className="index">{numero(rang)}</span>&nbsp;{" "}
-            {famille.contenu.libelle}
+            {famille.contenu.libelleEn && locale === "en"
+              ? famille.contenu.libelleEn
+              : famille.contenu.libelle}
           </span>
           <div data-reveal>
             <h2 className="t">
@@ -248,9 +575,12 @@ function BlocFamille({
         </div>
         {/* L accroche est celle de la page de la famille, lue telle quelle :
             l index annonce, la page developpe, et les deux ne peuvent pas se
-            contredire. */}
+            contredire. Le repli sur le francais est celui que prescrit
+            lib/familles.ts — une page lisible en entier vaut mieux qu un trou. */}
         <p className="lede" data-reveal style={{ marginBottom: 34 }}>
-          {famille.contenu.resout}
+          {locale === "en"
+            ? (famille.contenu.resoutEn ?? famille.contenu.resout)
+            : famille.contenu.resout}
         </p>
         {/* CHAQUE CARTE OUVRE SA PRESTATION, a l ancre de son bloc sur la page
             de la famille. C est la difference avec l accueil, dont les cartes
@@ -261,26 +591,35 @@ function BlocFamille({
             en dessous ; la carte le redirait une troisieme fois. */}
         <div className="cat-grid">
           {lignes.map((service) => (
-            <CarteService key={service.id} service={service} versSaPage />
+            <CarteCatalogue key={service.id} service={service} locale={locale} />
           ))}
         </div>
         <div className="cat-tout" data-reveal>
-          <a className="btn btn-line" href={famille.href}>
+          <a className="btn btn-line" href={lien(locale, famille.href)}>
             {bloc.lien} <span className="ar">→</span>
           </a>
         </div>
         <div className="sm-foot">
-          <span>{MENTION_TVA}</span>
-          <BoutonDevis sujet={famille.contenu.sujet}>
-            {DEVIS_LABEL}
-          </BoutonDevis>
+          <span>{t.mentionTvaPhrase}</span>
+          <LienDevis locale={locale} sujet={famille.contenu.sujet}>
+            {t.devisLabel}
+          </LienDevis>
         </div>
       </div>
     </section>
   );
 }
 
-export default async function Services() {
+/**
+ * LE CORPS DU CATALOGUE — appele par `/services` en francais et par
+ * `/en/services` en anglais.
+ *
+ * Voir l en-tete du fichier : c est une FONCTION appelee, pas un composant
+ * rendu, precisement pour que l arbre francais reste celui d avant le chantier.
+ */
+export async function corpsServices(locale: Locale) {
+  const t = TEXTES[locale];
+
   // UNE seule lecture pour toute la page (cf. lib/catalogue.ts). Les formules
   // gardent leur grille de cartes ; tout le reste est range en familles, le
   // rangement etant partage avec l accueil (lib/catalogue-familles.ts).
@@ -314,21 +653,22 @@ export default async function Services() {
     <>
       <SchemaPage
         fil={[
-          { nom: "Accueil", chemin: "/" },
-          { nom: "Services", chemin: "/services" },
+          { nom: t.fil.accueil, chemin: lien(locale, "/") },
+          { nom: t.fil.services, chemin: lien(locale, CHEMIN) },
         ]}
+        locale={locale}
       />
       <section>
         <div className="wrap">
           <div className="sec-head">
             <span className="meta" data-reveal>
-              Catalogue
+              {t.meta}
             </span>
             <div data-reveal>
               <h1 className="t">
-                Tout ce que fait
+                {t.h1[0]}
                 <br />
-                le studio, à Genève.
+                {t.h1[1]}
               </h1>
             </div>
           </div>
@@ -337,22 +677,14 @@ export default async function Services() {
               n etait plus celui des blocs. Un chapo qui decrit une autre page
               que celle qu on lit est un bug, pas une approximation. */}
           <p className="lede" data-reveal>
-            Trois lignes en vitrine. Le site d&apos;abord — c&apos;est le
-            produit d&apos;entrée, et ce sur quoi tout le reste vient se
-            brancher. Puis les cartes de visite et les imprimés, ce que vos clients
-            gardent en main. Puis les réseaux sociaux, tenus au mois.
-            Le logo, l&apos;hébergement et les supports de restaurant
-            suivent plus bas, entiers.
+            {t.chapo}
           </p>
           {/* La comparaison « chez les autres » a ete retiree : le
               positionnement §8 interdit de comparer, nomme ou non. Ce qui la
               remplace nomme l attente par defaut du lecteur — une croyance,
               pas la pratique d un concurrent. */}
           <p className="lede" data-reveal style={{ marginTop: "1.2em" }}>
-            Le délai est d&apos;<strong>une semaine</strong>, et il court dès
-            votre feu vert — pas dès que vous m&apos;aurez envoyé vos textes.
-            Vous n&apos;avez rien à préparer : je reprends ce qui est déjà en
-            ligne.
+            {t.delai}
           </p>
           {/* LES DEUX REGIMES DE PRIX, ANNONCES AVANT LA PREMIERE GRILLE.
               Cinq lignes portent un montant, le reste se chiffre sur devis :
@@ -363,11 +695,13 @@ export default async function Services() {
               calcules sur la base, jamais ecrits a la main. */}
           <div className="sm-devis" data-reveal style={{ marginTop: "1.6em" }}>
             <p className="sm-devis-t">
-              {lignesChiffrees} lignes portent un prix ferme, {lignesSurDevis} sont
-              annoncées sur devis.
+              {lignesChiffrees}
+              {t.comptePrixFerme}
+              {lignesSurDevis}
+              {t.compteSurDevis}
             </p>
-            <p>{MENTION_DEVIS}</p>
-            <p className="sm-devis-r">{MENTION_REPONSE}</p>
+            <p>{t.mentionDevis}</p>
+            <p className="sm-devis-r">{t.mentionReponse}</p>
           </div>
         </div>
       </section>
@@ -377,21 +711,23 @@ export default async function Services() {
         <div className="wrap">
           <div className="sec-head">
             <span className="meta" data-reveal>
-              <span className="index">(01)</span>&nbsp; Les formules
+              {/* L espace insecable ET le libelle tiennent dans UNE SEULE
+                  expression : deux enfants texte cote a cote font ecrire a
+                  React un `<!-- -->` entre eux pour borner l hydratation, ce
+                  qui changerait le HTML rendu en francais. */}
+              <span className="index">(01)</span>
+              {`  ${t.formules.meta}`}
             </span>
             <div data-reveal>
               <h2 className="t">
-                Trois paliers,
+                {t.formules.h2[0]}
                 <br />
-                un seul site.
+                {t.formules.h2[1]}
               </h2>
             </div>
           </div>
           <p className="lede" data-reveal style={{ marginBottom: 44 }}>
-            Pour la PME genevoise dont le site a plus de cinq ans. Du site
-            simplement présentable à celui qui répond et relance tout seul —
-            chaque palier contient le précédent en entier. Livré en une
-            semaine, dès votre feu vert.
+            {t.formules.lede}
           </p>
 
           <div className="price-grid">
@@ -399,14 +735,25 @@ export default async function Services() {
               <article className="price" data-reveal key={service.id}>
                 {/* MEME LIGNE DE TETE QUE LA GRILLE D ACCUEIL, et lue a la
                     meme source (lib/formules.ts) : « N° 01 / 02 / 03 »
-                    numerotait trois cartes qu on voit deja cote a cote. */}
+                    numerotait trois cartes qu on voit deja cote a cote.
+                    Le repli anglais est celui que prescrit `POUR_QUI_EN` —
+                    un libelle manquant retombe sur le francais plutot que de
+                    vider la ligne la plus lisible de la carte. */}
                 <div className="lab">
                   <span>
-                    {estFormule(service.slug) ? POUR_QUI[service.slug] : ""}
+                    {estFormule(service.slug)
+                      ? locale === "en"
+                        ? (POUR_QUI_EN[service.slug] ?? POUR_QUI[service.slug])
+                        : POUR_QUI[service.slug]
+                      : ""}
                   </span>
                 </div>
-                <h3>{service.name}</h3>
-                <p className="d">{service.description}</p>
+                {/* Les NOMS des trois formules ne se traduisent pas — article
+                    compris. `nameEn` vaut null en base pour cette raison
+                    exacte, et `nomService` produit donc « La Vitrine » sur la
+                    page anglaise (voice-guide §10, glossaire §5). */}
+                <h3>{nomService(service, locale)}</h3>
+                <p className="d">{descriptionService(service, locale)}</p>
                 {/* Meme rendu que la grille d accueil, `dès` et `/mois`
                     compris : ce sont des drapeaux de la base, et un jour ou
                     une formule les portera, la carte doit suivre sans qu on y
@@ -414,20 +761,24 @@ export default async function Services() {
                     raison qu a l accueil : la regle vaut par unite de lecture,
                     et le bas de grille est deja hors du regard. */}
                 <p className="num">
-                  {service.priceFrom ? <small>{FROM_PREFIX}</small> : null}
+                  {service.priceFrom ? <small>{prefixeDes(locale)}</small> : null}
                   {formatChfAmount(service.priceCents as number)}
-                  <small>{`${CHF_UNIT} CHF`}</small>
+                  <small>{t.uniteMontant}</small>
                   {service.isMonthly ? (
-                    <small className="per">{MONTHLY_SUFFIX}</small>
+                    <small className="per">{suffixeMensuel(locale)}</small>
                   ) : null}
                 </p>
-                <p className="num-tva">{TVA_LABEL}</p>
+                <p className="num-tva">{mentionTva(locale)}</p>
                 {/* Le lien n existe que pour les trois formules qui ont une
                     page. Un `principal` ajoute en base demain apparait donc
                     dans la grille, mais sans lien mort. */}
                 {estFormule(service.slug) ? (
-                  <a className="btn btn-line" href={hrefService(service.slug)}>
-                    Voir la formule <span className="ar">→</span>
+                  <a
+                    className="btn btn-line"
+                    href={lien(locale, hrefService(service.slug))}
+                  >
+                    {`${t.formules.voir} `}
+                    <span className="ar">→</span>
                   </a>
                 ) : null}
               </article>
@@ -445,25 +796,30 @@ export default async function Services() {
           {surDevis.map((service) => (
             <div className="p-note" data-reveal key={service.id}>
               <span>
-                {service.name}
-                {` — ${QUOTE_LABEL}`}
+                {nomService(service, locale)}
+                {` — ${libelleDevis(locale)}`}
               </span>
-              <span>{service.description}</span>
+              <span>{descriptionService(service, locale)}</span>
             </div>
           ))}
 
           <div className="p-note" data-reveal>
-            <span>{MENTION_TVA}</span>
-            <BoutonDevis sujet="devis-formules">
-              {DEVIS_LABEL}
-            </BoutonDevis>
+            <span>{t.mentionTvaPhrase}</span>
+            <LienDevis locale={locale} sujet="devis-formules">
+              {t.devisLabel}
+            </LienDevis>
           </div>
         </div>
       </section>
 
       {/* ---------- (02) et (03) — la vitrine : imprimes, reseaux ---------- */}
       {vitrine.map((groupe, i) => (
-        <BlocFamille key={groupe.famille.slug} {...groupe} rang={i + 2} />
+        <BlocFamille
+          key={groupe.famille.slug}
+          {...groupe}
+          rang={i + 2}
+          locale={locale}
+        />
       ))}
 
       {/* ---------- la bascule de rang ----------
@@ -474,16 +830,14 @@ export default async function Services() {
       <section className="prest-second" style={{ paddingBottom: 0 }}>
         <div className="wrap">
           <p className="cat-rang" data-reveal>
-            <span>Le reste du catalogue</span>
+            <span>{t.bascule.titre}</span>
           </p>
           {/* Comme sur l accueil, cette phrase ne parle que de cette page :
               decrire une habitude d achat demanderait une source que le studio
               n a pas (positionnement §9). Ce qu elle affirme se verifie en
               descendant l ecran. */}
           <p className="cat-rang-d" data-reveal>
-            Logo et photos, hébergement du site, restaurants et cafés. Trois
-            lignes entières, avec leurs prestations, leurs prix et leur devis —
-            elles passent après, pas au rabais.
+            {t.bascule.texte}
           </p>
         </div>
       </section>
@@ -494,11 +848,16 @@ export default async function Services() {
           key={groupe.famille.slug}
           {...groupe}
           rang={vitrine.length + i + 2}
+          locale={locale}
           sobre
         />
       ))}
 
-      <FooterContact />
+      <FooterContact locale={locale} />
     </>
   );
+}
+
+export default async function Services() {
+  return corpsServices("fr");
 }

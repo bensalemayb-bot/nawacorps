@@ -36,6 +36,17 @@ model Service {
   slug        String    @unique
   name        String
   description String
+  // La version anglaise du catalogue. NULLABLE ET C EST LA REGLE : tant qu une
+  // ligne n est pas traduite, le site anglais retombe sur le francais plutot
+  // que d afficher un trou. Une traduction absente se voit et se corrige ;
+  // une chaine vide passe inapercue jusqu au client.
+  // Les NOMS DES TROIS FORMULES ne se traduisent PAS — docs/agents/brand/
+  // voice-guide.md §10 : « jamais abregees, jamais traduites ». La Vitrine
+  // reste La Vitrine. (Citation corrigee le 31/08 : elle renvoyait a tort
+  // vers product-marketing.md §8, ou la regle ne figure pas.)
+  // Pour elles, nameEn reste null volontairement.
+  nameEn        String?
+  descriptionEn String?
   category    String
   priceType   PriceType
   priceCents  Int?
