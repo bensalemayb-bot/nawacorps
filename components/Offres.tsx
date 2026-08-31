@@ -162,7 +162,7 @@ export default async function Offres() {
                     « N° 01 / 02 / 03 ». La ligne la plus lisible de la carte
                     numerotait trois cartes qu on voit deja cote a cote : un
                     rang de tri, pas une information. Le libelle vit dans
-                    lib/formules.ts parce que /prestations rend la meme grille.
+                    lib/formules.ts parce que /services rend la meme grille.
                     Un `principal` ajoute en base sans libelle laisse la ligne
                     vide plutot que d inventer une promesse. */}
                 <div className="lab">

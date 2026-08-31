@@ -45,9 +45,9 @@ const eslintConfig = defineConfig([
       // dynamique s ecrit `[slug]`, or dans un glob les crochets forment une
       // classe de caracteres — le chemin litteral ne matcherait qu une lettre
       // parmi s, l, u, g. Les echapper marche, mais se relit mal et se casse a
-      // la premiere copie. Toutes les pages de prestations sont concernees par
+      // la premiere copie. Toutes les pages de services sont concernees par
       // la meme decision de toute facon.
-      "app/(site)/prestations/**",
+      "app/(site)/services/**",
       // Le corps partage des cinq pages de famille. Il vit dans components/
       // parce que c'est un composant, mais il rend exactement le meme markup
       // que les pages ci-dessus et il est soumis a la meme decision : des <a>

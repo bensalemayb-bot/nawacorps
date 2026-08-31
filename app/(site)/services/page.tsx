@@ -33,7 +33,7 @@ import {
 import { openGraphPage, whatsapp } from "@/lib/site";
 
 /**
- * /prestations — LE CATALOGUE EN ENTIER.
+ * /services — LE CATALOGUE EN ENTIER.
  *
  * Pourquoi cette page existe. L offre etait eclatee en deux endroits qui ne se
  * parlaient pas : la grille d accueil montrait les trois formules de site, la
@@ -89,13 +89,13 @@ const DESCRIPTION =
   "Le catalogue du studio genevois : trois formules de site, le suivi mensuel, l'identité et les imprimés, les réseaux sociaux et la ligne restauration.";
 
 export const metadata: Metadata = {
-  title: "Prestations et tarifs à Genève",
+  title: "Services et tarifs à Genève",
   description: DESCRIPTION,
-  alternates: { canonical: "/prestations" },
+  alternates: { canonical: "/services" },
   openGraph: openGraphPage({
-    titre: "Prestations et tarifs à Genève — Nawa Corps",
+    titre: "Services et tarifs à Genève — Nawa Corps",
     description: DESCRIPTION,
-    chemin: "/prestations",
+    chemin: "/services",
   }),
   /**
    * LE BLOC TWITTER EST OBLIGATOIRE ICI, et pour une raison de fond, pas de
@@ -111,7 +111,7 @@ export const metadata: Metadata = {
    */
   twitter: {
     card: "summary_large_image",
-    title: "Prestations et tarifs à Genève — Nawa Corps",
+    title: "Services et tarifs à Genève — Nawa Corps",
     description: DESCRIPTION,
   },
 };
@@ -268,7 +268,7 @@ function BlocFamille({
   );
 }
 
-export default async function Prestations() {
+export default async function Services() {
   // UNE seule lecture pour toute la page (cf. lib/catalogue.ts). Les formules
   // gardent leur grille de cartes ; tout le reste est range en familles, le
   // rangement etant partage avec l accueil (lib/catalogue-familles.ts).
@@ -410,7 +410,7 @@ export default async function Prestations() {
                 {estFormule(service.slug) ? (
                   <a
                     className="btn btn-line"
-                    href={`/prestations/${service.slug}`}
+                    href={`/services/${service.slug}`}
                   >
                     Voir la formule <span className="ar">→</span>
                   </a>

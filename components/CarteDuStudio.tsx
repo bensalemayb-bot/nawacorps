@@ -43,7 +43,7 @@ import CarteService from "@/components/CarteService";
  *      leur devis. Elles cessent seulement de se disputer la vitrine.
  *
  * LE PARTAGE EST LU DANS lib/catalogue-familles.ts, jamais decide ici :
- * /prestations rend le meme classement, et deux listes ecrites a deux endroits
+ * /services rend le meme classement, et deux listes ecrites a deux endroits
  * divergent au premier arbitrage.
  *
  * LES TROIS FORMULES NE SONT PAS REPRISES ICI. Elles etaient listees en tete
@@ -116,7 +116,7 @@ export default async function CarteDuStudio() {
               meme mot juste au-dessus de trois cartes qui le portent. Le second
               rang, lui, porte une bande — non pour nommer une famille, mais
               pour dire qu on change de rang, ce qu aucune carte ne peut dire
-              d elle-meme. L index /prestations separe vraiment les familles :
+              d elle-meme. L index /services separe vraiment les familles :
               c est sa raison d etre, ce n est pas celle de l accueil. */}
           <div className="cat-grid cat-grid-avant">
             {vitrine.map((service) => (

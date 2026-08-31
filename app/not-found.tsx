@@ -52,8 +52,8 @@ export default function NotFound() {
             </a>
           </p>
           <p>
-            <a className="lnk" href="/prestations">
-              Voir toutes les prestations →
+            <a className="lnk" href="/services">
+              Voir tous les services →
             </a>
           </p>
         </div>

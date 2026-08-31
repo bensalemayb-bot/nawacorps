@@ -17,7 +17,7 @@ import { FAMILLES, FAMILLE_SLUGS, type FamilleSlug } from "@/lib/familles";
  * base. Le visiteur, lui, cherche s il est au bon endroit pour un logo, pour
  * une carte de restaurant ou pour son suivi mensuel. La famille est la
  * traduction de l un dans l autre, et elle est ecrite UNE fois : sans ce
- * fichier, l accueil et /prestations tiendraient chacun sa liste, et les deux
+ * fichier, l accueil et /services tiendraient chacun sa liste, et les deux
  * divergeraient au premier ajout en base.
  *
  * LE RATTACHEMENT EST NOMME PUIS, A DEFAUT, DEDUIT DE LA CATEGORIE.
@@ -30,7 +30,7 @@ import { FAMILLES, FAMILLE_SLUGS, type FamilleSlug } from "@/lib/familles";
  * qu on revienne ici.
  *
  * `principal` N A PAS DE FAMILLE, volontairement. Les trois formules de site
- * ont chacune leur page (/prestations/<slug>, cf. lib/formules.ts) et leur
+ * ont chacune leur page (/services/<slug>, cf. lib/formules.ts) et leur
  * propre grille de cartes ; leur donner une famille les ferait paraitre deux
  * fois sur le meme ecran.
  */
@@ -73,7 +73,7 @@ const FAMILLE_PAR_SERVICE: Record<string, FamilleSlug> = Object.fromEntries(
  * derriere.
  *
  * POURQUOI ELLE EXISTE. Le catalogue traitait ses familles a EGALITE : cinq
- * blocs de meme poids sur /prestations, quatorze cartes de meme dessin sur
+ * blocs de meme poids sur /services, quatorze cartes de meme dessin sur
  * l accueil. Ce n est pas ce que le studio vend vraiment. Trois lignes portent
  * l activite — les sites, les cartes et imprimes, les reseaux sociaux — et le
  * reste, sans etre secondaire par la qualite, ne se dispute pas la vitrine.
@@ -115,7 +115,7 @@ export const FAMILLES_EN_SECOND = FAMILLE_SLUGS.filter(
 
 /** L URL publique d une famille. */
 export function hrefFamille(slug: FamilleSlug): string {
-  return `/prestations/${slug}`;
+  return `/services/${slug}`;
 }
 
 /** Ce qu il faut savoir d une ligne de catalogue pour la ranger. */
@@ -151,7 +151,7 @@ export function familleDuService(
  *
  * `ordre` RESTREINT ET ORDONNE le resultat : passer FAMILLES_EN_VITRINE ne
  * rend que les familles de vitrine, passer FAMILLES_EN_SECOND ne rend que les
- * autres. C est ainsi que l accueil et /prestations rendent leur catalogue en
+ * autres. C est ainsi que l accueil et /services rendent leur catalogue en
  * DEUX passages de poids visuel different sans tenir chacun sa liste — et
  * comme les deux constantes sont derivees de FAMILLE_SLUGS, leurs deux
  * passages couvrent exactement le catalogue.

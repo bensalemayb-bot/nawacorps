@@ -4,7 +4,7 @@ import { SITE_NAME, openGraphPage, whatsapp } from "@/lib/site";
 
 /**
  * LES CINQ FAMILLES DE PRESTATIONS — la matiere editoriale des pages
- * /prestations/<famille>.
+ * /services/<famille>.
  *
  * POURQUOI DES FAMILLES ET PAS UNE PAGE PAR LIGNE. Le meme raisonnement que
  * lib/formules.ts, applique au reste du catalogue : quatorze lignes en base
@@ -40,7 +40,7 @@ import { SITE_NAME, openGraphPage, whatsapp } from "@/lib/site";
 /**
  * Les cinq segments statiques, dans l ordre ou ils apparaissent au catalogue.
  *
- * Ce sont des SEGMENTS STATIQUES sous app/(site)/prestations/ : ils l emportent
+ * Ce sont des SEGMENTS STATIQUES sous app/(site)/services/ : ils l emportent
  * sur le voisin [slug], qui ne connait que les trois formules de site. Aucun
  * conflit de route, et aucun de ces cinq mots ne peut donc devenir un slug de
  * formule un jour sans que la page statique gagne — d ou la liste ci-dessous,
@@ -124,7 +124,7 @@ type Famille = {
    * Ce que la famille resout, en trois ou quatre phrases.
    *
    * ELLE EST RENDUE A DEUX ENDROITS — la page de la famille et le bloc
-   * correspondant de /prestations — et c est voulu : l index annonce, la page
+   * correspondant de /services — et c est voulu : l index annonce, la page
    * developpe, et les deux ne peuvent pas se contredire.
    *
    * LES CINQ ONT ETE ETOFFEES D UNE PHRASE. Elles decrivaient le probleme du
@@ -229,22 +229,22 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
     horsPerimetre: [
       {
         quoi: "L'impression de vos cartes, affiches et stickers",
-        href: "/prestations/imprimes",
+        href: "/services/imprimes",
         ou: "Imprimés & signalétique",
       },
       {
         quoi: "Le site qui portera cette identité",
-        href: "/prestations",
+        href: "/services",
         ou: "Les formules de site",
       },
       {
         quoi: "La production de vos réseaux sociaux au mois",
-        href: "/prestations/reseaux-sociaux",
+        href: "/services/reseaux-sociaux",
         ou: "Réseaux sociaux",
       },
       {
         quoi: "La carte et les supports de salle d'un restaurant",
-        href: "/prestations/restauration",
+        href: "/services/restauration",
         ou: "La ligne restauration",
       },
     ],
@@ -319,17 +319,17 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
     horsPerimetre: [
       {
         quoi: "Le logotype, la palette et les typographies que ces imprimés appliquent",
-        href: "/prestations/identite",
+        href: "/services/identite",
         ou: "Identité & photographie",
       },
       {
         quoi: "La carte, les chevalets et les supports de salle d'un restaurant",
-        href: "/prestations/restauration",
+        href: "/services/restauration",
         ou: "La ligne restauration",
       },
       {
         quoi: "Le site, et le formulaire de demande qui va avec",
-        href: "/prestations",
+        href: "/services",
         ou: "Les formules de site",
       },
       {
@@ -389,17 +389,17 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
       },
       {
         quoi: "Les photos et les vidéos à prendre sur place",
-        href: "/prestations/identite",
+        href: "/services/identite",
         ou: "Identité & photographie",
       },
       {
         quoi: "Le site vers lequel ces publications renvoient",
-        href: "/prestations",
+        href: "/services",
         ou: "Les formules de site",
       },
       {
         quoi: "Les supports imprimés de la même campagne",
-        href: "/prestations/imprimes",
+        href: "/services/imprimes",
         ou: "Imprimés & signalétique",
       },
     ],
@@ -483,17 +483,17 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
     horsPerimetre: [
       {
         quoi: "La refonte du site elle-même, et les trois formules",
-        href: "/prestations",
+        href: "/services",
         ou: "Les formules de site",
       },
       {
         quoi: "Une page de plus, une fonction qui n'existait pas au départ",
-        href: "/prestations",
+        href: "/services",
         ou: "Le catalogue",
       },
       {
         quoi: "La production de vos réseaux sociaux au mois",
-        href: "/prestations/reseaux-sociaux",
+        href: "/services/reseaux-sociaux",
         ou: "Réseaux sociaux",
       },
       {
@@ -596,22 +596,22 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
     horsPerimetre: [
       {
         quoi: "Le site de l'établissement et sa prise de réservation",
-        href: "/prestations",
+        href: "/services",
         ou: "Les formules de site",
       },
       {
         quoi: "Le logotype, la palette et l'enseigne",
-        href: "/prestations/identite",
+        href: "/services/identite",
         ou: "Identité & photographie",
       },
       {
         quoi: "La production de vos réseaux sociaux au mois",
-        href: "/prestations/reseaux-sociaux",
+        href: "/services/reseaux-sociaux",
         ou: "Réseaux sociaux",
       },
       {
         quoi: "La version anglaise, du site comme de la carte",
-        href: "/prestations/suivi",
+        href: "/services/suivi",
         ou: "Suivi & hébergement",
       },
       {
@@ -661,11 +661,11 @@ export function metadataFamille(slug: FamilleSlug): Metadata {
   return {
     title: famille.seoTitre,
     description: famille.seoDescription,
-    alternates: { canonical: `/prestations/${slug}` },
+    alternates: { canonical: `/services/${slug}` },
     openGraph: openGraphPage({
       titre: titreComplet,
       description: famille.seoDescription,
-      chemin: `/prestations/${slug}`,
+      chemin: `/services/${slug}`,
     }),
     twitter: {
       card: "summary_large_image",

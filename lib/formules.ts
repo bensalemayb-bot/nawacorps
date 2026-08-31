@@ -2,7 +2,7 @@ import { whatsapp } from "@/lib/site";
 
 /**
  * LES TROIS FORMULES DE SITE — la matiere editoriale des pages
- * /prestations/<slug>.
+ * /services/<slug>.
  *
  * POURQUOI TROIS PAGES ET PAS DIX-HUIT. Le catalogue compte dix-huit lignes en
  * base, mais quinze d entre elles n ont qu un nom, une description d une ligne
@@ -81,7 +81,7 @@ export function estFormule(valeur: string): valeur is FormuleSlug {
  * soi-meme. C est la question que le lecteur se pose devant trois prix.
  *
  * ILS VIVENT ICI ET NON DANS components/Offres.tsx parce que DEUX grilles les
- * rendent — l accueil et /prestations —, et que deux copies d un meme libelle
+ * rendent — l accueil et /services —, et que deux copies d un meme libelle
  * divergent au premier arbitrage. Le Record est indexe par FormuleSlug : une
  * formule ajoutee sans libelle ne compile pas.
  */
@@ -218,7 +218,7 @@ export const FORMULES: Record<FormuleSlug, Formule> = {
     sujet: "devis-l-assistant",
     // Sommet de l echelle : il n y a plus de palier au-dessus, mais il reste
     // des prestations hors perimetre. Elles vivent toutes au catalogue, sur
-    // devis — d ou le renvoi vers /prestations plutot que vers une formule.
+    // devis — d ou le renvoi vers /services plutot que vers une formule.
     //
     // La liste a ete elargie a ce que le studio vend REELLEMENT hors site :
     // imprimes, photos, reseaux sociaux et ligne restauration. Elle n en

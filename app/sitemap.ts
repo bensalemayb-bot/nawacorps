@@ -20,13 +20,13 @@ import { SITE_URL } from "@/lib/site";
  * fonction passe `async` et lit Prisma comme le fait deja Offres.
  *
  * LES TROIS FORMULES SONT DERIVEES DE `FORMULE_SLUGS`, la meme constante que
- * `generateStaticParams` de app/(site)/prestations/[slug]/page.tsx. Les ecrire
+ * `generateStaticParams` de app/(site)/services/[slug]/page.tsx. Les ecrire
  * une seconde fois ici garantissait qu un jour le plan annoncerait une page qui
  * n existe plus, ou en oublierait une nouvelle.
  *
  * LES CINQ FAMILLES SUIVENT LA MEME REGLE, derivees de `FAMILLE_SLUGS`
  * (lib/familles.ts) — la constante qui indexe aussi FAMILLES et donc les cinq
- * segments statiques de app/(site)/prestations/. Ces pages sont bien listees
+ * segments statiques de app/(site)/services/. Ces pages sont bien listees
  * malgre leur `force-dynamic` : le rendu dynamique dit comment la page est
  * fabriquee, pas si elle merite d etre indexee.
  */
@@ -41,25 +41,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
-      url: `${SITE_URL}/prestations`,
+      url: `${SITE_URL}/services`,
       lastModified: BUILD,
       changeFrequency: "monthly",
       priority: 0.8,
     },
     // Priorite juste sous celle du catalogue : ce sont les pages de vente que
     // le studio veut voir remonter sur « refonte de site Genève », mais elles
-    // se rejoignent toutes depuis /prestations.
+    // se rejoignent toutes depuis /services.
     ...FORMULE_SLUGS.map((slug) => ({
-      url: `${SITE_URL}/prestations/${slug}`,
+      url: `${SITE_URL}/services/${slug}`,
       lastModified: BUILD,
       changeFrequency: "monthly" as const,
       priority: 0.7,
     })),
     // Un cran sous les formules, et pour la meme raison qui les place sous le
     // catalogue : ce sont des pages de vente reelles, mais le site vend
-    // d abord la refonte, et ces cinq-la se rejoignent depuis /prestations.
+    // d abord la refonte, et ces cinq-la se rejoignent depuis /services.
     ...FAMILLE_SLUGS.map((slug) => ({
-      url: `${SITE_URL}/prestations/${slug}`,
+      url: `${SITE_URL}/services/${slug}`,
       lastModified: BUILD,
       changeFrequency: "monthly" as const,
       priority: 0.6,

@@ -569,7 +569,7 @@ html.menu-open .nav-time,html.menu-open .nav-r a{opacity:0;pointer-events:none}
    Le catalogue est passe en cartes (voir « le catalogue en cartes » plus bas)
    et l accueil n emploie plus aucune de ces quatre classes.
    Elles NE SONT PAS SUPPRIMEES : .sm-grp, .sm-it et .sm-foot sont reutilisees
-   par les pages /prestations, qui sont ecrites en parallele. Les retirer
+   par les pages /services, qui sont ecrites en parallele. Les retirer
    casserait des pages qui ne sont pas encore toutes dans l arbre. */
 .studio-menu{margin-top:clamp(60px,8vw,110px)}
 /* Le selecteur vise le h2, pas un h3 : c est un h2 que .sm-head contient
@@ -615,7 +615,7 @@ html.menu-open .nav-time,html.menu-open .nav-r a{opacity:0;pointer-events:none}
    en dessous — et le meme systeme par ailleurs : .wrap, .sec-head, .meta,
    .lede, .btn, .lnk, .p-note et .sm-foot sont repris tels quels.
    DEUX FONDS, UN SEUL DESSIN. La grille vit sur l accueil (fond pin, dans
-   .green) et sur /prestations (fond os). Comme .meta, .lede et .btn avant
+   .green) et sur /services (fond os). Comme .meta, .lede et .btn avant
    elle, la carte declare sa palette claire puis ne redefinit sous .green que
    ce qui change de couleur. */
 .cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2.2vw,26px)}
@@ -636,7 +636,7 @@ html.menu-open .nav-time,html.menu-open .nav-r a{opacity:0;pointer-events:none}
   transition:border-color .3s var(--ease),background .3s var(--ease),transform .3s var(--ease)}
 .green .cat-it{border-color:var(--line-g)}
 /* Le survol ne concerne que les cartes QUI MENENT QUELQUE PART. Sur
-   /prestations la carte est un <article> : la faire reagir au pointeur
+   /services la carte est un <article> : la faire reagir au pointeur
    promettrait un clic qui n arrive pas. */
 a.cat-it:hover{border-color:var(--ink);background:var(--bone-2);transform:translateY(-3px)}
 .green a.cat-it:hover{border-color:var(--bone);background:rgba(241,238,230,.06)}
@@ -677,7 +677,7 @@ a.cat-it:hover{border-color:var(--ink);background:var(--bone-2);transform:transl
 .green .cat-it .go{color:var(--brass-l)}
 .cat-it .go .ar{display:inline-block;transition:transform .3s var(--ease)}
 a.cat-it:hover .go .ar{transform:translateX(4px)}
-/* Le « tout voir » de chaque famille sur /prestations. Un .btn plutot qu un
+/* Le « tout voir » de chaque famille sur /services. Un .btn plutot qu un
    .lnk : c est la porte du bloc, et sa hauteur dessinee (1.05em de padding
    vertical, soit ~46px) depasse deja les 44px des cibles tactiles — il n a
    donc rien a demander au bloc de fin de fichier. */
@@ -686,7 +686,7 @@ a.cat-it:hover .go .ar{transform:translateX(4px)}
 /* ========== la hierarchie de vitrine ==========
    POURQUOI CES CLASSES EXISTENT. Le catalogue traitait ses cinq familles a
    EGALITE : quatorze cartes de meme dessin sur l accueil, cinq blocs de meme
-   poids sur /prestations. Ce n est pas ce que le studio vend. Trois lignes
+   poids sur /services. Ce n est pas ce que le studio vend. Trois lignes
    portent l activite — les sites, les cartes et imprimes, les reseaux sociaux
    — et le reste (identite et photographie, suivi et hebergement, ligne
    restauration) reste accessible, garde ses pages et ses prix, mais ne se
@@ -721,7 +721,7 @@ a.cat-it:hover .go .ar{transform:translateX(4px)}
    part parce que c est ELLE qui fait le poids visuel d une carte, pas son
    titre ; la ligne garde son nom, son prix et la porte vers sa famille, ou la
    description l attend en entier. C est le partage assume entre les deux
-   pages : l accueil est une vitrine et ne developpe pas, /prestations est le
+   pages : l accueil est une vitrine et ne developpe pas, /services est le
    catalogue et garde ses descriptions partout. */
 .cat-grid-sobre{grid-template-columns:repeat(4,1fr);gap:clamp(12px,1.4vw,18px)}
 @media(max-width:900px){.cat-grid-sobre{grid-template-columns:repeat(3,1fr)}}
@@ -780,7 +780,7 @@ a.cat-it:hover .go .ar{transform:translateX(4px)}
   letter-spacing:.01em;color:var(--brass)}
 .green .sm-devis .sm-devis-r{color:var(--brass-l)}
 
-/* LE SECOND RANG SUR /prestations, qui n a pas le meme travail a faire.
+/* LE SECOND RANG SUR /services, qui n a pas le meme travail a faire.
    L accueil est une vitrine : le second rang y perd ses descriptions. Cette
    page-ci est LE CATALOGUE — on y vient pour savoir ce qu une ligne recouvre,
    et l amputer serait la rendre inutile. La demotion s y joue donc autrement :
@@ -1147,12 +1147,12 @@ html.menu-open .wordmark img { filter: brightness(0) invert(1); }
   text-align: center;
 }
 
-/* ========== pages prestations ========== */
-/* Les seules classes nouvelles de /prestations et /prestations/<slug>. Tout le
+/* ========== pages services ========== */
+/* Les seules classes nouvelles de /services et /services/<slug>. Tout le
    reste de ces pages reutilise le design system tel quel : .wrap, .sec-head,
    .meta, .lede, .price-grid, .price, .p-note, .cat-grid, .cat-it, .cat-tout,
    .sm-it, .sm-grp, .sm-foot, .sm-note, .facts, .faq, .c-row, .btn, .lnk.
-   L INDEX /prestations N EMPLOIE PLUS .prest-liste NI .sm-it : son catalogue
+   L INDEX /services N EMPLOIE PLUS .prest-liste NI .sm-it : son catalogue
    est passe en cartes (.cat-grid, plus haut). Les deux regles qui suivent ne
    servent donc plus que les pages de detail, qui listent encore des lignes. */
 

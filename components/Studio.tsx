@@ -32,7 +32,7 @@
 //
 // « AUCUNE SOUS-TRAITANCE » A ETE RETIRE, ET NE DOIT PAS REVENIR. L affirmation
 // est fausse : la production des reseaux sociaux est faite avec un partenaire,
-// et /prestations/reseaux-sociaux comme lib/familles.ts l ecrivent en toutes
+// et /services/reseaux-sociaux comme lib/familles.ts l ecrivent en toutes
 // lettres — la contradiction se lisait a deux clics d ici. La phrase avait deja
 // ete corrigee une fois avant d etre reintroduite par une reecriture. Ce qui la
 // remplace porte sur ce qui est vrai et suffit a l argument : le site est

@@ -23,7 +23,7 @@ import type { ReactElement } from "react";
  *   4. corriger la legende ci-dessous, qui dit « demonstration ». Si la piece
  *      est un travail realise pour un client, elle ne peut etre publiee
  *      qu avec son accord, et la legende doit dire ce qu elle est.
- * Rien d autre ne bouge : la mise en page vit dans .vg-fig (app/prestations.css)
+ * Rien d autre ne bouge : la mise en page vit dans .vg-fig (app/services.css)
  * et ne depend pas de ce qu il y a dedans.
  *
  * `aria-hidden="true"` SUR CHAQUE VIGNETTE. Ce sont des illustrations, pas du

@@ -113,7 +113,7 @@ export default function SchemaStudio() {
     ],
     hasOfferCatalog: {
       "@type": "OfferCatalog",
-      name: "Prestations du studio",
+      name: "Services du studio",
       itemListElement: PRESTATIONS.map((nom) => ({
         "@type": "Offer",
         itemOffered: {

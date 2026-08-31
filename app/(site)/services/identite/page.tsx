@@ -6,10 +6,10 @@ import { metadataFamille } from "@/lib/familles";
 // le portage a l octet pres de la maquette et qui est travaille en parallele.
 // Un CSS global s importe depuis n importe quelle page en App Router — voir
 // node_modules/next/dist/docs/01-app/01-getting-started/11-css.md.
-import "@/app/prestations.css";
+import "@/app/services.css";
 
 /**
- * /prestations/identite — Identité & photographie
+ * /services/identite — Identité & photographie
  *
  * Deux prestations : le logotype et son systeme, et les photos de
  * l entreprise. Elles se prennent seules, sans site chez le studio — c est
@@ -25,7 +25,7 @@ import "@/app/prestations.css";
  * viennent de Postgres : aucun montant n est ecrit dans ces trois fichiers.
  */
 
-// Meme raison qu app/(site)/prestations/page.tsx : la page lit Postgres, et
+// Meme raison qu app/(site)/services/page.tsx : la page lit Postgres, et
 // `next build` tourne sans base joignable (l etage builder du Dockerfile n en
 // a aucune). Sans force-dynamic, Next tenterait un prerendu au build et la
 // construction echouerait sur P1001.

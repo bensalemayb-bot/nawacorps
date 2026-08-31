@@ -87,7 +87,7 @@ function construireQuestions(
       // vraiment, et la reponse BORNE la prestation au lieu de la defendre.
       //
       // « NI SOUS-TRAITANCE » NE REVIENT PAS. C etait faux : la production des
-      // reseaux sociaux est faite avec un partenaire, et /prestations/
+      // reseaux sociaux est faite avec un partenaire, et /services/
       // reseaux-sociaux comme lib/familles.ts le disent noir sur blanc. La
       // contradiction etait a deux clics sur le site public. La phrase a deja
       // ete corrigee une fois puis reintroduite par une reecriture : la portee

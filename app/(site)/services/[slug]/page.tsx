@@ -26,7 +26,7 @@ import {
 } from "@/lib/site";
 
 /**
- * /prestations/<slug> — UNE PAGE PAR FORMULE DE SITE, et seulement pour les
+ * /services/<slug> — UNE PAGE PAR FORMULE DE SITE, et seulement pour les
  * trois formules.
  *
  * POURQUOI TROIS ET PAS DIX-HUIT : voir le docblock de lib/formules.ts. En
@@ -79,7 +79,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({
   params,
-}: PageProps<"/prestations/[slug]">): Promise<Metadata> {
+}: PageProps<"/services/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   // Un slug inconnu ne merite pas de metadonnees : la page qui suit repondra
   // notFound(). Renvoyer un objet vide laisse le layout fournir ses valeurs
@@ -90,14 +90,14 @@ export async function generateMetadata({
   return {
     title: formule.seoTitre,
     description: formule.seoDescription,
-    alternates: { canonical: `/prestations/${slug}` },
+    alternates: { canonical: `/services/${slug}` },
     // Le helper de lib/site.ts, importe tel quel : Next ne fusionne pas les
     // objets openGraph champ par champ, une page qui n en declare qu une
     // partie perdrait siteName, locale et type.
     openGraph: openGraphPage({
       titre: `${formule.seoTitre} — ${SITE_NAME}`,
       description: formule.seoDescription,
-      chemin: `/prestations/${slug}`,
+      chemin: `/services/${slug}`,
     }),
     // Meme raison qu au catalogue : la fusion des metadata de Next ne descend
     // pas dans les objets. Un `twitter` partiel perdrait les cles qu il ne
@@ -115,7 +115,7 @@ export async function generateMetadata({
 
 export default async function FormulePage({
   params,
-}: PageProps<"/prestations/[slug]">) {
+}: PageProps<"/services/[slug]">) {
   const { slug } = await params;
   if (!estFormule(slug)) notFound();
 
@@ -176,11 +176,11 @@ export default async function FormulePage({
   const schema = {
     "@context": "https://schema.org",
     "@type": "Service",
-    "@id": `${SITE_URL}/prestations/${slug}#formule`,
+    "@id": `${SITE_URL}/services/${slug}#formule`,
     name: service.name,
     description: service.description,
     serviceType: "Création et refonte de site web",
-    url: `${SITE_URL}/prestations/${slug}`,
+    url: `${SITE_URL}/services/${slug}`,
     // L @id pose par components/SchemaStudio.tsx sur l accueil. On ne
     // redeclare pas le studio ici : deux fiches du meme prestataire qui
     // divergeraient d un mot valent moins qu une seule, referencee.
@@ -205,7 +205,7 @@ export default async function FormulePage({
             price: String(Math.round((service.priceCents as number) / 100)),
             priceCurrency: "CHF",
             availability: "https://schema.org/InStock",
-            url: `${SITE_URL}/prestations/${slug}`,
+            url: `${SITE_URL}/services/${slug}`,
           },
         }),
   };
@@ -222,8 +222,8 @@ export default async function FormulePage({
         <div className="wrap">
           <div className="sec-head">
             <span className="meta" data-reveal>
-              <a className="lnk" href="/prestations">
-                Prestations
+              <a className="lnk" href="/services">
+                Services
               </a>
             </span>
             <div data-reveal>
@@ -339,7 +339,7 @@ export default async function FormulePage({
                     ))}
                   </ul>
                   <p style={{ marginTop: 16 }}>
-                    <a className="lnk" href={`/prestations/${bloc.slug}`}>
+                    <a className="lnk" href={`/services/${bloc.slug}`}>
                       Voir {bloc.nom} →
                     </a>
                   </p>
@@ -360,7 +360,7 @@ export default async function FormulePage({
                     alors que la liste ci-dessus couvre aussi le continu et la
                     restauration. Il ouvre donc le catalogue en entier. */}
                 <p style={{ marginTop: 16 }}>
-                  <a className="lnk" href="/prestations">
+                  <a className="lnk" href="/services">
                     Voir tout le catalogue →
                   </a>
                 </p>
@@ -410,8 +410,8 @@ export default async function FormulePage({
             >
               Demander un devis <span className="ar">→</span>
             </BoutonDevis>
-            <a className="btn btn-line" href="/prestations">
-              Toutes les prestations
+            <a className="btn btn-line" href="/services">
+              Tous les services
             </a>
           </div>
         </div>

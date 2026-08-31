@@ -2,12 +2,12 @@
  * LA 404 DU SITE PUBLIC.
  *
  * POURQUOI ELLE EXISTE. Cette branche a introduit les premiers notFound() du
- * depot — deux dans app/(site)/prestations/[slug]/page.tsx (slug inconnu, puis
+ * depot — deux dans app/(site)/services/[slug]/page.tsx (slug inconnu, puis
  * formule absente de la base) et un dans components/PageFamille.tsx (plus
  * aucune ligne publiee dans la famille). Sans ce fichier, ces trois chemins
  * servaient la 404 par defaut de Next : en anglais, sans la nav, sans le chrome
  * du site, sans aucun lien de retour. Un visiteur arrive par un lien vers une
- * formule retiree, ou par /prestations/reseaux-sociaux le jour ou son unique
+ * formule retiree, ou par /services/reseaux-sociaux le jour ou son unique
  * ligne est masquee depuis /admin — il ne merite pas un cul-de-sac.
  *
  * ELLE VIT DANS (site), PAS A LA RACINE. Placee ici, elle est rendue A
@@ -41,8 +41,8 @@ export default function NotFound() {
         <h1 className="t">Cette page n&apos;existe plus.</h1>
         <div className="studio-txt" style={{ marginTop: 40 }}>
           <p>L&apos;adresse est peut-être ancienne, ou la prestation qu&apos;elle décrivait n&apos;est plus au catalogue. Rien n&apos;est perdu : le reste du site est intact, et le studio répond toujours.</p>
-          <p>Le catalogue complet — les trois formules de site, le suivi, l&apos;identité, les imprimés, les réseaux sociaux et la ligne restauration — se trouve sur la page des prestations.</p>
-          <p style={{ marginTop: 40 }}><a className="lnk" href="/prestations">Voir les prestations</a></p>
+          <p>Le catalogue complet — les trois formules de site, le suivi, l&apos;identité, les imprimés, les réseaux sociaux et la ligne restauration — se trouve sur la page des services.</p>
+          <p style={{ marginTop: 40 }}><a className="lnk" href="/services">Voir tous les services</a></p>
           <p><a className="lnk" href="/">← Retour au site</a></p>
         </div>
       </div>

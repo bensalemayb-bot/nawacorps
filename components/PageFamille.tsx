@@ -18,7 +18,7 @@ import { CONTACT, SITE_URL, jsonLd } from "@/lib/site";
  *
  * POURQUOI UN COMPOSANT PARTAGE plutot que cinq pages ecrites cinq fois. Les
  * cinq segments ont exactement la meme ossature — celle de
- * app/(site)/prestations/[slug]/page.tsx, adaptee : un h1 avec Genève, ce que
+ * app/(site)/services/[slug]/page.tsx, adaptee : un h1 avec Genève, ce que
  * la famille resout, le detail prestation par prestation avec son prix lu en
  * base et sa vignette, ce qui n est pas compris, les questions, le CTA de
  * devis. Ecrire cette ossature cinq fois garantissait qu une correction en
@@ -26,7 +26,7 @@ import { CONTACT, SITE_URL, jsonLd } from "@/lib/site";
  * corrige sur deux pages sur trois.
  *
  * Ce que chaque page garde en propre : son `metadata`, son `force-dynamic` et
- * l import de app/prestations.css. Le reste — la matiere editoriale — vit dans
+ * l import de app/services.css. Le reste — la matiere editoriale — vit dans
  * lib/familles.ts, et les noms, descriptions et prix viennent de Postgres.
  *
  * AUCUN MONTANT N EST ECRIT ICI. Les prix sont formates par lib/format.ts a
@@ -80,11 +80,11 @@ export default async function PageFamille({ slug }: { slug: FamilleSlug }) {
   const schema = {
     "@context": "https://schema.org",
     "@type": "Service",
-    "@id": `${SITE_URL}/prestations/${slug}#famille`,
+    "@id": `${SITE_URL}/services/${slug}#famille`,
     name: famille.libelle,
     description: famille.seoDescription,
     serviceType: famille.serviceType,
-    url: `${SITE_URL}/prestations/${slug}`,
+    url: `${SITE_URL}/services/${slug}`,
     // L @id pose par components/SchemaStudio.tsx sur l accueil. Le studio
     // n est pas redeclare ici : deux fiches du meme prestataire qui
     // divergeraient d un mot valent moins qu une seule, referencee.
@@ -144,8 +144,8 @@ export default async function PageFamille({ slug }: { slug: FamilleSlug }) {
         <div className="wrap">
           <div className="sec-head">
             <span className="meta" data-reveal>
-              <a className="lnk" href="/prestations">
-                Prestations
+              <a className="lnk" href="/services">
+                Services
               </a>
             </span>
             <div data-reveal>
@@ -302,7 +302,7 @@ export default async function PageFamille({ slug }: { slug: FamilleSlug }) {
                 ))}
               </ul>
               <p style={{ marginTop: 16 }}>
-                <a className="lnk" href="/prestations">
+                <a className="lnk" href="/services">
                   Voir tout le catalogue →
                 </a>
               </p>
@@ -351,8 +351,8 @@ export default async function PageFamille({ slug }: { slug: FamilleSlug }) {
             >
               Demander un devis <span className="ar">→</span>
             </BoutonDevis>
-            <a className="btn btn-line" href="/prestations">
-              Toutes les prestations
+            <a className="btn btn-line" href="/services">
+              Tous les services
             </a>
           </div>
         </div>

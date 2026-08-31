@@ -36,7 +36,7 @@ type ServiceSeed = {
  * LES DESCRIPTIONS ONT ETE REECRITES, ET CE N EST PAS COSMETIQUE. Elles
  * tenaient en trois a cinq mots : « Prête à imprimer », « Dix tampons, un vrai
  * design », « Genève travaille en deux langues ». Ce sont les MEMES chaines
- * qui remplissent les cartes du catalogue sur l accueil et sur /prestations, et
+ * qui remplissent les cartes du catalogue sur l accueil et sur /services, et
  * qui nourrissent le prompt de l assistant. Une carte dont la description tient
  * en trois mots ne dit pas ce qu on achete : elle laisse un dirigeant de PME
  * genevoise, qui compare avec des agences a quatre ou huit mille francs, deviner
@@ -89,7 +89,7 @@ const services: ServiceSeed[] = [
     // Le slug reste `site-sur-mesure` : c est une cle, la renommer casserait
     // les lignes deja en base sans rien apporter. Le NOM, lui, ne peut plus
     // dire « sur-mesure » — mot vide du guide de voix, et sature chez quatre
-    // concurrents sur six. Il est affiche sur l accueil et sur /prestations.
+    // concurrents sur six. Il est affiche sur l accueil et sur /services.
     slug: "site-sur-mesure",
     name: "Site à plusieurs pages",
     description: "Plusieurs pages, plusieurs métiers ou plusieurs zones : le périmètre se définit avant le premier écran.",

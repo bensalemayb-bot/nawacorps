@@ -12,7 +12,7 @@ import type { ServiceCatalogue } from "@/lib/catalogue";
 import type { FamilleRangee } from "@/lib/catalogue-familles";
 
 /**
- * UNE PRESTATION, EN CARTE — le dessin partage par l accueil et /prestations.
+ * UNE PRESTATION, EN CARTE — le dessin partage par l accueil et /services.
  *
  * POURQUOI CE COMPOSANT EXISTE. Le catalogue s affichait en lignes : intitule,
  * filet pointille, prix a droite. C est la mise en page d une carte de
@@ -34,7 +34,7 @@ import type { FamilleRangee } from "@/lib/catalogue-familles";
  * restauration restent affichees, avec leur nom, leur prix et la porte vers
  * leur famille — mais la description part, parce que c est elle qui fait le
  * poids visuel d une carte. Le lecteur la retrouve en entier sur la page de la
- * famille, a un clic, et sur /prestations, qui est le catalogue et les garde
+ * famille, a un clic, et sur /services, qui est le catalogue et les garde
  * toutes. L echelle, elle, est portee par la grille (.cat-grid-sobre) : une
  * carte ne decide pas de sa propre taille.
  *
@@ -42,7 +42,7 @@ import type { FamilleRangee } from "@/lib/catalogue-familles";
  * Sur l accueil, la carte est la seule porte vers la page de sa famille : elle
  * la nomme en toutes lettres au pied, parce qu un lien doit dire ou il mene —
  * cliquer « Cartes de visite » pour atterrir sur « Les imprimés » sans
- * prevenir n est pas une navigation, c est une surprise. Sur /prestations, le
+ * prevenir n est pas une navigation, c est une surprise. Sur /services, le
  * bloc porte deja le titre de la famille et son lien « tout voir » : la carte
  * y redirait trois fois la meme chose, elle reste donc du contenu.
  */
