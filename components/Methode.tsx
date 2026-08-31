@@ -9,7 +9,9 @@
 // semaine », une seule forme, et une methode se numerote en etapes ou en
 // moments de la semaine. « corrigé dans la journée » tombe pour la meme
 // raison — c est un engagement de reactivite sans source, et le seul autorise
-// (« réponse le jour ouvrable suivant ») vit au formulaire, une seule fois.
+// (« réponse le jour ouvrable suivant ») s ecrit la ou le visiteur est sur le
+// point de demander quelque chose — formulaire, assistant, bouton de devis —
+// et la Methode n est aucun de ces endroits.
 // A la place, l etape 4 dit un fait de structure : qui corrige, et qui est
 // encore la l annee suivante.
 //

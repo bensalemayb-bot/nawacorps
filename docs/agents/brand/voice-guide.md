@@ -327,8 +327,26 @@ de style :
 
 **Le seul engagement de réactivité admis** est un engagement d'exploitation
 tenable **un dimanche de décembre** : *« réponse le jour ouvrable suivant »*.
-Une seule occurrence sur tout le site, au formulaire. Pas de « sous 24 h », pas
-de « corrigé dans la journée », pas de « devis en cinq minutes ».
+Pas de « sous 24 h », pas de « corrigé dans la journée », pas de « devis en cinq
+minutes » — aucun de ces trois n'a jamais été décidé, et ils figuraient pourtant
+sur trois pages.
+
+**Où il s'écrit.** La règle n'est pas un quota, c'est une place : l'engagement
+s'écrit partout où le visiteur est sur le point de demander quelque chose — le
+formulaire, l'assistant, un bouton de devis. C'est là que naît la question
+« quand est-ce qu'on me répond ? », et y répondre avant qu'elle ne soit posée
+lève l'objection au lieu de la laisser traîner. Il apparaît donc aujourd'hui
+au formulaire, dans l'assistant et sous les prestations sur devis.
+
+Une version antérieure de cette règle disait « une seule occurrence, au
+formulaire ». Elle a été écrite quand l'engagement venait de remplacer trois
+promesses non tenues, et la prudence était de le rationner. Le site l'a
+depuis porté à huit occurrences dans cinq fichiers ; la règle disait donc autre
+chose que le site, ce qui est exactement le défaut qu'un guide doit éviter.
+
+**Ce qui reste interdit**, et c'est là qu'était le vrai risque : le formuler
+autrement d'un endroit à l'autre. Un délai qui change de mots change de sens
+aux yeux du lecteur. **Une seule formulation, au caractère près.**
 
 Les affirmations retirées faute de preuve sont consignées dans
 `docs/agents/copy/_sans-preuve.md`, avec ce qu'il faudrait pour les réintroduire.
