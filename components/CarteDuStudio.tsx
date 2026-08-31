@@ -2,6 +2,8 @@ import { whatsapp } from "@/lib/site";
 import { chargerCatalogue, parCategories } from "@/lib/catalogue";
 import {
   CATEGORIES_FAMILLES,
+  FAMILLES_EN_SECOND,
+  FAMILLES_EN_VITRINE,
   familleDuService,
   parFamilles,
 } from "@/lib/catalogue-familles";
@@ -20,7 +22,25 @@ import CarteService from "@/components/CarteService";
  * trois formules juste au-dessus : un titre, ce que c est en une phrase, le
  * prix ou « sur devis », et la porte vers la page de sa famille.
  *
- * LES TROIS FORMULES NE SONT PLUS REPRISES ICI. Elles etaient listees en tete
+ * PUIS LES QUATORZE CARTES ONT CESSE D ETRE EGALES, et c est le changement le
+ * plus recent. Une grille uniforme dit au lecteur que tout se vaut ; elle
+ * mettait un sticker vitrine au meme rang que la ligne reseaux sociaux. La
+ * section rend donc deux grilles :
+ *
+ *   1. LA VITRINE — imprimes et reseaux sociaux, en deux colonnes, avec leur
+ *      description. Avec les trois formules de site rendues juste au-dessus
+ *      par components/Offres.tsx, ce sont les trois lignes que le studio met
+ *      devant. Les sites n ont pas a etre repris ici : ils ouvrent l ecran.
+ *   2. LE SECOND RANG — identite et photographie, suivi et hebergement, ligne
+ *      restauration, en quatre colonnes et sans description. Elles ne
+ *      disparaissent pas : elles gardent leur nom, leur prix, leur page et
+ *      leur devis. Elles cessent seulement de se disputer la vitrine.
+ *
+ * LE PARTAGE EST LU DANS lib/catalogue-familles.ts, jamais decide ici :
+ * /prestations rend le meme classement, et deux listes ecrites a deux endroits
+ * divergent au premier arbitrage.
+ *
+ * LES TROIS FORMULES NE SONT PAS REPRISES ICI. Elles etaient listees en tete
  * sous le libelle « Les formules », a l epoque ou cette section etait une
  * carte de noms et de prix : les revoir en liste juste sous leurs propres
  * cartes n avait pas de cout. En cartes, ce serait la MEME carte rendue deux
@@ -58,8 +78,14 @@ export default async function CarteDuStudio() {
   // categorie `annee`. Rendues telles quelles, les cartes auraient donne une
   // grille ou « Cartes de visite » et « Photos » se cotoient sans logique
   // visible. Aucune ligne n est perdue : toute categorie filtree ici a une
-  // famille d accueil (cf. lib/catalogue-familles.ts).
-  const lignes = parFamilles(services).flatMap((groupe) => groupe.lignes);
+  // famille d accueil, et les deux listes de rang couvrent les cinq familles
+  // (cf. lib/catalogue-familles.ts).
+  const vitrine = parFamilles(services, FAMILLES_EN_VITRINE).flatMap(
+    (groupe) => groupe.lignes,
+  );
+  const second = parFamilles(services, FAMILLES_EN_SECOND).flatMap(
+    (groupe) => groupe.lignes,
+  );
 
   return (
     <section className="offres green" style={{ paddingTop: 0 }}>
@@ -68,20 +94,20 @@ export default async function CarteDuStudio() {
           <div className="sm-head" data-reveal>
             <h2>La carte <span className="serif-i">du studio</span></h2>
           </div>
-          {/* « ligne par ligne » a quitte cette accroche avec les lignes
-              elles-memes. Ce qui reste dit les deux choses que le visiteur ne
-              devine pas : pourquoi presque tout est sur devis, et que rien ici
-              n oblige a prendre un site. */}
-          <p className="lede" data-reveal style={{ marginBottom: 30 }}>Tout ce que le studio vend en dehors des trois formules. Le suivi porte un prix ; le reste se chiffre sur devis, parce qu&apos;un tirage, un format et un papier ne se devinent pas. Tout se commande avec un site chez moi comme sans — la ligne restauration comprise.</p>
-          {/* AUCUN TITRE DE GROUPE AU-DESSUS DES CARTES, et c est voulu.
-              Chaque carte porte deja le nom de sa famille au pied, en guise de
-              porte de sortie : un intertitre par famille redirait le meme mot
-              juste au-dessus de trois cartes qui le portent. Les familles
-              restent lisibles parce que l ordre de la grille les tient
-              groupees. L index /prestations, lui, les separe vraiment — c est
-              sa raison d etre, ce n est pas celle de l accueil. */}
-          <div className="cat-grid">
-            {lignes.map((service) => (
+          {/* L accroche annonce l ordre de lecture au lieu de le subir : ce
+              qui vient d abord, pourquoi, et ce qui suit. « ligne par ligne » a
+              quitte cette phrase avec les lignes elles-memes. */}
+          <p className="lede" data-reveal style={{ marginBottom: 30 }}>Le site est le produit d&apos;entrée ; il n&apos;est pas le seul atelier. Ce qu&apos;on imprime et ce qu&apos;on publie chaque semaine viennent d&apos;abord, parce que ce sont les deux lignes que les clients reprennent le plus souvent après une refonte. Le reste suit, et se commande avec un site chez moi comme sans.</p>
+          {/* AUCUN TITRE DE GROUPE AU-DESSUS DE CETTE PREMIERE GRILLE, et c est
+              voulu. Chaque carte porte deja le nom de sa famille au pied, en
+              guise de porte de sortie : un intertitre par famille redirait le
+              meme mot juste au-dessus de trois cartes qui le portent. Le second
+              rang, lui, porte une bande — non pour nommer une famille, mais
+              pour dire qu on change de rang, ce qu aucune carte ne peut dire
+              d elle-meme. L index /prestations separe vraiment les familles :
+              c est sa raison d etre, ce n est pas celle de l accueil. */}
+          <div className="cat-grid cat-grid-avant">
+            {vitrine.map((service) => (
               <CarteService
                 key={service.id}
                 service={service}
@@ -89,11 +115,27 @@ export default async function CarteDuStudio() {
               />
             ))}
           </div>
+          <p className="cat-rang" data-reveal>
+            <span>Également à l&apos;atelier</span>
+          </p>
+          <p className="cat-rang-d" data-reveal>Trois lignes que le studio fait depuis le début, et qui ne se vendent pas depuis une vitrine : elles se décident en cours de route. Chacune ouvre sa page, avec le détail et le devis.</p>
+          <div className="cat-grid cat-grid-sobre">
+            {second.map((service) => (
+              <CarteService
+                key={service.id}
+                service={service}
+                famille={familleDuService(service)}
+                sobre
+              />
+            ))}
+          </div>
           <div className="p-note" data-reveal>
             {/* « devis en cinq minutes » etait un engagement de reactivite
                 sans source : le seul admis est « réponse le jour ouvrable
-                suivant », et il vit au formulaire. */}
-            <span>Prix en francs suisses, TVA comprise. Les lignes sur devis se chiffrent après un échange.</span>
+                suivant », et il est porte ici, une fois, parce que c est le
+                seul endroit de l accueil ou treize lignes sur devis se
+                presentent ensemble. */}
+            <span>Prix en francs suisses, TVA comprise. Un devis se chiffre après deux questions, et la réponse arrive le jour ouvrable suivant.</span>
             <BoutonDevis href={DEVIS_HREF} sujet="devis-carte-du-studio">
               Demander un devis →
             </BoutonDevis>

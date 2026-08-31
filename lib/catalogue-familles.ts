@@ -68,6 +68,51 @@ const FAMILLE_PAR_SERVICE: Record<string, FamilleSlug> = Object.fromEntries(
   ),
 );
 
+/**
+ * LA HIERARCHIE DE VITRINE — ce que le studio met devant, et ce qu il garde
+ * derriere.
+ *
+ * POURQUOI ELLE EXISTE. Le catalogue traitait ses familles a EGALITE : cinq
+ * blocs de meme poids sur /prestations, quatorze cartes de meme dessin sur
+ * l accueil. Ce n est pas ce que le studio vend vraiment. Trois lignes portent
+ * l activite — les sites, les cartes et imprimes, les reseaux sociaux — et le
+ * reste, sans etre secondaire par la qualite, ne se dispute pas la vitrine.
+ * Decision du proprietaire, pas une lecture de trafic.
+ *
+ * LES SITES NE SONT PAS DANS CETTE TABLE, et c est normal : les trois formules
+ * sont des `principal`, elles n ont pas de famille (voir l en-tete) et elles
+ * ouvrent deja les deux pages avec leur propre grille de cartes. Restent donc
+ * les deux familles a promouvoir.
+ *
+ * LE Record EST EXHAUSTIF PAR CONSTRUCTION. Indexe par FamilleSlug, il ne
+ * compile pas si une famille ajoutee dans lib/familles.ts n est pas classee
+ * ici. C est la garde qui compte : sans elle, une famille non classee
+ * disparaitrait EN SILENCE des deux grilles, qui ne rendent plus le catalogue
+ * en un seul passage mais en deux.
+ */
+export type RangDeVitrine = "vitrine" | "second";
+
+const RANG_PAR_FAMILLE: Record<FamilleSlug, RangDeVitrine> = {
+  identite: "second",
+  imprimes: "vitrine",
+  "reseaux-sociaux": "vitrine",
+  suivi: "second",
+  restauration: "second",
+};
+
+/**
+ * Les deux listes ordonnees, DERIVEES de FAMILLE_SLUGS et jamais reecrites a
+ * la main : l ordre de lecture du catalogue reste decide a un seul endroit, et
+ * leur reunion est le catalogue entier — aucune ligne ne peut tomber entre les
+ * deux.
+ */
+export const FAMILLES_EN_VITRINE = FAMILLE_SLUGS.filter(
+  (slug) => RANG_PAR_FAMILLE[slug] === "vitrine",
+);
+export const FAMILLES_EN_SECOND = FAMILLE_SLUGS.filter(
+  (slug) => RANG_PAR_FAMILLE[slug] === "second",
+);
+
 /** L URL publique d une famille. */
 export function hrefFamille(slug: FamilleSlug): string {
   return `/prestations/${slug}`;
@@ -104,14 +149,24 @@ export function familleDuService(
 /**
  * Le catalogue regroupe par famille, dans l ordre de FAMILLE_SLUGS.
  *
+ * `ordre` RESTREINT ET ORDONNE le resultat : passer FAMILLES_EN_VITRINE ne
+ * rend que les familles de vitrine, passer FAMILLES_EN_SECOND ne rend que les
+ * autres. C est ainsi que l accueil et /prestations rendent leur catalogue en
+ * DEUX passages de poids visuel different sans tenir chacun sa liste — et
+ * comme les deux constantes sont derivees de FAMILLE_SLUGS, leurs deux
+ * passages couvrent exactement le catalogue.
+ *
  * Une famille sans aucune ligne visible en base est OMISE : elle laisserait
  * sinon un titre, une accroche et un lien vers une page sans contenu.
  */
 export function parFamilles<T extends ServiceRangeable>(
   services: readonly T[],
+  ordre: readonly FamilleSlug[] = FAMILLE_SLUGS,
 ): { famille: FamilleRangee; lignes: T[] }[] {
-  return FAMILLE_SLUGS.map((slug) => ({
-    famille: ranger(slug),
-    lignes: services.filter((s) => familleDuService(s)?.slug === slug),
-  })).filter((groupe) => groupe.lignes.length > 0);
+  return ordre
+    .map((slug) => ({
+      famille: ranger(slug),
+      lignes: services.filter((s) => familleDuService(s)?.slug === slug),
+    }))
+    .filter((groupe) => groupe.lignes.length > 0);
 }

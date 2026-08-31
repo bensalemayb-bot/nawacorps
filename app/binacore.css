@@ -623,6 +623,89 @@ a.cat-it:hover .go .ar{transform:translateX(4px)}
    donc rien a demander au bloc de fin de fichier. */
 .cat-tout{margin-top:clamp(28px,3.5vw,40px)}
 
+/* ========== la hierarchie de vitrine ==========
+   POURQUOI CES CLASSES EXISTENT. Le catalogue traitait ses cinq familles a
+   EGALITE : quatorze cartes de meme dessin sur l accueil, cinq blocs de meme
+   poids sur /prestations. Ce n est pas ce que le studio vend. Trois lignes
+   portent l activite — les sites, les cartes et imprimes, les reseaux sociaux
+   — et le reste (identite et photographie, suivi et hebergement, ligne
+   restauration) reste accessible, garde ses pages et ses prix, mais ne se
+   dispute plus la vitrine.
+
+   TROIS LEVIERS, ET AUCUN NE CACHE RIEN. L ordre de lecture, l echelle de la
+   carte, et la densite du texte. Les dix-huit lignes visibles en base restent
+   rendues, toutes, sur les deux pages : une hierarchie qui supprime n est plus
+   une hierarchie, c est une coupe.
+
+   PIEGE DE SPECIFICITE — a lire avant de deplacer une ligne. `.cat-grid-avant`
+   et `.cat-grid-sobre` pesent (0,1,0), exactement comme `.cat-grid` et comme
+   ses deux media queries : c est donc l ORDRE DANS LE FICHIER qui tranche, et
+   rien d autre. Ce bloc doit rester APRES les regles de `.cat-grid`, et chaque
+   variante doit redeclarer ses propres seuils. Remonter ce bloc au-dessus, ou
+   omettre une media query ici, rend la variante inoperante sous 760px sans
+   qu aucune erreur ne le signale. */
+
+/* LE RANG DE VITRINE — deux colonnes au lieu de trois.
+   La carte gagne ~50 % de largeur, sa description tient sur moins de lignes et
+   son prix se lit de plus loin. C est le meme dessin que `.cat-it`, monte d un
+   cran : on ne redessine pas une carte pour la promouvoir, on l agrandit. */
+.cat-grid-avant{grid-template-columns:repeat(2,1fr)}
+@media(max-width:760px){.cat-grid-avant{grid-template-columns:1fr}}
+.cat-grid-avant .cat-it{padding:clamp(22px,2.8vw,34px)}
+.cat-grid-avant .cat-it h3{font-size:1.3rem;line-height:1.24}
+.cat-grid-avant .cat-it .d{font-size:.9rem;margin-top:10px;max-width:48ch}
+
+/* LE SECOND PLAN — quatre colonnes, et pas de description.
+   La carte tombe d un cran sous `.cat-it` de la meme facon que `.cat-it` tombe
+   d un cran sous `.price` : meme grammaire, moins de place. La description
+   part parce que c est ELLE qui fait le poids visuel d une carte, pas son
+   titre ; la ligne garde son nom, son prix et la porte vers sa famille, ou la
+   description l attend en entier. C est le partage assume entre les deux
+   pages : l accueil est une vitrine et ne developpe pas, /prestations est le
+   catalogue et garde ses descriptions partout. */
+.cat-grid-sobre{grid-template-columns:repeat(4,1fr);gap:clamp(12px,1.4vw,18px)}
+@media(max-width:900px){.cat-grid-sobre{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:640px){.cat-grid-sobre{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:420px){.cat-grid-sobre{grid-template-columns:1fr}}
+.cat-grid-sobre .cat-it{padding:clamp(14px,1.7vw,20px)}
+.cat-grid-sobre .cat-it h3{font-size:.92rem;font-weight:500;line-height:1.35}
+.cat-grid-sobre .cat-it .px{font-size:1.05rem;padding-top:16px}
+.cat-grid-sobre .cat-it .go{margin-top:10px;font-size:.6rem;letter-spacing:.12em}
+
+/* LA BANDE QUI SEPARE LES DEUX RANGS.
+   Sans elle, la grille de quatre colonnes se lirait comme une suite de la
+   grille de deux — un changement d echelle sans motif. La bande dit en un mot
+   ce que le changement signifie, et le filet qui la prolonge marque la rupture
+   sans poser de titre concurrent au h2 de la section.
+   Le libelle porte les memes .62rem/.26em que `.sm-grp`, qui fait deja ce
+   travail sur les pages de prestations : deux graphies pour une meme fonction
+   se remarqueraient. */
+.cat-rang{margin:clamp(40px,5vw,64px) 0 clamp(16px,2vw,22px);
+  display:flex;align-items:center;gap:1.2em;
+  font-size:.62rem;font-weight:600;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--brass)}
+.green .cat-rang{color:var(--brass-l)}
+.cat-rang::after{content:"";flex:1;height:1px;background:var(--line)}
+.green .cat-rang::after{background:var(--line-g)}
+/* L accroche du second rang : elle repond a la seule question que la bande
+   pose — pourquoi ces lignes-la sont plus bas. Bornee a 62ch pour ne pas
+   traverser les quatre colonnes qu elle annonce. */
+.cat-rang-d{max-width:62ch;font-size:.86rem;line-height:1.6;color:var(--muted);
+  margin-bottom:clamp(20px,2.4vw,28px)}
+.green .cat-rang-d{color:var(--muted-g)}
+
+/* LE SECOND RANG SUR /prestations, qui n a pas le meme travail a faire.
+   L accueil est une vitrine : le second rang y perd ses descriptions. Cette
+   page-ci est LE CATALOGUE — on y vient pour savoir ce qu une ligne recouvre,
+   et l amputer serait la rendre inutile. La demotion s y joue donc autrement :
+   le titre de bloc descend d une echelle (celle de « La carte du studio »,
+   .sm-head h2, plutot que celle des titres de section) et le bloc respire
+   moins. Les cartes, elles, restent entieres.
+   `h2.t` est qualifie par la balise, comme la regle d origine : `.t` seul
+   designe deux autres objets dans ce fichier. */
+.prest-second{padding-top:clamp(52px,6vw,86px);padding-bottom:clamp(52px,6vw,86px)}
+.prest-second h2.t{font-size:clamp(1.7rem,3.4vw,2.6rem);letter-spacing:-.02em;line-height:1.1}
+
 /* ========== carrousel travaux ========== */
 .car-top{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:28px}
 .car-top .lede{max-width:44ch}

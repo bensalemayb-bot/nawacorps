@@ -27,6 +27,15 @@ import type { FamilleRangee } from "@/lib/catalogue-familles";
  * NOM, DESCRIPTION ET PRIX VIENNENT DE POSTGRES. Rien n est ecrit ici :
  * `service` sort de la table Service telle quelle.
  *
+ * `sobre` RETIRE LA DESCRIPTION, ET RIEN D AUTRE. C est le second rang de la
+ * vitrine de l accueil : identite et photographie, suivi et hebergement, ligne
+ * restauration restent affichees, avec leur nom, leur prix et la porte vers
+ * leur famille — mais la description part, parce que c est elle qui fait le
+ * poids visuel d une carte. Le lecteur la retrouve en entier sur la page de la
+ * famille, a un clic, et sur /prestations, qui est le catalogue et les garde
+ * toutes. L echelle, elle, est portee par la grille (.cat-grid-sobre) : une
+ * carte ne decide pas de sa propre taille.
+ *
  * LA CARTE EST UN LIEN QUAND — ET SEULEMENT QUAND — ON LUI PASSE UNE FAMILLE.
  * Sur l accueil, la carte est la seule porte vers la page de sa famille : elle
  * la nomme en toutes lettres au pied, parce qu un lien doit dire ou il mene —
@@ -38,15 +47,18 @@ import type { FamilleRangee } from "@/lib/catalogue-familles";
 export default function CarteService({
   service,
   famille,
+  sobre = false,
 }: {
   service: ServiceCatalogue;
   /** Passee UNIQUEMENT quand la carte doit ouvrir la page de sa famille. */
   famille?: FamilleRangee;
+  /** Second rang de la vitrine : la description n est pas rendue. */
+  sobre?: boolean;
 }) {
   const contenu = (
     <>
       <h3>{service.name}</h3>
-      <p className="d">{service.description}</p>
+      {sobre ? null : <p className="d">{service.description}</p>}
       {/* Le prix reste en bas de carte : sur une grille, les titres n ont pas
           tous la meme hauteur, et un prix qui flotte a mi-hauteur casse la
           ligne de lecture horizontale d une rangee a l autre. */}

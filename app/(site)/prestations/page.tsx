@@ -12,8 +12,18 @@ import {
 } from "@/lib/format";
 import { estFormule } from "@/lib/formules";
 import { type FamilleSlug, MENTION_TVA } from "@/lib/familles";
-import { CATEGORIES_FAMILLES, parFamilles } from "@/lib/catalogue-familles";
-import { chargerCatalogue, parCategories } from "@/lib/catalogue";
+import {
+  CATEGORIES_FAMILLES,
+  FAMILLES_EN_SECOND,
+  FAMILLES_EN_VITRINE,
+  type FamilleRangee,
+  parFamilles,
+} from "@/lib/catalogue-familles";
+import {
+  type ServiceCatalogue,
+  chargerCatalogue,
+  parCategories,
+} from "@/lib/catalogue";
 import { openGraphPage, whatsapp } from "@/lib/site";
 
 /**
@@ -44,6 +54,19 @@ import { openGraphPage, whatsapp } from "@/lib/site";
  * qui ont chacune leur page : le bloc porte le titre de la famille, son
  * accroche, ses prestations et la porte qui l ouvre en entier. Le rangement
  * lui-meme vit dans lib/catalogue-familles.ts, partage avec l accueil.
+ *
+ * PUIS LES CINQ FAMILLES ONT CESSE D ETRE EGALES. Cinq blocs de meme poids
+ * disent que tout se vend pareil ; ce n est pas le cas. La page s ouvre donc
+ * sur ce que le studio met en vitrine — les trois formules de site, puis les
+ * imprimes, puis les reseaux sociaux — et bascule ensuite, bande a l appui,
+ * sur l identite, le suivi et la restauration. Le classement est lu dans
+ * lib/catalogue-familles.ts et non decide ici : l accueil rend le meme.
+ *
+ * LA BASCULE NE RETIRE RIEN. Les dix-huit lignes visibles en base sont
+ * rendues, toutes, descriptions comprises ; les trois blocs du second rang
+ * gardent leur accroche, leur lien, leur mention de TVA et leur devis. Ce qui
+ * change tient au titre, qui descend d une echelle, et au bloc, qui respire
+ * moins. Un catalogue qui coupe ses lignes n est plus un catalogue.
  */
 
 // Rendu a chaque requete, meme raison qu app/(site)/page.tsx : cette page lit
@@ -160,15 +183,100 @@ const BLOCS: Record<
 /** « Les formules » ouvre la page en (01) ; les familles suivent. */
 const numero = (rang: number) => `(${String(rang).padStart(2, "0")})`;
 
+/**
+ * UN BLOC DE FAMILLE, rendu deux fois avec deux poids differents.
+ *
+ * POURQUOI LE BLOC EST FACTORISE. La page rendait ses cinq familles dans une
+ * seule boucle, toutes au meme poids. Elle en rend maintenant DEUX suites — la
+ * vitrine, puis le second rang — et deux boucles copiees-collees auraient
+ * diverge des la premiere correction editoriale. Le seul parametre qui les
+ * separe est `sobre`.
+ *
+ * CE QUE `sobre` CHANGE, ET CE QU IL NE CHANGE PAS. Il n ote AUCUN contenu :
+ * l accroche, les cartes avec leurs descriptions, le lien vers la page, la
+ * mention de TVA et le devis restent. Il ne fait qu ajouter la classe
+ * `.prest-second`, qui descend le titre d une echelle et resserre le bloc.
+ * C est la difference avec l accueil, ou le second rang perd ses descriptions :
+ * ici on est dans le catalogue, et un catalogue qui ampute ses lignes ne sert
+ * plus a rien.
+ */
+function BlocFamille({
+  famille,
+  lignes,
+  rang,
+  sobre = false,
+}: {
+  famille: FamilleRangee;
+  lignes: ServiceCatalogue[];
+  rang: number;
+  sobre?: boolean;
+}) {
+  const bloc = BLOCS[famille.slug];
+  return (
+    <section id={famille.slug} className={sobre ? "prest-second" : undefined}>
+      <div className="wrap">
+        <div className="sec-head">
+          <span className="meta" data-reveal>
+            <span className="index">{numero(rang)}</span>&nbsp;{" "}
+            {famille.contenu.libelle}
+          </span>
+          <div data-reveal>
+            <h2 className="t">
+              {bloc.titre[0]}
+              <br />
+              {bloc.titre[1]}
+            </h2>
+          </div>
+        </div>
+        {/* L accroche est celle de la page de la famille, lue telle quelle :
+            l index annonce, la page developpe, et les deux ne peuvent pas se
+            contredire. */}
+        <p className="lede" data-reveal style={{ marginBottom: 34 }}>
+          {famille.contenu.resout}
+        </p>
+        {/* Les cartes ne portent PAS le nom de leur famille ici : le bloc l a
+            deja ecrit deux fois au-dessus, et le lien qui suit l ouvre en
+            entier. Sur l accueil, ou il n y a pas de bloc, c est l inverse —
+            voir components/CarteService.tsx. */}
+        <div className="cat-grid">
+          {lignes.map((service) => (
+            <CarteService key={service.id} service={service} />
+          ))}
+        </div>
+        <div className="cat-tout" data-reveal>
+          <a className="btn btn-line" href={famille.href}>
+            {bloc.lien} <span className="ar">→</span>
+          </a>
+        </div>
+        <div className="sm-foot">
+          <span>{MENTION_TVA}</span>
+          <BoutonDevis
+            href={famille.contenu.amorce}
+            sujet={famille.contenu.sujet}
+          >
+            {DEVIS_LABEL}
+          </BoutonDevis>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default async function Prestations() {
   // UNE seule lecture pour toute la page (cf. lib/catalogue.ts). Les formules
   // gardent leur grille de cartes ; tout le reste est range en familles, le
   // rangement etant partage avec l accueil (lib/catalogue-familles.ts).
   const catalogue = await chargerCatalogue();
   const principal = parCategories(catalogue, ["principal"]);
-  const familles = parFamilles(
-    parCategories(catalogue, [...CATEGORIES_FAMILLES]),
-  );
+  // DEUX SUITES, PAS CINQ BLOCS EGAUX. Le classement vient de
+  // lib/catalogue-familles.ts, partage avec l accueil : les imprimes et les
+  // reseaux sociaux passent devant, avec les formules de site juste au-dessus ;
+  // l identite, le suivi et la restauration suivent, dans un traitement plus
+  // sobre. Leur reunion est le catalogue entier — aucune ligne ne se perd
+  // entre les deux appels.
+  const rangeables = parCategories(catalogue, [...CATEGORIES_FAMILLES]);
+  const vitrine = parFamilles(rangeables, FAMILLES_EN_VITRINE);
+  const second = parFamilles(rangeables, FAMILLES_EN_SECOND);
 
   // Les formules chiffrees prennent la grille de cartes ; celles qui se
   // traitent sur devis passent en ligne pleine largeur dessous, comme le fait
@@ -193,17 +301,16 @@ export default async function Prestations() {
               </h1>
             </div>
           </div>
-          {/* Quatre OFFRES, pas une offre et trois annexes. Le site reste en
-              tete parce qu il porte la promesse, le prix affiche et le
-              referencement — mais il n est plus le seul a exister sur cette
-              page. */}
+          {/* CE PARAGRAPHE ANNONCE L ORDRE REEL DE LA PAGE, et il doit le
+              suivre : il enumerait quatre offres a plat, dans un ordre qui
+              n etait plus celui des blocs. Un chapo qui decrit une autre page
+              que celle qu on lit est un bug, pas une approximation. */}
           <p className="lede" data-reveal>
-            Quatre offres, et le site n&apos;est que la première. Les formules
-            d&apos;abord — c&apos;est le produit d&apos;entrée ; puis le suivi
-            au mois, ce qui se voit ailleurs qu&apos;à l&apos;écran, et la ligne
-            restauration. Les formules et le suivi portent un prix ; tout ce
-            qui s&apos;imprime ou se produit se chiffre sur devis, parce
-            qu&apos;un tirage, un format et un papier ne se devinent pas.
+            Trois lignes en vitrine. Le site d&apos;abord — c&apos;est le
+            produit d&apos;entrée, et le seul à porter un prix ferme. Puis les
+            cartes et les imprimés, ce que vos clients gardent en main. Puis
+            les réseaux sociaux, tenus au mois. L&apos;identité, le suivi et la
+            ligne restauration suivent plus bas, entières.
           </p>
           {/* La comparaison « chez les autres » a ete retiree : le
               positionnement §8 interdit de comparer, nomme ou non. Ce qui la
@@ -291,58 +398,39 @@ export default async function Prestations() {
         </div>
       </section>
 
-      {/* ---------- (02) a (06) — les cinq familles, en cartes ---------- */}
-      {familles.map(({ famille, lignes }, rang) => {
-        const bloc = BLOCS[famille.slug];
-        return (
-          <section key={famille.slug} id={famille.slug}>
-            <div className="wrap">
-              <div className="sec-head">
-                <span className="meta" data-reveal>
-                  <span className="index">{numero(rang + 2)}</span>&nbsp;{" "}
-                  {famille.contenu.libelle}
-                </span>
-                <div data-reveal>
-                  <h2 className="t">
-                    {bloc.titre[0]}
-                    <br />
-                    {bloc.titre[1]}
-                  </h2>
-                </div>
-              </div>
-              {/* L accroche est celle de la page de la famille, lue telle
-                  quelle : l index annonce, la page developpe, et les deux ne
-                  peuvent pas se contredire. */}
-              <p className="lede" data-reveal style={{ marginBottom: 34 }}>
-                {famille.contenu.resout}
-              </p>
-              {/* Les cartes ne portent PAS le nom de leur famille ici : le
-                  bloc l a deja ecrit deux fois au-dessus, et le lien qui suit
-                  l ouvre en entier. Sur l accueil, ou il n y a pas de bloc,
-                  c est l inverse — voir components/CarteService.tsx. */}
-              <div className="cat-grid">
-                {lignes.map((service) => (
-                  <CarteService key={service.id} service={service} />
-                ))}
-              </div>
-              <div className="cat-tout" data-reveal>
-                <a className="btn btn-line" href={famille.href}>
-                  {bloc.lien} <span className="ar">→</span>
-                </a>
-              </div>
-              <div className="sm-foot">
-                <span>{MENTION_TVA}</span>
-                <BoutonDevis
-                  href={famille.contenu.amorce}
-                  sujet={famille.contenu.sujet}
-                >
-                  {DEVIS_LABEL}
-                </BoutonDevis>
-              </div>
-            </div>
-          </section>
-        );
-      })}
+      {/* ---------- (02) et (03) — la vitrine : imprimes, reseaux ---------- */}
+      {vitrine.map((groupe, i) => (
+        <BlocFamille key={groupe.famille.slug} {...groupe} rang={i + 2} />
+      ))}
+
+      {/* ---------- la bascule de rang ----------
+          Elle n est pas decorative : sans elle, les trois blocs qui suivent se
+          liraient comme une baisse de qualite ou un reste de page. Ce qu elle
+          dit est exact et verifiable sur cette page meme — ces lignes gardent
+          leur bloc, leur accroche, leurs cartes, leur page et leur devis. */}
+      <section className="prest-second" style={{ paddingBottom: 0 }}>
+        <div className="wrap">
+          <p className="cat-rang" data-reveal>
+            <span>Le reste du catalogue</span>
+          </p>
+          <p className="cat-rang-d" data-reveal>
+            Trois lignes que le studio fait depuis le début, et qu&apos;on
+            décide rarement devant une grille : elles viennent en cours de
+            route, une fois le site en ligne ou la salle rouverte. Même
+            traitement, même devis, même personne.
+          </p>
+        </div>
+      </section>
+
+      {/* ---------- (04) a (06) — identite, suivi, restauration ---------- */}
+      {second.map((groupe, i) => (
+        <BlocFamille
+          key={groupe.famille.slug}
+          {...groupe}
+          rang={vitrine.length + i + 2}
+          sobre
+        />
+      ))}
 
       <FooterContact />
     </>
