@@ -322,7 +322,12 @@ const MenuOld = () => (
 const SiteOld = () => (
   <div className="osite" aria-hidden="true">
     <div className="obar">
-      <span>Le Comptoir - Microsoft Internet Explorer</span>
+      {/* Le nom du site, comme l afficherait n importe quel navigateur.
+          Cette barre disait « Le Comptoir - Microsoft Internet Explorer » :
+          nommer le navigateur en faisait une chute, et la regle du guide de
+          voix est « date, jamais ridicule » — le « avant » qu on moque est
+          celui du prospect. Le cadre suffit a dater la scene. */}
+      <span>Le Comptoir</span>
       <span>_ □ ✕</span>
     </div>
     <div className="oin">
