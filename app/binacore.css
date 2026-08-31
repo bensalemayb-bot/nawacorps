@@ -42,44 +42,42 @@ a{color:inherit}
 .index{color:var(--brass);font-weight:600}
 .serif-i{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:0}
 section{padding:clamp(90px,11vw,160px) 0}
-/* Premiere colonne FIXE et non `auto` : le libelle qui precede le titre change
-   de largeur d'une section a l'autre — 92px pour « (03) Offres », 118px pour
-   « (06) Questions ». Avec `auto`, le titre partait donc d'un x different a
-   chaque section et rien ne s'alignait verticalement le long de la page.
-   140px couvre le libelle le plus large avec de la marge. Le `12vw` du clamp
-   ne suit AUCUNE police : `.meta` est figee a .68rem et ne grandit jamais ; il
-   ne fait qu'eviter que la colonne ne devienne absurdement large sur un tres
-   grand ecran, en la plafonnant a 190px au-dela de 1583px de viewport. */
-.sec-head{display:grid;grid-template-columns:auto 1fr;gap:clamp(20px,4vw,60px);align-items:end;margin-bottom:clamp(44px,6vw,80px)}
-/* La colonne fixe ne vaut que pour les sections qui portent un titre : c'est
-   entre elles que l'alignement se joue. Les pages legales n'ont qu'un libelle
-   seul dans leur .sec-head, et « Nawa Corps · nLPD » (~143px) deborderait une
-   colonne de 140px en passant a la ligne. */
-/* `:has(h1)` rejoint la regle : les pages de prestations ouvrent sur un h1
-   POSE DANS le .sec-head, comme les sections posent leur h2. Sans lui, ce
-   .sec-head-la retombait sur `auto 1fr` et le h1 partait d'un x different de
-   celui des h2 qui le suivent sur la meme page — l'alignement vertical, seule
-   raison d'etre de la colonne fixe, sautait des le premier titre.
-   Les deux pages legales ne sont pas concernees : leur h1 vit HORS du
-   .sec-head, qui n'y contient qu'un libelle seul. */
-.sec-head:has(h1),.sec-head:has(h2){grid-template-columns:clamp(140px,12vw,190px) 1fr}
-/* LES DEUX SELECTEURS `:has()` SONT REPETES ICI, ET C'EST OBLIGATOIRE.
-   Une media query n'ajoute AUCUNE specificite : ce bloc ne pesait donc que
-   `.sec-head` (0,1,0) face aux (0,1,1) de la regle du dessus — la specificite
-   de `:has(h2)` est celle de son argument, `h2`, qui vaut un element. La plus
-   specifique gagnait quel que soit l'ordre, si bien que la bascule mobile ne
-   s'appliquait qu'aux .sec-head SANS titre, c'est-a-dire aux deux pages
-   legales — jamais a une seule section titree du site.
-   Mesure a 390px avant correction : colonne de titre a 190px au lieu des 350px
-   disponibles. Le h1 de /prestations/le-site tenait sur 227px de haut au lieu
-   de 115 ; « Six gestes, un seul interlocuteur. » forcait meme sa piste a
-   206px — le mot « interlocuteur. » ne rentre pas dans 190 — et debordait donc
-   de 16px dans la gouttiere droite de .wrap. */
-@media(max-width:760px){
-  .sec-head,
-  .sec-head:has(h1),
-  .sec-head:has(h2){grid-template-columns:1fr;align-items:start;gap:18px}
-}
+/* UN TITRE DE SECTION COMMENCE AU MEME x QUE CE QU'IL COIFFE — a TOUTES les
+   largeurs, et c'est le seul alignement qui se voie.
+
+   CE QUI EXISTAIT, ET POURQUOI IL EST PARTI. `.sec-head` etait une grille a
+   deux colonnes — libelle a gauche dans une colonne fixe de
+   clamp(140px,12vw,190px), titre a droite — pour que les titres s'alignent
+   VERTICALEMENT entre eux d'une section a l'autre. L'intention etait juste,
+   mais elle alignait les titres sur rien de visible : mesure sur la page
+   rendue a 1565px de viewport, section #offres, distances au bord gauche de
+   .wrap — « (06) OFFRES » a 65px, le h2 « Des prix clairs, tout compris. » a
+   315px, et la grille .price-grid juste en dessous a 65px. Le titre etait donc
+   en retrait de 250px sur le contenu qu'il annonce. #services mesurait
+   exactement pareil : ce n'etait pas une regression, c'etait le dessin.
+
+   250px de retrait cassent la colonne de lecture au moment precis ou elle
+   compte : l'oeil descend le bord gauche, rencontre un titre qui part
+   d'ailleurs, et perd le rattachement entre le titre et la grille qu'il
+   coiffe. Un alignement de titres entre eux ne vaut pas l'alignement du titre
+   sur son propre contenu.
+
+   La bascule en colonne unique — libelle AU-DESSUS du titre — existait deja
+   sous 760px. Elle vaut desormais partout : c'est la meme regle, elle n'a plus
+   de point de rupture, et les trois `.sec-head` (avec h1, avec h2, avec un
+   libelle seul sur les pages legales) se comportent enfin de la meme facon.
+
+   PLUS AUCUN `:has()` ICI, ET C'EST LE POINT DELICAT. La regle a colonne fixe
+   etait ecrite `.sec-head:has(h1),.sec-head:has(h2)`, soit une specificite de
+   (0,1,1) — celle de `:has()` est celle de son argument. Une media query
+   n'ajoutant AUCUNE specificite, la bascule mobile ecrite `.sec-head` (0,1,0)
+   ne l'emportait pas et ne servait, avant correction, que les pages legales.
+   Le piege a deja casse le mobile une fois dans ce depot. Il ne peut plus se
+   reproduire : la regle a colonne fixe est SUPPRIMEE, pas surchargee, et il ne
+   reste qu'une seule declaration de `grid-template-columns` pour `.sec-head`
+   dans tout le fichier. Toute reintroduction d'un `:has()` ici ramenerait le
+   probleme entier. */
+.sec-head{display:grid;grid-template-columns:1fr;gap:18px;align-items:start;margin-bottom:clamp(44px,6vw,80px)}
 /* `h1.t` rejoint `h2.t`. La classe .t veut dire « titre de section » et rien
    d'autre ; elle etait deja ecrite sur les h1 des pages legales et sur ceux des
    pages de prestations, mais aucune regle ne la servait pour un h1 — le

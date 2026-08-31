@@ -40,7 +40,8 @@
 
 /* Filet de securite : une prestation ajoutee en base sans vignette ne laisse
    pas une colonne vide de 400 px a cote de son texte — elle reprend toute la
-   largeur. `:has()` est deja employe par binacore.css (.sec-head:has(h1)). */
+   largeur. `:has()` est deja employe ailleurs dans ces feuilles, et il est ici
+   sans piege : la regle ne concurrence aucune media query. */
 .pf-piece:not(:has(.vg-fig)) {
   grid-template-columns: 1fr;
 }
@@ -57,8 +58,10 @@
    Elle avait l air d une bonne idee pour rompre la colonne d images de la page
    restauration. Deux defauts au navigateur, a 1440 px :
    1. le titre d une prestation sur deux repartait de x=940 au lieu de x=88,
-      alors que tout l alignement vertical du site repose sur une colonne de
-      gauche fixe (binacore.css, .sec-head:has(h2)) ;
+      alors que toute la page se lit le long d un unique bord gauche — c est
+      la raison pour laquelle .sec-head est passe en colonne unique a toutes
+      les largeurs (binacore.css) : un titre commence au meme x que ce qu il
+      coiffe ;
    2. la vignette fait 379 px de haut pour un bloc de texte qui en fait 746 :
       posee a gauche, elle laissait 367 px de vide en haut de page — un trou,
       pas une respiration.
