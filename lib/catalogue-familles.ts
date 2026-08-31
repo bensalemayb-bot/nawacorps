@@ -113,10 +113,54 @@ export const FAMILLES_EN_SECOND = FAMILLE_SLUGS.filter(
   (slug) => RANG_PAR_FAMILLE[slug] === "second",
 );
 
+/**
+ * LA RACINE DES PAGES DE SERVICE, ecrite une seule fois.
+ *
+ * Le segment s appelait `/prestations`. Le proprietaire a tranche : « service,
+ * offre et prestation veulent dire la meme chose », et la navigation portait
+ * les trois. Il ne reste qu un mot, `/services`, et il ne s ecrit qu ici pour
+ * les deux fonctions ci-dessous — le jour ou il rebouge, une seule ligne suit.
+ */
+const RACINE = "/services";
+
+/** L URL de la page generale — celle que la navigation ouvre en premier. */
+export const HREF_SERVICES = RACINE;
+
 /** L URL publique d une famille. */
 export function hrefFamille(slug: FamilleSlug): string {
-  return `/services/${slug}`;
+  return `${RACINE}/${slug}`;
 }
+
+/**
+ * L URL publique d une ligne de catalogue.
+ *
+ * ATTENTION, LE SEGMENT EST PARTAGE. `/services/<slug>` sert deja les cinq
+ * familles, qui sont des segments STATIQUES, et les trois formules de site,
+ * servies par le voisin [slug]. Un segment statique l emporte toujours sur le
+ * dynamique : `reseaux-sociaux` est a la fois un slug de famille et un slug de
+ * la table Service, et c est la page de famille qui repond. Ce n est pas un
+ * lien mort — cette famille ne contient QUE cette ligne, la page est donc bien
+ * celle de la prestation —, mais aucune page produit distincte ne pourra
+ * jamais vivre a cette adresse.
+ */
+export function hrefService(slug: string): string {
+  return `${RACINE}/${slug}`;
+}
+
+/** Une entree de navigation : ou ca mene, et sous quel nom. */
+export type EntreeNav = { href: string; libelle: string };
+
+/**
+ * LES CINQ FAMILLES TELLES QUE LA NAVIGATION LES LISTE.
+ *
+ * Elle est DERIVEE, jamais ecrite a la main : la barre de nav et le menu plein
+ * ecran rendent la meme liste, et une famille ajoutee dans lib/familles.ts doit
+ * apparaitre dans les deux sans qu on y revienne. Le libelle est celui de la
+ * famille — la nav n a pas a rebaptiser une page qui porte deja son nom.
+ */
+export const ENTREES_FAMILLES: readonly EntreeNav[] = FAMILLE_SLUGS.map(
+  (slug) => ({ href: hrefFamille(slug), libelle: FAMILLES[slug].libelle }),
+);
 
 /** Ce qu il faut savoir d une ligne de catalogue pour la ranger. */
 type ServiceRangeable = { slug: string; category: string };

@@ -23,6 +23,7 @@ import {
   FAMILLES_EN_SECOND,
   FAMILLES_EN_VITRINE,
   type FamilleRangee,
+  hrefService,
   parFamilles,
 } from "@/lib/catalogue-familles";
 import {
@@ -40,6 +41,18 @@ import { openGraphPage, whatsapp } from "@/lib/site";
  * « carte du studio » montrait les supports. Le visiteur qui voulait savoir
  * ce que le studio vend devait donc reconstituer le catalogue de tete. Ici il
  * le voit d un coup, groupe, avec les prix.
+ *
+ * ELLE S APPELAIT /prestations. La navigation portait « Services », « Offres »
+ * et « Prestations » — trois mots pour la meme chose, dont deux ancres de
+ * l accueil et une page. Le visiteur devait deviner laquelle contenait quoi.
+ * Il ne reste qu un mot et qu une page generale : celle-ci. Le site n etait pas
+ * en ligne, aucune redirection n a donc ete posee.
+ *
+ * ET CHAQUE LIGNE S OUVRE. La page promet qu on y voit tout ce qui est vendu ;
+ * elle promet donc aussi qu on peut lire chaque ligne en entier. Les cartes
+ * ouvrent /services/<slug de la table Service>, la ligne sur devis aussi, et
+ * les trois formules gardent leur bouton. La construction de ces pages produit
+ * ne se fait pas ici.
  *
  * TOUT VIENT DE POSTGRES. Aucun montant n est ecrit dans ce fichier : noms,
  * descriptions et prix sortent de la table Service (visible: true), comme dans
@@ -240,13 +253,15 @@ function BlocFamille({
         <p className="lede" data-reveal style={{ marginBottom: 34 }}>
           {famille.contenu.resout}
         </p>
-        {/* Les cartes ne portent PAS le nom de leur famille ici : le bloc l a
-            deja ecrit deux fois au-dessus, et le lien qui suit l ouvre en
-            entier. Sur l accueil, ou il n y a pas de bloc, c est l inverse —
-            voir components/CarteService.tsx. */}
+        {/* CHAQUE CARTE OUVRE LA PAGE DE SA PRESTATION, pas celle de sa
+            famille. C est la difference entre cette page et l accueil, et elle
+            tient a la promesse de celle-ci : on y voit tout ce qui est vendu,
+            et ce qu on y voit s ouvre. La famille, elle, a deja son titre
+            deux fois au-dessus et son lien « tout voir » juste en dessous —
+            la carte le redirait une troisieme fois sans rien ajouter. */}
         <div className="cat-grid">
           {lignes.map((service) => (
-            <CarteService key={service.id} service={service} />
+            <CarteService key={service.id} service={service} versSaPage />
           ))}
         </div>
         <div className="cat-tout" data-reveal>
@@ -408,10 +423,7 @@ export default async function Services() {
                     page. Un `principal` ajoute en base demain apparait donc
                     dans la grille, mais sans lien mort. */}
                 {estFormule(service.slug) ? (
-                  <a
-                    className="btn btn-line"
-                    href={`/services/${service.slug}`}
-                  >
+                  <a className="btn btn-line" href={hrefService(service.slug)}>
                     Voir la formule <span className="ar">→</span>
                   </a>
                 ) : null}
@@ -419,9 +431,19 @@ export default async function Services() {
             ))}
           </div>
 
+          {/* LA LIGNE SUR DEVIS S OUVRE ELLE AUSSI. Elle n a pas de carte —
+              elle n a pas de montant a mettre dans une grille de prix —, mais
+              c est une ligne du catalogue comme les autres et la page promet
+              que chacune s ouvre. Sans ce lien, la seule prestation de site
+              qu on ne peut pas lire est celle qui coute le plus cher. */}
           {surDevis.map((service) => (
             <div className="p-note" data-reveal key={service.id}>
-              <span>{`${service.name} — ${QUOTE_LABEL}`}</span>
+              <span>
+                <a className="lnk" href={hrefService(service.slug)}>
+                  {service.name}
+                </a>
+                {` — ${QUOTE_LABEL}`}
+              </span>
               <span>{service.description}</span>
             </div>
           ))}

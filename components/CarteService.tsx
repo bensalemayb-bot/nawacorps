@@ -9,7 +9,7 @@ import {
   isQuote,
 } from "@/lib/format";
 import type { ServiceCatalogue } from "@/lib/catalogue";
-import type { FamilleRangee } from "@/lib/catalogue-familles";
+import { type FamilleRangee, hrefService } from "@/lib/catalogue-familles";
 
 /**
  * UNE PRESTATION, EN CARTE — le dessin partage par l accueil et /services.
@@ -38,25 +38,57 @@ import type { FamilleRangee } from "@/lib/catalogue-familles";
  * toutes. L echelle, elle, est portee par la grille (.cat-grid-sobre) : une
  * carte ne decide pas de sa propre taille.
  *
- * LA CARTE EST UN LIEN QUAND — ET SEULEMENT QUAND — ON LUI PASSE UNE FAMILLE.
- * Sur l accueil, la carte est la seule porte vers la page de sa famille : elle
- * la nomme en toutes lettres au pied, parce qu un lien doit dire ou il mene —
- * cliquer « Cartes de visite » pour atterrir sur « Les imprimés » sans
- * prevenir n est pas une navigation, c est une surprise. Sur /services, le
- * bloc porte deja le titre de la famille et son lien « tout voir » : la carte
- * y redirait trois fois la meme chose, elle reste donc du contenu.
+ * LA CARTE EST UN LIEN, ET SA DESTINATION DEPEND DE LA PAGE QUI LA REND.
+ *
+ * Sur l accueil, on lui passe une FAMILLE : la carte est la seule porte vers
+ * la page de cette famille, et elle la nomme en toutes lettres au pied, parce
+ * qu un lien doit dire ou il mene — cliquer « Cartes de visite » pour atterrir
+ * sur « Les imprimés » sans prevenir n est pas une navigation, c est une
+ * surprise.
+ *
+ * Sur /services, on lui passe `versSaPage` : la carte ouvre la page de la
+ * prestation elle-meme. La destination n a alors pas a etre nommee — le titre
+ * de la carte EST le nom de la page. Cette page-la est le catalogue : elle
+ * promet qu on y voit tout ce qui est vendu et que chaque ligne s ouvre.
+ * Une carte muette y etait une impasse.
+ *
+ * Sans l un ni l autre, la carte reste du contenu : mieux vaut une carte sans
+ * porte de sortie qu une porte sur le vide.
  */
+/**
+ * Le pied de carte quand elle ouvre sa propre page.
+ *
+ * Il n y a rien a nommer — le titre de la carte est deja le nom de la page —,
+ * mais il faut une AFFORDANCE : sans elle, seul le survol dit que la carte est
+ * cliquable, et un telephone ne survole rien. Trois mots qui disent ce qu on
+ * obtient, pas « En savoir plus », qui ne dit rien.
+ */
+const LIBELLE_SA_PAGE = "Voir le détail";
+
 export default function CarteService({
   service,
   famille,
+  versSaPage = false,
   sobre = false,
 }: {
   service: ServiceCatalogue;
   /** Passee UNIQUEMENT quand la carte doit ouvrir la page de sa famille. */
   famille?: FamilleRangee;
+  /**
+   * La carte ouvre la page de la prestation, /services/<slug>. L emporte sur
+   * `famille` : les deux ne sont jamais passees ensemble, et si elles
+   * l etaient, la page la plus precise gagne.
+   */
+  versSaPage?: boolean;
   /** Second rang de la vitrine : la description n est pas rendue. */
   sobre?: boolean;
 }) {
+  const porte = versSaPage
+    ? { href: hrefService(service.slug), libelle: LIBELLE_SA_PAGE }
+    : famille
+      ? { href: famille.href, libelle: famille.contenu.libelle }
+      : null;
+
   const contenu = (
     <>
       <h3>{service.name}</h3>
@@ -91,15 +123,15 @@ export default function CarteService({
           <small className="px-note px-tva">{TVA_LABEL}</small>
         </p>
       )}
-      {famille ? (
+      {porte ? (
         <span className="go">
-          {famille.contenu.libelle} <span className="ar">→</span>
+          {porte.libelle} <span className="ar">→</span>
         </span>
       ) : null}
     </>
   );
 
-  if (!famille) {
+  if (!porte) {
     return (
       <article className="cat-it" data-reveal>
         {contenu}
@@ -110,7 +142,7 @@ export default function CarteService({
   // Pas de next/link sur le site public : les revelations au scroll ne
   // s initialisent qu une fois (cf. CLAUDE.md).
   return (
-    <a className="cat-it" href={famille.href} data-reveal>
+    <a className="cat-it" href={porte.href} data-reveal>
       {contenu}
     </a>
   );
