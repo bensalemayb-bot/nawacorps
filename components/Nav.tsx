@@ -1,4 +1,6 @@
 import Image from "next/image";
+import NavServices from "@/components/NavServices";
+import { ENTREES_FAMILLES, HREF_SERVICES } from "@/lib/catalogue-familles";
 
 // Barre de navigation — reference/binacore.html lignes 695-705.
 // Composant serveur : les ecouteurs (#nav, #burger, #clock) sont poses par
@@ -32,6 +34,21 @@ import Image from "next/image";
 // L icone porte alt="" : elle ne dit rien que le wordmark ne dise deja, et un
 // lecteur d ecran annoncerait deux fois la meme marque. C est le nom qui porte
 // le texte alternatif.
+//
+// CINQ ENTREES SONT DEVENUES QUATRE, ET C EST LE CONSTAT DU PROPRIETAIRE :
+// « service, offre et prestation veulent dire la meme chose ». La barre portait
+// les trois — « Services » vers une ancre de l accueil, « Offres » vers une
+// autre ancre du meme accueil, « Prestations » vers une page. Le visiteur
+// devait deviner laquelle contenait quoi, et il ne devine pas : il part.
+// « Offres » et « Prestations » quittent donc la nav. Les sections de l accueil
+// ne bougent pas d un pixel et gardent leurs ancres — c est la nav qui cesse de
+// les dedoubler, pas la page qui perd du contenu.
+//
+// LA SEULE ENTREE QUI S OUVRE EST « Services », et son deroulant vit dans
+// components/NavServices.tsx : il a un etat, donc il est client, et il est le
+// seul de ce fichier a l etre. La liste des familles n est pas ecrite ici — elle
+// est derivee de lib/familles.ts par lib/catalogue-familles.ts, la meme source
+// que le menu plein ecran. Deux listes ecrites a deux endroits divergent.
 export default function Nav() {
   // volontaire — next/link casserait les reveals (Interactions ne tourne qu'une fois), voir décision B7
   return (
@@ -57,13 +74,12 @@ export default function Nav() {
       <span className="nav-time" id="clock">Genève — 00:00</span>
       <div className="nav-r">
         <a className="lnk" href="/#travaux">Travaux</a>
-        <a className="lnk" href="/#services">Services</a>
-        <a className="lnk" href="/#offres">Offres</a>
-        {/* « Prestations » est la seule entree qui mene a une AUTRE PAGE, d ou
-            sa place apres les trois ancres : celles-ci gardent l ordre des
-            sections de l accueil (01, 02, 03), la page vient ensuite. Elle est
-            un <a> nu comme les autres — voir la note en tete de fichier. */}
-        <a className="lnk" href="/prestations">Prestations</a>
+        <NavServices
+          general={{ href: HREF_SERVICES, libelle: "Tous les services" }}
+          familles={ENTREES_FAMILLES}
+        />
+        <a className="lnk" href="/studio">Le studio</a>
+        <a className="lnk" href="/contact">Contact</a>
         <a className="pill" href="/#contact">Parlons-en</a>
         <button className="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false"><i></i><i></i></button>
       </div>

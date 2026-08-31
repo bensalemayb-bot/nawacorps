@@ -6,10 +6,15 @@ import { SITE_URL } from "@/lib/site";
 /**
  * sitemap.xml, genere.
  *
- * Douze URL : l accueil, le catalogue, les trois formules de site, les cinq
- * familles de prestations, les deux pages legales. Sans ce plan, la decouverte
- * reposerait entierement sur les liens de la nav et du pied de page, et une
- * page atteinte par un seul lien est une page mal signalee.
+ * L accueil, le catalogue, les trois formules de site, les cinq familles, la
+ * page du studio, celle du contact, les deux pages legales. Sans ce plan, la
+ * decouverte reposerait entierement sur les liens de la nav et du pied de page,
+ * et une page atteinte par un seul lien est une page mal signalee.
+ *
+ * LE COMPTE N EST PLUS ECRIT. Il disait « douze URL » et il en annoncait deja
+ * quatorze : un chiffre dans un commentaire est faux a la premiere page
+ * ajoutee, et deux des lignes ci-dessous sont des `map` dont la longueur se
+ * decide ailleurs.
  *
  * `lastModified` est volontairement la date du build et non `new Date()` a
  * chaque requete : ce fichier est un Route Handler mis en cache par Next, et
@@ -64,6 +69,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly" as const,
       priority: 0.6,
     })),
+    // LES DEUX PAGES QUE LA NAV OUVRE SANS PASSER PAR LE CATALOGUE. Elles ne
+    // vendent pas une prestation, elles repondent aux deux questions qui
+    // restent quand le prix est lu : qui fait le travail, et comment on le
+    // joint. Meme priorite que les familles, parce qu elles se cherchent
+    // autant — « qui refait mon site à Genève » n est pas une requete de
+    // catalogue.
+    {
+      url: `${SITE_URL}/studio`,
+      lastModified: BUILD,
+      changeFrequency: "monthly",
+      priority: 0.6,
+    },
+    {
+      url: `${SITE_URL}/contact`,
+      lastModified: BUILD,
+      changeFrequency: "monthly",
+      priority: 0.6,
+    },
     {
       url: `${SITE_URL}/mentions-legales`,
       lastModified: BUILD,

@@ -27,8 +27,13 @@ declare global {
  *  - closeMenu cible `.menu a[href*="#"]` la ou la maquette ecrivait
  *    `[href^="#"]`. Depuis B7 le site a plusieurs pages : les liens du menu
  *    sont `/#ancre`, que `^=` ne matchait plus — le menu ne se serait plus
- *    referme au clic. `*=` matche exactement les memes 5 liens, .m-foot ne
- *    contenant que wa.me et mailto:, sans `#`.
+ *    referme au clic.
+ *    DEPUIS LA REFONTE DE LA NAV, LE SELECTEUR NE MATCHE PLUS QU UN LIEN :
+ *    « Travaux ». Tous les autres — Services, les cinq familles, Le studio,
+ *    Contact — changent de page, le document est remplace et html.menu-open
+ *    part avec lui ; ils n ont donc pas besoin de closeMenu, et le selecteur
+ *    n a pas a etre elargi. .m-foot, lui, ne contient que wa.me et mailto:,
+ *    sans `#`.
  */
 export default function Interactions() {
   // volontaire — portage verbatim du <script> de la maquette, aucune réécriture permise, voir décision B4

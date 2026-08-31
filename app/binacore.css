@@ -146,7 +146,53 @@ section.offres.green{display:flow-root}
   transition:background .3s,color .3s;
 }
 .pill:hover{background:var(--ink);color:var(--bone)}
-@media(max-width:860px){.nav-time{display:none}.nav{grid-template-columns:1fr auto}.nav-r a:not(.pill){display:none}}
+
+/* « Services », la seule entree de nav qui s ouvre.
+   Le comportement — clavier, survol, Echap, focus — vit dans
+   components/NavServices.tsx ; ici, le dessin et les deux etats. */
+.nav-drop{position:relative;display:flex;align-items:center}
+/* Le bouton porte aussi .lnk : il herite du souligne au survol des entrees
+   voisines, pour qu on ne voie pas qu il n est pas un lien. Le reste remet a
+   zero ce qu un <button> apporte de son cru — .nav-r a:not(.pill) ne l atteint
+   pas, il n est pas un <a>. */
+.nav-drop-t{
+  display:inline-flex;align-items:center;gap:.45em;
+  background:none;border:0;padding:0;margin:0;cursor:pointer;
+  font:inherit;font-size:.8rem;font-weight:500;color:var(--ink);line-height:1.2;
+}
+.nav-drop-c{flex:none;transition:transform .3s var(--ease)}
+.nav-drop.open .nav-drop-c{transform:rotate(180deg)}
+/* LE PONT, et ce n est pas une decoration. Sans lui, le pointeur qui descend du
+   bouton vers le panneau traverse 12px de vide, y declenche le mouseleave de
+   l enveloppe, et le menu se referme sous le doigt avant d etre atteint. Il
+   n existe QUE menu ouvert, et il ne couvre qu une bande deja occupee par .nav
+   — il n intercepte donc rien que la barre n interceptait pas deja. */
+.nav-drop.open::after{content:"";position:absolute;top:100%;left:0;right:0;height:12px}
+.nav-drop-p{
+  position:absolute;top:calc(100% + 12px);left:50%;translate:-50% 0;
+  min-width:236px;display:flex;flex-direction:column;
+  padding:10px 0;border:1px solid var(--line);border-radius:var(--r);
+  background:rgba(241,238,230,.97);backdrop-filter:blur(14px);
+  box-shadow:0 18px 40px -24px rgba(23,22,19,.5);
+  /* `visibility` ET PAS SEULEMENT `opacity` : a opacity:0 seul, les six liens
+     restent dans l ordre de tabulation et dans l arbre d accessibilite — un
+     menu ferme qui piege le clavier. C est aussi ce qui dispense le panneau
+     d un aria-hidden, lequel serait une faute sur un conteneur focalisable. */
+  opacity:0;visibility:hidden;transform:translateY(-6px);
+  transition:opacity .28s var(--ease),transform .28s var(--ease),visibility .28s;
+}
+.nav-drop.open .nav-drop-p{opacity:1;visibility:visible;transform:none}
+.nav-drop-p a{
+  display:block;padding:9px 20px;line-height:1.35;
+  font-size:.8rem;font-weight:500;text-decoration:none;color:var(--ink);
+  transition:background .25s,color .25s;
+}
+.nav-drop-p a:hover{background:rgba(23,22,19,.05)}
+/* La page generale se detache des cinq familles parce qu elle les contient
+   toutes : c est elle qui tient la promesse « on y voit tout ce qui est
+   vendu », les autres n en ouvrent qu un morceau. */
+.nav-drop-p a.nav-drop-g{font-weight:600;padding-bottom:13px;margin-bottom:6px;border-bottom:1px solid var(--line)}
+@media(max-width:860px){.nav-time{display:none}.nav{grid-template-columns:1fr auto}.nav-r a:not(.pill){display:none}.nav-drop{display:none}}
 
 /* ---------- hero ---------- */
 .hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:0;position:relative}
@@ -526,30 +572,58 @@ html.menu-open{overflow:hidden}
 .menu .m-lnk{display:flex;align-items:baseline;gap:1em;text-decoration:none;
   padding:.32em 0;border-bottom:1px solid var(--line-g);
   opacity:0;transform:translateY(28px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
-html.menu-open .menu .m-lnk{opacity:1;transform:none}
-html.menu-open .menu .m-lnk:nth-child(1){transition-delay:.22s}
-html.menu-open .menu .m-lnk:nth-child(2){transition-delay:.3s}
-html.menu-open .menu .m-lnk:nth-child(3){transition-delay:.38s}
-html.menu-open .menu .m-lnk:nth-child(4){transition-delay:.46s}
-html.menu-open .menu .m-lnk:nth-child(5){transition-delay:.54s}
-/* Le menu compte SIX entrees depuis l'ajout de « Prestations » ; l'echelonnement
-   s'arretait a cinq. Sans delai, la sixieme (Contact) partait a 0s et arrivait
-   donc AVANT les cinq autres, a rebours de la cascade. Defaut visible sur
-   telephone uniquement : le menu plein ecran ne s'ouvre que sous 860px. */
-html.menu-open .menu .m-lnk:nth-child(6){transition-delay:.62s}
+/* L ECHELONNEMENT SE COMPTE EN `--i`, PLUS EN `nth-child`.
+   Il y avait six regles, une par rang DOM, et il a suffi d intercaler la
+   sous-liste des familles sous « Services » pour que la cascade saute un cran :
+   `nth-child` compte TOUS les freres, y compris le <div> qui n a pas de delai a
+   recevoir. Le rang est donc pose par components/MenuOverlay.tsx, sur l entree
+   elle-meme, et il survit a toute insertion. `--i` etant une propriete
+   personnalisee, elle est HERITEE : la posee sur .m-grp sert aussi bien le
+   .m-lnk qu il enveloppe que la sous-liste qui le suit. */
+html.menu-open .menu .m-lnk{opacity:1;transform:none;transition-delay:calc(.22s + var(--i,0) * .08s)}
 .menu .mi{font-size:.7rem;font-weight:600;letter-spacing:.18em;color:var(--brass-l)}
 .menu .mt{font-weight:550;font-size:clamp(2rem,7.5vw,4.2rem);letter-spacing:-.03em;line-height:1.15;transition:color .3s}
 .menu .m-lnk:hover .mt{color:var(--brass-l)}
+/* La sous-liste des familles. Elle ne se replie pas : sur un menu plein ecran,
+   cacher cinq liens derriere un pli coute un geste et ne gagne aucune place.
+   C est l echelle qui dit qu elles dependent de « Services », pas un bouton.
+   Le groupe n a pas de bordure a lui — celle du .m-lnk qu il contient separe
+   deja l entree de la suivante, et la sous-liste vit du bon cote du filet. */
+.menu .m-grp .m-lnk{border-bottom:0}
+.menu .m-sub{display:flex;flex-direction:column;
+  padding:2px 0 14px;border-bottom:1px solid var(--line-g);
+  opacity:0;transform:translateY(20px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+html.menu-open .menu .m-sub{opacity:1;transform:none;transition-delay:calc(.28s + var(--i,0) * .08s)}
+/* 38px de hauteur reelle, et non une surface sensible ajoutee en ::before : la
+   liste est verticale et serree, deux calques de 44px se recouvriraient l un
+   l autre — c est precisement ce que le bloc « cibles tactiles » plus bas
+   s interdit. La hauteur est donc dans la boite, pas au-dessus. */
+.menu .m-sub a{display:flex;align-items:center;min-height:38px;
+  font-size:.82rem;font-weight:500;letter-spacing:.01em;
+  text-decoration:none;color:var(--muted-g);transition:color .3s}
+.menu .m-sub a:hover{color:var(--brass-l)}
+/* Filet de securite, jamais visible tant que le menu tient dans l ecran :
+   quatre entrees, cinq familles et le pied depassent sur un telephone couche,
+   et un menu coupe est pire qu un menu qui defile. `contain` empeche le geste
+   de se propager au document, que html.menu-open a deja verrouille.
+   LES 28px DE PADDING NE SONT PAS DECORATIFS : les entrees partent a
+   translateY(28px) et reviennent a 0. Sans cette reserve, l ecart de depart
+   deborderait la boite que `overflow` vient de rendre clippante, et la cascade
+   d ouverture se jouerait derriere un bord coupant. */
+.menu nav{max-height:calc(100svh - 170px);overflow-y:auto;overscroll-behavior:contain;padding-bottom:28px}
 .menu .m-foot{position:absolute;left:var(--pad);right:var(--pad);bottom:30px;
   display:flex;justify-content:space-between;gap:1.5em;flex-wrap:wrap;
   font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-g)}
 .menu .m-foot a{color:var(--bone);text-decoration:none}
 
 /* nav au-dessus du menu ouvert */
-.nav-time,.nav-r a{transition:opacity .3s}
+/* `.nav-drop-t` rejoint la liste : « Services » est un <button>, pas un <a>, et
+   il serait reste seul et lisible par-dessus le menu plein ecran pendant que
+   ses voisins s effacent. */
+.nav-time,.nav-r a,.nav-drop-t{transition:opacity .3s}
 html.menu-open .nav{background:transparent;box-shadow:none;backdrop-filter:none}
 html.menu-open .wordmark{color:var(--bone)}
-html.menu-open .nav-time,html.menu-open .nav-r a{opacity:0;pointer-events:none}
+html.menu-open .nav-time,html.menu-open .nav-r a,html.menu-open .nav-drop-t{opacity:0;pointer-events:none}
 
 /* media qui s'echelonnent */
 .frame{transform:translateY(0) scale(1);transition:box-shadow .4s}
