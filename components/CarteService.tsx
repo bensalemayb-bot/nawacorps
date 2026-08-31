@@ -3,6 +3,8 @@ import {
   FROM_PREFIX,
   MONTHLY_SUFFIX,
   QUOTE_LABEL,
+  QUOTE_NOTE,
+  TVA_LABEL,
   formatChfAmount,
   isQuote,
 } from "@/lib/format";
@@ -59,22 +61,36 @@ export default function CarteService({
     <>
       <h3>{service.name}</h3>
       {sobre ? null : <p className="d">{service.description}</p>}
-      {/* Le prix reste en bas de carte : sur une grille, les titres n ont pas
+      {/* LE PRIX RESTE EN BAS DE CARTE : sur une grille, les titres n ont pas
           tous la meme hauteur, et un prix qui flotte a mi-hauteur casse la
-          ligne de lecture horizontale d une rangee a l autre. */}
-      <p className="px">
-        {isQuote(service) || service.priceCents === null ? (
-          QUOTE_LABEL
-        ) : (
-          <>
-            {service.priceFrom ? <small>{FROM_PREFIX}</small> : null}
-            {`${formatChfAmount(service.priceCents)}${CHF_UNIT}`}
-            {service.isMonthly ? (
-              <small className="per">{MONTHLY_SUFFIX}</small>
-            ) : null}
-          </>
-        )}
-      </p>
+          ligne de lecture horizontale d une rangee a l autre.
+
+          ET IL PORTE DESORMAIS SA MENTION. « TVA comprise » vivait au pied de
+          la grille, a plusieurs cartes de distance ; la regle vaut par UNITE DE
+          LECTURE, et un dirigeant qui compare deux cartes ne lit pas le bas de
+          page. La mention descend donc sous le montant, ou elle est aussi un
+          argument : c est un prix qu il n a pas a recalculer.
+
+          « sur devis » recoit son pendant, pour la raison inverse : seul, il se
+          lit comme un refus de repondre. Trois mots disent que c en est une —
+          voir QUOTE_NOTE dans lib/format.ts. Ils tombent au second rang de
+          l accueil, ou la carte est deja reduite a son os et ou le
+          raisonnement est ecrit juste au-dessus, en prose. */}
+      {isQuote(service) || service.priceCents === null ? (
+        <p className="px px-devis">
+          {QUOTE_LABEL}
+          {sobre ? null : <small className="px-note">{QUOTE_NOTE}</small>}
+        </p>
+      ) : (
+        <p className="px">
+          {service.priceFrom ? <small>{FROM_PREFIX}</small> : null}
+          {`${formatChfAmount(service.priceCents)}${CHF_UNIT}`}
+          {service.isMonthly ? (
+            <small className="per">{MONTHLY_SUFFIX}</small>
+          ) : null}
+          <small className="px-note px-tva">{TVA_LABEL}</small>
+        </p>
+      )}
       {famille ? (
         <span className="go">
           {famille.contenu.libelle} <span className="ar">→</span>

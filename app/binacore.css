@@ -350,6 +350,37 @@ section.offres.green{display:flow-root}
 .price .num small{font-family:var(--sans);font-size:.8rem;color:var(--muted-g);letter-spacing:.02em}
 .price .was{font-size:.76rem;color:var(--muted-g)}
 .price .was s{opacity:.75}
+/* « TVA comprise » COLLE AU MONTANT, et pas au bas de la grille.
+   La regle vaut par UNITE DE LECTURE (CLAUDE.md, Interdits) : un chiffre de
+   3,8rem n est pas couvert par une note posee trois blocs plus bas, que
+   personne ne lit avant d avoir compare les trois prix. Elle se lit d ailleurs
+   moins comme une obligation que comme un argument — c est un prix que le
+   lecteur n a pas a recalculer.
+   Assez petite pour ne pas concurrencer le chiffre, assez lisible pour ne pas
+   passer pour une note de bas de page : .72rem, sans capitales, la meme
+   couleur sourde que la description de la carte.
+   Les DEUX grilles qui la rendent — l accueil et l index des prestations —
+   vivent sur fond pin : la couleur sourde est donc celle du fond pin, et il
+   n y a volontairement pas de variante claire. Le jour ou une carte de prix
+   sortira du vert, il faudra en ajouter une, comme le font deja .lede et .btn.
+   Une regle qui ne sert rien aujourd hui est une regle qu on ne relit plus. */
+.price .num-tva{margin-top:8px;font-size:.72rem;letter-spacing:.02em;color:var(--muted-g)}
+/* La ligne de tete ne numerote plus, elle nomme : « Recevoir les demandes »
+   est plus long que « N° 02 » et doit pouvoir passer a la ligne sans pousser
+   la pastille « Recommandé » hors de la carte.
+   Largeurs relevees a 1445 : la ligne offre 381px, le libelle le plus long en
+   prend 177 et la pastille 109 — elle tient donc, mais la reserve est ecrite
+   plutot que supposee. */
+.price .lab{gap:12px;flex-wrap:wrap}
+.price .lab .rec{flex:none}
+/* LE LIBELLE PREND LA MEME BOITE QUE LA PASTILLE, bordure transparente
+   comprise. Sans cela, la carte « Recommandé » etait la seule a porter une
+   ligne de tete haute de 27px la ou les deux autres en faisaient 17 : son
+   titre partait 9px plus bas et son prix 10px plus bas, si bien que les trois
+   montants — ce qu on compare — ne se lisaient pas sur la meme ligne. Le
+   defaut existait deja avec « N° 02 ». Une bordure transparente plutot qu une
+   hauteur en dur : elle suit la pastille si son dessin change. */
+.price .lab > span:first-child{padding:.4em 0;border:1px solid transparent}
 .price ul{list-style:none;margin:24px 0 30px;display:grid;gap:10px}
 .price li{font-size:.88rem;color:#DCE4DC;display:flex;gap:.8em}
 .price li::before{content:"—";color:var(--brass-l);flex:none}
@@ -608,6 +639,22 @@ a.cat-it:hover{border-color:var(--ink);background:var(--bone-2);transform:transl
   letter-spacing:.06em;margin-right:.4em;text-transform:uppercase}
 .green .cat-it .px small{color:var(--muted-g)}
 .cat-it .px small.per{margin-right:0;margin-left:.15em;text-transform:none;letter-spacing:0}
+/* LA LIGNE SOUS LE MONTANT — « TVA comprise » sous un prix, « chiffré après
+   deux questions » sous un « sur devis ».
+   Elle passe en BLOC : les `small` de `.px` sont dessines pour le prefixe
+   « dès », qui vit sur la meme ligne que le chiffre et porte a ce titre un
+   `margin-right`. Celle-ci se lit dessous, en bas de casse — c est une phrase,
+   pas une etiquette —, et elle reprend une interligne propre parce que `.px`
+   est a `line-height:1` pour serrer le chiffre. */
+.cat-it .px small.px-note{display:block;margin:7px 0 0;font-size:.68rem;font-weight:500;
+  line-height:1.35;letter-spacing:.01em;text-transform:none}
+/* « sur devis » ne doit pas se lire comme la case vide de la colonne des prix.
+   Il garde le corps et la serif du montant — c est une reponse, pas une
+   absence — et prend l accent laiton, qui est la couleur de ce que le site
+   affirme. Le montant, lui, reste a la couleur du texte : c est le chiffre qui
+   doit primer quand il existe. */
+.cat-it .px-devis{color:var(--brass)}
+.green .cat-it .px-devis{color:var(--brass-l)}
 /* LA FAMILLE EST NOMMEE AU PIED DE LA CARTE, et ce n est pas decoratif : la
    carte entiere est un lien, et un lien doit dire ou il mene. Sans ce libelle,
    cliquer « Cartes de visite » ouvrait « Imprimés & signalétique » sans
@@ -693,6 +740,32 @@ a.cat-it:hover .go .ar{transform:translateX(4px)}
 .cat-rang-d{max-width:62ch;font-size:.86rem;line-height:1.6;color:var(--muted);
   margin-bottom:clamp(20px,2.4vw,28px)}
 .green .cat-rang-d{color:var(--muted-g)}
+
+/* ========== « sur devis », ecrit comme une decision ==========
+   TREIZE DES DIX-HUIT LIGNES DU CATALOGUE SONT SUR DEVIS, dont deux des trois
+   lignes de vitrine. Tant que la raison n est pas donnee, le lecteur lit un
+   refus de repondre — et il la cherchait jusqu ici dans une note de bas de
+   grille, en .78rem gris, a cote de la mention de TVA. Une note de bas de
+   grille est le format de ce qu on est oblige d ecrire ; ce texte-ci est un
+   argument de vente, et il en prend la forme : un chiffre en tete, un
+   paragraphe lisible, et l engagement de reponse detache a la fin.
+   Le filet a gauche fait le reste : il dit « ceci se lit », sans poser un
+   titre de plus dans une section qui en a deja un. */
+.sm-devis{margin-top:clamp(34px,4vw,52px);max-width:74ch;
+  padding-left:clamp(16px,1.8vw,22px);border-left:2px solid var(--brass)}
+.green .sm-devis{border-left-color:var(--brass-l)}
+.sm-devis p{font-size:.92rem;line-height:1.65;color:var(--muted)}
+.green .sm-devis p{color:var(--muted-g)}
+/* Le compte ouvre le bloc et donne l ordre de grandeur avant l explication :
+   un lecteur qui sait combien de lignes sont concernees lit la suite comme une
+   regle, pas comme une excuse pour la ligne qu il regardait. */
+.sm-devis .sm-devis-t{font-family:var(--serif);font-size:1.14rem;line-height:1.4;
+  color:inherit;margin-bottom:.6em}
+/* L engagement de reponse est le seul du site : il se detache du paragraphe
+   qui le precede, sinon il se lit comme sa derniere subordonnee. */
+.sm-devis .sm-devis-r{margin-top:.75em;font-weight:600;font-size:.86rem;
+  letter-spacing:.01em;color:var(--brass)}
+.green .sm-devis .sm-devis-r{color:var(--brass-l)}
 
 /* LE SECOND RANG SUR /prestations, qui n a pas le meme travail a faire.
    L accueil est une vitrine : le second rang y perd ses descriptions. Cette

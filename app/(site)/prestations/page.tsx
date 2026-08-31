@@ -7,11 +7,17 @@ import {
   FROM_PREFIX,
   MONTHLY_SUFFIX,
   QUOTE_LABEL,
+  TVA_LABEL,
   formatChfAmount,
   isQuote,
 } from "@/lib/format";
-import { estFormule } from "@/lib/formules";
-import { type FamilleSlug, MENTION_TVA } from "@/lib/familles";
+import { POUR_QUI, estFormule } from "@/lib/formules";
+import {
+  type FamilleSlug,
+  MENTION_DEVIS,
+  MENTION_REPONSE,
+  MENTION_TVA,
+} from "@/lib/familles";
 import {
   CATEGORIES_FAMILLES,
   FAMILLES_EN_SECOND,
@@ -277,6 +283,13 @@ export default async function Prestations() {
   const rangeables = parCategories(catalogue, [...CATEGORIES_FAMILLES]);
   const vitrine = parFamilles(rangeables, FAMILLES_EN_VITRINE);
   const second = parFamilles(rangeables, FAMILLES_EN_SECOND);
+  // LE PARTAGE ENTRE LES DEUX REGIMES DE PRIX, DERIVE DE LA BASE. Ecrits en
+  // dur, ces deux comptes seraient faux au premier ajout au catalogue ou a la
+  // premiere ligne masquee depuis /admin — et une phrase qui compte faux
+  // discredite celle qui explique. `isQuote` est la condition qui decide deja
+  // du rendu de chaque carte : les deux ne peuvent pas se contredire.
+  const lignesSurDevis = catalogue.filter(isQuote).length;
+  const lignesChiffrees = catalogue.length - lignesSurDevis;
 
   // Les formules chiffrees prennent la grille de cartes ; celles qui se
   // traitent sur devis passent en ligne pleine largeur dessous, comme le fait
@@ -322,6 +335,21 @@ export default async function Prestations() {
             Vous n&apos;avez rien à préparer : je reprends ce qui est déjà en
             ligne.
           </p>
+          {/* LES DEUX REGIMES DE PRIX, ANNONCES AVANT LA PREMIERE GRILLE.
+              Cinq lignes portent un montant, le reste se chiffre sur devis :
+              tant que la raison n est pas donnee, « sur devis » se lit comme
+              un refus de repondre, et il occupe la majorite du catalogue.
+              Le raisonnement est celui de lib/familles.ts, rendu mot pour mot
+              comme sur les cinq pages de famille. Les deux comptes sont
+              calcules sur la base, jamais ecrits a la main. */}
+          <div className="sm-devis" data-reveal style={{ marginTop: "1.6em" }}>
+            <p className="sm-devis-t">
+              {lignesChiffrees} lignes portent un prix ferme, {lignesSurDevis} sont
+              annoncées sur devis.
+            </p>
+            <p>{MENTION_DEVIS}</p>
+            <p className="sm-devis-r">{MENTION_REPONSE}</p>
+          </div>
         </div>
       </section>
 
@@ -348,17 +376,24 @@ export default async function Prestations() {
           </p>
 
           <div className="price-grid">
-            {cartes.map((service, i) => (
+            {cartes.map((service) => (
               <article className="price" data-reveal key={service.id}>
+                {/* MEME LIGNE DE TETE QUE LA GRILLE D ACCUEIL, et lue a la
+                    meme source (lib/formules.ts) : « N° 01 / 02 / 03 »
+                    numerotait trois cartes qu on voit deja cote a cote. */}
                 <div className="lab">
-                  <span>N° {String(i + 1).padStart(2, "0")}</span>
+                  <span>
+                    {estFormule(service.slug) ? POUR_QUI[service.slug] : ""}
+                  </span>
                 </div>
                 <h3>{service.name}</h3>
                 <p className="d">{service.description}</p>
                 {/* Meme rendu que la grille d accueil, `dès` et `/mois`
                     compris : ce sont des drapeaux de la base, et un jour ou
                     une formule les portera, la carte doit suivre sans qu on y
-                    revienne. */}
+                    revienne. La mention de TVA suit le montant pour la meme
+                    raison qu a l accueil : la regle vaut par unite de lecture,
+                    et le bas de grille est deja hors du regard. */}
                 <p className="num">
                   {service.priceFrom ? <small>{FROM_PREFIX}</small> : null}
                   {formatChfAmount(service.priceCents as number)}
@@ -367,6 +402,7 @@ export default async function Prestations() {
                     <small className="per">{MONTHLY_SUFFIX}</small>
                   ) : null}
                 </p>
+                <p className="num-tva">{TVA_LABEL}</p>
                 {/* Le lien n existe que pour les trois formules qui ont une
                     page. Un `principal` ajoute en base demain apparait donc
                     dans la grille, mais sans lien mort. */}

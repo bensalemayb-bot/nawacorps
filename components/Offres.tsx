@@ -4,10 +4,12 @@ import {
   FROM_PREFIX,
   MONTHLY_SUFFIX,
   QUOTE_LABEL,
+  TVA_LABEL,
   formatChfAmount,
   isQuote,
 } from "@/lib/format";
 import { chargerCatalogue, parCategories } from "@/lib/catalogue";
+import { POUR_QUI, estFormule } from "@/lib/formules";
 import BoutonDevis from "@/components/BoutonDevis";
 
 /**
@@ -152,12 +154,19 @@ export default async function Offres() {
         </div>
 
         <div className="price-grid">
-          {cards.map((service, i) => {
+          {cards.map((service) => {
             const ed = EDITORIAL[service.slug];
             return (
               <article className="price" data-reveal key={service.id}>
+                {/* LA LIGNE DE TETE DIT A QUI LA FORMULE S ADRESSE, plus
+                    « N° 01 / 02 / 03 ». La ligne la plus lisible de la carte
+                    numerotait trois cartes qu on voit deja cote a cote : un
+                    rang de tri, pas une information. Le libelle vit dans
+                    lib/formules.ts parce que /prestations rend la meme grille.
+                    Un `principal` ajoute en base sans libelle laisse la ligne
+                    vide plutot que d inventer une promesse. */}
                 <div className="lab">
-                  <span>N° {String(i + 1).padStart(2, "0")}</span>
+                  <span>{estFormule(service.slug) ? POUR_QUI[service.slug] : ""}</span>
                   {ed?.recommended ? <span className="rec">Recommandé</span> : null}
                 </div>
                 <h3>{service.name}</h3>
@@ -174,6 +183,17 @@ export default async function Offres() {
                     </>
                   )}
                 </p>
+                {/* LA MENTION SUIT LE MONTANT, ET NON LA GRILLE. Elle vivait
+                    trois blocs plus bas, sous la note de pied : la regle vaut
+                    par UNITE DE LECTURE, et le chiffre de 3,8rem qui la
+                    reclame est justement ce qu on lit en premier. Elle n est
+                    pas qu une obligation — pour un dirigeant, c est le prix
+                    qu il n a pas a recalculer.
+                    Rendue seulement quand un montant s affiche : sous « sur
+                    devis », elle ne voudrait rien dire. */}
+                {service.priceCents === null ? null : (
+                  <p className="num-tva">{TVA_LABEL}</p>
+                )}
                 {ed ? (
                   <ul>
                     {ed.bullets.map((b) => <li key={b}>{b}</li>)}

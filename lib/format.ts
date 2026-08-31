@@ -31,6 +31,34 @@ export const QUOTE_LABEL = "sur devis";
 export const FROM_PREFIX = "dès";
 export const MONTHLY_SUFFIX = "/mois";
 
+/**
+ * LA MENTION QUI ACCOMPAGNE UN MONTANT, ecrite une seule fois pour tout le
+ * site.
+ *
+ * Elle est obligatoire — CLAUDE.md, Interdits — et elle vaut PAR UNITE DE
+ * LECTURE : un montant en tete de page n est pas couvert par une note deux
+ * ecrans plus bas. C est pour cela qu elle vit ici, a cote du formatage du
+ * montant, et non dans une phrase de bas de grille : ce qui affiche un prix
+ * doit avoir la mention sous la main.
+ *
+ * lib/familles.ts la reprend telle quelle dans sa phrase longue. Deux copies
+ * du meme mot divergent toujours, et celle-ci a valeur legale.
+ */
+export const TVA_LABEL = "TVA comprise";
+
+/**
+ * CE QUI SE LIT SOUS « sur devis », et pourquoi il y a quelque chose a lire.
+ *
+ * Treize des dix-huit lignes du catalogue sont sur devis. Seul, « sur devis »
+ * se lit comme un trou — une information qu on refuse de donner. Ce n en est
+ * pas une : un imprime se chiffre selon le tirage, le format, le papier et
+ * l urgence, et deux questions posees avant de chiffrer donnent un prix juste
+ * du premier coup, la ou un tarif affiche hors contexte devrait etre corrige
+ * devant le client. Trois mots suffisent a le dire sur la carte ; le
+ * raisonnement complet vit une fois par bloc, en prose.
+ */
+export const QUOTE_NOTE = "chiffré après deux questions";
+
 /** 195000 -> "1'950" ; 4900 -> "49" ; 45000 -> "450" */
 export function formatChfAmount(cents: number): string {
   const francs = Math.round(cents / 100);

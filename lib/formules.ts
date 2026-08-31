@@ -68,6 +68,30 @@ export function estFormule(valeur: string): valeur is FormuleSlug {
 }
 
 /**
+ * CE QUE LA FORMULE FAIT FAIRE AU SITE, en trois mots, en tete de carte.
+ *
+ * CE QUI OCCUPAIT CETTE PLACE : « N° 01 », « N° 02 », « N° 03 ». La ligne la
+ * plus haute et la plus lisible de la carte servait a numeroter trois cartes
+ * qu on voit deja cote a cote — un rang de tri, pas une information. Personne
+ * ne choisit la deuxieme formule parce qu elle est la deuxieme.
+ *
+ * Les trois libelles reprennent la colonne « Pour qui » de
+ * .agents/product-marketing.md §5 et forment une echelle qui se lit d un coup
+ * d oeil : etre presentable, recevoir les demandes, ne plus les traiter
+ * soi-meme. C est la question que le lecteur se pose devant trois prix.
+ *
+ * ILS VIVENT ICI ET NON DANS components/Offres.tsx parce que DEUX grilles les
+ * rendent — l accueil et /prestations —, et que deux copies d un meme libelle
+ * divergent au premier arbitrage. Le Record est indexe par FormuleSlug : une
+ * formule ajoutee sans libelle ne compile pas.
+ */
+export const POUR_QUI: Record<FormuleSlug, string> = {
+  "la-vitrine": "Être présentable",
+  "le-site": "Recevoir les demandes",
+  "l-assistant": "Les traiter sans vous",
+};
+
+/**
  * Le socle, commun aux trois formules — c est La Vitrine, et c est ce que
  * toutes les autres contiennent aussi.
  *

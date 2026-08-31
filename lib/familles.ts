@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { TVA_LABEL } from "@/lib/format";
 import { SITE_NAME, openGraphPage, whatsapp } from "@/lib/site";
 
 /**
@@ -148,10 +149,32 @@ type Famille = {
  * elle a ete ecrite.
  */
 export const MENTION_DEVIS =
-  "Les lignes annoncées sur devis le sont volontairement. Une prestation se chiffre mal hors contexte : le tirage, le format, le papier, le nombre de pages et l'urgence changent le prix, et un forfait affiché ne serait juste pour personne. Le devis part de ce que vous avez décidé, pas d'une moyenne. Deux allers-retours de correction sont compris, facturés au-delà.";
+  "Les lignes annoncées sur devis le sont volontairement. Une prestation se chiffre mal hors contexte : le tirage, le format, le papier, le nombre de pages et l'urgence changent le prix, et un forfait affiché ne serait juste pour personne. Deux questions posées avant de chiffrer donnent un prix juste du premier coup, là où un tarif affiché à l'aveugle devrait être corrigé devant vous. Le devis part de ce que vous avez décidé, pas d'une moyenne. Deux allers-retours de correction sont compris, facturés au-delà.";
 
-/** La mention obligatoire sous tout prix affiche. */
-export const MENTION_TVA = "Prix en francs suisses, TVA comprise.";
+/**
+ * LE SEUL ENGAGEMENT DE REACTIVITE ADMIS, et il ne voyage pas seul.
+ *
+ * Il est tenable un dimanche de decembre, contrairement au « sous 24 h » qui
+ * figurait sur trois pages sans avoir jamais ete decide. Il vivait au seul
+ * formulaire ; il accompagne desormais AUSSI les deux endroits ou treize
+ * lignes sur devis se presentent ensemble — l accueil et l index des
+ * prestations —, parce que « sur devis » sans delai de reponse se lit comme
+ * une porte fermee, et que c est precisement ce qu il ne doit pas etre.
+ *
+ * IL RESTE HORS DES CINQ PAGES DE FAMILLE. Cinq occurrences de plus le
+ * transformeraient en formule de remplissage, et une promesse repetee cesse
+ * d etre lue comme une promesse.
+ */
+export const MENTION_REPONSE = "Réponse le jour ouvrable suivant.";
+
+/**
+ * La mention obligatoire sous tout prix affiche, en phrase complete.
+ *
+ * Les deux mots qui portent l obligation viennent de lib/format.ts, ou vit
+ * aussi la mention courte collee sous chaque montant : deux graphies du meme
+ * mot finiraient par diverger, et celle-ci a valeur legale.
+ */
+export const MENTION_TVA = `Prix en francs suisses, ${TVA_LABEL}.`;
 
 export const FAMILLES: Record<FamilleSlug, Famille> = {
   /* ------------------------------------------------------------------ */

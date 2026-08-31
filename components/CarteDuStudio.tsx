@@ -1,4 +1,10 @@
 import { whatsapp } from "@/lib/site";
+import { isQuote } from "@/lib/format";
+import {
+  MENTION_DEVIS,
+  MENTION_REPONSE,
+  MENTION_TVA,
+} from "@/lib/familles";
 import { chargerCatalogue, parCategories } from "@/lib/catalogue";
 import {
   CATEGORIES_FAMILLES,
@@ -70,9 +76,15 @@ const DEVIS_HREF = whatsapp(
 export default async function CarteDuStudio() {
   // Lecture PARTAGEE avec Offres, rendue juste avant sur le meme ecran (cf.
   // lib/catalogue.ts). Le filtre par categories reste ici, en memoire.
-  const services = parCategories(await chargerCatalogue(), [
-    ...CATEGORIES_FAMILLES,
-  ]);
+  const catalogue = await chargerCatalogue();
+  const services = parCategories(catalogue, [...CATEGORIES_FAMILLES]);
+  // LES DEUX COMPTES DE LA PHRASE SUR LE DEVIS, DERIVES DE LA BASE. Ecrits en
+  // dur, ils seraient faux au premier ajout au catalogue ou a la premiere
+  // ligne masquee depuis /admin — et une phrase qui compte faux discredite
+  // celle qui explique. `isQuote` est la meme condition que celle qui decide
+  // du rendu de chaque carte : les deux ne peuvent pas se contredire.
+  const total = catalogue.length;
+  const surDevis = catalogue.filter(isQuote).length;
   // Aplati DANS L ORDRE DES FAMILLES, et non dans celui de `sortOrder` : en
   // base, les imprimes et l identite se suivent en alternance dans la meme
   // categorie `annee`. Rendues telles quelles, les cartes auraient donne une
@@ -129,13 +141,24 @@ export default async function CarteDuStudio() {
               />
             ))}
           </div>
+          {/* POURQUOI « SUR DEVIS » EST ECRIT EN PROSE, ET PAS EN NOTE DE BAS
+              DE GRILLE. La majorite des lignes du catalogue sont sur devis :
+              tant que la raison n est pas donnee, le lecteur lit un refus de
+              repondre, et deux des trois lignes de vitrine en font partie.
+              Le raisonnement est ecrit UNE fois, ici, et lu dans
+              lib/familles.ts — les cinq pages de famille rendent la meme
+              phrase, mot pour mot, et deux copies divergeraient.
+              Les deux comptes sont CALCULES sur la base : ecrits a la main,
+              ils deviendraient faux au premier ajout au catalogue. */}
+          <div className="sm-devis" data-reveal>
+            <p className="sm-devis-t">
+              {surDevis} lignes sur {total} sont annoncées sur devis.
+            </p>
+            <p>{MENTION_DEVIS}</p>
+            <p className="sm-devis-r">{MENTION_REPONSE}</p>
+          </div>
           <div className="p-note" data-reveal>
-            {/* « devis en cinq minutes » etait un engagement de reactivite
-                sans source : le seul admis est « réponse le jour ouvrable
-                suivant », et il est porte ici, une fois, parce que c est le
-                seul endroit de l accueil ou treize lignes sur devis se
-                presentent ensemble. */}
-            <span>Prix en francs suisses, TVA comprise. Un devis se chiffre après deux questions, et la réponse arrive le jour ouvrable suivant.</span>
+            <span>{MENTION_TVA}</span>
             <BoutonDevis href={DEVIS_HREF} sujet="devis-carte-du-studio">
               Demander un devis →
             </BoutonDevis>
