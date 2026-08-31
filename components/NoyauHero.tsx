@@ -77,15 +77,59 @@ export default async function NoyauHero() {
               <span className="l"><span>Une seule <span className="serif-i">personne</span>.</span></span>
             </h1>
             <div className="hero-foot">
-              {/* LE SOUS-TITRE A ETE COUPE DE MOITIE, et pas pour le style :
-                  a 328 caracteres il rendait sept lignes, le hero-foot
-                  descendait a 898px et debordait de 46px sous une fenetre de
-                  1442 x 852. Il enumerait par ailleurs des fonctions de site
-                  avant de rattraper le reste du catalogue en fin de phrase —
-                  ce que le h1 ci-dessus dit maintenant en premier. Il ne lui
-                  reste donc que ce que le titre ne peut pas porter : le delai,
-                  ce qu il n y a rien a preparer, et le prix d entree. */}
-              <p className="hero-sub">Le site refait en une semaine : je reprends vos textes, vous n&apos;avez rien à préparer.{entree ? ` Dès ${entree}, TVA comprise.` : ""} Le reste sort du même atelier, sur devis.</p>
+              {/* LE SOUS-TITRE EST COURT PARCE QU IL N A PAS DE PLACE, et la
+                  contrainte se mesure. `.hero` est un `min-height:100svh` en
+                  `justify-content:flex-end` : le pied est colle au bas du pli,
+                  donc CHAQUE ligne de ce paragraphe pousse le contenu vers le
+                  HAUT, et quand le contenu depasse le pli, c est le pied qui
+                  sort de l ecran par le bas.
+
+                  Coupe n°1 : a 328 caracteres il rendait sept lignes, le pied
+                  descendait a 898px et debordait de 46px sous un viewport de
+                  1442 x 852.
+
+                  Coupe n°2, celle-ci. A 151 caracteres il rendait TROIS lignes
+                  dans les 42ch de `.hero-sub`, le contenu du hero mesurait
+                  774,51px, et le pied sortait de l ecran des que la fenetre
+                  descendait sous 774,5px de haut — le lot d un portable de
+                  768px. Balayage releve a 1445 de large, marge sous le pied :
+                  760px -> -14,5 · 740px -> -34,5 · 700px -> -74,5.
+
+                  LE SEUIL EST UN SEUIL DE LIGNES, PAS DE CARACTERES, et c est
+                  ce qui a decide la reecriture. Retirer la seule phrase de
+                  trop — « Le reste sort du meme atelier, sur devis » — ramenait
+                  le texte a 109 caracteres mais le laissait sur TROIS lignes
+                  (mesure : 83,23px pour une interligne de 27,744px) : zero
+                  pixel gagne. La barre est a 42 caracteres par ligne rendus,
+                  soit ~84 pour deux lignes. « je reprends vos textes » est donc
+                  parti avec elle. Le mecanisme n est pas perdu pour autant : il
+                  est ecrit trois fois plus bas sur la meme page — Q1 et la
+                  derniere reponse de components/Faq.tsx, geste 01 de
+                  components/ServicesRows.tsx.
+
+                  Ce qui reste porte les trois choses que le h1 ne peut pas
+                  dire, et le guide de voix §5 est tenu : « une semaine » ne
+                  voyage pas seule, elle est accompagnee de l absence de travail
+                  a fournir. Le prix d entree garde sa mention de TVA dans la
+                  meme unite de lecture.
+
+                  APRES : deux lignes, contenu 760,02px, seuil de debordement
+                  ramene a 746,8px de haut. A 1446 x 850 la derniere ligne de
+                  texte s arrete 25,6px au-dessus du pli.
+
+                  UN RELIQUAT QUI N EST PAS DU TEXTE, et qu il ne faut pas
+                  chercher a corriger ici. Le bord BAS de `.hero-foot` tombe
+                  toujours pile sur `100svh`, par construction : `.hero` est un
+                  `min-height:100svh` en `flex-end` avec `padding-bottom:0`.
+                  Or `svh` se calcule en pixels fractionnaires quand le zoom
+                  (90 %) et le rapport de pixels (1,5) ne tombent pas juste —
+                  850,37px releves pour un `innerHeight` de 850 — alors que
+                  `innerHeight` est arrondi a l entier. D ou un « depassement »
+                  de 0,37px qui ne bouge pas d un iota si l on raccourcit encore
+                  le texte : ce sont deux unites de mesure differentes, pas une
+                  ligne qui deborde. Le seul chiffre qui repond au texte est le
+                  seuil ci-dessus. */}
+              <p className="hero-sub">Le site refait en une semaine, et vous n&apos;avez rien à préparer.{entree ? ` Dès ${entree}, TVA comprise.` : ""}</p>
               <div className="hero-cta">
                 <a className="btn" href={WHATSAPP_HREF} target="_blank" rel="noopener">Faire refaire mon site <span className="ar">→</span></a>
                 <a className="btn btn-line" href="#travaux">Voir les avant / après</a>
