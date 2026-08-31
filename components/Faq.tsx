@@ -132,7 +132,7 @@ export default async function Faq() {
       />
       <div className="wrap">
         <div className="sec-head">
-          <span className="meta" data-reveal><span className="index">(05)</span>&nbsp; Questions</span>
+          <span className="meta" data-reveal><span className="index">(06)</span>&nbsp; Questions</span>
           <h2 className="sr-only">Questions fréquentes</h2>
         </div>
         <div data-reveal>
@@ -142,6 +142,29 @@ export default async function Faq() {
               <p className="a">{item.r}</p>
             </details>
           ))}
+        </div>
+
+        {/* LA SECTION SE TERMINAIT SUR UNE PORTE FERMEE. Les cinq reponses
+            levent les objections une par une, et le lecteur arrivait au bas
+            de la derniere sans rien a faire de ce qu il venait de decider.
+            Les deux FAQ de pages — components/PageFamille.tsx et
+            app/(site)/services/[slug]/page.tsx — closent la leur par ce meme
+            bloc .c-row depuis leur ecriture ; l accueil etait le seul a ne
+            pas l avoir.
+
+            Le motif est repris tel quel, a une difference pres : le bouton
+            principal pointe vers /devis et non vers WhatsApp. Les pages de
+            famille et de formule connaissent la prestation demandee et
+            peuvent amorcer la conversation avec son sujet (BoutonDevis) ;
+            l accueil, lui, ne sait pas encore ce que le visiteur veut — le
+            formulaire est l endroit ou il le dit. */}
+        <div className="c-row" data-reveal>
+          <a className="btn" href="/devis">
+            Demander un devis <span className="ar">→</span>
+          </a>
+          <a className="btn btn-line" href="/services">
+            Voir les formules
+          </a>
         </div>
       </div>
     </section>

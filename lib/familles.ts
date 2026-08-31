@@ -160,9 +160,42 @@ type Famille = {
  * page du suivi est MIXTE — deux abonnements chiffres, une traduction sur
  * devis. Une phrase qui parlerait de toute la page y serait fausse le jour ou
  * elle a ete ecrite.
+ *
+ * UNE PHRASE EN A ETE RETIREE, ET ELLE NE REVIENT PAS : « Deux questions
+ * posees avant de chiffrer donnent un prix juste du premier coup ». Ces deux
+ * questions n existaient nulle part — ni dans le formulaire, ni dans
+ * l assistant, ni dans aucun parcours. C etait une affirmation sur un processus
+ * inexistant, et la regle de preuve du guide de voix §8 l interdit : ce qui
+ * n est pas dans .agents/product-marketing.md ni dans docs/agents/veille/ est
+ * reformule en fait verifiable, ou supprime. Le reste du raisonnement tient
+ * sans elle — il porte sur ce qui fait varier un prix, ce qui est verifiable
+ * chez n importe quel imprimeur.
  */
 export const MENTION_DEVIS =
-  "Les lignes annoncées sur devis le sont volontairement. Une prestation se chiffre mal hors contexte : le tirage, le format, le papier, le nombre de pages et l'urgence changent le prix, et un forfait affiché ne serait juste pour personne. Deux questions posées avant de chiffrer donnent un prix juste du premier coup, là où un tarif affiché à l'aveugle devrait être corrigé devant vous. Le devis part de ce que vous avez décidé, pas d'une moyenne. Deux allers-retours de correction sont compris, facturés au-delà.";
+  "Les lignes annoncées sur devis le sont volontairement. Une prestation se chiffre mal hors contexte : le tirage, le format, le papier, le nombre de pages et l'urgence changent le prix, et un forfait affiché ne serait juste pour personne. Le devis part de ce que vous avez décidé, pas d'une moyenne. Deux allers-retours de correction sont compris, facturés au-delà.";
+
+/**
+ * LA MEME CHOSE EN UNE PHRASE — pour l accueil, et pour lui seul.
+ *
+ * POURQUOI ELLE EXISTE. `MENTION_DEVIS` etait rendue MOT POUR MOT a deux
+ * endroits que le meme visiteur traverse a la suite : la carte du studio sur
+ * l accueil, puis /services. Un paragraphe entier lu deux fois ne convainc pas
+ * deux fois — il donne a lire un site qui se repete, et il coute a l accueil de
+ * la place que la conversion utilise mieux.
+ *
+ * LE PARTAGE RETENU : /services garde le raisonnement ENTIER, parce que c est
+ * le catalogue et que c est la que le lecteur compare treize « sur devis » ;
+ * l accueil n en garde que la raison, celle qui repond a « pourquoi pas de
+ * prix ». Les cinq pages de famille gardent la version longue elles aussi :
+ * on y arrive sans avoir lu l accueil.
+ *
+ * ELLE N EST PAS UNE PARAPHRASE : c est la phrase centrale de `MENTION_DEVIS`,
+ * reprise telle quelle. Deux formulations differentes du meme argument
+ * divergeraient a la premiere correction — c est exactement ce que le guide de
+ * voix §8 interdit.
+ */
+export const MENTION_DEVIS_COURTE =
+  "Une prestation se chiffre mal hors contexte : le tirage, le format, le papier, le nombre de pages et l'urgence changent le prix, et un forfait affiché ne serait juste pour personne.";
 
 /**
  * LE SEUL ENGAGEMENT DE REACTIVITE ADMIS, et il ne voyage pas seul.
@@ -193,7 +226,7 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
   /* ------------------------------------------------------------------ */
   identite: {
     h1: ["Identité et photographie,", "à Genève."],
-    libelle: "Identité & photographie",
+    libelle: "Logo, identité et photos",
     seoTitre: "Identité, logo et photos à Genève",
     seoDescription:
       "Logotype, palette et photos de votre entreprise à Genève. La même identité du site à l'enseigne, et des images cadrées pour le site et la fiche Google.",
@@ -245,7 +278,7 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
       {
         quoi: "La carte et les supports de salle d'un restaurant",
         href: "/services/restauration",
-        ou: "La ligne restauration",
+        ou: "Restaurants et cafés",
       },
     ],
     questions: [
@@ -271,7 +304,7 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
   /* ------------------------------------------------------------------ */
   imprimes: {
     h1: ["Imprimés et signalétique,", "à Genève."],
-    libelle: "Imprimés & signalétique",
+    libelle: "Imprimés et signalétique",
     seoTitre: "Imprimés et signalétique à Genève",
     seoDescription:
       "Cartes de visite 85 × 55, affiches d'événement et sticker vitrine avec QR, à Genève. Conception, fichiers prêts à imprimer et tirage, sur devis.",
@@ -325,7 +358,7 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
       {
         quoi: "La carte, les chevalets et les supports de salle d'un restaurant",
         href: "/services/restauration",
-        ou: "La ligne restauration",
+        ou: "Restaurants et cafés",
       },
       {
         quoi: "Le site, et le formulaire de demande qui va avec",
@@ -426,7 +459,7 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
   /* ------------------------------------------------------------------ */
   suivi: {
     h1: ["Suivi et hébergement", "de votre site, à Genève."],
-    libelle: "Suivi & hébergement",
+    libelle: "Hébergement et suivi",
     seoTitre: "Suivi et hébergement de site à Genève",
     seoDescription:
       "Hébergement, domaine, mises à jour, sauvegardes et version anglaise de votre site, à Genève. Le suivi démarre la 2ᵉ année, prix TVA comprise.",
@@ -522,8 +555,8 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
 
   /* ------------------------------------------------------------------ */
   restauration: {
-    h1: ["La ligne restauration,", "à Genève."],
-    libelle: "La ligne restauration",
+    h1: ["Restaurants et cafés,", "à Genève."],
+    libelle: "Restaurants et cafés",
     seoTitre: "Cartes et supports de restaurant à Genève",
     seoDescription:
       "La carte repensée avec sa version en ligne et son QR, chevalets, carte de fidélité, bons cadeaux et supports de saison, pour un établissement genevois.",

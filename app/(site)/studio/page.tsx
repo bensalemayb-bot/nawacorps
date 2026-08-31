@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import SchemaPage from "@/components/SchemaPage";
 import BoutonDevis from "@/components/BoutonDevis";
 import FooterContact from "@/components/FooterContact";
 import {
+  LANGUES,
   SITE_NAME,
   SITE_URL,
   jsonLd,
@@ -92,21 +94,53 @@ export const metadata: Metadata = {
 };
 
 /**
- * AboutPage, rattachee au studio par @id.
+ * AboutPage + Person, rattachees au studio par @id.
  *
  * Le studio lui-meme n est PAS redeclare ici : components/SchemaStudio.tsx
  * emet le ProfessionalService sur l accueil sous l @id `/#studio`, et deux
  * fiches du meme prestataire qui divergeraient d un mot valent moins qu une
- * seule, referencee. C est deja la regle des pages de formule.
+ * seule, referencee. C est deja la regle des pages de formule — et c est
+ * pourquoi la `Person` ci-dessous se rattache au studio par `worksFor`
+ * plutot que de recopier ses coordonnees.
+ *
+ * LA PAGE QUI PRESENTE UNE PERSONNE NE DECLARAIT AUCUNE `Person`.
+ *
+ * Elle n emettait qu une `AboutPage` renvoyant au n ud du studio
+ * (`/#studio`). Or c est la seule page du site dont le sujet EST quelqu un :
+ * son h1 dit « Le studio, c est une personne, à Genève », et tout l argument
+ * de vente — un seul interlocuteur, le meme l annee suivante — repose sur
+ * cette personne. Un moteur n avait aucun moyen de le savoir.
+ *
+ * Le n ud porte le meme `@id` que le `founder` declare sur l accueil
+ * (components/SchemaStudio.tsx) : les deux descriptions se fondent en une
+ * seule entite au lieu de creer deux Ayoub Bensalem sans lien.
+ *
+ * PAS D `image` TANT QU IL N Y A PAS DE PHOTOGRAPHIE. Pointer une image
+ * inexistante vaut moins que ne rien declarer — c est la ligne « portrait »
+ * de l inventaire des visuels a fournir.
  */
 const SCHEMA = {
   "@context": "https://schema.org",
-  "@type": "AboutPage",
-  "@id": `${SITE_URL}/studio#page`,
-  url: `${SITE_URL}/studio`,
-  name: `${TITRE} — ${SITE_NAME}`,
-  description: DESCRIPTION,
-  mainEntity: { "@id": `${SITE_URL}/#studio` },
+  "@graph": [
+    {
+      "@type": "AboutPage",
+      "@id": `${SITE_URL}/studio#page`,
+      url: `${SITE_URL}/studio`,
+      name: `${TITRE} — ${SITE_NAME}`,
+      description: DESCRIPTION,
+      mainEntity: { "@id": `${SITE_URL}/#ayoub` },
+      about: { "@id": `${SITE_URL}/#studio` },
+    },
+    {
+      "@type": "Person",
+      "@id": `${SITE_URL}/#ayoub`,
+      name: "Ayoub Bensalem",
+      jobTitle: "Designer et développeur",
+      url: `${SITE_URL}/studio`,
+      worksFor: { "@id": `${SITE_URL}/#studio` },
+      knowsLanguage: [...LANGUES],
+    },
+  ],
 };
 
 export default function StudioPage() {
@@ -116,6 +150,12 @@ export default function StudioPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLd(SCHEMA) }}
+      />
+      <SchemaPage
+        fil={[
+          { nom: "Accueil", chemin: "/" },
+          { nom: "Le studio", chemin: "/studio" },
+        ]}
       />
 
       {/* ---------- Qui, où, et en combien de temps ---------- */}
@@ -476,7 +516,12 @@ export default function StudioPage() {
         </div>
       </section>
 
-      <FooterContact />
+      {/* L index du pied de page suit la derniere section de CETTE page :
+          cinq sections (01) a (05) sur cette page, donc le contact porte (06).
+          Le defaut "07" du composant est celui de l accueil, qui compte
+          sept sections ; le laisser ici faisait sauter la numerotation
+          sous les yeux du lecteur. */}
+      <FooterContact indexSection="06" />
     </>
   );
 }

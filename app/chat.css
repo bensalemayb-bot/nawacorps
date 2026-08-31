@@ -4,8 +4,17 @@
    FICHIER NEUF. binacore.css est le portage de la maquette et reste intouche :
    le widget n existe pas dans la maquette, son style vit donc a part.
 
-   Aucune couleur en dur : tout vient des variables posees par binacore.css
-   (--pine, --bone, --brass, --sans...). Panneau pin, bulles os, accents laiton.
+   PANNEAU NOIR, VARIABLES LOCALES. Le panneau etait pin (--pine, #12352B) ; il
+   est desormais noir. Les trois couleurs de son fond et de ses filets sont
+   declarees SUR .chat-panel et .chat-fab eux-memes, pas dans :root — et c est
+   la seule facon correcte de le faire ici : --pine, --pine-2 et --line-g sont
+   definies dans le :root de binacore.css et lues par noyau.css, services.css
+   et admin.css. Les repeindre en noir la-bas repeindrait le site entier pour
+   changer la couleur d une bulle. Portees par le composant, elles n existent
+   que sous lui, et les descendants en heritent sans une ligne de plus.
+   Le reste continue de venir de binacore.css : --bone pour le texte, --brass-l
+   pour l accent — c est ce qui rattache la bulle a la marque —, --sans, --r,
+   --pad, --ease. Aucune couleur en dur hors du bloc de variables ci-dessous.
 
    z-index 95 : au-dessus du grain (90) et de la nav (80), mais sous le loader
    (130) et le curseur (140) — l intro doit continuer a tout recouvrir, et le
@@ -16,6 +25,23 @@
    defilerait avec la page. Meme regle que nav/loader/cursor, decision B4.
    ========================================================================== */
 
+/* Les trois couleurs propres au chat. Declarees ici, sur les deux racines du
+   composant, et nulle part ailleurs — voir l en-tete. #0B0B0B plutot qu un
+   #000 franc : le noir absolu fait disparaitre l ombre portee et durcit le
+   bord sur un fond os. --chat-line est le filet os a 14 % — un point de moins
+   que le --line-g d origine, parce qu un meme voile blanc ressort davantage
+   sur du noir que sur du pin. */
+.chat-panel,
+.chat-fab {
+  --chat-bg: #0B0B0B;
+  --chat-bg-2: #161616;
+  --chat-line: rgba(241, 238, 230, 0.14);
+}
+
+/* TAILLE ET RETRAIT DU BOUTON : NE PAS Y TOUCHER. Sa hauteur (45px) plus son
+   retrait (22px) sont mesures et compenses par le padding bas de .hero-foot
+   dans binacore.css — l agrandir decale le pied du hero et la bulle se
+   reposerait sur le sous-titre. Seuls le fond et la bordure changent ici. */
 .chat-fab {
   position: fixed;
   left: var(--pad);
@@ -26,9 +52,9 @@
   gap: 0.7em;
   max-width: calc(100vw - 2 * var(--pad));
   padding: 0.9em 1.4em;
-  border: 1px solid var(--pine);
+  border: 1px solid var(--chat-bg);
   border-radius: 999px;
-  background: var(--pine);
+  background: var(--chat-bg);
   color: var(--bone);
   font-family: var(--sans);
   font-size: 0.8rem;
@@ -55,11 +81,16 @@
   z-index: 95;
   display: flex;
   flex-direction: column;
-  width: min(380px, calc(100vw - 2 * var(--pad)));
-  max-height: min(620px, calc(100vh - 44px));
+  /* AGRANDI : 380 -> 460 de large, 620 -> 760 de haut. Les deux bornes
+     restent des min() contre la fenetre — sur telephone c est elle qui gagne,
+     comme avant, et le panneau ne deborde jamais. Le 44px soustrait a la
+     hauteur, ce sont les 22px de retrait bas doubles pour garder autant d air
+     en haut. */
+  width: min(460px, calc(100vw - 2 * var(--pad)));
+  max-height: min(760px, calc(100vh - 44px));
   border-radius: var(--r);
   overflow: hidden;
-  background: var(--pine);
+  background: var(--chat-bg);
   color: var(--bone);
   font-family: var(--sans);
   box-shadow: 0 24px 60px rgba(23, 22, 19, 0.32);
@@ -71,7 +102,7 @@
   justify-content: space-between;
   gap: 12px;
   padding: 16px 18px;
-  border-bottom: 1px solid var(--line-g);
+  border-bottom: 1px solid var(--chat-line);
 }
 .chat-head b { font-weight: 600; font-size: 0.92rem; letter-spacing: -0.01em; }
 .chat-head span { display: block; font-size: 0.68rem; color: var(--muted-g); font-weight: 500; }
@@ -79,7 +110,7 @@
   flex: none;
   width: 30px;
   height: 30px;
-  border: 1px solid var(--line-g);
+  border: 1px solid var(--chat-line);
   border-radius: 50%;
   background: transparent;
   color: var(--bone);
@@ -88,11 +119,11 @@
   cursor: pointer;
   transition: background 0.25s var(--ease);
 }
-.chat-close:hover { background: var(--pine-2); }
+.chat-close:hover { background: var(--chat-bg-2); }
 
 .chat-note {
   padding: 12px 18px;
-  border-bottom: 1px solid var(--line-g);
+  border-bottom: 1px solid var(--chat-line);
   font-size: 0.68rem;
   line-height: 1.5;
   color: var(--muted-g);
@@ -118,8 +149,11 @@
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
+/* La bulle de l assistant reste CLAIRE sur le panneau noir — os sur noir, le
+   contraste le plus fort de la palette. On ne l inverse pas : c est elle qui
+   porte le plus de texte, et c est ce qui la distingue de celle du visiteur. */
 .chat-msg.bot { align-self: flex-start; background: var(--bone); color: var(--ink); }
-.chat-msg.user { align-self: flex-end; background: var(--pine-2); color: var(--bone); border: 1px solid var(--line-g); }
+.chat-msg.user { align-self: flex-end; background: var(--chat-bg-2); color: var(--bone); border: 1px solid var(--chat-line); }
 
 .chat-typing { align-self: flex-start; display: inline-flex; gap: 4px; padding: 0.8em 0.95em; }
 .chat-typing i {
@@ -171,15 +205,15 @@
   display: flex;
   gap: 8px;
   padding: 14px 18px;
-  border-top: 1px solid var(--line-g);
+  border-top: 1px solid var(--chat-line);
 }
 .chat-form input {
   flex: 1;
   min-width: 0;
   padding: 0.75em 0.95em;
-  border: 1px solid var(--line-g);
+  border: 1px solid var(--chat-line);
   border-radius: 999px;
-  background: var(--pine-2);
+  background: var(--chat-bg-2);
   color: var(--bone);
   font-family: var(--sans);
   font-size: 0.85rem;
@@ -192,7 +226,7 @@
   border: 1px solid var(--bone);
   border-radius: 999px;
   background: var(--bone);
-  color: var(--pine);
+  color: var(--chat-bg);
   font-family: var(--sans);
   font-size: 0.8rem;
   font-weight: 600;

@@ -24,7 +24,7 @@ type Message = { role: "user" | "assistant"; content: string };
 /** Le schema de la route plafonne le tableau envoye a 16 entrees. */
 const MAX_MESSAGES = 16;
 
-/** A partir de ce nombre de messages, le bouton « Terminer » apparait. */
+/** A partir de ce nombre de messages, le bouton « Envoyer ma demande à Ayoub » apparait. */
 const SEUIL_BOUTON = 6;
 
 /** En dessous, un abandon ne vaut pas la peine d etre finalise. */
@@ -33,7 +33,7 @@ const SEUIL_ABANDON = 4;
 const WA_LINK = whatsapp();
 
 const ACCUEIL =
-  "Bonjour. Je prépare votre proposition avec Ayoub. Quel est votre métier, et avez-vous déjà un site en ligne ?";
+  "Bonjour. Je prépare votre proposition avec Ayoub. Qu'est-ce que vous cherchez à faire faire ?";
 
 export default function ChatWidget() {
   // volontaire — next/link casserait les reveals (Interactions ne tourne qu'une fois), voir décision B7
@@ -228,7 +228,7 @@ export default function ChatWidget() {
       {!clos && messages.length >= SEUIL_BOUTON ? (
         <div className="chat-end">
           <button type="button" onClick={terminer} disabled={envoi}>
-            Terminer la conversation
+            Envoyer ma demande à Ayoub
           </button>
         </div>
       ) : null}

@@ -34,6 +34,15 @@ export default function Methode() {
           <div className="stp" data-reveal><span className="t">Fin de semaine</span><span className="n">03</span><h3>La mise en ligne</h3><p>Domaine, hébergement, formulaire, rendez-vous : tout est branché. Vous n&apos;installez rien, vous ne configurez rien.</p></div>
           <div className="stp" data-reveal><span className="t">Ensuite</span><span className="n">04</span><h3>Le suivi</h3><p>Un tarif change, une prestation s&apos;ajoute, un horaire bouge ? Vous m&apos;écrivez, et c&apos;est moi qui corrige. Une affiche pour la rentrée, des cartes à réimprimer : vous m&apos;écrivez aussi. La deuxième année, c&apos;est encore la même personne.</p></div>
         </div>
+        {/* LA METHODE ETAIT UN CUL-DE-SAC. Entre le hero et la grille de
+            prix, le lecteur traversait quatre sections sans un seul bouton :
+            celui que le deroulement en une semaine venait de convaincre
+            devait encore descendre la biographie du studio avant de pouvoir
+            agir. Le lien mene aux prix, pas au contact — a ce point de la
+            page il veut savoir combien, pas ecrire. */}
+        <div className="c-row" data-reveal style={{ marginTop: 34 }}>
+          <a className="btn btn-line" href="#offres">Voir les formules et les prix <span className="ar">→</span></a>
+        </div>
       </div>
     </section>
   );

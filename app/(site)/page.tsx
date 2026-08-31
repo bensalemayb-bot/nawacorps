@@ -131,9 +131,20 @@ export default function Home() {
         <ServicesRows />
         <Methode />
         <Studio />
-        <Faq />
+        {/* L ORDRE A CHANGE LE 31 AOUT 2026 : les prix passent AVANT les
+            questions. L argument n est pas une preference, il est dans la FAQ
+            elle-meme — sa cinquieme question demande « À ce prix-là,
+            qu'est-ce qui n'est pas fait ? » alors qu aucun prix n avait encore
+            ete montre. Une objection de prix posee avant le prix ne leve rien :
+            elle l invente. La grille passe donc devant, la FAQ derriere, ou son
+            travail est de lever les dernieres reserves juste avant le
+            formulaire. Le catalogue reste colle aux formules : son chapo
+            dit « a cote des formules » et suppose de les avoir vues.
+            Les index des deux sections suivent l ordre — Offres (05),
+            Questions (06). */}
         <Offres />
         <CarteDuStudio />
+        <Faq />
         <FooterContact />
       </div>
     </>

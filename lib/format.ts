@@ -47,17 +47,26 @@ export const MONTHLY_SUFFIX = "/mois";
 export const TVA_LABEL = "TVA comprise";
 
 /**
- * CE QUI SE LIT SOUS « sur devis », et pourquoi il y a quelque chose a lire.
+ * IL N Y A PLUS DE NOTE SOUS « sur devis », ET C EST VOULU.
  *
- * Treize des dix-huit lignes du catalogue sont sur devis. Seul, « sur devis »
- * se lit comme un trou — une information qu on refuse de donner. Ce n en est
- * pas une : un imprime se chiffre selon le tirage, le format, le papier et
- * l urgence, et deux questions posees avant de chiffrer donnent un prix juste
- * du premier coup, la ou un tarif affiche hors contexte devrait etre corrige
- * devant le client. Trois mots suffisent a le dire sur la carte ; le
- * raisonnement complet vit une fois par bloc, en prose.
+ * Cette constante valait « chiffré après deux questions » et s affichait sur
+ * chaque carte au prix libre — quatre fois sur le seul accueil. Elle a ete
+ * retiree le 31 aout 2026 : CES DEUX QUESTIONS N EXISTAIENT NULLE PART. Ni
+ * dans le formulaire, ni dans l assistant, ni dans aucun parcours du site.
+ * La regle de preuve (guide de voix §8) interdit d affirmer un processus qui
+ * n a pas lieu, et une promesse de methode est aussi engageante qu une
+ * promesse de prix.
+ *
+ * L argument de depart reste juste : seul, « sur devis » se lit comme un trou.
+ * Mais il se comble en prose, une fois par bloc, la ou on a la place de dire
+ * POURQUOI un tirage, un format et un papier ne se devinent pas — et cette
+ * prose se termine deja par « Réponse le jour ouvrable suivant. », le seul
+ * engagement decide, qui repond a la question que « sur devis » laisse
+ * reellement ouverte : quand est-ce que je saurai le prix ?
+ *
+ * A NE PAS REINTRODUIRE sans avoir d abord ecrit les deux questions et les
+ * avoir posees quelque part.
  */
-export const QUOTE_NOTE = "chiffré après deux questions";
 
 /** 195000 -> "1'950" ; 4900 -> "49" ; 45000 -> "450" */
 export function formatChfAmount(cents: number): string {

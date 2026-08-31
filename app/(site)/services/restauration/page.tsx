@@ -9,7 +9,7 @@ import { metadataFamille } from "@/lib/familles";
 import "@/app/services.css";
 
 /**
- * /services/restauration — La ligne restauration
+ * /services/restauration — Restaurants et cafes
  *
  * Cinq prestations, la page la plus longue des cinq. C est la ligne
  * secondaire du studio : elle vit hors de la grille principale et se

@@ -54,7 +54,7 @@ const EDITORIAL: Record<string, Editorial> = {
       "Appel, itinéraire et horaires en un geste",
       "Domaine et hébergement la 1ʳᵉ année",
     ],
-    ctaLabel: "Refaire mon site",
+    ctaLabel: "Rendre mon site présentable",
     ctaHref:
       whatsapp("Bonjour, je souhaite faire refaire le site de mon entreprise."),
     ctaOutline: true,
@@ -67,7 +67,7 @@ const EDITORIAL: Record<string, Editorial> = {
       "Devis chiffré automatiquement",
       "Fiche Google et photos comprises",
     ],
-    ctaLabel: "Lancer mon site",
+    ctaLabel: "Recevoir mes demandes",
     ctaHref:
       whatsapp("Bonjour, je veux un site qui reçoive les demandes de devis."),
     ctaOutline: false,
@@ -149,7 +149,7 @@ export default async function Offres() {
     <section className="offres green" id="offres" style={{ paddingBottom: 0 }}>
       <div className="wrap">
         <div className="sec-head">
-          <span className="meta" data-reveal><span className="index">(06)</span>&nbsp; Offres</span>
+          <span className="meta" data-reveal><span className="index">(05)</span>&nbsp; Offres</span>
           <div data-reveal><h2 className="t">Des prix clairs,<br />tout compris.</h2></div>
         </div>
 
@@ -178,7 +178,7 @@ export default async function Offres() {
                     <>
                       {service.priceFrom ? <small>{FROM_PREFIX}</small> : null}
                       {formatChfAmount(service.priceCents)}
-                      <small>{`${CHF_UNIT} CHF`}</small>
+                      <small>{CHF_UNIT}</small>
                       {service.isMonthly ? <small className="per">{MONTHLY_SUFFIX}</small> : null}
                     </>
                   )}
@@ -194,6 +194,20 @@ export default async function Offres() {
                 {service.priceCents === null ? null : (
                   <p className="num-tva">{TVA_LABEL}</p>
                 )}
+                {/* LE SUIVI OBLIGATOIRE DE L ASSISTANT, SUR LA CARTE, AVANT LE
+                    BOUTON. Il n apparaissait qu apres le bouton, dans la note
+                    de bas de grille (`noteSuivi` ci-dessus) — un engagement
+                    recurrent impose par le palier et lisible seulement APRES
+                    l achat est un prix cache. Le guide de voix (pilier 3)
+                    impose deux emplacements : la carte, et sous la grille.
+                    /services/l-assistant applique deja cette regle
+                    (app/(site)/services/[slug]/page.tsx) ; cette carte reprend
+                    la meme formulation, condensee. Montant lu en base comme
+                    partout ailleurs — rendu seulement si la ligne
+                    `suivi-assistant` existe et porte un prix. */}
+                {service.slug === "l-assistant" && suiviAssistant ? (
+                  <p className="num-tva">{`puis ${suiviAssistant} dès la 2ᵉ année — obligatoire, l'assistant tourne en continu`}</p>
+                ) : null}
                 {ed ? (
                   <ul>
                     {ed.bullets.map((b) => <li key={b}>{b}</li>)}

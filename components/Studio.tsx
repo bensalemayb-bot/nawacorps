@@ -52,11 +52,29 @@ export default function Studio() {
             <p>Nawa Corps est le studio de création digitale d&apos;Ayoub Bensalem, designer et développeur à Genève. Pas de commerciaux, pas de chargé de compte, pas de brief qui passe de main en main : la personne qui répond à votre message est celle qui dessine votre logotype, code votre site et photographie votre atelier.</p>
             <p>Ce que ça change se voit à l&apos;usage. Le travail commence à votre feu vert, pas à la réception de vos textes. Le site fini vous est présenté et validé avant d&apos;être mis en ligne. Deux allers-retours sont compris, et ils sont écrits — une prestation qu&apos;on borne est une prestation qu&apos;on tient.</p>
             <p>Pas de bureaux, pas d&apos;équipe commerciale : votre site est dessiné et construit par la même personne, et vous traitez avec elle du premier message à la livraison. C&apos;est encore elle l&apos;année suivante, quand un tarif change, qu&apos;il faut une affiche pour la rentrée ou qu&apos;un formulaire doit poser une question de plus.</p>
+            {/* « 1 sem. » etait la derniere abreviation du delai sur le site.
+                Le glossaire (guide de voix, entree 3) impose une forme unique,
+                « une semaine » : un delai qui change de mots change de sens aux
+                yeux du lecteur. Le meme bandeau sur /studio ecrivait deja
+                « Une semaine » — le commentaire de cette page-la affirme que
+                les deux bandeaux sont identiques, ce qui n etait pas vrai. */}
             <div className="facts">
               <div><b>Genève</b><span>Basé ici</span></div>
-              <div><b>1 sem.</b><span>Refonte livrée</span></div>
+              <div><b>Une semaine</b><span>Refonte livrée</span></div>
               <div><b>FR / EN</b><span>Langues</span></div>
             </div>
+            {/* LA SECTION N AVAIT AUCUN LIEN. Trois paragraphes qui disent qui
+                fait le travail, et rien pour aller le verifier : /studio
+                existe depuis la refonte de la nav et n etait atteignable que
+                par le menu. Un seul renvoi, sobre, sous les faits — c est une
+                section de confiance, pas une section de vente, et un bouton y
+                sonnerait faux. <a> classique, jamais next/link : la navigation
+                client casse les revelations au scroll (decision B7). */}
+            <p style={{ marginTop: "1.8rem", marginBottom: 0 }}>
+              <a className="lnk" href="/studio" style={{ color: "var(--ink)" }}>
+                Voir qui fait le travail →
+              </a>
+            </p>
           </div>
         </div>
       </div>

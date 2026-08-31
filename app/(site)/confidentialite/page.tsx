@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import SchemaPage from "@/components/SchemaPage";
 import { CONTACT, openGraphPage } from "@/lib/site";
 
 /**
@@ -20,12 +21,12 @@ import { CONTACT, openGraphPage } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Confidentialité",
   description:
-    "Politique de confidentialité de Nawa Corps (nLPD) : données collectées, finalité, durée de conservation, hébergement en Suisse et vos droits.",
+    "Politique de confidentialité de Nawa Corps (nLPD) : données collectées, finalité, durée de conservation, hébergement des données et vos droits.",
   alternates: { canonical: "/confidentialite" },
   openGraph: openGraphPage({
     titre: "Confidentialité — Nawa Corps",
     description:
-      "Politique de confidentialité de Nawa Corps (nLPD) : données collectées, finalité, durée de conservation, hébergement en Suisse et vos droits.",
+      "Politique de confidentialité de Nawa Corps (nLPD) : données collectées, finalité, durée de conservation, hébergement des données et vos droits.",
     chemin: "/confidentialite",
   }),
 };
@@ -33,6 +34,15 @@ export const metadata: Metadata = {
 export default function Confidentialite() {
   // volontaire — next/link casserait les reveals (Interactions ne tourne qu'une fois), voir décision B7
   return (
+    <>
+      {/* Fil d Ariane : la page est un cul-de-sac de navigation, le moteur a
+          besoin qu on lui dise d ou elle depend. */}
+      <SchemaPage
+        fil={[
+          { nom: "Accueil", chemin: "/" },
+          { nom: "Confidentialité", chemin: "/confidentialite" },
+        ]}
+      />
     <section>
       <div className="wrap">
         <div className="sec-head">
@@ -47,12 +57,20 @@ export default function Confidentialite() {
           <p className="meta">Conservation</p>
           <p>12 mois, puis suppression.</p>
           <p className="meta">Hébergement des données</p>
-          <p>Le site et la base de données sont hébergés en Suisse.</p>
-          {/* CORRECTION D'EXACTITUDE. Cette page affirmait « Suisse » tout court,
-              alors que lib/llm.ts envoie chaque message de l'assistant a Google
-              ou a Groq selon LLM_PROVIDER — donc hors de Suisse. Une page de
-              confidentialite qui se trompe sur ce point precis est le pire
-              endroit ou se tromper. */}
+          {/* CORRECTION D'EXACTITUDE, deuxieme passe. Cette page a d abord
+              affirme « heberges en Suisse ». C etait deja douteux pour
+              l assistant ; c est devenu faux le 31 aout 2026, quand
+              l hebergeur a ete tranche : Vercel, qui n a aucune region
+              suisse — 20 regions, la plus proche de Geneve est Francfort.
+              Une page de confidentialite qui se trompe sur le lieu de
+              stockage est le pire endroit ou se tromper, et la LCD art. 3
+              vise les indications trompeuses.
+              L Allemagne figure a l annexe 1 de l OPDo (Etats a protection
+              adequate), ce qui rend la communication licite sans garantie
+              supplementaire — d ou la derniere phrase.
+              Si la region Vercel change, ce paragraphe et /mentions-legales
+              se changent ensemble. */}
+          <p>Le site et sa base de données sont hébergés par Vercel Inc., société américaine, sur des serveurs situés en Allemagne (Francfort). L&apos;Allemagne figure sur la liste des États dont le Conseil fédéral reconnaît une protection des données adéquate.</p>
           <p>Les échanges avec l&apos;assistant de conversation sont traités par un fournisseur d&apos;intelligence artificielle situé hors de Suisse. Ne lui confiez pas d&apos;information sensible : pour cela, écrivez directement.</p>
           <p>Pas de cookies publicitaires ni de traceurs tiers.</p>
           <p className="meta">Vos droits</p>
@@ -61,5 +79,6 @@ export default function Confidentialite() {
         </div>
       </div>
     </section>
+    </>
   );
 }

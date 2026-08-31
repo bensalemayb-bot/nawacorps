@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import SchemaPage from "@/components/SchemaPage";
 import { CONTACT, openGraphPage } from "@/lib/site";
 
 /**
@@ -19,8 +20,9 @@ import { CONTACT, openGraphPage } from "@/lib/site";
  *    en dev (ou Tailwind n emet rien) et `font-size:inherit` du preflight en
  *    prod. Les intitules utilisent .meta, identique dans les deux modes.
  *
- * Les [PLACEHOLDERS] sont volontairement visibles : ils marquent ce qui reste
- * a confirmer et ne doivent jamais etre remplis par invention.
+ * Il ne reste plus de [PLACEHOLDER] sur cette page : le dernier, l hebergeur,
+ * a ete tranche le 31 aout 2026. La regle tient toujours si un autre apparait
+ * — un placeholder se remplit par une decision, jamais par invention.
  */
 /**
  * Le suffixe « — Nawa Corps » a disparu du titre : il est desormais ajoute par
@@ -47,6 +49,15 @@ export const metadata: Metadata = {
 export default function MentionsLegales() {
   // volontaire — next/link casserait les reveals (Interactions ne tourne qu'une fois), voir décision B7
   return (
+    <>
+      {/* Fil d Ariane : la page est un cul-de-sac de navigation, le moteur a
+          besoin qu on lui dise d ou elle depend. */}
+      <SchemaPage
+        fil={[
+          { nom: "Accueil", chemin: "/" },
+          { nom: "Mentions légales", chemin: "/mentions-legales" },
+        ]}
+      />
     <section>
       <div className="wrap">
         <div className="sec-head">
@@ -57,12 +68,18 @@ export default function MentionsLegales() {
           <p className="meta">Éditeur</p>
           <p>Nawa Corps, studio de création digitale, Genève, Suisse, exploité par Ayoub Bensalem. Contact : {CONTACT.emailGeneral} — {CONTACT.telephoneAffiche}.</p>
           <p className="meta">Hébergement</p>
-          <p>[Infomaniak, Suisse — à confirmer en B12]</p>
+          {/* Decision du 31 aout 2026 : Vercel, pas Infomaniak. Vercel n a pas
+              de region suisse — la plus proche de Geneve est Francfort (fra1),
+              d ou la mention de l Allemagne. Si la region change dans les
+              reglages du projet Vercel, cette ligne devient fausse : les deux
+              se changent ensemble, avec /confidentialite. */}
+          <p>Vercel Inc., société de droit américain, sur des serveurs situés en Allemagne (Francfort).</p>
           <p className="meta">Propriété intellectuelle</p>
           <p>Contenus et design © Nawa Corps. Reproduction interdite sans accord.</p>
           <p style={{ marginTop: 40 }}><a className="lnk" href="/">← Retour au site</a></p>
         </div>
       </div>
     </section>
+    </>
   );
 }

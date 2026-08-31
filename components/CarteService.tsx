@@ -3,7 +3,6 @@ import {
   FROM_PREFIX,
   MONTHLY_SUFFIX,
   QUOTE_LABEL,
-  QUOTE_NOTE,
   TVA_LABEL,
   formatChfAmount,
   isQuote,
@@ -103,16 +102,20 @@ export default function CarteService({
           page. La mention descend donc sous le montant, ou elle est aussi un
           argument : c est un prix qu il n a pas a recalculer.
 
-          « sur devis » recoit son pendant, pour la raison inverse : seul, il se
-          lit comme un refus de repondre. Trois mots disent que c en est une —
-          voir QUOTE_NOTE dans lib/format.ts. Ils tombent au second rang de
-          l accueil, ou la carte est deja reduite a son os et ou le
-          raisonnement est ecrit juste au-dessus, en prose. */}
+          « sur devis » N A PLUS DE PENDANT SUR LA CARTE, et c est une
+          correction, pas un oubli. La carte affichait « chiffré après deux
+          questions » : ces deux questions n existaient nulle part — ni dans le
+          formulaire, ni dans l assistant, ni dans aucun parcours — et la regle
+          de preuve (guide de voix §8) interdit d affirmer un processus qui n a
+          pas lieu. La phrase apparaissait quatre fois sur l accueil.
+          Ce qui reste est vrai et suffit : le raisonnement complet — pourquoi
+          un tirage, un format et un papier ne se devinent pas — vit une fois
+          par bloc, en prose, juste au-dessus des cartes, et il y est suivi de
+          « Réponse le jour ouvrable suivant. », qui repond a la seule question
+          que « sur devis » laisse ouverte : quand est-ce que je saurai le
+          prix ? */}
       {isQuote(service) || service.priceCents === null ? (
-        <p className="px px-devis">
-          {QUOTE_LABEL}
-          {sobre ? null : <small className="px-note">{QUOTE_NOTE}</small>}
-        </p>
+        <p className="px px-devis">{QUOTE_LABEL}</p>
       ) : (
         <p className="px">
           {service.priceFrom ? <small>{FROM_PREFIX}</small> : null}

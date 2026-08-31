@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import SchemaPage from "@/components/SchemaPage";
 import ContactForm from "@/components/ContactForm";
 import { MENTION_REPONSE } from "@/lib/familles";
 import {
@@ -18,23 +19,28 @@ import {
  *
  * POURQUOI CETTE PAGE EXISTE. Le contact vivait uniquement en pied de page,
  * derriere toute la longueur de l accueil : deux boutons et un formulaire, sans
- * un mot sur ce qui distingue les canaux. Un visiteur qui cherche « comment les
- * joindre » n avait aucune page a atteindre, et rien ne lui disait laquelle des
- * deux adresses e-mail utiliser.
+ * un mot sur ce qui distingue les canaux. Un visiteur qui cherche « comment le
+ * joindre » n avait aucune page a atteindre.
  *
- * AUCUNE COORDONNEE N EST ECRITE EN DUR. Telephone, WhatsApp, les deux
- * adresses et les horaires viennent tous de lib/site.ts, qui est la source
- * unique : pour un commerce local, la coherence du triplet nom / adresse /
- * telephone est le premier signal de referencement local, et deux graphies du
- * meme numero sur deux pages suffisent a brouiller le rapprochement avec la
- * fiche Google. Une valeur recopiee ici serait exactement la divergence que ce
- * fichier existe pour empecher.
+ * AUCUNE COORDONNEE N EST ECRITE EN DUR. Telephone, WhatsApp, l adresse et les
+ * horaires viennent tous de lib/site.ts, qui est la source unique : pour un
+ * commerce local, la coherence du triplet nom / adresse / telephone est le
+ * premier signal de referencement local, et deux graphies du meme numero sur
+ * deux pages suffisent a brouiller le rapprochement avec la fiche Google. Une
+ * valeur recopiee ici serait exactement la divergence que ce fichier existe
+ * pour empecher.
  *
- * LES DEUX ADRESSES NE SONT PAS UN DOUBLON, ET LA PAGE LE DIT. `CONTACT.email`
- * (ayoub@) recoit les demandes de projet ; `CONTACT.emailGeneral` (contact@)
- * recoit le reste — droits nLPD, mentions legales, sollicitations. Les separer
- * evite qu une demande client se perde dans le tout-venant, et le visiteur doit
- * savoir laquelle choisir sinon la separation ne sert a rien.
+ * UNE SEULE ADRESSE EST MISE EN AVANT, ET C EST `CONTACT.email` (ayoub@).
+ * La page en ouvrait DEUX et expliquait comment choisir — « si vous hesitez
+ * entre les deux adresses, c est celle-ci ». On demandait donc un arbitrage au
+ * visiteur a l instant precis ou il voulait ecrire, et cet arbitrage ne servait
+ * que le studio : la boite generale existe pour que le tout-venant ne noie pas
+ * les demandes de projet, ce qui est un probleme de tri interne, pas une
+ * question que le lecteur ait a trancher. Un message de projet arrive au bon
+ * endroit du premier coup ; les autres sont rares.
+ * `CONTACT.emailGeneral` (contact@) N EST PAS SUPPRIMEE DU SITE : elle reste
+ * ou elle sert vraiment, dans /mentions-legales et /confidentialite, ou la loi
+ * demande une adresse pour les droits nLPD et l editeur.
  *
  * LE FORMULAIRE EST components/ContactForm.tsx, IMPORTE TEL QUEL. Il n est pas
  * reecrit : il porte deja son leurre anti-robot, sa gestion d erreur et son
@@ -102,7 +108,7 @@ const PLAGE = `${enHeure(HORAIRES.ouverture)}–${enHeure(HORAIRES.fermeture)}`;
  */
 const TITRE = "Contacter le studio à Genève";
 const DESCRIPTION =
-  "WhatsApp, téléphone, deux adresses e-mail ou le formulaire : les chemins pour joindre le studio à Genève, et ce qu'il est utile d'écrire.";
+  "WhatsApp, téléphone, e-mail ou le formulaire : les quatre chemins pour joindre le studio à Genève, et ce qu'il est utile d'écrire dans votre message.";
 
 export const metadata: Metadata = {
   title: TITRE,
@@ -128,10 +134,12 @@ export const metadata: Metadata = {
  * ses points de contact, par reference — deux fiches du meme prestataire qui
  * divergeraient d un mot valent moins qu une seule, referencee.
  *
- * LES DEUX ContactPoint DISENT LA MEME CHOSE QUE LA PAGE, et c est la regle :
- * une donnee structuree qui promet ce que l ecran ne montre pas finit ignoree.
- * `sales` porte la boite d Ayoub et le telephone, `customer service` la boite
- * generale — exactement la separation ecrite dans lib/site.ts.
+ * LE ContactPoint DIT LA MEME CHOSE QUE LA PAGE, et c est la regle : une
+ * donnee structuree qui promet ce que l ecran ne montre pas finit ignoree.
+ * Il y en avait deux — `sales` pour la boite d Ayoub, `customer service` pour
+ * la boite generale. Le second a ete retire EN MEME TEMPS que le bloc contact@
+ * de l ecran : le declarer encore reviendrait a publier un canal que la page
+ * ne presente plus.
  *
  * NAP_CONFIRME RESTE LE VERROU. Il vaut true, donc les coordonnees partent ;
  * le jour ou l une d elles redevient incertaine, on cesse d emettre le bloc
@@ -164,14 +172,6 @@ const SCHEMA = {
                 closes: HORAIRES.fermeture,
               },
             },
-            {
-              "@type": "ContactPoint",
-              contactType: "customer service",
-              name: "Questions générales",
-              email: CONTACT.emailGeneral,
-              areaServed: CONTACT.ville,
-              availableLanguage: [...LANGUES],
-            },
           ],
         }
       : {}),
@@ -190,6 +190,12 @@ export default function ContactPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLd(SCHEMA) }}
+      />
+      <SchemaPage
+        fil={[
+          { nom: "Accueil", chemin: "/" },
+          { nom: "Contact", chemin: "/contact" },
+        ]}
       />
 
       {/* ---------- Le titre, et les coordonnées réelles ---------- */}
@@ -280,25 +286,19 @@ export default function ContactPage() {
               , {JOURS} de {PLAGE}.
             </p>
 
+            {/* UNE SEULE ADRESSE, ET AUCUN ARBITRAGE DEMANDE. Un second bloc
+                ouvrait contact@ et une phrase expliquait laquelle choisir :
+                c etait une question de tri interne posee au visiteur au moment
+                exact ou il voulait ecrire. L adresse generale n a pas disparu
+                du site — elle vit dans /mentions-legales et /confidentialite,
+                ou la loi la demande. */}
             <h3 className="sm-grp">{CONTACT.email}</h3>
             <p>
-              Ma boîte, et elle ne sert qu&apos;à ça : les demandes de projet.
-              Refonte de site, identité, imprimés, photographie, fiche Google,
-              réseaux sociaux, devis. Si vous hésitez entre les deux adresses,
-              c&apos;est celle-ci.{" "}
+              Ma boîte, et c&apos;est la seule à écrire : refonte de site,
+              identité, imprimés, photographie, fiche Google, réseaux sociaux,
+              devis. Elle arrive sur mon téléphone comme le reste.{" "}
               <a className="lnk" href={`mailto:${CONTACT.email}`}>
                 Écrire à {CONTACT.email} →
-              </a>
-            </p>
-
-            <h3 className="sm-grp">{CONTACT.emailGeneral}</h3>
-            <p>
-              Tout le reste : une question sur les mentions légales, l&apos;accès
-              ou la suppression de vos données, une facture, une sollicitation.
-              Les deux boîtes sont séparées pour qu&apos;une demande client ne se
-              perde pas dans le tout-venant.{" "}
-              <a className="lnk" href={`mailto:${CONTACT.emailGeneral}`}>
-                Écrire à {CONTACT.emailGeneral} →
               </a>
             </p>
 

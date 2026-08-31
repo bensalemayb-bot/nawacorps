@@ -41,7 +41,7 @@ export default function NotFound() {
         <h1 className="t">Cette page n&apos;existe plus.</h1>
         <div className="studio-txt" style={{ marginTop: 40 }}>
           <p>L&apos;adresse est peut-être ancienne, ou la prestation qu&apos;elle décrivait n&apos;est plus au catalogue. Rien n&apos;est perdu : le reste du site est intact, et le studio répond toujours.</p>
-          <p>Le catalogue complet — les trois formules de site, le suivi, l&apos;identité, les imprimés, les réseaux sociaux et la ligne restauration — se trouve sur la page des services.</p>
+          <p>Le catalogue complet — les trois formules de site, le suivi, l&apos;identité, les imprimés, les réseaux sociaux et les supports de restaurant — se trouve sur la page des services.</p>
           <p style={{ marginTop: 40 }}><a className="lnk" href="/services">Voir tous les services</a></p>
           <p><a className="lnk" href="/">← Retour au site</a></p>
         </div>

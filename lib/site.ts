@@ -143,7 +143,29 @@ export const FONDE_EN = "2026";
  * l Open Graph de l accueil en entier — titre de l accueil et surtout og:url
  * pointant vers « / ». Partager /confidentialite affichait la carte de la page
  * d accueil.
+ *
+ * L IMAGE EST ICI POUR LA MEME RAISON, et c est ce qui manquait.
+ * `app/(site)/opengraph-image.tsx` genere bien une image, mais une convention
+ * de fichier ne survit pas a un `openGraph` explicite : elle ne s appliquait
+ * donc qu a l accueil — la SEULE page qui ne declare pas le sien. Releve du
+ * 31 aout 2026 : og:image present sur 1 page sur 14. Les 13 autres se
+ * partageaient sans apercu, alors meme que le layout annonce
+ * `twitter: { card: "summary_large_image" }`, qui reserve un grand
+ * emplacement d image — vide.
+ *
+ * POURQUOI UN FICHIER STATIQUE et non la route generee : Next sert la
+ * convention de fichier sous un chemin hache (`/opengraph-image-12o0cb?...`)
+ * qui change au moindre recalcul ; `/opengraph-image` repond 404. Un helper
+ * partage ne peut pas dependre d une URL instable. `og-nawa-corps.png` est
+ * donc le rendu de cette meme image, fige dans /public : meme visuel, chemin
+ * stable, et un seul fichier a remplacer le jour ou une vraie photographie
+ * prend sa place.
+ *
+ * URL ABSOLUE OBLIGATOIRE : plusieurs robots sociaux refusent une og:image
+ * relative.
  */
+export const OG_IMAGE = `${SITE_URL}/brand/og-nawa-corps.png`;
+
 export function openGraphPage(page: {
   titre: string;
   description: string;
@@ -156,6 +178,14 @@ export function openGraphPage(page: {
     url: page.chemin,
     title: page.titre,
     description: page.description,
+    images: [
+      {
+        url: OG_IMAGE,
+        width: 1200,
+        height: 630,
+        alt: `${SITE_NAME} — studio de création digitale à Genève`,
+      },
+    ],
   };
 }
 

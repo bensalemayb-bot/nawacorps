@@ -56,6 +56,16 @@ model Lead {
   status        LeadStatus    @default(NEW)
   score         Int           @default(0)
   needSummary   String?
+  // Ce qui a ete demande, quand on le sait : le slug d une formule ou d une
+  // prestation (« le-site », « devis-identite »), pose par la page /devis.
+  // Ajoute parce que la table ne gardait AUCUNE trace de l intention : un
+  // visiteur cliquait « Le Site » et la demande arrivait nue, il fallait le
+  // rappeler pour savoir de quoi il parlait. Le modele extrait deja un
+  // tableau `services` cote chatbot (lib/extract-prompt.ts), mais il finissait
+  // dans Conversation.extracted, invisible du back-office.
+  // Nullable, et c est voulu : une demande spontanee — pied de page, WhatsApp
+  // — n en porte pas, et un champ vide vaut mieux qu un champ invente.
+  subject       String?
   notes         String?
   conversation  Conversation?
   createdAt     DateTime      @default(now())

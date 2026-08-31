@@ -1,4 +1,5 @@
 import ContactForm from "@/components/ContactForm";
+import { MENTION_REPONSE } from "@/lib/familles";
 import { CONTACT, WHATSAPP_HREF } from "@/lib/site";
 
 // Footer Contact — reference/binacore.html lignes 1136-1153, copie verbatim.
@@ -22,11 +23,22 @@ import { CONTACT, WHATSAPP_HREF } from "@/lib/site";
 //  B8 — « ou par écrit » et <ContactForm />, sous la c-row. La maquette n a
 //  pas de formulaire ; celui-ci s ajoute aux deux CTA WhatsApp/e-mail, qui ne
 //  bougent pas. binacore.css reste intouche.
-export default function FooterContact() {
+type FooterContactProps = {
+  /**
+   * Numero de section affiche devant « Contact », ex. « 05 ». Par defaut
+   * « 07 » : l accueil compte sept sections et ne doit pas changer de
+   * comportement. Les pages internes, qui en comptent moins, passent leur
+   * propre numero pour ne pas laisser le lecteur passer de (05) a (07) sans
+   * transition (constat 18, docs/agents/reviews/brand-review-2026-08-31.md).
+   */
+  indexSection?: string;
+};
+
+export default function FooterContact({ indexSection = "07" }: FooterContactProps) {
   return (
     <footer className="contact green" id="contact">
       <div className="wrap">
-        <span className="meta" data-reveal><span className="index">(07)</span>&nbsp; Contact</span>
+        <span className="meta" data-reveal><span className="index">({indexSection})</span>&nbsp; Contact</span>
         {/* « Montrez-moi votre site » fermait la page sur le seul produit
             d entree, et renvoyait le visiteur venu pour un logotype ou des
             cartes de visite. « Ce que vous avez » couvre le site, l imprime et
@@ -45,6 +57,12 @@ export default function FooterContact() {
             d eux, il ne les remplace pas. */}
         <div data-reveal>
           <p className="meta" style={{ marginTop: 34 }}>ou dites-moi en deux lignes ce qu&apos;il vous faut</p>
+          {/* Constat 5 de la revue de marque : cet engagement etait ecrit
+              au-dessus du formulaire sur /contact mais absent ici, sur la
+              page qui recoit le plus de trafic. MENTION_REPONSE est importee
+              de lib/familles.ts, pas recopiee, pour garantir la formulation
+              unique au caractere pres qu exige le guide de voix (§8). */}
+          <p className="meta">{MENTION_REPONSE}</p>
           <ContactForm />
         </div>
         <div className="c-cols" data-reveal>

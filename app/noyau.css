@@ -159,22 +159,45 @@ html.has-intro:not(.loaded) .noyau-enter{animation-play-state:paused}
    C'est le moment ou la page bascule dans le coeur. */
 .noyau-beat-3{justify-content:center;color:var(--bone)}
 .noyau-beat-3 .meta{color:var(--brass-l)}
-.noyau-spec{display:grid;grid-template-columns:auto 1fr;gap:clamp(28px,6vw,90px);align-items:end}
+/* LE TABLEAU S ETALAIT SUR TOUTE LA LARGEUR, et deux regles s y mettaient a
+   deux. La seconde colonne etait en `1fr` : elle prenait tout ce qui restait de
+   la ligne — pres de 1360px sur un ecran large — alors que la liste, elle, est
+   capee a 34ch. Puis `margin-left:auto` sur .v jetait chaque valeur contre le
+   bord droit de cette colonne : l oeil devait traverser un vide pour relier une
+   etiquette a sa valeur. `auto auto` + `justify-content:start` ramenent la
+   grille a sa largeur de contenu et la calent a gauche, sous le grand mot ; les
+   valeurs se lisent maintenant juste apres leur etiquette (voir .noyau-specs .v).
+   Sous 760px la regle qui suit reprend la main : une seule colonne. */
+.noyau-spec{display:grid;grid-template-columns:auto auto;justify-content:start;gap:clamp(24px,3.5vw,48px);align-items:end}
 @media(max-width:760px){.noyau-spec{grid-template-columns:1fr;gap:26px;align-items:start}}
 
 .noyau-fig{display:flex;align-items:baseline;gap:.32em;line-height:.86}
+/* LISIBILITE DU GRAND MOT — corrige le 31 aout 2026.
+ .noyau-beat-3 est clair EN PERMANENCE (color:var(--bone)) parce qu il est
+ ecrit pour la plongee, quand le cœur sombre remplit l ecran. Mais
+ `noyau-dark` ne s active qu entre p>.5 et p<.76 et n inverse que la nav :
+ le fond derriere ce bloc, lui, reste le halo CLAIR du noyau en bas a
+ gauche. Tant que l element etait le chiffre « 1 », un glyphe pale passait
+ pour un ornement. Depuis qu il porte « Tout » — l etendue de l offre, ce que
+ le studio livre au-dela du site — un texte illisible fait perdre la phrase la
+ plus utile de la page. Releve a l ecran, capture « site 2 ».
+ L ombre est portee, pas peinte : elle ne change ni la couleur, ni la
+ graisse, ni la taille, et disparait sur fond sombre ou elle ne sert a rien.
+ POUR ANNULER : supprimer les deux `text-shadow` ci-dessous. */
 .noyau-num{
   font-family:var(--serif);font-weight:400;
   font-size:clamp(5rem,15vw,11rem);letter-spacing:-.04em;
+  text-shadow:0 2px 28px rgba(23,22,19,.55), 0 1px 4px rgba(23,22,19,.35);
 }
 .noyau-unit{
   font-size:.7rem;font-weight:600;letter-spacing:.24em;text-transform:uppercase;
   color:var(--muted-g);
+  text-shadow:0 1px 12px rgba(23,22,19,.5);
 }
 .noyau-specs{list-style:none;max-width:34ch;width:100%}
 .noyau-specs li{
   display:flex;align-items:baseline;gap:.9em;
-  padding:9px 0;font-size:.92rem;
+  padding:9px 0;font-size:1.02rem;
   border-bottom:1px solid var(--line-g);
 }
 .noyau-specs li:first-child{border-top:1px solid var(--line-g)}
@@ -182,13 +205,35 @@ html.has-intro:not(.loaded) .noyau-enter{animation-play-state:paused}
   font-size:.66rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;
   color:var(--muted-g);flex:0 0 auto;min-width:9em;
 }
-.noyau-specs .v{margin-left:auto;text-align:right}
+/* Contre l etiquette, pas contre le bord : voir le commentaire de .noyau-spec. */
+.noyau-specs .v{text-align:left}
 
 /* Temps 4 — la sortie. Le noyau se retire, la page reprend la main. */
 .noyau-beat-4{min-height:74svh;justify-content:center}
 .noyau-out{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;
   padding-top:26px;border-top:1px solid var(--line)}
-.noyau-out p{max-width:34ch;color:var(--muted);font-size:1.02rem;line-height:1.7}
+/* LA SORTIE DEVIENT LA PHRASE LA PLUS VISIBLE DU HERO — demande du
+   proprietaire, 31 aout 2026, capture « site 3 ».
+   Elle etait rendue en var(--muted) a 1.02rem : la typographie d une note de
+   bas de page, ecrasee par le bouton noir pose a cote. C est pourtant la
+   derniere chose que le visiteur lit avant d entrer dans la page, et la seule
+   qui dise POURQUOI refaire un site plutot que COMMENT.
+   Elle passe donc en encre pleine, au corps du serif d affichage, sur trois
+   lignes courtes. La structure ne bouge pas : .noyau-out reste le meme flex
+   `space-between` a deux enfants, et il retombe en colonne sous 700px comme
+   avant grace a son flex-wrap. */
+.noyau-out p{
+  max-width:18ch;color:var(--ink);
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(1.6rem,3.6vw,2.7rem);line-height:1.2;letter-spacing:-.015em;
+}
+
+/* LES DEUX SORTIES FORMENT UN SEUL ENFANT DE .noyau-out. Le `space-between`
+   ci-dessus n oppose que deux blocs : la phrase et les boutons. Sans ce
+   conteneur, le second bouton devenait un troisieme enfant et le flex ecartait
+   les trois sur toute la largeur. Le gap remplace l espace inter-mots, et le
+   wrap les empile quand la place manque, comme .noyau-out le fait deja. */
+.noyau-out-cta{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 
 /* ---------- le reste du site ----------
    Opaque, obligatoirement : voir ORDRE DE PEINTURE en tete de fichier. */

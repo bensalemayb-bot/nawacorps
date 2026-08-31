@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import SchemaPage from "@/components/SchemaPage";
 import BoutonDevis from "@/components/BoutonDevis";
 import CarteService from "@/components/CarteService";
 import FooterContact from "@/components/FooterContact";
@@ -48,11 +49,15 @@ import { openGraphPage, whatsapp } from "@/lib/site";
  * Il ne reste qu un mot et qu une page generale : celle-ci. Le site n etait pas
  * en ligne, aucune redirection n a donc ete posee.
  *
- * ET CHAQUE LIGNE S OUVRE. La page promet qu on y voit tout ce qui est vendu ;
- * elle promet donc aussi qu on peut lire chaque ligne en entier. Les cartes
- * ouvrent /services/<slug de la table Service>, la ligne sur devis aussi, et
- * les trois formules gardent leur bouton. La construction de ces pages produit
- * ne se fait pas ici.
+ * ET CHAQUE LIGNE S OUVRE — MAIS PAS SUR UNE PAGE PAR LIGNE. La page promet
+ * qu on y voit tout ce qui est vendu ; elle promet donc aussi qu on peut lire
+ * chaque ligne en entier. Les cartes ouvraient `/services/<slug de la table
+ * Service>` : quatorze de ces adresses n existaient pas et repondaient 404
+ * (constat 10 de la revue du 31 aout). Elles ouvrent desormais le bloc de la
+ * ligne sur la page de sa FAMILLE, a l ancre — `hrefService` decide, dans
+ * lib/catalogue-familles.ts, et c est la ou le contenu vit deja. Les trois
+ * formules gardent leur page et leur bouton ; `site-sur-mesure`, qui n a ni
+ * l une ni l autre, est rendu sans lien.
  *
  * TOUT VIENT DE POSTGRES. Aucun montant n est ecrit dans ce fichier : noms,
  * descriptions et prix sortent de la table Service (visible: true), comme dans
@@ -99,7 +104,7 @@ import { openGraphPage, whatsapp } from "@/lib/site";
 export const dynamic = "force-dynamic";
 
 const DESCRIPTION =
-  "Le catalogue du studio genevois : trois formules de site, le suivi mensuel, l'identité et les imprimés, les réseaux sociaux et la ligne restauration.";
+  "Le catalogue du studio genevois : trois formules de site, le suivi mensuel, le logo et les imprimés, les réseaux sociaux et les supports de restaurant.";
 
 export const metadata: Metadata = {
   title: "Services et tarifs à Genève",
@@ -253,12 +258,13 @@ function BlocFamille({
         <p className="lede" data-reveal style={{ marginBottom: 34 }}>
           {famille.contenu.resout}
         </p>
-        {/* CHAQUE CARTE OUVRE LA PAGE DE SA PRESTATION, pas celle de sa
-            famille. C est la difference entre cette page et l accueil, et elle
-            tient a la promesse de celle-ci : on y voit tout ce qui est vendu,
-            et ce qu on y voit s ouvre. La famille, elle, a deja son titre
-            deux fois au-dessus et son lien « tout voir » juste en dessous —
-            la carte le redirait une troisieme fois sans rien ajouter. */}
+        {/* CHAQUE CARTE OUVRE SA PRESTATION, a l ancre de son bloc sur la page
+            de la famille. C est la difference avec l accueil, dont les cartes
+            ouvrent la famille en haut de page, et elle tient a la promesse de
+            celle-ci : on y voit tout ce qui est vendu, et ce qu on y voit
+            s ouvre — sur la ligne, pas sur un sommaire. La famille, elle, a
+            deja son titre deux fois au-dessus et son lien « tout voir » juste
+            en dessous ; la carte le redirait une troisieme fois. */}
         <div className="cat-grid">
           {lignes.map((service) => (
             <CarteService key={service.id} service={service} versSaPage />
@@ -315,6 +321,12 @@ export default async function Services() {
 
   return (
     <>
+      <SchemaPage
+        fil={[
+          { nom: "Accueil", chemin: "/" },
+          { nom: "Services", chemin: "/services" },
+        ]}
+      />
       <section>
         <div className="wrap">
           <div className="sec-head">
@@ -336,10 +348,10 @@ export default async function Services() {
           <p className="lede" data-reveal>
             Trois lignes en vitrine. Le site d&apos;abord — c&apos;est le
             produit d&apos;entrée, et ce sur quoi tout le reste vient se
-            brancher. Puis les cartes et les imprimés, ce que vos clients
+            brancher. Puis les cartes de visite et les imprimés, ce que vos clients
             gardent en main. Puis les réseaux sociaux, tenus au mois.
-            L&apos;identité, le suivi et la ligne restauration suivent plus
-            bas, entières.
+            Le logo, l&apos;hébergement et les supports de restaurant
+            suivent plus bas, entiers.
           </p>
           {/* La comparaison « chez les autres » a ete retiree : le
               positionnement §8 interdit de comparer, nomme ou non. Ce qui la
@@ -431,17 +443,18 @@ export default async function Services() {
             ))}
           </div>
 
-          {/* LA LIGNE SUR DEVIS S OUVRE ELLE AUSSI. Elle n a pas de carte —
-              elle n a pas de montant a mettre dans une grille de prix —, mais
-              c est une ligne du catalogue comme les autres et la page promet
-              que chacune s ouvre. Sans ce lien, la seule prestation de site
-              qu on ne peut pas lire est celle qui coute le plus cher. */}
+          {/* LA LIGNE SUR DEVIS N EST PAS UN LIEN, ET C EST LA CORRECTION.
+              Elle en portait un, vers `/services/site-sur-mesure` — une
+              adresse que personne ne sert : ce `principal` n a ni page de
+              formule ni famille, et la route repondait 404 (constat 10 de la
+              revue du 31 aout). Rien n est perdu au passage : la ligne montre
+              deja son nom, son regime de prix et sa description en entier, et
+              le devis est deux lignes plus bas. Mieux vaut une ligne sans
+              porte de sortie qu une porte sur le vide. */}
           {surDevis.map((service) => (
             <div className="p-note" data-reveal key={service.id}>
               <span>
-                <a className="lnk" href={hrefService(service.slug)}>
-                  {service.name}
-                </a>
+                {service.name}
                 {` — ${QUOTE_LABEL}`}
               </span>
               <span>{service.description}</span>
@@ -477,7 +490,7 @@ export default async function Services() {
               n a pas (positionnement §9). Ce qu elle affirme se verifie en
               descendant l ecran. */}
           <p className="cat-rang-d" data-reveal>
-            Identité et photographie, suivi du site, ligne restauration. Trois
+            Logo et photos, hébergement du site, restaurants et cafés. Trois
             lignes entières, avec leurs prestations, leurs prix et leur devis —
             elles passent après, pas au rabais.
           </p>

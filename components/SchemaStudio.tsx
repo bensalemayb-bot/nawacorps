@@ -90,7 +90,13 @@ export default function SchemaStudio() {
     image: `${SITE_URL}/brand/nawa-corps-logo-principal-transparent.png`,
     logo: `${SITE_URL}/brand/nawa-corps-logo-principal-transparent.png`,
     foundingDate: FONDE_EN,
-    founder: { "@type": "Person", name: "Ayoub Bensalem" },
+    founder: {
+      // Meme @id que le nœud Person complet de /studio : sans lui, le site
+      // declarait deux Ayoub Bensalem sans lien entre eux.
+      "@type": "Person",
+      "@id": `${SITE_URL}/#ayoub`,
+      name: "Ayoub Bensalem",
+    },
     knowsLanguage: [...LANGUES],
     currenciesAccepted: "CHF",
     areaServed: {

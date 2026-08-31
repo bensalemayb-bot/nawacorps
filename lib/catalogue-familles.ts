@@ -132,19 +132,42 @@ export function hrefFamille(slug: FamilleSlug): string {
 }
 
 /**
- * L URL publique d une ligne de catalogue.
+ * L URL publique d une ligne de catalogue : sa page quand elle en a une, sinon
+ * l ANCRE de son bloc sur la page de sa famille.
  *
- * ATTENTION, LE SEGMENT EST PARTAGE. `/services/<slug>` sert deja les cinq
- * familles, qui sont des segments STATIQUES, et les trois formules de site,
- * servies par le voisin [slug]. Un segment statique l emporte toujours sur le
- * dynamique : `reseaux-sociaux` est a la fois un slug de famille et un slug de
- * la table Service, et c est la page de famille qui repond. Ce n est pas un
- * lien mort — cette famille ne contient QUE cette ligne, la page est donc bien
- * celle de la prestation —, mais aucune page produit distincte ne pourra
- * jamais vivre a cette adresse.
+ * POURQUOI ELLE NE REND PLUS `/services/<slug>` POUR TOUT LE MONDE. Elle le
+ * faisait, et quatorze des dix-huit lignes du catalogue repondaient donc 404 :
+ * a cette adresse ne vivent que les trois formules, servies par le voisin
+ * [slug], et les cinq familles, qui sont des segments statiques. La moitie
+ * basse du catalogue envoyait le visiteur dans le mur — releve route par
+ * route, `docs/agents/reviews/brand-review-2026-08-31.md`, constat 10.
+ *
+ * LA CORRECTION NE CREE AUCUNE PAGE, et c est deliberé : quatorze pages baties
+ * sur une ligne de base seraient du contenu mince, qui dessert le referencement
+ * au lieu de le servir (meme raisonnement qu en tete de lib/formules.ts). Le
+ * contenu EXISTE DEJA — chaque ligne est une `piece` de lib/familles.ts, et la
+ * page de sa famille la rend en entier : ce que c est, ce qu on recoit, son
+ * prix lu en base, la raison de son devis. On y renvoie donc a l ancre du bloc,
+ * posee par components/PageFamille.tsx sur l `id` de chaque `<article>`.
+ *
+ * LES TROIS FORMULES GARDENT LEUR PAGE : elles n ont pas de famille (voir
+ * l en-tete), `FAMILLE_PAR_SERVICE` ne les connait pas, et elles retombent
+ * donc sur `/services/<slug>`.
+ *
+ * UN SEUL SLUG N A NI PAGE NI FAMILLE : `site-sur-mesure`, un `principal` sur
+ * devis. Cette fonction lui rendrait une adresse morte — le seul endroit qui
+ * le rende, app/(site)/services/page.tsx, ne l appelle donc pas pour lui et
+ * l affiche sans lien.
+ *
+ * ATTENTION, LE SEGMENT EST PARTAGE. `reseaux-sociaux` est a la fois un slug de
+ * famille et un slug de la table Service ; un segment statique l emporte
+ * toujours sur le dynamique, et c est bien la page de famille qui repond. Ce
+ * n est pas un lien mort — cette famille ne contient QUE cette ligne —, mais
+ * aucune page produit distincte ne pourra jamais vivre a cette adresse.
  */
 export function hrefService(slug: string): string {
-  return `${RACINE}/${slug}`;
+  const famille = FAMILLE_PAR_SERVICE[slug];
+  return famille ? `${hrefFamille(famille)}#${slug}` : `${RACINE}/${slug}`;
 }
 
 /** Une entree de navigation : ou ca mene, et sous quel nom. */

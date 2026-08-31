@@ -104,7 +104,7 @@ const services: ServiceSeed[] = [
   // ---------- En continu ----------
   {
     slug: "hebergement",
-    name: "Suivi & hébergement",
+    name: "Hébergement et suivi du site",
     description: "Hébergement, nom de domaine renouvelé, mises à jour, sauvegardes et certificat. Départ la 2ᵉ année.",
     category: "continu",
     priceType: "FIXED",
@@ -115,7 +115,7 @@ const services: ServiceSeed[] = [
   },
   {
     slug: "suivi-assistant",
-    name: "Suivi & hébergement — avec assistant",
+    name: "Hébergement et suivi — avec l'assistant",
     description: "Le même suivi, plus l'assistant lui-même et vos modifications de contenu comprises.",
     category: "continu",
     priceType: "FIXED",
@@ -126,7 +126,7 @@ const services: ServiceSeed[] = [
   },
   {
     slug: "reseaux-sociaux",
-    name: "Réseaux sociaux — la ligne complète",
+    name: "Réseaux sociaux — publications et messages, au mois",
     description: "Le calendrier du mois vous est proposé, vous le validez : visuels, textes, publication et réponses aux messages.",
     category: "continu",
     priceType: "QUOTE",
@@ -139,7 +139,7 @@ const services: ServiceSeed[] = [
   // ---------- En complément ----------
   {
     slug: "carte-visite",
-    name: "Cartes de visite — conception + 75 ex. imprimés",
+    name: "Cartes de visite — 75 exemplaires imprimés",
     description: "85 × 55 recto-verso, le papier choisi ensemble, l'imprimeur et le contrôle avant tirage compris.",
     category: "annee",
     priceType: "QUOTE",
@@ -150,7 +150,7 @@ const services: ServiceSeed[] = [
   },
   {
     slug: "identite-logo",
-    name: "Identité complète / logo",
+    name: "Logo et identité visuelle",
     description: "Logotype et déclinaisons, palette, typographies, et les règles qui tiennent le site, les devis et l'enseigne.",
     category: "annee",
     priceType: "QUOTE",
@@ -172,7 +172,7 @@ const services: ServiceSeed[] = [
   },
   {
     slug: "traduction",
-    name: "Traduction du site FR / EN",
+    name: "Version anglaise du site",
     description: "La version anglaise du site, rédigée et remise en page — elle s'ajoute à ce qui est déjà en ligne.",
     category: "annee",
     priceType: "QUOTE",
@@ -183,7 +183,7 @@ const services: ServiceSeed[] = [
   },
   {
     slug: "sticker-avis",
-    name: "Sticker vitrine « Avis Google » + QR",
+    name: "Sticker vitrine — avis Google",
     description: "Un QR en vitrine ou au comptoir, qui ouvre le formulaire d'avis de votre fiche Google sans rien chercher.",
     category: "annee",
     priceType: "QUOTE",
@@ -207,7 +207,7 @@ const services: ServiceSeed[] = [
   // ---------- Ligne restauration, secondaire ----------
   {
     slug: "la-carte",
-    name: "La Carte — menu de restaurant",
+    name: "Menu de restaurant",
     description: "La carte reprise en entier, puis rendue en trois objets : fichiers d'impression, version en ligne et QR.",
     category: "saison",
     priceType: "QUOTE",
@@ -240,7 +240,7 @@ const services: ServiceSeed[] = [
   },
   {
     slug: "chevalets",
-    name: "Chevalets de table — carte, QR & wifi",
+    name: "Chevalets de table — menu, QR et wifi",
     description: "Debout sur la table : la suggestion du moment d'un côté, le QR de la carte et le code wifi de l'autre.",
     category: "saison",
     priceType: "QUOTE",
@@ -251,7 +251,7 @@ const services: ServiceSeed[] = [
   },
   {
     slug: "pack-saisonnier",
-    name: "Pack saisonnier — affiche + posts + carte à jour",
+    name: "Pack saisonnier — affiche, publications et menu à jour",
     description: "Le passage d'une saison à l'autre en une fois : l'affiche, les publications assorties, la carte à jour.",
     category: "saison",
     priceType: "QUOTE",

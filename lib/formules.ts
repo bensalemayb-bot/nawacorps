@@ -34,7 +34,7 @@ import { whatsapp } from "@/lib/site";
  * FEU VERT. Ni 72 h ni 48 h : ces chiffres ont circule, aucun n est tenu, et
  * un delai rate coute plus cher que le delai gagne.
  *
- * TROIS AFFIRMATIONS ONT ETE RETIREES DE CE FICHIER, et ne reviennent pas :
+ * QUATRE FORMULATIONS ONT ETE RETIREES DE CE FICHIER, et ne reviennent pas :
  *  - « chez les autres, le compteur part quand… » : c est une comparaison
  *    publiee. Le positionnement §8 les interdit, nommees ou non. Le fait se
  *    dit desormais sur NOUS, en nommant l attente par defaut du lecteur
@@ -47,6 +47,10 @@ import { whatsapp } from "@/lib/site";
  *  - « sur-mesure » : mot vide du guide de voix, sature chez quatre
  *    concurrents sur six. « à plusieurs pages » dit la meme chose et se
  *    verifie.
+ *  - « mobile d abord » : c est « mobile-first » traduit, banni par le
+ *    glossaire (entree 13) au profit de « lisible sur téléphone ». Il vivait
+ *    dans la `seoDescription` de La Vitrine — c est-a-dire dans l extrait que
+ *    Google montre au prospect avant meme qu il ouvre la page.
  */
 
 /**
@@ -122,6 +126,19 @@ type Formule = {
   resout: string;
   /** Ce que ce palier ajoute au precedent. Vide pour le socle. */
   apporte: readonly string[];
+  /**
+   * LE LIBELLE DU BOUTON DE DEVIS, ET IL EST PROPRE AU PALIER.
+   *
+   * Les trois pages concluaient sur le meme « Demander un devis ». Sur Le Site
+   * c etait une contradiction lisible a un ecran d intervalle : la page affiche
+   * un prix ferme en tete, puis demande un devis pour ce qui est deja chiffre.
+   * Le guide de voix §7 donne un libelle par palier, et chacun promet le
+   * BENEFICE du palier plutot que la demarche — refaire le site, recevoir les
+   * demandes, les automatiser. « Demander un devis » reste le libelle de la
+   * carte du studio et des cinq familles, ou le prix, lui, est reellement a
+   * etablir.
+   */
+  cta: string;
   /** Amorce du lien WhatsApp — repli si l assistant ne demarre pas. */
   amorce: string;
   /** Identifiant de conversation passe a l assistant par BoutonDevis. */
@@ -141,10 +158,11 @@ export const FORMULES: Record<FormuleSlug, Formule> = {
     h1Suite: "refonte de site à Genève.",
     seoTitre: "La Vitrine : refonte de site à Genève",
     seoDescription:
-      "Votre site de PME genevoise remis à niveau en une semaine, dès votre feu vert. Une page mobile d'abord, formulaire de demande compris, TVA comprise.",
+      "Votre site de PME genevoise remis à niveau en une semaine, dès votre feu vert. Une page lisible sur téléphone, formulaire de demande compris, TVA comprise.",
     resout:
       "Votre site a été fait une fois, il y a plus de cinq ans, et personne ne s'en est occupé depuis : il est daté, il se lit mal sur téléphone, et le formulaire ne mène nulle part. La Vitrine le remet à niveau — une page nette, rapide, avec une demande de devis qui arrive vraiment chez vous.",
     apporte: [],
+    cta: "Rendre mon site présentable",
     amorce: whatsapp(
       "Bonjour, La Vitrine m'intéresse pour le site de mon entreprise.",
     ),
@@ -178,6 +196,7 @@ export const FORMULES: Record<FormuleSlug, Formule> = {
       "Fiche Google complétée — photos, horaires, zone d'intervention",
       "Photos de votre entreprise, cadrées pour le site comme pour Google",
     ],
+    cta: "Recevoir mes demandes",
     amorce: whatsapp(
       "Bonjour, Le Site m'intéresse : je veux un site qui reçoive les demandes de devis.",
     ),
@@ -212,6 +231,7 @@ export const FORMULES: Record<FormuleSlug, Formule> = {
       "La relance automatique des prospects restés sans réponse",
       "Le site en français et en anglais",
     ],
+    cta: "Automatiser mes demandes",
     amorce: whatsapp(
       "Bonjour, L'Assistant m'intéresse pour le site de mon entreprise.",
     ),

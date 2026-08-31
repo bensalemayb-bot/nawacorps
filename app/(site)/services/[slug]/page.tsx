@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import SchemaPage from "@/components/SchemaPage";
 import { notFound } from "next/navigation";
 import BoutonDevis from "@/components/BoutonDevis";
 import FooterContact from "@/components/FooterContact";
@@ -48,15 +49,20 @@ import {
  * compteur d avis : il n existe aucun avis reel, et en Suisse la LCD (art. 3)
  * vise les indications trompeuses.
  *
- * UN PRIX MENSUEL OBLIGATOIRE S AFFICHE AU POINT DE DECISION, PAS AILLEURS.
- * L Assistant impose l abonnement de suivi — l assistant consomme des appels
- * d API tous les mois, le vendre une seule fois reviendrait a porter une
- * charge perpetuelle sans revenu. Cette obligation dormait dans un <details>
- * replie, et SANS son montant : le visiteur lisait 2'499.–, cliquait, et
- * decouvrait 129.–/mois plus tard. C est la definition d un prix cache. Le
- * montant est donc rendu ENTRE le prix et le bouton, avec le mot
- * « obligatoire », son point de depart et « TVA comprise » — et il est lu en
- * base (slug `suivi-assistant`), jamais ecrit ici.
+ * LE PRIX MENSUEL S AFFICHE AU POINT DE DECISION, SUR LES TROIS PALIERS.
+ * L Assistant IMPOSE son abonnement — l assistant consomme des appels d API
+ * tous les mois, le vendre une seule fois reviendrait a porter une charge
+ * perpetuelle sans revenu. Cette obligation dormait dans un <details> replie,
+ * et SANS son montant : le visiteur lisait 2'499.–, cliquait, et decouvrait
+ * 129.–/mois plus tard. C est la definition d un prix cache.
+ *
+ * LES DEUX AUTRES PALIERS N EN DISAIENT RIEN DU TOUT, ce qui etait le meme
+ * defaut d un cran en dessous : le suivi passe a 49.–/mois la 2ᵉ annee, et on
+ * pouvait lire La Vitrine ou Le Site en entier sans l apprendre. Les trois
+ * portent donc leur montant ENTRE le prix et le bouton, avec son point de
+ * depart et « TVA comprise ». Seul le mot « obligatoire » les distingue : il
+ * n est ecrit que la ou l abonnement l est vraiment. Les deux montants sont lus
+ * en base (slugs `hebergement` et `suivi-assistant`), jamais ecrits ici.
  */
 
 // Meme raison qu app/(site)/page.tsx : la page lit Postgres, et `next build`
@@ -151,23 +157,40 @@ export default async function FormulePage({
     : `${formatChfAmount(service.priceCents as number)}${CHF_UNIT}`;
 
   /**
-   * L abonnement que CETTE formule impose, s il y en a un.
+   * LE SUIVI QUI DECOULE DE CE PALIER — les trois en ont un.
    *
-   * Le lien formule -> suivi est ecrit ici et pas en base : la table Service
-   * ne porte aucune relation entre une formule et son abonnement, et lui en
-   * ajouter une pour un seul cas couterait plus cher que cette ligne. Le
-   * MONTANT, lui, vient de la base — c est tout ce qui compte.
+   * LES DEUX PREMIERES FORMULES N EN DISAIENT RIEN, et c etait le defaut :
+   * seule L Assistant annoncait son abonnement, si bien qu on pouvait lire
+   * La Vitrine ou Le Site en entier sans apprendre que le site coute 49.–/mois
+   * a partir de la 2ᵉ annee. Ce n est pas un prix cache au sens de l interdit
+   * n°4 du guide — il n est pas obligatoire sur ces deux paliers, le site est
+   * au client et il peut l heberger ailleurs — mais c est une depense annoncee
+   * apres coup, et le pilier 3 la traite comme une SUITE du palier, pas comme
+   * une option a decider. Elle se dit donc au meme endroit que le prix.
    *
-   * Une ligne absente, masquee depuis /admin ou passee sur devis ne fait rien
-   * afficher : mieux vaut pas de mention qu une mention fausse.
+   * `obligatoire` DISTINGUE LES DEUX CAS, et il change le libelle comme la
+   * phrase : sur L Assistant l abonnement est une regle de contrat — l assistant
+   * consomme des appels d API tous les mois —, sur les deux autres il decrit ce
+   * qui se passe l annee suivante. Ecrire « obligatoire » sur les trois serait
+   * faux, et la FAQ de /services/suivi dit deja le contraire.
+   *
+   * Le lien formule -> suivi est ecrit ici et pas en base : la table Service ne
+   * porte aucune relation entre une formule et son abonnement. Le MONTANT, lui,
+   * vient de la base — c est tout ce qui compte. Une ligne absente, masquee
+   * depuis /admin ou passee sur devis ne fait rien afficher : mieux vaut pas de
+   * mention qu une mention fausse.
    */
-  const SUIVI_IMPOSE: Partial<Record<typeof slug, string>> = {
-    "l-assistant": "suivi-assistant",
+  const SUIVI_DU_PALIER: Record<
+    typeof slug,
+    { service: string; obligatoire: boolean }
+  > = {
+    "la-vitrine": { service: "hebergement", obligatoire: false },
+    "le-site": { service: "hebergement", obligatoire: false },
+    "l-assistant": { service: "suivi-assistant", obligatoire: true },
   };
-  const suiviSlug = SUIVI_IMPOSE[slug];
-  const suivi = suiviSlug
-    ? catalogue.find((s) => s.slug === suiviSlug) ?? null
-    : null;
+  const { service: suiviSlug, obligatoire: suiviImpose } =
+    SUIVI_DU_PALIER[slug];
+  const suivi = catalogue.find((s) => s.slug === suiviSlug) ?? null;
   const prixSuivi =
     suivi && suivi.priceCents !== null && !isQuote(suivi)
       ? `${formatChfAmount(suivi.priceCents)}${CHF_UNIT}${MONTHLY_SUFFIX}`
@@ -216,6 +239,14 @@ export default async function FormulePage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLd(schema) }}
       />
+      <SchemaPage
+        fil={[
+          { nom: "Accueil", chemin: "/" },
+          { nom: "Services", chemin: "/services" },
+          { nom: service.name, chemin: `/services/${slug}` },
+        ]}
+        questions={formule.questions}
+      />
 
       {/* ---------- Le titre, ce que ça résout, le prix et le délai ---------- */}
       <section>
@@ -258,14 +289,17 @@ export default async function FormulePage({
               <b>Dès votre feu vert</b>
               <span>Départ du délai</span>
             </div>
-            {/* Le quatrieme fait n existe que sur une formule qui impose un
-                abonnement. Il est dans le MEME bandeau que le prix du site :
-                le visiteur ne peut pas lire l un sans l autre, et il les lit
-                avant d atteindre le bouton. */}
+            {/* LE QUATRIEME FAIT — le suivi, sur les trois paliers. Il est dans
+                le MEME bandeau que le prix du site : le visiteur ne peut pas
+                lire l un sans l autre, et il les lit avant d atteindre le
+                bouton. Le libelle suit le regime reel de l abonnement : impose
+                sur L Assistant, simple suite du palier sur les deux autres. */}
             {prixSuivi ? (
               <div>
                 <b>{prixSuivi}</b>
-                <span>Suivi obligatoire</span>
+                <span>
+                  {suiviImpose ? "Suivi obligatoire" : "Suivi dès la 2ᵉ année"}
+                </span>
               </div>
             ) : null}
           </div>
@@ -273,13 +307,21 @@ export default async function FormulePage({
               qu elle veut lever, et elle est saturee chez la concurrence. Ce
               qui rassure vraiment, c est de nommer la contrainte — ce que fait
               la phrase du suivi juste en dessous. */}
-          {prixSuivi ? (
+          {prixSuivi && suiviImpose ? (
             <p className="sm-note" data-reveal>
               Prix en francs suisses, TVA comprise. Le suivi à {prixSuivi} est{" "}
               <strong>obligatoire</strong> avec {service.name} et démarre la
               2ᵉ année — la première est comprise dans le prix du site.
               L&apos;assistant consomme des appels d&apos;API tous les mois ;
               sans le suivi, il s&apos;arrête.
+            </p>
+          ) : prixSuivi ? (
+            <p className="sm-note" data-reveal>
+              Prix en francs suisses, TVA comprise. Le suivi à {prixSuivi}{" "}
+              démarre la <strong>2ᵉ année</strong> — la première est comprise
+              dans le prix du site : hébergement, nom de domaine renouvelé,
+              mises à jour et sauvegardes. Deux allers-retours de correction
+              compris, facturés au-delà.
             </p>
           ) : (
             <p className="sm-note" data-reveal>
@@ -399,16 +441,21 @@ export default async function FormulePage({
             ))}
           </div>
 
-          {/* Le CTA de devis. BoutonDevis reste un <a href> vers WhatsApp :
-              si le JS ne demarre jamais, le lien fonctionne encore ; sinon le
-              clic ouvre l assistant, qui qualifie mieux. */}
+          {/* LE CTA PORTE LE BENEFICE DU PALIER, PAS LA DEMARCHE. Les trois
+              pages disaient « Demander un devis » ; sur Le Site, la page
+              affiche un prix ferme en tete et demandait un devis pour ce qui
+              est deja chiffre. Le libelle est lu dans lib/formules.ts, ou il
+              suit le tableau du guide de voix §7, palier par palier.
+              BoutonDevis reste un <a href> vers WhatsApp : si le JS ne demarre
+              jamais, le lien fonctionne encore ; sinon le clic ouvre
+              l assistant, qui qualifie mieux. */}
           <div className="c-row" data-reveal>
             <BoutonDevis
               href={formule.amorce}
               sujet={formule.sujet}
               className="btn"
             >
-              Demander un devis <span className="ar">→</span>
+              {formule.cta} <span className="ar">→</span>
             </BoutonDevis>
             <a className="btn btn-line" href="/services">
               Tous les services
@@ -417,7 +464,12 @@ export default async function FormulePage({
         </div>
       </section>
 
-      <FooterContact />
+      {/* L index du pied de page suit la derniere section de CETTE page :
+          trois sections (01) a (03) sur une page de formule, donc le contact porte (04).
+          Le defaut "07" du composant est celui de l accueil, qui compte
+          sept sections ; le laisser ici faisait sauter la numerotation
+          sous les yeux du lecteur. */}
+      <FooterContact indexSection="04" />
     </>
   );
 }

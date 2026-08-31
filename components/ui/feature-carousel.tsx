@@ -301,7 +301,14 @@ const FidNew = () => (
 );
 
 /* ------------------------------------------------------------------ */
-/*  Scènes "avant" (l'ancien monde)                                    */
+/*  Scènes "avant" (l'ancien monde).
+    Règle non négociable (guide de voix §4, positionnement §8) : le "avant"
+    montré ici est exactement le site ou l'imprimé que le prospect a chez
+    lui. Il reste DATÉ, jamais RIDICULE — pas de point d'exclamation
+    multiplié, pas de majuscules qui crient, pas de nom de fichier brut, pas
+    de fax. On date par ce qui MANQUE (formulaire, horaires structurés,
+    version téléphone), pas par ce qui prête à rire. Ne pas réintroduire la
+    moquerie ici.                                                          */
 /* ------------------------------------------------------------------ */
 
 const MenuOld = () => (
@@ -315,7 +322,7 @@ const MenuOld = () => (
     <div className="it"><span>CAFE / THE</span><i /><span>3.80</span></div>
     <hr />
     <div className="it"><span>ASSIETTE FROMAGE</span><i /><span>14.-</span></div>
-    <p className="w">* prix sujets à changement — demander au bar</p>
+    <p className="w">Ouvert du mardi au samedi.</p>
   </div>
 );
 
@@ -331,10 +338,10 @@ const SiteOld = () => (
       <span>_ □ ✕</span>
     </div>
     <div className="oin">
-      <h4>Bienvenue sur le site du Comptoir !!</h4>
+      <h4>Bienvenue sur le site du Comptoir</h4>
       <p className="onav">Accueil | Photos | Livre d&apos;or | Contact</p>
-      <div className="oimg">photo_bar_001.jpg</div>
-      <p className="onew">NOUVEAU : soirée jazz le jeudi !!!</p>
+      <div className="oimg">Photo du bar</div>
+      <p className="onew">NOUVEAU : soirée jazz le jeudi.</p>
       {/* LE COMPTEUR DE VISITEURS ET LE PIED « optimise pour Internet
           Explorer 6 » ONT ETE SUPPRIMES, sans remplacement. Le guide de voix
           demande un « avant » date, jamais ridicule : ce site-la est celui du
@@ -349,17 +356,17 @@ const CardOld = () => (
     <span className="t1">LE COMPTOIR</span>
     <span className="t2">Bar - Ambiance - Billard</span>
     <span className="st">★ ─── ★</span>
-    <span className="t3">Tél : 022 000 00 00<br />Fax : 022 000 00 01</span>
+    <span className="t3">Tél : 022 000 00 00</span>
   </div>
 );
 
 const PosterOld = () => (
   <div className="oflyer" aria-hidden="true">
-    <span className="f1">★ SOIREE ★</span>
-    <span className="f2">JAZZ !!!</span>
+    <span className="f1">★ Soirée ★</span>
+    <span className="f2">Jazz</span>
     <span className="f3">jeudi 12 decembre des 19H00</span>
     <span className="f4">ENTREE LIBRE</span>
-    <span className="f5">venez nombreux !!!</span>
+    <span className="f5">Bar ouvert dès 18h.</span>
   </div>
 );
 
@@ -370,7 +377,7 @@ const FidOld = () => (
       <span>✗</span><span>✗</span><span>✗</span>
       <span /><span /><span /><span /><span /><span /><span />
     </div>
-    <span className="b">10 cafés achetés = 1 café offert (tampon obligatoire)</span>
+    <span className="b">10 cafés achetés, le 11ᵉ offert.</span>
   </div>
 );
 

@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import SchemaPage from "@/components/SchemaPage";
 import BoutonDevis from "@/components/BoutonDevis";
 import FooterContact from "@/components/FooterContact";
 import VignettePrestation from "@/components/VignettePrestation";
@@ -138,6 +139,14 @@ export default async function PageFamille({ slug }: { slug: FamilleSlug }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLd(schema) }}
       />
+      <SchemaPage
+        fil={[
+          { nom: "Accueil", chemin: "/" },
+          { nom: "Services", chemin: "/services" },
+          { nom: famille.libelle, chemin: `/services/${slug}` },
+        ]}
+        questions={famille.questions}
+      />
 
       {/* ---------- Le titre et ce que la famille résout ---------- */}
       <section>
@@ -195,7 +204,19 @@ export default async function PageFamille({ slug }: { slug: FamilleSlug }) {
                 .filter((nom): nom is string => nom !== null);
 
               return (
-                <article className="pf-piece" data-reveal key={service.id}>
+                /* L `id` EST L ANCRE DU CATALOGUE, et il porte le slug de la
+                   table Service. Les grilles de l accueil et de /services
+                   pointent chaque ligne sur `/services/<famille>#<slug>` (cf.
+                   `hrefService` dans lib/catalogue-familles.ts) : sans cet
+                   attribut, le lien ouvrirait bien la page mais laisserait le
+                   visiteur en chercher la prestation. C est un attribut, pas
+                   une classe — la mise en page ne bouge pas. */
+                <article
+                  className="pf-piece"
+                  id={service.slug}
+                  data-reveal
+                  key={service.id}
+                >
                   <div className="pf-txt">
                     {/* Nom et description viennent de Postgres, jamais du
                         fichier editorial. */}
@@ -358,7 +379,12 @@ export default async function PageFamille({ slug }: { slug: FamilleSlug }) {
         </div>
       </section>
 
-      <FooterContact />
+      {/* L index du pied de page suit la derniere section de CETTE page :
+          trois sections (01) a (03) sur une page de famille, donc le contact porte (04).
+          Le defaut "07" du composant est celui de l accueil, qui compte
+          sept sections ; le laisser ici faisait sauter la numerotation
+          sous les yeux du lecteur. */}
+      <FooterContact indexSection="04" />
     </>
   );
 }

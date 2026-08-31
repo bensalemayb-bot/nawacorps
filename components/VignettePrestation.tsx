@@ -266,7 +266,7 @@ const Traduction = (): ReactElement => (
 );
 
 /* -------------------------------------------------------------------- */
-/*  La ligne restauration                                                */
+/*  Restaurants et cafes                                                  */
 /* -------------------------------------------------------------------- */
 
 /** Largeurs des intitules de plats, en pourcentage. Purement graphique. */

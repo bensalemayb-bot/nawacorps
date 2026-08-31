@@ -54,9 +54,20 @@ export default function ContactForm() {
     const corps = {
       name: String(data.get("name") ?? ""),
       phone: String(data.get("phone") ?? ""),
+      email: String(data.get("email") ?? ""),
       message: String(data.get("message") ?? ""),
       website: String(data.get("website") ?? ""),
     };
+
+    // Le studio vend une proposition ecrite : il lui faut un moyen de la
+    // renvoyer. Ni le telephone ni l e-mail ne porte `required` seul, mais
+    // l un des deux doit etre rempli — la meme regle est imposee cote
+    // serveur (app/api/contact/route.ts), qui reste la seule verification
+    // qui compte ; celle-ci n evite qu un aller-retour reseau inutile.
+    if (!corps.phone.trim() && !corps.email.trim()) {
+      setEtat({ statut: "erreur", message: "Indiquez un téléphone ou un e-mail." });
+      return;
+    }
 
     try {
       const res = await fetch("/api/contact", {
@@ -69,10 +80,12 @@ export default function ContactForm() {
         // « réponse sous 24 h » a survecu ici a la purge des delais parce
         // qu il vivait dans une chaine JS et non dans du JSX. C est pourtant
         // le meme engagement interdit : le seul autorise est « réponse le
-        // jour ouvrable suivant », et il est deja ecrit au-dessus du
-        // formulaire — le repeter en ferait une seconde occurrence. Le
-        // message de succes dit donc un FAIT verifiable a la place : ou
-        // arrive le message (lib/telegram.ts).
+        // jour ouvrable suivant » (MENTION_REPONSE, lib/familles.ts), et il
+        // est ecrit au-dessus du formulaire partout ou ce composant est
+        // rendu — FooterContact.tsx et /contact — le repeter ici en ferait
+        // une seconde formulation du meme engagement. Le message de succes
+        // dit donc un FAIT verifiable a la place : ou arrive le message
+        // (lib/telegram.ts).
         setEtat({
           statut: "succes",
           message: "Message reçu — il arrive directement sur mon téléphone.",
@@ -86,12 +99,12 @@ export default function ContactForm() {
         statut: "erreur",
         message:
           erreur?.error ??
-          "Envoi impossible pour le moment. Écrivez-nous sur WhatsApp en attendant.",
+          "Envoi impossible pour le moment. Écrivez-moi sur WhatsApp en attendant.",
       });
     } catch {
       setEtat({
         statut: "erreur",
-        message: "Connexion interrompue. Écrivez-nous sur WhatsApp en attendant.",
+        message: "Connexion interrompue. Écrivez-moi sur WhatsApp en attendant.",
       });
     }
   }
@@ -114,10 +127,18 @@ export default function ContactForm() {
           style={champ}
           type="tel"
           name="phone"
-          required
           placeholder="Votre téléphone"
           aria-label="Votre téléphone"
           autoComplete="tel"
+        />
+        <input
+          style={champ}
+          type="email"
+          name="email"
+          maxLength={160}
+          placeholder="Votre e-mail"
+          aria-label="Votre e-mail"
+          autoComplete="email"
         />
         <textarea
           style={{ ...champ, resize: "vertical", minHeight: 110 }}

@@ -51,6 +51,21 @@ import { ENTREES_FAMILLES, HREF_SERVICES } from "@/lib/catalogue-familles";
 // que le menu plein ecran. Deux listes ecrites a deux endroits divergent.
 export default function Nav() {
   // volontaire — next/link casserait les reveals (Interactions ne tourne qu'une fois), voir décision B7
+
+  // L HORLOGE EST CALCULEE AU RENDU, PAS ECRITE EN DUR. « Genève — 00:00 »
+  // etait une chaine fixe : servie telle quelle a n importe quelle heure, et
+  // corrigee seulement quand Interactions.tsx demarre son intervalle — donc
+  // minuit au premier rendu, et minuit definitif si ce script echoue. MEME
+  // FORMAT que ce script (components/Interactions.tsx, fonction `tick`) :
+  // `fr-CH`, `Europe/Zurich`, heure et minute sur 2 chiffres. Le premier tick
+  // cote client ne fait ainsi que rafraichir une valeur deja juste, jamais la
+  // corriger.
+  const heureGeneve = new Intl.DateTimeFormat("fr-CH", {
+    timeZone: "Europe/Zurich",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date());
+
   return (
     <nav className="nav" id="nav">
       <a className="wordmark" href="/#top" aria-label="Nawa Corps — accueil">
@@ -71,7 +86,13 @@ export default function Nav() {
           priority
         />
       </a>
-      <span className="nav-time" id="clock">Genève — 00:00</span>
+      {/* suppressHydrationWarning sur ce seul span : Nav est un composant
+          serveur (pas de "use client" dans ce fichier), donc rien ne le
+          reexecute cote client — mais l heure qu il affiche continue d avancer
+          entre l instant du rendu et l hydratation, une difference legitime
+          qu il ne faut pas signaler comme un bug plutot que de faire de tout
+          le composant un client component pour une seule horloge. */}
+      <span className="nav-time" id="clock" suppressHydrationWarning>{`Genève — ${heureGeneve}`}</span>
       <div className="nav-r">
         <a className="lnk" href="/#travaux">Travaux</a>
         <NavServices
@@ -80,7 +101,7 @@ export default function Nav() {
         />
         <a className="lnk" href="/studio">Le studio</a>
         <a className="lnk" href="/contact">Contact</a>
-        <a className="pill" href="/#contact">Parlons-en</a>
+        <a className="pill" href="/#contact">Refaire mon site</a>
         <button className="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false"><i></i><i></i></button>
       </div>
     </nav>

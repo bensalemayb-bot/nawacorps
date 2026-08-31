@@ -1,7 +1,7 @@
 import { whatsapp } from "@/lib/site";
 import { isQuote } from "@/lib/format";
 import {
-  MENTION_DEVIS,
+  MENTION_DEVIS_COURTE,
   MENTION_REPONSE,
   MENTION_TVA,
 } from "@/lib/familles";
@@ -17,7 +17,13 @@ import BoutonDevis from "@/components/BoutonDevis";
 import CarteService from "@/components/CarteService";
 
 /**
- * La carte du studio — le catalogue hors formules, sur l accueil.
+ * Le catalogue hors formules, sur l accueil.
+ *
+ * LE TITRE NE DIT PLUS « La carte du studio ». « Carte » designait quatre
+ * choses sur la meme page — le menu d un restaurant, une carte de visite, une
+ * carte de fidelite, et ce catalogue-ci. Un restaurateur lisait menu, un
+ * garagiste lisait carte de visite, et les deux avaient raison. Le titre dit
+ * desormais ce qu il est.
  *
  * CE QUI A CHANGE, ET POURQUOI. Ces prestations s affichaient en LIGNES :
  * intitule, filet pointille, prix a droite, sur deux colonnes dans un encart
@@ -83,8 +89,8 @@ export default async function CarteDuStudio() {
   // ligne masquee depuis /admin — et une phrase qui compte faux discredite
   // celle qui explique. `isQuote` est la meme condition que celle qui decide
   // du rendu de chaque carte : les deux ne peuvent pas se contredire.
-  const total = catalogue.length;
   const surDevis = catalogue.filter(isQuote).length;
+  const chiffrees = catalogue.length - surDevis;
   // Aplati DANS L ORDRE DES FAMILLES, et non dans celui de `sortOrder` : en
   // base, les imprimes et l identite se suivent en alternance dans la meme
   // categorie `annee`. Rendues telles quelles, les cartes auraient donne une
@@ -104,12 +110,12 @@ export default async function CarteDuStudio() {
       <div className="wrap">
         <div className="studio-menu">
           <div className="sm-head" data-reveal>
-            <h2>La carte <span className="serif-i">du studio</span></h2>
+            <h2>Tout ce que <span className="serif-i">fait le studio</span></h2>
           </div>
           {/* L accroche annonce l ordre de lecture au lieu de le subir : ce
               qui vient d abord, pourquoi, et ce qui suit. « ligne par ligne » a
               quitte cette phrase avec les lignes elles-memes. */}
-          <p className="lede" data-reveal style={{ marginBottom: 30 }}>Le site est le produit d&apos;entrée ; il n&apos;est pas le seul atelier. Ce qui s&apos;imprime et ce qui se publie chaque semaine passent devant : ce sont les deux lignes que le studio met en vitrine à côté des formules. Le reste suit, entier, et se commande avec un site chez moi comme sans — la ligne restauration comprise.</p>
+          <p className="lede" data-reveal style={{ marginBottom: 30 }}>Le site est le produit d&apos;entrée ; il n&apos;est pas le seul atelier. Ce qui s&apos;imprime et ce qui se publie chaque semaine passent devant : ce sont les deux que le studio met en vitrine à côté des formules. Le reste suit, entier, et se commande avec un site chez moi comme sans — les supports de restaurant compris.</p>
           {/* AUCUN TITRE DE GROUPE AU-DESSUS DE CETTE PREMIERE GRILLE, et c est
               voulu. Chaque carte porte deja le nom de sa famille au pied, en
               guise de porte de sortie : un intertitre par famille redirait le
@@ -137,7 +143,7 @@ export default async function CarteDuStudio() {
               il n a donc aucune source pour decrire un comportement d achat.
               Ce qui reste est verifiable en descendant l ecran : ces trois
               lignes sont entieres, elles gardent page, prix et devis. */}
-          <p className="cat-rang-d" data-reveal>Identité et photographie, suivi du site, ligne restauration : trois lignes entières, qui gardent leur page, leur prix et leur devis. Elles passent après, pas au rabais.</p>
+          <p className="cat-rang-d" data-reveal>Logo et photos, hébergement du site, restaurants et cafés : trois pages entières, qui gardent leur prix et leur devis. Elles passent après, pas au rabais.</p>
           <div className="cat-grid cat-grid-sobre">
             {second.map((service) => (
               <CarteService
@@ -152,16 +158,28 @@ export default async function CarteDuStudio() {
               DE GRILLE. La majorite des lignes du catalogue sont sur devis :
               tant que la raison n est pas donnee, le lecteur lit un refus de
               repondre, et deux des trois lignes de vitrine en font partie.
-              Le raisonnement est ecrit UNE fois, ici, et lu dans
-              lib/familles.ts — les cinq pages de famille rendent la meme
-              phrase, mot pour mot, et deux copies divergeraient.
-              Les deux comptes sont CALCULES sur la base : ecrits a la main,
-              ils deviendraient faux au premier ajout au catalogue. */}
+
+              LA PHRASE DE COMPTE EST CELLE DE /services, AU CARACTERE PRES.
+              L accueil disait « 13 lignes sur 18 sont annoncées sur devis »,
+              l index « 5 lignes portent un prix ferme, 13 sont annoncées sur
+              devis » : la meme donnee, dite de deux facons, dans deux pages que
+              le meme visiteur traverse a la suite. Le guide de voix §8 impose
+              une formulation unique, et c est la seconde qui a ete gardee —
+              elle commence par ce qui est chiffre. Les deux comptes restent
+              CALCULES sur la base : ecrits a la main, ils deviendraient faux au
+              premier ajout au catalogue.
+
+              LE RAISONNEMENT, LUI, EST REDUIT A SA PHRASE CENTRALE. Il tenait
+              en un paragraphe entier, rendu mot pour mot ici ET sur /services.
+              La version longue reste la ou le lecteur compare les treize lignes
+              — le catalogue ; l accueil garde la raison, pas la demonstration.
+              Les deux viennent de lib/familles.ts, jamais recopiees. */}
           <div className="sm-devis" data-reveal>
             <p className="sm-devis-t">
-              {surDevis} lignes sur {total} sont annoncées sur devis.
+              {chiffrees} lignes portent un prix ferme, {surDevis} sont annoncées
+              sur devis.
             </p>
-            <p>{MENTION_DEVIS}</p>
+            <p>{MENTION_DEVIS_COURTE}</p>
             <p className="sm-devis-r">{MENTION_REPONSE}</p>
           </div>
           <div className="p-note" data-reveal>
