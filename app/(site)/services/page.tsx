@@ -32,7 +32,7 @@ import {
   chargerCatalogue,
   parCategories,
 } from "@/lib/catalogue";
-import { openGraphPage, whatsapp } from "@/lib/site";
+import { openGraphPage } from "@/lib/site";
 
 /**
  * /services — LE CATALOGUE EN ENTIER.
@@ -151,12 +151,6 @@ export const metadata: Metadata = {
  */
 
 const DEVIS_LABEL = "Demander un devis →";
-
-// CTA du groupe « Les formules », a part parce que son amorce parle de site et
-// non de support.
-const DEVIS_FORMULES = whatsapp(
-  "Bonjour, j'aimerais un devis pour la refonte du site de mon entreprise.",
-);
 
 /**
  * L HABILLAGE DES CINQ BLOCS DE FAMILLE, PROPRE A CETTE PAGE.
@@ -277,10 +271,7 @@ function BlocFamille({
         </div>
         <div className="sm-foot">
           <span>{MENTION_TVA}</span>
-          <BoutonDevis
-            href={famille.contenu.amorce}
-            sujet={famille.contenu.sujet}
-          >
+          <BoutonDevis sujet={famille.contenu.sujet}>
             {DEVIS_LABEL}
           </BoutonDevis>
         </div>
@@ -463,7 +454,7 @@ export default async function Services() {
 
           <div className="p-note" data-reveal>
             <span>{MENTION_TVA}</span>
-            <BoutonDevis href={DEVIS_FORMULES} sujet="devis-formules">
+            <BoutonDevis sujet="devis-formules">
               {DEVIS_LABEL}
             </BoutonDevis>
           </div>

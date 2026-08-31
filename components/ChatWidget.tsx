@@ -1,7 +1,7 @@
 "use client";
 
 import { whatsapp } from "@/lib/site";
-import { NAWA_CHAT_OUVRIR } from "@/lib/chat-ouvrir";
+import { NAWA_CHAT_OUVRIR, type DetailOuverture } from "@/lib/chat-ouvrir";
 import { useEffect, useRef, useState } from "react";
 
 /**
@@ -32,8 +32,42 @@ const SEUIL_ABANDON = 4;
 
 const WA_LINK = whatsapp();
 
+/**
+ * OU ENVOYER LE VISITEUR QUAND L ASSISTANT LACHE.
+ *
+ * Le repli pointait TOUJOURS sur `/#contact`, c est-a-dire sur le formulaire du
+ * pied de page de l ACCUEIL. Depuis /devis, c etait le pire des chemins : la
+ * page qu il vient d ouvrir porte deja un formulaire, celui-la meme qui
+ * transporte le sujet de sa demande en champ cache — l envoyer sur l accueil
+ * lui faisait perdre a la fois sa place et l objet de sa demande.
+ *
+ * LA PRESENCE D UN `sujet` EST LE SIGNAL. Il n est pose que par une ouverture
+ * pilotee depuis /devis (lib/chat-ouvrir.ts), et cette page est la seule a
+ * porter l ancre `#formulaire`. Ailleurs, rien ne change : `/#contact` reste le
+ * seul formulaire atteignable.
+ */
+const ANCRE_FORMULAIRE = "#formulaire";
+const HREF_ACCUEIL_CONTACT = "/#contact";
+
 const ACCUEIL =
   "Bonjour. Je prépare votre proposition avec Ayoub. Qu'est-ce que vous cherchez à faire faire ?";
+
+/**
+ * L ACCUEIL QUAND ON SAIT DEJA CE QUE LE VISITEUR EST VENU CHERCHER.
+ *
+ * Il arrive de /devis, qui a resolu le nom de la prestation en base et le
+ * transmet dans l evenement d ouverture. Lui reposer « qu est-ce que vous
+ * cherchez a faire faire ? » apres qu il vient de cliquer « Le Site » lui
+ * apprend une seule chose : que personne n a regarde. La phrase NOMME donc ce
+ * qu il a clique, puis pose la premiere vraie question — celle dont la reponse
+ * n est nulle part dans l URL.
+ *
+ * ELLE NE PROMET RIEN DE PLUS que l accueil ordinaire : pas de delai, pas de
+ * prix, pas de methode. Le seul engagement du site est « Réponse le jour
+ * ouvrable suivant », et il est deja ecrit dans l en-tete du panneau.
+ */
+const accueilCible = (libelle: string) =>
+  `Bonjour. Votre demande porte sur « ${libelle} » — c'est noté, je prépare votre proposition avec Ayoub. Pour commencer : quel est votre métier, et l'adresse de votre site actuel s'il y en a un ?`;
 
 export default function ChatWidget() {
   // volontaire — next/link casserait les reveals (Interactions ne tourne qu'une fois), voir décision B7
@@ -50,6 +84,10 @@ export default function ChatWidget() {
   const [envoi, setEnvoi] = useState(false);
   const [replie, setReplie] = useState(false);
   const [clos, setClos] = useState(false);
+  // CE QUE LA DEMANDE CONCERNE, pose par l ouverture depuis /devis. Il ne
+  // s affiche pas : il sert a nommer la prestation dans le premier message, et
+  // il repart dans le corps de la finalisation pour atterrir sur Lead.subject.
+  const [sujet, setSujet] = useState<string | null>(null);
   const finRef = useRef<HTMLDivElement | null>(null);
 
   // Garde anti-double-envoi. Un ref et non un etat : le gestionnaire
@@ -61,6 +99,11 @@ export default function ChatWidget() {
   // Meme raison : le gestionnaire pagehide est pose une fois et doit voir
   // l historique a jour, pas celui du montage.
   const messagesRef = useRef<Message[]>([]);
+
+  // Meme mecanique, meme raison, pour le sujet : il est pose APRES le montage
+  // (l ouverture depuis /devis arrive par evenement), et pagehide doit voir la
+  // valeur du moment ou l onglet se ferme.
+  const sujetRef = useRef<string | null>(null);
 
   // Le verrou se DEDUIT de l historique, il ne se stocke pas : un etat
   // parallele finirait par mentir sur le contenu de messages.
@@ -74,15 +117,44 @@ export default function ChatWidget() {
     messagesRef.current = messages;
   }, [messages]);
 
-  // Ouverture pilotee de l'exterieur — voir lib/chat-ouvrir.ts. Le `sujet`
-  // transporte par l'evenement n'est pas encore consomme ici : rien, pour
-  // l'instant, ne configure la conversation a partir de lui. Le stocker dans
-  // un etat sans lecteur serait du code mort ; on l'ajoutera avec la
-  // configuration de l'assistant qui en aura l'usage.
   useEffect(() => {
-    function surDemande() {
+    sujetRef.current = sujet;
+  }, [sujet]);
+
+  /**
+   * Ouverture pilotee de l'exterieur — voir lib/chat-ouvrir.ts.
+   *
+   * LE `sujet` DE L'EVENEMENT EST ENFIN LU. Il etait transmis depuis le bloc B9
+   * et ignore ici : la conversation s'ouvrait identique, que le visiteur ait
+   * clique « Le Site » ou rien du tout, et la demande finissait chez Ayoub sans
+   * dire sur quoi elle portait. Il est desormais garde en etat, ecrit dans la
+   * premiere phrase, et pose sur Lead.subject a la finalisation.
+   *
+   * LE `libelle` VIENT DE LA BASE, pas d'ici. Le sujet est un identifiant
+   * (« devis-le-site ») ; c'est app/(site)/devis qui lit Postgres et transmet le
+   * NOM (« Le Site »). Tenir ici une table sujet -> nom ferait une seconde
+   * source de verite, qui divergerait au premier renommage en base.
+   *
+   * LA PHRASE D'ACCUEIL N'EST REMPLACEE QUE SI LA CONVERSATION N'A PAS COMMENCE
+   * (`suite.length === 1`). Une ouverture pilotee alors que le visiteur a deja
+   * ecrit trois messages effacerait ce qu'il vient de dire.
+   */
+  useEffect(() => {
+    function surDemande(e: Event) {
+      const detail = (e as CustomEvent<DetailOuverture>).detail;
       setOuvert(true);
       setReplie(false);
+
+      if (!detail?.sujet) return;
+      setSujet(detail.sujet);
+
+      const libelle = detail.libelle;
+      if (!libelle) return;
+      setMessages((suite) =>
+        suite.length === 1
+          ? [{ role: "assistant", content: accueilCible(libelle) }]
+          : suite,
+      );
     }
     window.addEventListener(NAWA_CHAT_OUVRIR, surDemande);
     return () => window.removeEventListener(NAWA_CHAT_OUVRIR, surDemande);
@@ -97,7 +169,14 @@ export default function ChatWidget() {
       const suite = messagesRef.current;
       if (finaliseRef.current || suite.length < SEUIL_ABANDON) return;
       finaliseRef.current = true;
-      const corps = JSON.stringify({ sessionId, messages: suite, reason: "abandoned" });
+      // `subject: undefined` n'est pas serialise par JSON.stringify : le corps
+      // part alors sans la cle, ce que le schema serveur lit comme « absent ».
+      const corps = JSON.stringify({
+        sessionId,
+        messages: suite,
+        reason: "abandoned",
+        subject: sujetRef.current ?? undefined,
+      });
       navigator.sendBeacon("/api/chat/finalize", new Blob([corps], { type: "application/json" }));
     }
     window.addEventListener("pagehide", surSortie);
@@ -115,7 +194,12 @@ export default function ChatWidget() {
       await fetch("/api/chat/finalize", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ sessionId, messages, reason: "completed" }),
+        body: JSON.stringify({
+          sessionId,
+          messages,
+          reason: "completed",
+          subject: sujet ?? undefined,
+        }),
       });
     } catch {
       // Rien a dire au visiteur : sa conversation est soit enregistree, soit
@@ -215,7 +299,9 @@ export default function ChatWidget() {
         <p className="chat-alert" role="status">
           Assistant indisponible — utilisez le formulaire juste en dessous ou{" "}
           <a href={WA_LINK} target="_blank" rel="noopener">WhatsApp</a>.{" "}
-          <a href="/#contact">Aller au formulaire</a>
+          <a href={sujet ? ANCRE_FORMULAIRE : HREF_ACCUEIL_CONTACT}>
+            Aller au formulaire
+          </a>
         </p>
       ) : null}
 
@@ -237,7 +323,7 @@ export default function ChatWidget() {
         <p className="chat-alert" role="status">
           Conversation complète — la suite avec Ayoub directement sur{" "}
           <a href={WA_LINK} target="_blank" rel="noopener">WhatsApp</a>, ou par le{" "}
-          <a href="/#contact">formulaire</a>.
+          <a href={sujet ? ANCRE_FORMULAIRE : HREF_ACCUEIL_CONTACT}>formulaire</a>.
         </p>
       ) : null}
 

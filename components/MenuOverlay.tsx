@@ -8,15 +8,17 @@ import { CONTACT, whatsapp } from "@/lib/site";
 // obligatoire : le selecteur closeMenu d Interactions.tsx passe de
 // `[href^="#"]` a `[href*="#"]`, sinon le menu ne se refermerait plus.
 //
-// IL NE RESTE QU UN SEUL LIEN AVEC UN `#`. C est « Travaux », et c est le seul
-// que `.menu a[href*="#"]` matche encore : tous les autres changent de page, le
-// document est remplace et la classe html.menu-open part avec lui. Ce qui etait
-// vrai d une entree l est devenu de sept. Interactions.tsx n a toujours pas a
-// bouger — mais son commentaire, qui annoncait « exactement les memes 5 liens »,
-// a ete corrige : un commentaire devenu faux est un bug.
+// IL NE RESTE PLUS AUCUN LIEN AVEC UN `#`. « Travaux » etait le dernier ; il
+// est devenu « Démonstrations » et pointe sur sa propre page. Toutes les entrees
+// changent donc de page : le document est remplace et la classe html.menu-open
+// part avec lui, si bien que `.menu a[href*="#"]` — le selecteur de closeMenu
+// dans Interactions.tsx — ne matche plus rien et n a plus rien a fermer. Le
+// menu se referme toujours par le burger et par Échap. Interactions.tsx n a
+// toujours pas a bouger, mais son commentaire a suivi : un commentaire devenu
+// faux est un bug.
 //
 // LA MEME STRUCTURE QUE LA BARRE DE NAV, ADAPTEE AU FORMAT. Quatre entrees —
-// Travaux, Services, Le studio, Contact —, et « Offres » comme « Prestations »
+// Démonstrations, Services, Le studio, Contact —, et « Offres » comme « Prestations »
 // ont disparu des deux endroits pour la meme raison : ces trois mots disaient
 // la meme chose (voir le commentaire de Nav.tsx). « Méthode » part avec elles,
 // non parce qu elle faisait doublon, mais parce que le menu doit lister ce que
@@ -44,7 +46,11 @@ export default function MenuOverlay() {
   return (
     <div className="menu" id="menu" aria-hidden="true">
       <nav>
-        <a className="m-lnk" style={{ "--i": 0 } as React.CSSProperties} href="/#travaux"><span className="mi">(01)</span><span className="mt">Travaux</span></a>
+        {/* Meme changement que dans la barre de nav, et pour les memes deux
+            raisons : « Travaux » promettait des references clients qui
+            n existent pas, et l ancre de l accueil obligeait a recharger la page
+            d entree depuis n importe quelle autre page. Voir components/Nav.tsx. */}
+        <a className="m-lnk" style={{ "--i": 0 } as React.CSSProperties} href="/demonstrations"><span className="mi">(01)</span><span className="mt">Démonstrations</span></a>
         <div className="m-grp" style={{ "--i": 1 } as React.CSSProperties}>
           <a className="m-lnk" href={HREF_SERVICES}><span className="mi">(02)</span><span className="mt">Services</span></a>
           <div className="m-sub">

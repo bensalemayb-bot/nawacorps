@@ -94,6 +94,13 @@ export default async function PageAdmin() {
               <th>Nom</th>
               <th>Téléphone</th>
               <th>Commerce</th>
+              {/* CE QUE LA DEMANDE CONCERNE. Sans cette colonne, la table ne
+                  disait rien de l intention : un visiteur cliquait « Le Site »
+                  et il fallait le rappeler pour savoir de quoi il parlait. Le
+                  champ est pose par app/(site)/devis, via le formulaire comme
+                  via l assistant. Vide pour une demande spontanee — pied de
+                  page, WhatsApp —, et c est une information en soi. */}
+              <th>Sujet</th>
               <th>Besoin</th>
               <th>Statut</th>
             </tr>
@@ -120,6 +127,7 @@ export default async function PageAdmin() {
                     {lead.commerceName ?? "—"}
                     {lead.commerceType ? ` (${lead.commerceType})` : ""}
                   </td>
+                  <td>{lead.subject ?? "—"}</td>
                   <td className="besoin">
                     {lead.needSummary ?? "—"}
                     {messages.length > 0 ? (

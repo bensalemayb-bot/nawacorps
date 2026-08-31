@@ -1,4 +1,3 @@
-import { whatsapp } from "@/lib/site";
 import { isQuote } from "@/lib/format";
 import {
   MENTION_DEVIS_COURTE,
@@ -74,10 +73,6 @@ import CarteService from "@/components/CarteService";
  * source. Le motif `style="padding-top:0"` est lui-meme utilise par la maquette
  * (sections #services, #studio, #faq).
  */
-
-const DEVIS_HREF = whatsapp(
-  "Bonjour, j'aimerais un devis pour une prestation.",
-);
 
 export default async function CarteDuStudio() {
   // Lecture PARTAGEE avec Offres, rendue juste avant sur le meme ecran (cf.
@@ -184,7 +179,7 @@ export default async function CarteDuStudio() {
           </div>
           <div className="p-note" data-reveal>
             <span>{MENTION_TVA}</span>
-            <BoutonDevis href={DEVIS_HREF} sujet="devis-carte-du-studio">
+            <BoutonDevis sujet="devis-carte-du-studio">
               Demander un devis →
             </BoutonDevis>
           </div>

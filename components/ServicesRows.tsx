@@ -1,3 +1,10 @@
+/* eslint-disable @next/next/no-html-link-for-pages --
+   volontaire — next/link casserait les reveals (Interactions ne tourne qu'une
+   fois), voir decision B7. C'est la meme exception que celle listee dans
+   eslint.config.mjs pour Nav.tsx, PageFamille.tsx et les pages publiques ; elle
+   est posee ICI et non la-bas parce que ce chantier n'ouvre pas la config, et
+   qu'un autre y travaille en parallele. A replier dans la liste de
+   eslint.config.mjs des que les deux chantiers sont poses. */
 import type { CSSProperties } from "react";
 
 // Section Services — reference/binacore.html lignes 940-973 pour la structure.
@@ -64,6 +71,16 @@ import type { CSSProperties } from "react";
 // meme evenement click. Les styles natifs du bouton sont neutralises par
 // STYLE_ENTETE ci-dessous — surtout `font`, que le bouton n'herite PAS.
 //
+// LE PRIX DE CE CHOIX EST CONNU : le <h3> se retrouve DANS le bouton. Le
+// modele de contenu de <button> n'admet que du contenu de phrase, et ARIA rend
+// les descendants d'un bouton presentationnels — les six titres restent dans le
+// DOM et lisibles par un moteur, mais ils sortent du plan de titres d'un
+// lecteur d'ecran. Le marche est assume : l'accordeon etait jusqu'ici TOTALEMENT
+// inoperable au clavier, et son contenu reste expose de toute facon (`.row-b`
+// n'est jamais `display:none`). La forme sans compromis — <h3><button>titre
+// </button></h3> — reclame de redecouper la grille `.row-h` en trois colonnes
+// dans app/binacore.css, hors du perimetre de ce chantier.
+//
 // RESERVE ASSUMEE SUR aria-expanded : l'etat ouvert/ferme est ecrit par
 // Interactions.tsx, qui pose la classe `open` sur `.row` et ne connait pas cet
 // attribut. La valeur rendue ici est donc l'etat INITIAL, et elle ne se met pas
@@ -76,10 +93,18 @@ import type { CSSProperties } from "react";
 // `.row-h` de chaque `[data-row]` — code deja en place depuis B4.
 
 /** Neutralisation des styles que l'agent utilisateur applique a <button> et
- *  que `.row-h` ne couvre pas. `padding` est volontairement ABSENT : il est
- *  pose par `.row-h` et anime par `.row:hover .row-h`, un style en ligne le
- *  figerait. `font` est le seul indispensable — la police d'un bouton n'est
- *  pas heritee, et `.pl` n'en declare pas. */
+ *  que `.row-h` ne couvre pas. `font` est le plus important — la police d'un
+ *  bouton n'est PAS heritee, et `.pl` n'en declare aucune : sans cette ligne le
+ *  « + » repassait en Arial.
+ *
+ *  DEUX PROPRIETES SONT VOLONTAIREMENT ABSENTES, et doivent le rester : un
+ *  style en ligne l'emporte sur toute regle de feuille, il ne peut donc porter
+ *  que ce que le CSS ne dispute pas.
+ *   - `padding` : pose par `.row-h`, anime par `.row:hover .row-h` — le figer
+ *     supprimerait le decalage au survol ;
+ *   - `cursor` : `html.cursor-on .row-h` le met a `none` pour laisser passer le
+ *     curseur maison ; le forcer a `pointer` ferait apparaitre DEUX curseurs.
+ *     La valeur utile vient de `.row{cursor:pointer}`, dont le bouton herite. */
 const STYLE_ENTETE: CSSProperties = {
   appearance: "none",
   background: "transparent",
@@ -89,7 +114,6 @@ const STYLE_ENTETE: CSSProperties = {
   textAlign: "left",
   font: "inherit",
   color: "inherit",
-  cursor: "pointer",
 };
 
 /** Le renvoi herite sinon du gris de `.row-b p` et se confond avec le texte.

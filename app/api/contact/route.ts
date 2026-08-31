@@ -47,6 +47,15 @@ const SchemaContact = z
       .refine((v) => v === "" || z.email().safeParse(v).success, "Adresse e-mail invalide."),
     message: z.string().max(1000),
     website: z.string().optional(),
+    // CE QUE LA DEMANDE CONCERNE, quand la page le sait — le champ cache pose
+    // par app/(site)/devis (« le-site », « devis-imprimes »). OPTIONNEL, et il
+    // doit le rester : le meme formulaire est rendu en pied de page et sur
+    // /contact, ou le visiteur n a rien clique de precis, et une demande
+    // spontanee sans sujet vaut mieux qu un sujet invente.
+    // BORNE A 80 CARACTERES : ce champ vient du CLIENT, donc de n importe qui.
+    // Nos sujets font moins de trente signes ; la borne n existe que pour qu un
+    // POST fabrique a la main ne puisse pas ecrire un roman dans Lead.subject.
+    subject: z.string().max(80).optional(),
   })
   .refine((data) => data.phone.trim() !== "" || data.email.trim() !== "", {
     message: "Indiquez un téléphone ou un e-mail.",
@@ -83,7 +92,11 @@ export async function POST(req: Request) {
       { status: 400 },
     );
   }
-  const { name, phone, email, message } = analyse.data;
+  const { name, phone, email, message, subject } = analyse.data;
+  // Une chaine vide n est pas un sujet : elle devient null, comme `email`
+  // juste en dessous. Un champ vide en base se lit tout de suite comme
+  // « on ne sait pas » ; une chaine vide se lit comme un bug.
+  const sujet = subject?.trim() ? subject.trim() : null;
 
   // 3. Limitation de debit, sur IP hachee.
   const ipHash = hashIp(clientIp(req.headers));
@@ -110,6 +123,7 @@ export async function POST(req: Request) {
       source: "FORM",
       status: "NEW",
       needSummary: message,
+      subject: sujet,
     },
   });
 
@@ -121,8 +135,14 @@ export async function POST(req: Request) {
   // notifyTelegram (lib/telegram.ts) ne prend qu un texte libre : l e-mail
   // s ajoute donc ici a la ligne de contact, sans toucher ce fichier.
   const contact = [phone.trim(), email.trim()].filter(Boolean).join(" · ");
+  // LE SUJET PART DANS LA NOTIFICATION, PAS SEULEMENT EN BASE. C est la seule
+  // ligne qu Ayoub lit sur son telephone avant de rappeler : savoir que la
+  // demande porte sur « le-site » change ce qu il prepare avant de decrocher.
+  // Il ne s ecrit que s il existe — pas de « sujet : — » sur les demandes
+  // spontanees.
+  const objet = sujet ? ` [${sujet}]` : "";
   try {
-    await notifyTelegram(`🆕 Lead FORM — ${name}, ${contact} : ${extrait}`);
+    await notifyTelegram(`🆕 Lead FORM${objet} — ${name}, ${contact} : ${extrait}`);
   } catch {
     console.warn("[contact] notification Telegram en échec — lead enregistré malgré tout");
   }

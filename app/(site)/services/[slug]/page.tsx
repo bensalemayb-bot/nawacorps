@@ -446,15 +446,11 @@ export default async function FormulePage({
               affiche un prix ferme en tete et demandait un devis pour ce qui
               est deja chiffre. Le libelle est lu dans lib/formules.ts, ou il
               suit le tableau du guide de voix §7, palier par palier.
-              BoutonDevis reste un <a href> vers WhatsApp : si le JS ne demarre
-              jamais, le lien fonctionne encore ; sinon le clic ouvre
-              l assistant, qui qualifie mieux. */}
+              BoutonDevis est un VRAI LIEN vers /devis : il fonctionne sans
+              JavaScript, et la page d arrivee nomme la formule avec son prix lu
+              en base avant d ouvrir l assistant. */}
           <div className="c-row" data-reveal>
-            <BoutonDevis
-              href={formule.amorce}
-              sujet={formule.sujet}
-              className="btn"
-            >
+            <BoutonDevis sujet={formule.sujet} className="btn">
               {formule.cta} <span className="ar">→</span>
             </BoutonDevis>
             <a className="btn btn-line" href="/services">

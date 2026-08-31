@@ -16,6 +16,16 @@ import { useState } from "react";
  * le champ, ce qui annule le piege. Il est aussi retire du parcours clavier
  * (tabIndex -1) et de l autocompletion, pour qu aucun humain ne le remplisse
  * par accident.
+ *
+ * `subject` — CE QUE LA DEMANDE CONCERNE, QUAND ON LE SAIT. La prop est
+ * OPTIONNELLE, et elle doit le rester : ce formulaire est aussi rendu par
+ * components/FooterContact.tsx et par /contact, ou le visiteur arrive sans
+ * avoir rien clique. Seule app/(site)/devis la renseigne, avec le slug ou le
+ * sujet resolu depuis l URL. Elle part en CHAMP CACHE plutot qu en variable de
+ * fermeture pour une raison de fond : le champ appartient alors au formulaire,
+ * et il suit exactement le meme chemin que les autres — meme FormData, meme
+ * validation cote serveur (app/api/contact/route.ts), meme borne de longueur.
+ * Rien ne peut partir que le serveur ne verifie.
  */
 
 type Etat = { statut: "repos" | "envoi" | "succes" | "erreur"; message?: string };
@@ -39,7 +49,7 @@ const leurre: React.CSSProperties = {
   overflow: "hidden",
 };
 
-export default function ContactForm() {
+export default function ContactForm({ subject }: { subject?: string }) {
   const [etat, setEtat] = useState<Etat>({ statut: "repos" });
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -51,12 +61,19 @@ export default function ContactForm() {
     // gestionnaire rend la main, donc form.reset() plus bas echouerait.
     const form = e.currentTarget;
     const data = new FormData(form);
+    // Le sujet est lu dans le FORMULAIRE et non dans la prop : le champ cache
+    // est deja la, et le lire ici garde une seule provenance a tout ce qui
+    // part. `undefined` quand il est vide — JSON.stringify l omet alors du
+    // corps, et le schema serveur le traite en absent plutot qu en chaine vide,
+    // qui finirait ecrite telle quelle en base.
+    const sujet = String(data.get("subject") ?? "").trim();
     const corps = {
       name: String(data.get("name") ?? ""),
       phone: String(data.get("phone") ?? ""),
       email: String(data.get("email") ?? ""),
       message: String(data.get("message") ?? ""),
       website: String(data.get("website") ?? ""),
+      subject: sujet === "" ? undefined : sujet,
     };
 
     // Le studio vend une proposition ecrite : il lui faut un moyen de la
@@ -148,6 +165,14 @@ export default function ContactForm() {
           placeholder="Votre besoin, et votre site actuel si vous en avez un"
           aria-label="Votre message"
         />
+
+        {/* Le sujet, quand la page en connait un. `type="hidden"` et non le
+            leurre ci-dessous : ce champ-la doit rester invisible ET hors du
+            parcours, celui-ci n existe simplement pas a l ecran. Il n est rendu
+            que s il porte une valeur — un champ vide n a rien a envoyer. */}
+        {subject ? (
+          <input type="hidden" name="subject" value={subject} readOnly />
+        ) : null}
 
         <div style={leurre} aria-hidden="true">
           <label htmlFor="website">Ne remplissez pas ce champ</label>

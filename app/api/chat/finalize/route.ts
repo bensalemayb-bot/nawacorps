@@ -40,6 +40,23 @@ const SchemaRequete = z.object({
     .min(2)
     .max(16),
   reason: z.enum(["completed", "abandoned"]),
+  /**
+   * CE QUE LA CONVERSATION CONCERNE, quand le widget le sait — le sujet pose
+   * par app/(site)/devis a l ouverture (« le-site », « devis-imprimes »).
+   *
+   * OPTIONNEL, et il doit le rester : la bulle s ouvre aussi toute seule, sur
+   * n importe quelle page, sans que rien n ait ete clique. Une conversation
+   * spontanee n a pas de sujet, et un champ vide vaut mieux qu un champ invente.
+   *
+   * BORNE A 80 CARACTERES, comme dans app/api/contact/route.ts et pour la meme
+   * raison : la valeur vient du client, donc de n importe qui.
+   *
+   * IL N EST PAS AJOUTE AU SCHEMA D EXTRACTION. Le modele n a pas a le deviner
+   * — on le SAIT, il vient de l URL cliquee. Ce que le modele extrait de son
+   * cote (`services`) reste ce qu il a compris de la conversation, et les deux
+   * ne se melangent pas.
+   */
+  subject: z.string().max(80).optional(),
 });
 
 /**
@@ -120,7 +137,11 @@ export async function POST(req: Request) {
       { status: 400 },
     );
   }
-  const { sessionId, messages, reason } = analyse.data;
+  const { sessionId, messages, reason, subject } = analyse.data;
+  // Une chaine vide n est pas un sujet : elle devient null. Meme normalisation
+  // qu au formulaire (app/api/contact/route.ts) — les deux routes ecrivent dans
+  // la MEME colonne, et deux facons de dire « on ne sait pas » y cohabiteraient.
+  const sujet = subject?.trim() ? subject.trim() : null;
 
   const total = messages.reduce((n, m) => n + m.content.length, 0);
   if (total > MAX_CARACTERES_TOTAL) {
@@ -213,6 +234,11 @@ export async function POST(req: Request) {
             status: "NEW",
             score: d.quality_score,
             needSummary: d.need_summary,
+            // CE QUE LE VISITEUR AVAIT CLIQUE, et non ce que le modele a cru
+            // comprendre : la valeur vient de l URL de /devis, pas de
+            // l extraction. `null` quand la bulle a ete ouverte sans rien
+            // designer — voir le champ `subject` du schema en tete de fichier.
+            subject: sujet,
           },
         });
         leadId = lead.id;
@@ -237,9 +263,13 @@ export async function POST(req: Request) {
 
   // 6. Notification. APRES l ecriture et sous try/catch : acquis du bloc B8,
   //    une panne de Telegram ne peut pas annuler un lead.
+  // Le sujet s ecrit dans la notification comme dans celle du formulaire : sur
+  // le telephone d Ayoub, c est la ligne qui dit quoi preparer avant de
+  // rappeler. Absent des conversations spontanees, ou il n y a rien a dire.
+  const objet = sujet ? ` [${sujet}]` : "";
   const texte = avecCoordonnees
-    ? `🤖 Lead CHATBOT ${etoiles(d.quality_score)} — ${d.name}, ${d.phone}, ${d.commerce_type ?? "commerce non précisé"}. Besoin : ${d.need_summary}`
-    : `💬 Conversation sans coordonnées (${etoiles(d.quality_score)}) : ${d.need_summary}`;
+    ? `🤖 Lead CHATBOT${objet} ${etoiles(d.quality_score)} — ${d.name}, ${d.phone}, ${d.commerce_type ?? "commerce non précisé"}. Besoin : ${d.need_summary}`
+    : `💬 Conversation sans coordonnées${objet} (${etoiles(d.quality_score)}) : ${d.need_summary}`;
   try {
     await notifyTelegram(texte);
   } catch {

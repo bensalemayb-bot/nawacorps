@@ -8,7 +8,6 @@ import {
   SITE_URL,
   jsonLd,
   openGraphPage,
-  whatsapp,
 } from "@/lib/site";
 
 /**
@@ -496,17 +495,13 @@ export default function StudioPage() {
             </p>
           </div>
 
-          {/* BoutonDevis reste un <a href> vers WhatsApp : si le JS ne demarre
-              jamais le lien fonctionne encore, sinon le clic ouvre l assistant
-              — c est-a-dire, ici, la piece dont la section vient de parler. */}
+          {/* BoutonDevis est un VRAI LIEN vers /devis : il fonctionne sans
+              JavaScript, et la page d arrivee ouvre l assistant — c est-a-dire,
+              ici, la piece dont la section vient de parler. L amorce WhatsApp
+              qui vivait dans ce bouton a suivi le visiteur : elle est le repli
+              de /devis pour ce sujet (lib/devis.ts). */}
           <div className="c-row" data-reveal>
-            <BoutonDevis
-              href={whatsapp(
-                "Bonjour, j'ai lu la page du studio et j'aimerais un devis.",
-              )}
-              sujet="devis-studio"
-              className="btn"
-            >
+            <BoutonDevis sujet="devis-studio" className="btn">
               Demander un devis <span className="ar">→</span>
             </BoutonDevis>
             <a className="btn btn-line" href="/services">

@@ -58,6 +58,18 @@ const eslintConfig = defineConfig([
       // et elle vit hors du groupe (site) donc sans le chrome qui justifierait
       // une navigation client.
       "app/not-found.tsx",
+      // Le parcours de devis. La page d arrivee des huit CTA « Demander un
+      // devis » renvoie vers /services et le catalogue ; le bouton, lui, est
+      // devenu un vrai lien vers /devis au lieu d intercepter son propre clic.
+      // Meme decision que partout ailleurs, et elle compte double ici : ce
+      // bouton doit fonctionner SANS JavaScript, ce qui etait precisement ce
+      // qu il ne faisait pas.
+      "app/(site)/devis/page.tsx",
+      "components/BoutonDevis.tsx",
+      // La grille des trois formules sur l accueil. Ses CTA pointent desormais
+      // sur /devis?p=<slug> et le nom de chaque carte ouvre sa page produit,
+      // qui etait jusque-la inatteignable depuis l accueil.
+      "components/Offres.tsx",
     ],
     rules: {
       // volontaire — next/link casserait les reveals (Interactions ne tourne qu'une fois), voir décision B7

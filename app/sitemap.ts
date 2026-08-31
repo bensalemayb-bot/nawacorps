@@ -7,9 +7,10 @@ import { SITE_URL } from "@/lib/site";
  * sitemap.xml, genere.
  *
  * L accueil, le catalogue, les trois formules de site, les cinq familles, la
- * page du studio, celle du contact, les deux pages legales. Sans ce plan, la
- * decouverte reposerait entierement sur les liens de la nav et du pied de page,
- * et une page atteinte par un seul lien est une page mal signalee.
+ * demande de devis, les demonstrations, la page du studio, celle du contact,
+ * les deux pages legales. Sans ce plan, la decouverte reposerait entierement
+ * sur les liens de la nav et du pied de page, et une page atteinte par un seul
+ * lien est une page mal signalee.
  *
  * LE COMPTE N EST PLUS ECRIT. Il disait « douze URL » et il en annoncait deja
  * quatorze : un chiffre dans un commentaire est faux a la premiere page
@@ -69,6 +70,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly" as const,
       priority: 0.6,
     })),
+    // LA DEMANDE DE DEVIS. Meme priorite que les formules : c est la page ou
+    // se termine le parcours de vente, celle que le hero et chaque fin de page
+    // designent. « demande de devis site internet Genève » est une requete de
+    // transaction, pas de catalogue — elle merite d etre trouvee seule.
+    {
+      url: `${SITE_URL}/devis`,
+      lastModified: BUILD,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    // LES DEMONSTRATIONS. Un cran sous le devis : la page ne vend rien, elle
+    // prouve. Elle existe justement parce que le carrousel n avait pas d URL a
+    // lui — enterre dans l accueil, il etait introuvable autrement.
+    {
+      url: `${SITE_URL}/demonstrations`,
+      lastModified: BUILD,
+      changeFrequency: "monthly",
+      priority: 0.6,
+    },
     // LES DEUX PAGES QUE LA NAV OUVRE SANS PASSER PAR LE CATALOGUE. Elles ne
     // vendent pas une prestation, elles repondent aux deux questions qui
     // restent quand le prix est lu : qui fait le travail, et comment on le

@@ -1,3 +1,10 @@
+/* eslint-disable @next/next/no-html-link-for-pages --
+   volontaire — next/link casserait les reveals (Interactions ne tourne qu'une
+   fois), voir decision B7. Meme exception que celle listee dans
+   eslint.config.mjs pour Nav.tsx, PageFamille.tsx et les pages publiques ; elle
+   est posee ICI et non la-bas parce que ce chantier n'ouvre pas la config, et
+   qu'un autre y travaille en parallele. A replier dans la liste de
+   eslint.config.mjs des que les deux chantiers sont poses. */
 import { chargerCatalogue } from "@/lib/catalogue";
 import { CHF_UNIT, MONTHLY_SUFFIX, formatChfAmount } from "@/lib/format";
 import { jsonLd } from "@/lib/site";

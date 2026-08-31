@@ -3,19 +3,37 @@
  *
  * Un evenement sur window plutot qu'un contexte React : ChatWidget est monte
  * dans app/(site)/layout.tsx, HORS de #smoothWrap (il est en position:fixed),
- * alors que les CTA vivent dedans. Un contexte devrait envelopper les deux et
- * ferait remonter du state client tres haut dans l'arbre, pour un seul booleen.
+ * alors que la page qui demande l'ouverture vit dedans. Un contexte devrait
+ * envelopper les deux et ferait remonter du state client tres haut dans
+ * l'arbre, pour un seul booleen.
  *
- * Le `sujet` sert a pre-remplir la conversation au bloc suivant, quand on
- * configurera l'assistant. Il est transmis des maintenant pour ne pas avoir a
- * retoucher tous les appelants ensuite.
+ * LE `sujet` EST DESORMAIS CONSOMME. Il l'annonce depuis le bloc B9 sans que
+ * personne ne le lise ; components/ChatWidget.tsx le garde maintenant en etat,
+ * l'ecrit dans la premiere phrase de la conversation et le pose sur le Lead
+ * (colonne Lead.subject) au moment de la finalisation. Une demande arrivait
+ * jusque-la nue : le visiteur avait clique « Le Site », et il fallait le
+ * rappeler pour savoir de quoi il parlait.
+ *
+ * LE `libelle` EST RESOLU COTE SERVEUR, ET C'EST TOUT L'INTERET. Le sujet est
+ * un identifiant (« devis-le-site ») ; le libelle est le NOM tel qu'il est
+ * ecrit en base (« Le Site »). Le widget est un composant client : lui faire
+ * deviner le nom d'une prestation l'obligerait a tenir une copie du catalogue,
+ * qui divergerait de Postgres au premier renommage. C'est app/(site)/devis qui
+ * lit la base et transmet le nom deja resolu.
  */
 export const NAWA_CHAT_OUVRIR = "nawa:chat-ouvrir";
 
-export type DetailOuverture = { sujet?: string };
+export type DetailOuverture = {
+  /** Identifiant de la demande — slug de prestation ou sujet de CTA. */
+  sujet?: string;
+  /** Le nom lisible de la prestation, lu en base par la page appelante. */
+  libelle?: string;
+};
 
-export function ouvrirChat(sujet?: string): void {
+export function ouvrirChat(sujet?: string, libelle?: string): void {
   window.dispatchEvent(
-    new CustomEvent<DetailOuverture>(NAWA_CHAT_OUVRIR, { detail: { sujet } }),
+    new CustomEvent<DetailOuverture>(NAWA_CHAT_OUVRIR, {
+      detail: { sujet, libelle },
+    }),
   );
 }

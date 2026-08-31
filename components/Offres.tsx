@@ -1,4 +1,3 @@
-import { whatsapp } from "@/lib/site";
 import {
   CHF_UNIT,
   FROM_PREFIX,
@@ -30,7 +29,6 @@ type Editorial = {
   recommended?: boolean;
   bullets: string[];
   ctaLabel: string;
-  ctaHref: string;
   ctaOutline: boolean;
   ctaArrow?: boolean;
 };
@@ -55,8 +53,6 @@ const EDITORIAL: Record<string, Editorial> = {
       "Domaine et hébergement la 1ʳᵉ année",
     ],
     ctaLabel: "Rendre mon site présentable",
-    ctaHref:
-      whatsapp("Bonjour, je souhaite faire refaire le site de mon entreprise."),
     ctaOutline: true,
   },
   "le-site": {
@@ -68,8 +64,6 @@ const EDITORIAL: Record<string, Editorial> = {
       "Fiche Google et photos comprises",
     ],
     ctaLabel: "Recevoir mes demandes",
-    ctaHref:
-      whatsapp("Bonjour, je veux un site qui reçoive les demandes de devis."),
     ctaOutline: false,
     ctaArrow: true,
   },
@@ -81,21 +75,13 @@ const EDITORIAL: Record<string, Editorial> = {
       "Relance automatique et tableau de bord",
     ],
     ctaLabel: "Automatiser mes demandes",
-    ctaHref:
-      whatsapp("Bonjour, l'Assistant m'intéresse pour mon site."),
     ctaOutline: true,
   },
 };
 
-// CTA de devis de la maquette (ligne 1060). Le libelle est verbatim ; le ?text=
-// est adapte a cette ligne. La maquette contient un seul CTA de devis, ecrit
-// pour le menu du studio (« pour un support »), que CarteDuStudio conserve.
-//
-// « sur mesure » a quitte l amorce : le guide de voix le classe parmi les mots
-// vides, et il est sature chez quatre concurrents sur six. « multi-pages » dit
-// la meme chose et se verifie.
-const DEVIS_HREF =
-  whatsapp("Bonjour, j'aimerais un devis pour un site à plusieurs pages.");
+// Le libelle du CTA de devis, verbatim de la maquette (ligne 1060). L amorce
+// WhatsApp qui l accompagnait a quitte ce fichier : elle vit dans lib/devis.ts,
+// ou la page /devis la ressert en repli — voir components/BoutonDevis.tsx.
 const DEVIS_LABEL = "Demander un devis →";
 
 export default async function Offres() {
@@ -169,7 +155,27 @@ export default async function Offres() {
                   <span>{estFormule(service.slug) ? POUR_QUI[service.slug] : ""}</span>
                   {ed?.recommended ? <span className="rec">Recommandé</span> : null}
                 </div>
-                <h3>{service.name}</h3>
+                {/* LE NOM OUVRE LA PAGE DE LA FORMULE. Les trois pages
+                    /services/<slug> etaient INATTEIGNABLES depuis l accueil :
+                    elles existaient, elles etaient au sitemap, et aucun lien de
+                    la page d entree n y menait — seul le bouton de devis sortait
+                    de la carte. Le titre est le lien naturel : c est ce qu on
+                    clique pour « en savoir plus ».
+                    LA CARTE ENTIERE N EST PAS ENVELOPPEE, et c est une regle,
+                    pas un gout : elle contient deja un bouton, et un lien dans
+                    un lien est du HTML invalide — le navigateur casse
+                    l imbrication et le resultat n est pas celui qu on croit.
+                    Un `principal` qui ne serait pas une formule (site sur
+                    mesure) n a pas de page : son titre reste du texte. */}
+                <h3>
+                  {estFormule(service.slug) ? (
+                    <a className="lnk" href={`/services/${service.slug}`}>
+                      {service.name}
+                    </a>
+                  ) : (
+                    service.name
+                  )}
+                </h3>
                 <p className="d">{service.description}</p>
                 <p className="num">
                   {service.priceCents === null ? (
@@ -213,12 +219,23 @@ export default async function Offres() {
                     {ed.bullets.map((b) => <li key={b}>{b}</li>)}
                   </ul>
                 ) : null}
+                {/* LE CTA NOMME ENFIN LA FORMULE QU IL VEND. Les trois
+                    pointaient sur WhatsApp, en `target="_blank"`, avec une
+                    amorce qui ne disait pas quelle formule avait ete cliquee :
+                    le visiteur quittait le site pour une conversation ou il
+                    fallait tout reexpliquer. Ils pointent desormais sur
+                    /devis?p=<slug>, qui nomme la formule et son prix lus en
+                    base avant d ouvrir l assistant.
+                    `target="_blank"` EST RETIRE : on ne quitte plus le site, il
+                    n y a plus rien a preserver dans l onglet d origine, et un
+                    lien interne qui ouvre un onglet fait perdre le fil.
+                    LES LIBELLES NE BOUGENT PAS : ils viennent du guide de voix
+                    §7, un par palier, et promettent le benefice plutot que la
+                    demarche. */}
                 {ed ? (
                   <a
                     className={ed.ctaOutline ? "btn btn-line" : "btn"}
-                    href={ed.ctaHref}
-                    target="_blank"
-                    rel="noopener"
+                    href={`/devis?p=${encodeURIComponent(service.slug)}`}
                   >
                     {ed.ctaLabel}
                     {ed.ctaArrow ? <> <span className="ar">→</span></> : null}
@@ -232,7 +249,7 @@ export default async function Offres() {
         {quotes.map((service) => (
           <div className="p-note" data-reveal key={service.id}>
             <span>{`${service.name} — ${QUOTE_LABEL}`}</span>
-            <BoutonDevis href={DEVIS_HREF} sujet="devis-sur-mesure">
+            <BoutonDevis sujet="devis-sur-mesure">
               {DEVIS_LABEL}
             </BoutonDevis>
           </div>

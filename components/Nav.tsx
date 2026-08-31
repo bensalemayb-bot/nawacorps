@@ -94,14 +94,29 @@ export default function Nav() {
           le composant un client component pour une seule horloge. */}
       <span className="nav-time" id="clock" suppressHydrationWarning>{`Genève — ${heureGeneve}`}</span>
       <div className="nav-r">
-        <a className="lnk" href="/#travaux">Travaux</a>
+        {/* « Travaux » DEVIENT « Démonstrations », ET CHANGE DE DESTINATION.
+            Le mot promettait des references clients ; le studio a un client et
+            zero reference de site (.agents/product-marketing.md §9), et ce que
+            la section montre sont des DEMONSTRATIONS — c est le mot qui les
+            etiquette deja a l ecran (components/VignettePrestation.tsx). Le lien
+            quitte en meme temps l ancre de l accueil pour la page dediee : une
+            ancre oblige a recharger l accueil entier depuis n importe quelle
+            autre page, et depose le visiteur au milieu d un ecran qu il n a pas
+            demande. */}
+        <a className="lnk" href="/demonstrations">Démonstrations</a>
         <NavServices
           general={{ href: HREF_SERVICES, libelle: "Tous les services" }}
           familles={ENTREES_FAMILLES}
         />
         <a className="lnk" href="/studio">Le studio</a>
         <a className="lnk" href="/contact">Contact</a>
-        <a className="pill" href="/#contact">Refaire mon site</a>
+        {/* LA PASTILLE MENE AU DEVIS, PLUS A UNE ANCRE. Elle pointait sur
+            `/#contact`, c est-a-dire sur le pied de page de l ACCUEIL : depuis
+            /services, /studio ou une page de formule, le seul bouton visible en
+            permanence rechargeait la page d entree et faisait recommencer le
+            visiteur au debut. /devis est une page a elle seule — elle ouvre
+            l assistant et rend le formulaire, sans rien faire perdre. */}
+        <a className="pill" href="/devis">Refaire mon site</a>
         <button className="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false"><i></i><i></i></button>
       </div>
     </nav>

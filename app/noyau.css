@@ -194,7 +194,15 @@ html.has-intro:not(.loaded) .noyau-enter{animation-play-state:paused}
   color:var(--muted-g);
   text-shadow:0 1px 12px rgba(23,22,19,.5);
 }
-.noyau-specs{list-style:none;max-width:34ch;width:100%}
+/* 34ch ne suffisait plus. La valeur la plus longue est passee de « Repris de
+   votre site » (20 signes) a « Logo, cartes, affiches, photos » (30), et le
+   corps a monte de .92 a 1.02rem : mesure au rendu, cette ligne-la retombait
+   sur DEUX lignes quand les quatre autres en tenaient une — un tableau en
+   dents de scie, exactement ce que la lisibilite demandee voulait corriger.
+   42ch laisse ~248px a la valeur, contre ~194 avant. Si une valeur plus
+   longue arrive un jour, c'est ce nombre qu'il faut remesurer, pas raccourcir
+   le texte au jugé. */
+.noyau-specs{list-style:none;max-width:42ch;width:100%}
 .noyau-specs li{
   display:flex;align-items:baseline;gap:.9em;
   padding:9px 0;font-size:1.02rem;

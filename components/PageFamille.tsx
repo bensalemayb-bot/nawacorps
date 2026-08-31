@@ -361,15 +361,12 @@ export default async function PageFamille({ slug }: { slug: FamilleSlug }) {
             ))}
           </div>
 
-          {/* Le CTA de devis. BoutonDevis reste un <a href> vers WhatsApp :
-              si le JS ne demarre jamais, le lien fonctionne encore ; sinon le
-              clic ouvre l assistant, qui qualifie mieux. */}
+          {/* Le CTA de devis. BoutonDevis est un VRAI LIEN vers /devis : il
+              fonctionne sans JavaScript, et la page d arrivee ouvre l assistant
+              deja renseigne du sujet de cette famille. L amorce WhatsApp de la
+              famille n a pas disparu — elle y sert de repli (lib/devis.ts). */}
           <div className="c-row" data-reveal>
-            <BoutonDevis
-              href={famille.amorce}
-              sujet={famille.sujet}
-              className="btn"
-            >
+            <BoutonDevis sujet={famille.sujet} className="btn">
               Demander un devis <span className="ar">→</span>
             </BoutonDevis>
             <a className="btn btn-line" href="/services">

@@ -132,7 +132,13 @@
 
 .chat-log {
   flex: 1;
-  min-height: 140px;
+  /* 140px etait calibre sur l ancien panneau de 380x620. Le panneau se
+     dimensionne AU CONTENU sous son max-height : avec un seul message
+     d accueil, il ne faisait que 331px de haut — elargir sans toucher a
+     ceci ne se voyait donc qu en largeur. 300px donne au panneau vide une
+     hauteur qui correspond a ce qu on a demande, sans jamais depasser le
+     max-height de 760px qui, lui, protege les petits ecrans. */
+  min-height: 300px;
   overflow-y: auto;
   padding: 16px 18px;
   display: flex;

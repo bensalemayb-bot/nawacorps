@@ -28,12 +28,14 @@ declare global {
  *    `[href^="#"]`. Depuis B7 le site a plusieurs pages : les liens du menu
  *    sont `/#ancre`, que `^=` ne matchait plus — le menu ne se serait plus
  *    referme au clic.
- *    DEPUIS LA REFONTE DE LA NAV, LE SELECTEUR NE MATCHE PLUS QU UN LIEN :
- *    « Travaux ». Tous les autres — Services, les cinq familles, Le studio,
- *    Contact — changent de page, le document est remplace et html.menu-open
- *    part avec lui ; ils n ont donc pas besoin de closeMenu, et le selecteur
- *    n a pas a etre elargi. .m-foot, lui, ne contient que wa.me et mailto:,
- *    sans `#`.
+ *    DEPUIS QUE « Travaux » EST DEVENU « Démonstrations » ET A SA PROPRE
+ *    PAGE, LE SELECTEUR NE MATCHE PLUS RIEN. Toutes les entrees du menu
+ *    changent desormais de page : le document est remplace et html.menu-open
+ *    part avec lui, donc il n y a plus rien a fermer au clic. Le burger et
+ *    Échap referment toujours le menu. La ligne reste — elle ne coute rien et
+ *    redeviendra utile a la premiere ancre remise au menu — mais elle ne doit
+ *    plus etre lue comme le mecanisme de fermeture. .m-foot, lui, ne contient
+ *    que wa.me et mailto:, sans `#`.
  */
 export default function Interactions() {
   // volontaire — portage verbatim du <script> de la maquette, aucune réécriture permise, voir décision B4
