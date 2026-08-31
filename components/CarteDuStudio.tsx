@@ -109,7 +109,7 @@ export default async function CarteDuStudio() {
           {/* L accroche annonce l ordre de lecture au lieu de le subir : ce
               qui vient d abord, pourquoi, et ce qui suit. « ligne par ligne » a
               quitte cette phrase avec les lignes elles-memes. */}
-          <p className="lede" data-reveal style={{ marginBottom: 30 }}>Le site est le produit d&apos;entrée ; il n&apos;est pas le seul atelier. Ce qu&apos;on imprime et ce qu&apos;on publie chaque semaine viennent d&apos;abord, parce que ce sont les deux lignes que les clients reprennent le plus souvent après une refonte. Le reste suit, et se commande avec un site chez moi comme sans.</p>
+          <p className="lede" data-reveal style={{ marginBottom: 30 }}>Le site est le produit d&apos;entrée ; il n&apos;est pas le seul atelier. Ce qui s&apos;imprime et ce qui se publie chaque semaine passent devant : ce sont les deux lignes que le studio met en vitrine à côté des formules. Le reste suit, entier, et se commande avec un site chez moi comme sans — la ligne restauration comprise.</p>
           {/* AUCUN TITRE DE GROUPE AU-DESSUS DE CETTE PREMIERE GRILLE, et c est
               voulu. Chaque carte porte deja le nom de sa famille au pied, en
               guise de porte de sortie : un intertitre par famille redirait le
@@ -130,7 +130,14 @@ export default async function CarteDuStudio() {
           <p className="cat-rang" data-reveal>
             <span>Également à l&apos;atelier</span>
           </p>
-          <p className="cat-rang-d" data-reveal>Trois lignes que le studio fait depuis le début, et qui ne se vendent pas depuis une vitrine : elles se décident en cours de route. Chacune ouvre sa page, avec le détail et le devis.</p>
+          {/* CETTE PHRASE NE PARLE QUE DE CETTE PAGE, et c est deliberé. Une
+              premiere version expliquait le second rang par une habitude des
+              clients — « les lignes qu on décide en cours de route » : le
+              studio a un client et zero reference de site (positionnement §9),
+              il n a donc aucune source pour decrire un comportement d achat.
+              Ce qui reste est verifiable en descendant l ecran : ces trois
+              lignes sont entieres, elles gardent page, prix et devis. */}
+          <p className="cat-rang-d" data-reveal>Identité et photographie, suivi du site, ligne restauration : trois lignes entières, qui gardent leur page, leur prix et leur devis. Elles passent après, pas au rabais.</p>
           <div className="cat-grid cat-grid-sobre">
             {second.map((service) => (
               <CarteService

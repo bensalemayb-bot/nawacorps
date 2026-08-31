@@ -320,10 +320,11 @@ export default async function Prestations() {
               que celle qu on lit est un bug, pas une approximation. */}
           <p className="lede" data-reveal>
             Trois lignes en vitrine. Le site d&apos;abord — c&apos;est le
-            produit d&apos;entrée, et le seul à porter un prix ferme. Puis les
-            cartes et les imprimés, ce que vos clients gardent en main. Puis
-            les réseaux sociaux, tenus au mois. L&apos;identité, le suivi et la
-            ligne restauration suivent plus bas, entières.
+            produit d&apos;entrée, et ce sur quoi tout le reste vient se
+            brancher. Puis les cartes et les imprimés, ce que vos clients
+            gardent en main. Puis les réseaux sociaux, tenus au mois.
+            L&apos;identité, le suivi et la ligne restauration suivent plus
+            bas, entières.
           </p>
           {/* La comparaison « chez les autres » a ete retiree : le
               positionnement §8 interdit de comparer, nomme ou non. Ce qui la
@@ -449,11 +450,14 @@ export default async function Prestations() {
           <p className="cat-rang" data-reveal>
             <span>Le reste du catalogue</span>
           </p>
+          {/* Comme sur l accueil, cette phrase ne parle que de cette page :
+              decrire une habitude d achat demanderait une source que le studio
+              n a pas (positionnement §9). Ce qu elle affirme se verifie en
+              descendant l ecran. */}
           <p className="cat-rang-d" data-reveal>
-            Trois lignes que le studio fait depuis le début, et qu&apos;on
-            décide rarement devant une grille : elles viennent en cours de
-            route, une fois le site en ligne ou la salle rouverte. Même
-            traitement, même devis, même personne.
+            Identité et photographie, suivi du site, ligne restauration. Trois
+            lignes entières, avec leurs prestations, leurs prix et leur devis —
+            elles passent après, pas au rabais.
           </p>
         </div>
       </section>

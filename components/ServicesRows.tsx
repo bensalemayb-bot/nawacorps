@@ -55,7 +55,7 @@ export default function ServicesRows() {
           </div>
           <div className="row" data-row>
             <div className="row-h"><span className="n">02</span><h3>Demandes, devis &amp; rendez-vous</h3><span className="pl">+</span></div>
-            <div className="row-b"><div><p>Un formulaire qui pose les bonnes questions — prestation, surface, délai, adresse — et qui vous arrive rempli plutôt qu&apos;en trois lignes vagues. Sur les formules qui les incluent, le visiteur repart avec une estimation chiffrée et pose lui-même son rendez-vous, à 23 h comme le dimanche. Ce qui atterrit chez vous n&apos;est plus une demande de rappel : c&apos;est un dossier que vous pouvez chiffrer sans décrocher trois fois.</p></div></div>
+            <div className="row-b"><div><p>Un formulaire qui pose les bonnes questions — prestation, surface, délai, adresse — et qui vous arrive rempli plutôt qu&apos;en trois lignes vagues. Sur les formules qui les incluent, le visiteur repart avec une estimation chiffrée et pose lui-même son rendez-vous, à 23 h comme le dimanche. Ce qui atterrit chez vous n&apos;est plus un « rappelez-moi » : c&apos;est une demande que vous pouvez chiffrer sans décrocher trois fois.</p></div></div>
           </div>
           <div className="row" data-row>
             <div className="row-h"><span className="n">03</span><h3>Assistant &amp; relances</h3><span className="pl">+</span></div>
