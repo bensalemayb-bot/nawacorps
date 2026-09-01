@@ -287,10 +287,9 @@ const AfficheEvenement = ({ t }: { t: Libelles }): ReactElement => (
    une prestation nulle part sur le site. Ses deux libelles (`votreAvis`,
    `scannez`) sont partis avec elle des deux colonnes de `LIBELLES`, et son
    entree a quitte la table `VIGNETTES` ci-dessous.
-   CE QUI RESTE, ET QUI N EST PAS A MOI : les regles `.vg-sticker`,
-   `.vg-sticker-p` et `.vg-sticker-txt` d app/services.css n ont plus de
-   markup a styler. Elles sont inertes, pas fausses ; leur suppression appartient
-   a qui tient les CSS.
+   SES REGLES CSS SONT PARTIES AVEC ELLE le 1er septembre 2026 : `.vg-sticker`,
+   `.vg-sticker-p` et `.vg-sticker-txt` n avaient plus aucun markup a styler
+   depuis le retrait de la vignette. Il ne reste rien du sticker dans le depot.
    SI LA LIGNE SURVIVAIT EN BASE, la page ne casserait pas : `VignettePrestation`
    rend `null` pour un slug sans vignette, et la colonne de texte reprend toute
    la largeur. */

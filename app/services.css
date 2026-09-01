@@ -532,47 +532,6 @@
   background-size: 0.36em 0.36em;
 }
 
-/* ---------- sticker vitrine ---------- */
-
-.vg-sticker-p {
-  width: 86%;
-  background: var(--pine);
-  border-radius: 1em;
-  padding: 1.1em;
-  display: flex;
-  align-items: center;
-  gap: 0.9em;
-  /* Le trait tirete figure la decoupe de l adhesif. */
-  outline: 0.12em dashed rgba(241, 238, 230, 0.34);
-  outline-offset: 0.5em;
-  box-shadow: 0 1em 2.4em rgba(23, 22, 19, 0.2);
-}
-.vg-sticker-txt {
-  flex: 1;
-  min-width: 0;
-}
-.vg-sticker-txt .vg-over {
-  color: var(--brass-l);
-  letter-spacing: 0.2em;
-  margin-bottom: 0.6em;
-}
-.vg-sticker-txt .vg-bar {
-  background: rgba(241, 238, 230, 0.34);
-}
-.vg-sticker-txt .vg-thin {
-  background: rgba(241, 238, 230, 0.2);
-}
-.vg-sticker-txt .vg-micro {
-  color: var(--muted-g);
-  letter-spacing: 0.12em;
-  margin-top: 0.7em;
-}
-.vg-sticker .vg-qr {
-  width: 3.6em;
-  height: 3.6em;
-  border-color: var(--bone);
-}
-
 /* ---------- réseaux sociaux : le calendrier et une publication ---------- */
 
 .vg-reseaux {
