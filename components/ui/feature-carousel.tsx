@@ -9,16 +9,20 @@
  *  - autoplay avec pauses intelligentes (survol, interaction, hors écran,
  *    onglet caché, prefers-reduced-motion)
  *
- * Prérequis : app/binacore.css importé globalement (les blocs <style> de la
- * maquette contiennent tous les styles utilisés ici : .car2, .chip, .pcard,
- * .ba, .m-old, .m-new, .osite, .obc, .oflyer, .ofid, .bc, .poster, .fid…).
- * Aucune lib externe : ni motion, ni hugeicons — tout est CSS + React.
+ * Prérequis : app/binacore.css importé globalement, pour .car2, .chip,
+ * .pcard, .ba et .ba-photo. Aucune lib externe : ni motion, ni hugeicons.
+ *
+ * PLUS AUCUNE SCÈNE DESSINÉE ICI depuis le 2 septembre 2026 : les cinq pièces
+ * sont des photographies. Les règles qui habillaient les maquettes CSS —
+ * .m-old, .m-new, .osite, .obc, .oflyer, .ofid, .bc, .poster, .fid et leurs
+ * enfants — dorment encore dans binacore.css. Elles n'ont pas été retirées
+ * dans le même geste : plusieurs sont groupées entre elles, et une coupe à
+ * l'aveugle en pleine intégration aurait cassé ce qu'on venait de poser.
  *
  * Usage : import FeatureCarousel from "@/components/ui/feature-carousel";
  *         <FeatureCarousel />
  */
 
-import { CONTACT } from "@/lib/site";
 import React, {
   useCallback,
   useEffect,
@@ -207,179 +211,116 @@ function BeforeAfter({
 }
 
 /* ------------------------------------------------------------------ */
-/*  Scenes « apres ».
-    AUCUN DETAIL LOCALISABLE dans ces maquettes : ni annee de fondation, ni rue
-    reelle, ni domaine en .ch. Elles portaient « fonde en 1987 », « Rue des
-    Etuves 12 · 1201 » et « lecomptoir-geneve.ch » — assez de precision pour
-    qu'un visiteur les prenne pour une reference client. Or c'est une
-    demonstration, et presenter un travail fictif comme une realisation est
-    vise par la LCD art. 3. La section est deja etiquetee « cinq
-    demonstrations » ; ces details la contredisaient.                     */
+/*  Pieces PHOTOGRAPHIEES.
+
+    Les CINQ pieces sont rendues par une image. « Le site » et « La carte »
+    depuis le 1er septembre 2026, les trois autres depuis le 2. Il n'y a donc
+    plus de melange dessine/photographie a assumer : ce composant est le seul
+    rendu de piece du fichier.
+
+    UN <img> NU, PAS next/image, ET POUR LA MEME RAISON QUE NoyauStage :
+    l'image est peinte dans une couche `.ba-layer` en position absolue que le
+    comparateur decoupe au pixel ; le wrapper que next/image insere casserait
+    ce calage. Le srcSet fait le travail que next/image aurait fait — deux
+    tailles reelles en WebP, 480 px pour le telephone.
+
+    LES FICHIERS SONT EN 720x900, C'EST-A-DIRE EXACTEMENT LE 4:5 DE `.stack`
+    (2 septembre 2026), et ils y arrivent par deux chemins differents.
+
+    LES SIX PIECES DU 2 SEPTEMBRE — l'affiche, la fidelite, la carte de visite —
+    ont ete DEMANDEES en 4:5 a la generation. Elles n'ont subi aucun recadrage
+    de cadrage, seulement une reduction. C'est la bonne facon de s'y prendre :
+    demander le format de destination plutot que le rattraper apres coup.
+
+    LES QUATRE PIECES DU 1er SEPTEMBRE, elles, ont du etre recoupees a la main.
+    Les originaux etaient en 1600x900, un 16:9 pose dans un cadre portrait : `object-fit:cover` jetait 55% de la largeur, et le portable
+    des deux pieces « Le site » se retrouvait coupe au hasard du centre
+    geometrique. Le recadrage a donc ete fait A LA MAIN, en amont, sur le sujet
+    et non sur le milieu de l'image — decalages retenus, en pixels depuis le
+    bord gauche de l'original : carte-avant 476, carte-apres 335, site-avant
+    300, site-apres 300. Ils ne sont pas centres, et c'est voulu : cale au
+    milieu, le crop coupait « CHANTIER SUISSE » en plein mot sur les deux
+    pieces « Le site », et le mot « Cocktail » sur « La carte » apres.
+    Le sujet etant plus large que 720 px sur trois photos sur quatre, un bord
+    est perdu de toute facon ; le choix est de perdre le bord DROIT, jamais le
+    logo ni le titre.
+
+    720 px DE LARGE POUR UNE CARTE QUI MONTE A 440 px CSS : a DPR 2 il en
+    faudrait 880. C'est la limite des originaux fournis, pas un reglage — si
+    des fichiers plus larges arrivent un jour, les recouper aux memes
+    decalages (proportionnellement) et regenerer les deux tailles.
+
+    UN SEUL <img> DANS LE FICHIER, d'ou ce composant partage plutot que quatre
+    balises recopiees : `@next/next/no-img-element` est un warning par image
+    ecrite, et le depot en tolere UN, celui de NoyauStage.
+
+    `alt` VIDE ET aria-hidden, comme les scenes dessinees qu'elles remplacent :
+    ce que la piece montre est deja dit par le `desc` de l'item, juste a cote,
+    et un comparateur avant/apres ne se lit pas au lecteur d'ecran.          */
 /* ------------------------------------------------------------------ */
 
-const MenuNew = () => (
-  <div className="m-new" aria-hidden="true">
-    <span className="ov">Bar — Genève</span>
-    <h3>Le Comptoir</h3>
-    <p className="st">Exemple de mise en page — démonstration</p>
-    <p className="grp">Pressions</p>
-    <div className="it"><span>Blonde locale</span><span className="px">5.50</span></div>
-    <div className="it"><span>IPA du moment</span><span className="px">7.00</span></div>
-    <p className="grp">Sans alcool</p>
-    <div className="it"><span>Citronnade maison</span><span className="px">5.00</span></div>
-    <div className="it"><span>Café · thé</span><span className="px">4.00</span></div>
-    <div className="qr-row">
-      <div className="qr" role="img" aria-label="QR code vers la carte en ligne" />
-      <p>Carte complète, horaires, adresse — toujours à jour.</p>
-    </div>
-  </div>
-);
-
-const SiteNew = () => (
-  <div className="browser" aria-hidden="true">
-    <div className="bar">
-      <div className="dots"><i /><i /><i /></div>
-      <div className="url">exemple.test</div>
-    </div>
-    <div className="bsite">
-      <div className="bhero">
-        <span className="ov">Démonstration — établissement fictif</span>
-        <h4>Un comptoir, des habitués, une vraie carte.</h4>
-        <p>Ouvert du mardi au samedi, à deux pas de la place.</p>
-        <span className="bb">Voir la carte</span>
-      </div>
-      <div className="brow">
-        <div><b>Horaires</b><span>Ma–Sa · 16h–01h</span></div>
-        <div><b>Adresse</b><span>Affichée en un tap</span></div>
-        <div><b>Contact</b><span>Appel en un tap</span></div>
-      </div>
-    </div>
-  </div>
-);
-
-const CardNew = () => (
-  <div className="bc-mini">
-    <div className="bc bc-recto" aria-hidden="true">
-      <span className="wm">Nawa Corps</span>
-      <span className="rl" />
-      <span className="cp">Studio de création digitale</span>
-    </div>
-    <div className="bc bc-verso" aria-hidden="true">
-      <div className="top"><span className="nm">Ayoub</span><span className="no">N° 001</span></div>
-      <span className="ro">Design &amp; développement</span>
-      <div className="hr" />
-      <div className="ct">
-        <span><b>TÉL.</b> {CONTACT.telephoneAffiche}</span>
-        <span><b>MAIL</b> {CONTACT.email}</span>
-        <span><b>WEB</b> nawacorps.ch</span>
-      </div>
-      <span className="ge">Genève, Suisse</span>
-    </div>
-  </div>
-);
-
-const PosterNew = () => (
-  <div className="poster" aria-hidden="true">
-    <span className="top">Le Comptoir — démonstration</span>
-    <div className="big"><em>Soirée</em><b>JAZZ</b></div>
-    <p className="dt">Jeudi 12 décembre — dès 19 h</p>
-    <p className="dd">Entrée libre · concert à 20 h 30</p>
-    <div className="bt"><span>Votre adresse · votre ville</span><i /></div>
-  </div>
-);
-
-const FidNew = () => (
-  <div className="fid" aria-hidden="true">
-    <span className="f1">Carte fidélité</span>
-    <span className="f2">Le Comptoir</span>
-    <div className="dots">
-      <span className="on">✶</span><span className="on">✶</span><span className="on">✶</span>
-      <span /><span /><span /><span /><span /><span /><span />
-    </div>
-    <span className="f3">10ᵉ café offert</span>
-  </div>
+const PhotoDemo = ({ nom }: { nom: string }) => (
+  // eslint-disable-next-line @next/next/no-img-element
+  <img
+    className="ba-photo"
+    src={`/demos/${nom}.webp`}
+    srcSet={`/demos/${nom}-480.webp 480w, /demos/${nom}.webp 720w`}
+    /* La carte ne depasse jamais `min(440px, 66%)` — voir .stack dans
+       binacore.css. 440px est donc la borne haute reelle, pas une estimation. */
+    sizes="440px"
+    alt=""
+    aria-hidden="true"
+    width={720}
+    height={900}
+    decoding="async"
+    loading="lazy"
+  />
 );
 
 /* ------------------------------------------------------------------ */
-/*  Scènes "avant" (l'ancien monde).
-    Règle non négociable (guide de voix §4, positionnement §8) : le "avant"
-    montré ici est exactement le site ou l'imprimé que le prospect a chez
-    lui. Il reste DATÉ, jamais RIDICULE — pas de point d'exclamation
-    multiplié, pas de majuscules qui crient, pas de nom de fichier brut, pas
-    de fax. On date par ce qui MANQUE (formulaire, horaires structurés,
-    version téléphone), pas par ce qui prête à rire. Ne pas réintroduire la
-    moquerie ici.                                                          */
+/*  Les cinq pieces sont PHOTOGRAPHIEES depuis le 2 septembre 2026.
+
+    Il n'y a plus une seule scene dessinee en CSS dans ce fichier. Les six
+    composants qui vivaient ici — CardOld/CardNew, PosterOld/PosterNew,
+    FidOld/FidNew — sont partis avec elles, et l'import de CONTACT avec eux :
+    il ne servait qu'a la carte de visite du studio.
+
+    CE QUE LA CARTE DE VISITE A PERDU, et il faut le savoir avant de la
+    regretter : son « apres » etait la carte de Nawa Corps, avec le vrai
+    telephone et le vrai e-mail lus dans lib/site.ts. Une photo les aurait
+    graves dans un fichier binaire, ou plus aucune correction de coordonnees
+    ne serait allee les chercher. La piece montre donc desormais la meme
+    enseigne fictive que « Le site » — Chantier Suisse.
+
+    LES ENSEIGNES SONT FICTIVES, ET LEURS NOMS SONT FLOUTES DANS LES IMAGES
+    depuis le 2 septembre 2026 (demande d'Ayoub). Deux etablissements pour
+    cinq pieces — un bar et une entreprise de marquage routier — parce que
+    chaque nom invente est un nom qui peut heurter une vraie enseigne.
+    LE FLOU EST FAIT EN AMONT, DANS LES FICHIERS, jamais en CSS : un filtre
+    `blur` sur une zone se contourne en lisant l'image d'origine, et l'image
+    d'origine est justement ce que le serveur envoie. Les fichiers servis ne
+    contiennent plus les noms.
+    LE PIED DE PAGE DE « site-avant » EST FLOUTE AUSSI, et il comptait plus que
+    les enseignes : il portait une rue, un code postal, un telephone et un
+    e-mail. C'est exactement le detail localisable que le bloc ci-dessus
+    interdit, et il avait echappe a la premiere lecture parce qu'il se lit a
+    peine a la taille d'affichage.
+    LE `desc` DE CHAQUE PIECE DIT TOUJOURS « Enseigne fictive » : le flou dit
+    qu'on cache un nom, il ne dit pas qu'il n'y a personne derriere. Les deux
+    phrases font un travail different et aucune ne remplace l'autre.
+
+    LA REGLE DES DETAILS TIENT, dans les images comme elle tenait dans le JSX :
+    aucune rue, aucun domaine en .ch, aucune annee de fondation. Les deux
+    cartes de visite portent « 022 000 00 00 », le numero manifestement
+    inutilisable qu'employait deja CardOld. Un detail localisable ferait
+    prendre une demonstration pour une realisation — LCD art. 3.
+
+    L'« AVANT » RESTE DATE, JAMAIS RIDICULE (guide de voix §4). Les trois
+    pieces « avant » ajoutees ici s'en tiennent a ce que faisaient les scenes
+    dessinees qu'elles remplacent, jusqu'au texte : « CARTE DE FIDELITE » sans
+    accents, « jeudi 12 decembre des 19H00 », « 10 cafes achetes, le 11e
+    offert ». Ce sont les memes mots, photographies.                       */
 /* ------------------------------------------------------------------ */
-
-const MenuOld = () => (
-  <div className="m-old" aria-hidden="true">
-    <h3>Le Comptoir</h3>
-    <p className="st">~ exemple ~</p>
-    <hr />
-    <div className="it"><span>BIERE PRESSION</span><i /><span>5.-</span></div>
-    <div className="it"><span>BIERE SPECIALE</span><i /><span>6.50</span></div>
-    <div className="it"><span>LIMONADE</span><i /><span>4.50</span></div>
-    <div className="it"><span>CAFE / THE</span><i /><span>3.80</span></div>
-    <hr />
-    <div className="it"><span>ASSIETTE FROMAGE</span><i /><span>14.-</span></div>
-    <p className="w">Ouvert du mardi au samedi.</p>
-  </div>
-);
-
-const SiteOld = () => (
-  <div className="osite" aria-hidden="true">
-    <div className="obar">
-      {/* Le nom du site, comme l afficherait n importe quel navigateur.
-          Cette barre disait « Le Comptoir - Microsoft Internet Explorer » :
-          nommer le navigateur en faisait une chute, et la regle du guide de
-          voix est « date, jamais ridicule » — le « avant » qu on moque est
-          celui du prospect. Le cadre suffit a dater la scene. */}
-      <span>Le Comptoir</span>
-      <span>_ □ ✕</span>
-    </div>
-    <div className="oin">
-      <h4>Bienvenue sur le site du Comptoir</h4>
-      <p className="onav">Accueil | Photos | Livre d&apos;or | Contact</p>
-      <div className="oimg">Photo du bar</div>
-      <p className="onew">NOUVEAU : soirée jazz le jeudi.</p>
-      {/* LE COMPTEUR DE VISITEURS ET LE PIED « optimise pour Internet
-          Explorer 6 » ONT ETE SUPPRIMES, sans remplacement. Le guide de voix
-          demande un « avant » date, jamais ridicule : ce site-la est celui du
-          prospect, et deux clins d oeil de plus le faisaient basculer de la
-          constatation a la moquerie. Ne pas les remettre. */}
-    </div>
-  </div>
-);
-
-const CardOld = () => (
-  <div className="obc" aria-hidden="true">
-    <span className="t1">LE COMPTOIR</span>
-    <span className="t2">Bar - Ambiance - Billard</span>
-    <span className="st">★ ─── ★</span>
-    <span className="t3">Tél : 022 000 00 00</span>
-  </div>
-);
-
-const PosterOld = () => (
-  <div className="oflyer" aria-hidden="true">
-    <span className="f1">★ Soirée ★</span>
-    <span className="f2">Jazz</span>
-    <span className="f3">jeudi 12 decembre des 19H00</span>
-    <span className="f4">ENTREE LIBRE</span>
-    <span className="f5">Bar ouvert dès 18h.</span>
-  </div>
-);
-
-const FidOld = () => (
-  <div className="ofid" aria-hidden="true">
-    <span className="t">CARTE DE FIDELITE</span>
-    <div className="grid">
-      <span>✗</span><span>✗</span><span>✗</span>
-      <span /><span /><span /><span /><span /><span /><span />
-    </div>
-    <span className="b">10 cafés achetés, le 11ᵉ offert.</span>
-  </div>
-);
 
 /* ------------------------------------------------------------------ */
 /*  Données                                                            */
@@ -395,39 +336,46 @@ export type CarouselItem = {
 
 const ITEMS: CarouselItem[] = [
   {
+    /* Le QR code a quitte cette description avec la scene dessinee qui le
+       montrait : la piece photographiee n'en porte pas, et decrire ce qui
+       n'est pas a l'image est un commentaire faux, donc un bug. */
     id: "carte",
     label: "La carte",
-    desc: "Une carte qui a bien servi, remise à plat : hiérarchie claire, prix lisibles, et sa version en ligne par QR code.",
-    before: <MenuOld />,
-    after: <MenuNew />,
+    desc: "Une carte qui a bien servi, reprise en entier : les familles séparées, les prix alignés, chaque cocktail montré. Enseigne fictive.",
+    before: <PhotoDemo nom="carte-avant" />,
+    after: <PhotoDemo nom="carte-apres" />,
   },
   {
+    /* « Lisible sur téléphone » est parti pour la meme raison : les deux
+       images montrent un ordinateur portable, et la promesse ne se verifie
+       nulle part a l'ecran. Ce que la piece montre, elle, c'est le devis
+       atteignable des le premier ecran. */
     id: "site",
     label: "Le site",
-    desc: "Un site d'il y a quinze ans refait en une semaine : lisible sur téléphone, avec un formulaire de devis qui fonctionne.",
-    before: <SiteOld />,
-    after: <SiteNew />,
+    desc: "Un site resté à son année de mise en ligne, refait en une semaine : le devis se demande dès le premier écran. Enseigne fictive.",
+    before: <PhotoDemo nom="site-avant" />,
+    after: <PhotoDemo nom="site-apres" />,
   },
   {
     id: "carte-visite",
     label: "La carte de visite",
-    desc: "85 × 55 recto-verso, sur un papier qu'on garde en main. Le même geste, mieux dit.",
-    before: <CardOld />,
-    after: <CardNew />,
+    desc: "85 × 55 sur un papier qu'on garde en main : un logo net, une seule hiérarchie, rien à déchiffrer. Enseigne fictive.",
+    before: <PhotoDemo nom="visite-avant" />,
+    after: <PhotoDemo nom="visite-apres" />,
   },
   {
     id: "affiche",
     label: "L'affiche",
-    desc: "La même annonce, redessinée : une affiche qu'on remarque et qu'on garde.",
-    before: <PosterOld />,
-    after: <PosterNew />,
+    desc: "La même annonce, redessinée : une hiérarchie, une image, de la place autour. Enseigne fictive.",
+    before: <PhotoDemo nom="affiche-avant" />,
+    after: <PhotoDemo nom="affiche-apres" />,
   },
   {
     id: "fidelite",
     label: "La fidélité",
-    desc: "La carte à tampons remise au propre : dix passages, un vrai design.",
-    before: <FidOld />,
-    after: <FidNew />,
+    desc: "La carte à tampons remise au propre : dix passages, un papier qui tient dans le portefeuille. Enseigne fictive.",
+    before: <PhotoDemo nom="fidelite-avant" />,
+    after: <PhotoDemo nom="fidelite-apres" />,
   },
 ];
 

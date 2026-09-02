@@ -121,19 +121,21 @@ export default function DemonstrationsPage() {
               « démonstration » se lit au-dessus des pièces, pas en dessous. */}
           <div className="studio-txt" data-reveal>
             <p>
-              Ces cinq pièces sont des démonstrations. Elles ont été dessinées
-              ici, de bout en bout, pour un bar qui n&apos;existe pas — « Le
-              Comptoir ». Il n&apos;y a donc aucun client derrière, aucun
-              chiffre de résultat à annoncer, aucune date de mise en ligne : ce
+              Ces cinq pièces sont des démonstrations. Elles ont été faites
+              ici, de bout en bout, pour deux établissements qui
+              n&apos;existent pas — un bar et une entreprise de marquage
+              routier. Leurs noms sont floutés sur les images, parce
+              qu&apos;il n&apos;y a personne derrière : aucun client, aucun
+              chiffre de résultat à annoncer, aucune date de mise en ligne. Ce
               que vous regardez est le travail lui-même. L&apos;avant est celui
               qu&apos;on rencontre encore souvent ; l&apos;après est ce qui
               serait livré.
             </p>
             <p>
               Le studio est jeune, et ça se dit sans détour. C&apos;est aussi
-              pourquoi il montre plutôt qu&apos;il ne raconte : une pièce
-              dessinée se juge en dix secondes, et vous n&apos;avez personne à
-              croire sur parole.
+              pourquoi il montre plutôt qu&apos;il ne raconte : une pièce se
+              juge en dix secondes, et vous n&apos;avez personne à croire sur
+              parole.
             </p>
           </div>
 

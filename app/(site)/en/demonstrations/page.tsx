@@ -11,8 +11,10 @@ import { SITE_NAME, alternatesPage, openGraphPage } from "@/lib/site";
  * >>> ELLE EST AUSSI EXPLICITE EN ANGLAIS QU'EN FRANCAIS, ET ELLE SE LIT AVANT
  * >>> LE CARROUSEL, PAS APRES. <<<
  *
- * Les cinq pieces sont dessinees pour un bar qui N'EXISTE PAS — « Le
- * Comptoir ». Il n'y a donc AUCUN client derriere, AUCUN chiffre de resultat,
+ * Les cinq pieces sont faites pour deux etablissements qui N'EXISTENT PAS, et
+ * leurs noms sont FLOUTES sur les images depuis le 2 septembre 2026 : une
+ * enseigne inventee, meme etiquetee, reste une enseigne inventee a l ecran.
+ * Il n'y a donc AUCUN client derriere, AUCUN chiffre de resultat,
  * AUCUN avis, AUCUNE date de mise en ligne, et il n'y en a pas a ajouter plus
  * tard sans accord ecrit du client concerne. La LCD art. 3 vise les
  * indications trompeuses, et ELLE NE S'ARRETE PAS A LA FRONTIERE DE LA
@@ -124,25 +126,23 @@ export default function DemonstrationsEn() {
               pieces, jamais en dessous. */}
           <div className="studio-txt" data-reveal>
             <p>
-              These five pieces are demonstrations. They were drawn here, from
-              start to finish, for a bar that does not exist —{" "}
-              {/* Guillemets anglais, jamais les chevrons francais : la page est
-                  anglaise, et « Le Comptoir » reste un nom propre francais a
-                  l interieur d une citation anglaise. */}
-              &ldquo;Le Comptoir&rdquo;. There is no client behind them, no
-              results to report and no launch date: what you are looking at is
+              These five pieces are demonstrations. They were made here, from
+              start to finish, for two businesses that do not exist — a bar and
+              a road-marking company. Their names are blurred out in the
+              images, because there is nobody behind them: no client, no
+              results to report and no launch date. What you are looking at is
               the work itself. The before is the one you still meet often; the
               after is what would be delivered.
             </p>
             <p>
               The pieces themselves are written in French, and that is not an
-              oversight: they are drawn for a bar in Geneva, and its menu, its
-              poster and its loyalty card are in the language of its customers.
+              oversight: they are made for two Geneva businesses, and a menu, a
+              poster and a loyalty card are in the language of their customers.
             </p>
             <p>
               The studio is young, and that is said plainly. It is also why it
-              shows rather than tells: a drawn piece is judged in ten seconds,
-              and you have nobody to take at their word.
+              shows rather than tells: a piece is judged in ten seconds, and
+              you have nobody to take at their word.
             </p>
           </div>
 
