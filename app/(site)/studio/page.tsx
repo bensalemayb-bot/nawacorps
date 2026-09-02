@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Metadata } from "next";
 import SchemaPage from "@/components/SchemaPage";
 import BoutonDevis from "@/components/BoutonDevis";
@@ -275,6 +276,45 @@ export default function StudioPage() {
               question de plus dans le formulaire : c&apos;est le même fil de
               discussion.
             </p>
+          </div>
+
+          {/* CE QUE CETTE IMAGE MONTRE, ET CE QU ELLE NE MONTRE PAS.
+
+              Elle montre les MATIERES du metier : des papiers, un specimen
+              typographique, une regle, un compte-fils. Elle ne montre ni
+              local, ni bureau, ni personne, ni piece cliente finie — et
+              aucun de ces trois manques n est un hasard.
+
+              PAS DE LOCAL : le studio n en a pas, le paragraphe juste
+              au-dessus le dit en toutes lettres (« Pas de bureaux non plus »),
+              lib/site.ts:69 le redit, et une photo de bureau les aurait
+              contredits dans le meme ecran. Affirmer des locaux inexistants
+              releve de la LCD art. 3 au meme titre qu une reference inventee.
+
+              PAS DE PIECE CLIENTE : le specimen ne porte QUE des lettres, les
+              cartes sont vierges. Une realisation fictive presentee ici, hors
+              de la section « demonstrations » et de son avertissement, serait
+              exactement ce que /demonstrations passe trois paragraphes a
+              desamorcer.
+
+              ELLE N EST PAS LE PORTRAIT. Le n ud Person n a toujours pas d
+              `image`, et ce fichier ne doit pas y etre accroche : ce serait
+              declarer a Google que cette photo represente Ayoub Bensalem.
+              La ligne « portrait » de l inventaire des visuels reste ouverte.
+
+              next/image ICI, contrairement a NoyauStage et au carrousel : rien
+              ne decoupe cette image au pixel, donc le wrapper qu il insere ne
+              casse aucun calage — et on gagne le format moderne et le
+              chargement differe sans ecrire de srcSet a la main. */}
+          <div data-reveal style={{ marginTop: 46 }}>
+            <Image
+              src="/brand/atelier.webp"
+              alt="Papiers de couleur, cartes vierges, spécimen typographique, règle et compte-fils posés sur une table."
+              width={1600}
+              height={1073}
+              sizes="(max-width: 900px) 100vw, 900px"
+              style={{ width: "100%", height: "auto", borderRadius: 14 }}
+            />
           </div>
         </div>
       </section>
