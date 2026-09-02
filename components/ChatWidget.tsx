@@ -247,7 +247,7 @@ const TEXTES: Record<
 > = {
   fr: {
     accueil:
-      "Bonjour. Nous préparons votre proposition. Qu'est-ce que vous cherchez à faire faire ?",
+      "Bonjour, je suis Leo, l'assistant de Nawa Corps. Nous faisons le logotype, les imprimés, les photos, les réseaux sociaux, les supports de restaurant et les sites. Qu'est-ce que vous cherchez à faire faire ?",
     /**
      * L ACCUEIL QUAND ON SAIT DEJA CE QUE LE VISITEUR EST VENU CHERCHER.
      *
@@ -271,13 +271,13 @@ const TEXTES: Record<
      * demande a l etape 2 du deroule, quand elle a un sens.
      */
     accueilCible: (libelle) =>
-      `Bonjour. Votre demande porte sur « ${libelle} » — c'est noté, nous préparons votre proposition. Pour commencer : quel est votre métier ?`,
+      `Bonjour, je suis Leo, l'assistant de Nawa Corps. Votre demande porte sur « ${libelle} » — c'est noté. Pour commencer : quel est votre métier ?`,
     bulle: "Décrivez votre besoin — réponse le jour ouvrable suivant",
-    titre: "Assistant Nawa Corps",
+    titre: "Leo — assistant Nawa Corps",
     sousTitre: "Réponse le jour ouvrable suivant",
     fermer: "Fermer la conversation",
     note: "Conversation enregistrée pour traiter votre demande — voir ",
-    ecrit: "L'assistant écrit",
+    ecrit: "Leo écrit",
     indispo: "Assistant indisponible — utilisez le formulaire juste en dessous ou ",
     allerFormulaire: "Aller au formulaire",
     clos: "C'est noté — nous revenons vers vous le jour ouvrable suivant.",
@@ -293,16 +293,16 @@ const TEXTES: Record<
   },
   en: {
     accueil:
-      "Hello. We're preparing your quote. What are you looking to have done?",
+      "Hello, I'm Leo, the Nawa Corps assistant. We do logotypes, print, photography, social media, restaurant material and sites. What are you looking to have done?",
     /** Meme role et memes limites que la version francaise ci-dessus. */
     accueilCible: (libelle) =>
-      `Hello. Your enquiry is about “${libelle}” — noted, we're preparing your quote. To start: what do you do?`,
+      `Hello, I'm Leo, the Nawa Corps assistant. Your enquiry is about “${libelle}” — noted. To start: what do you do?`,
     bulle: "Tell us what you need — an answer on the next working day",
-    titre: "Nawa Corps assistant",
+    titre: "Leo — Nawa Corps assistant",
     sousTitre: "An answer on the next working day",
     fermer: "Close the conversation",
     note: "This conversation is recorded so that your enquiry can be handled — see ",
-    ecrit: "The assistant is typing",
+    ecrit: "Leo is typing",
     indispo: "Assistant unavailable — use the form just below, or ",
     allerFormulaire: "Go to the form",
     clos: "Noted — we'll come back to you on the next working day.",
