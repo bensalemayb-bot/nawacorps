@@ -985,3 +985,19 @@
   border-color: var(--pine);
   color: var(--bone);
 }
+
+/* LA VIGNETTE PHOTOGRAPHIEE (2 septembre 2026). Elle reprend le cadre `.vg`
+   ci-dessus — meme 5:4, meme bord, meme rayon — mais l image doit le REMPLIR :
+   le padding qui aere les scenes dessinees laisserait ici une bande de fond
+   autour de la photo, et le degrade du cadre se verrait sur ses quatre cotes.
+   Le fond reste declare : il se voit pendant le chargement, et sur une image
+   qui n arriverait pas. */
+.vg-photo {
+  padding: 0;
+}
+.vg-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}

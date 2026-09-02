@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { ReactElement } from "react";
 import type { Locale } from "@/lib/i18n";
 
@@ -113,6 +114,15 @@ type Libelles = {
    * elle-meme etant masquee.
    */
   legende: string;
+  /**
+   * LA LEGENDE DES VIGNETTES PHOTOGRAPHIEES. Elle existe a cote de `legende`
+   * et ne la remplace pas : depuis le 2 septembre 2026 les deux especes
+   * cohabitent, dix pieces photographiees et trois encore dessinees. Dire
+   * « illustration dessinee » sous une photographie serait faux, et l inverse
+   * aussi — or c est la SEULE phrase qu un lecteur d ecran entend de la
+   * figure, la vignette elle-meme etant masquee.
+   */
+  legendePhoto: string;
 };
 
 const LIBELLES: Record<Locale, Libelles> = {
@@ -149,6 +159,7 @@ const LIBELLES: Record<Locale, Libelles> = {
     bonNumero: "N°",
     piecesPack: ["Affiche", "Réseaux", "Carte"],
     legende: "Démonstration — illustration dessinée pour cette page.",
+    legendePhoto: "Démonstration — pièce faite pour cette page.",
   },
   en: {
     identiteMicro: "Mark · palette · typefaces",
@@ -190,6 +201,7 @@ const LIBELLES: Record<Locale, Libelles> = {
     bonNumero: "No.",
     piecesPack: ["Poster", "Social", "Menu"],
     legende: "Demonstration — an illustration drawn for this page.",
+    legendePhoto: "Demonstration — a piece made for this page.",
   },
 };
 
@@ -553,6 +565,36 @@ const VIGNETTES: Record<string, (props: { t: Libelles }) => ReactElement> = {
  *   pour la meme raison que partout ailleurs : un appelant qui l oublie rend
  *   du francais, pas une vignette vide.
  */
+/**
+ * LES PIECES PHOTOGRAPHIEES, par slug (2 septembre 2026).
+ *
+ * Dix des treize vignettes sont desormais des photographies ; l hebergement,
+ * le suivi et la traduction restent dessines, faute d objet a photographier
+ * sans en inventer un.
+ *
+ * AUCUNE DE CES IMAGES NE PORTE DE NOM NI DE CHIFFRE. Les pieces du carrousel
+ * ont du etre floutees apres coup parce qu elles portaient des enseignes
+ * inventees ; ici la contrainte a ete posee A LA GENERATION — pas de nom, pas
+ * de montant, pas de date, et les lignes de texte rendues en barres grises.
+ * Rien a masquer ensuite, et rien qui puisse se lire comme une realisation.
+ *
+ * LE FORMAT EST 5:4, celui de `.vg` dans app/services.css. Il est demande a la
+ * generation plutot que rattrape au recadrage : c est la lecon des quatre
+ * premieres pieces du carrousel, livrees en 16:9 pour un cadre 4:5.
+ */
+const PHOTOS: Record<string, string> = {
+  "identite-logo": "identite-logo",
+  photos: "photos",
+  "carte-visite": "carte-visite",
+  "affiche-evenement": "affiche-evenement",
+  "reseaux-sociaux": "reseaux-sociaux",
+  "la-carte": "la-carte",
+  chevalets: "chevalets",
+  "carte-fidelite": "carte-fidelite",
+  "bons-cadeaux": "bons-cadeaux",
+  "pack-saisonnier": "pack-saisonnier",
+};
+
 export default function VignettePrestation({
   slug,
   locale = "fr",
@@ -560,12 +602,38 @@ export default function VignettePrestation({
   slug: string;
   locale?: Locale;
 }) {
+  const t = LIBELLES[locale];
+
+  // Les photographies passent AVANT les scenes dessinees : un slug present des
+  // deux cotes rendrait la photo, jamais le dessin. Aucun ne l est aujourd hui,
+  // mais l ordre rend la bascule d une piece triviale — on ajoute une ligne
+  // ici, on ne retire rien la-bas, et le dessin reste disponible.
+  const photo = PHOTOS[slug];
+  if (photo) {
+    return (
+      <figure className="vg-fig">
+        <div className="vg vg-photo">
+          {/* `alt` vide et aria-hidden, comme les scenes dessinees : ce que la
+              piece montre est deja dit par le texte de la prestation, juste a
+              cote, et la legende porte l avertissement. */}
+          <Image
+            src={`/vignettes/${photo}.webp`}
+            alt=""
+            aria-hidden="true"
+            width={1000}
+            height={800}
+            sizes="(max-width: 900px) 100vw, 460px"
+          />
+        </div>
+        <figcaption className="vg-cap">{t.legendePhoto}</figcaption>
+      </figure>
+    );
+  }
+
   const Vignette = VIGNETTES[slug];
   // Une ligne ajoutee en base sans vignette ne laisse pas un cadre vide
   // derriere elle : la colonne disparait et le texte reprend toute la largeur.
   if (!Vignette) return null;
-
-  const t = LIBELLES[locale];
 
   return (
     <figure className="vg-fig">
