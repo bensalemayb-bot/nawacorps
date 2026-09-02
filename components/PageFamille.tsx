@@ -399,6 +399,47 @@ export default async function PageFamille({
           <p className="lede" data-reveal>
             {resout}
           </p>
+
+          {/* LA DEMONSTRATION FILMEE, quand la famille en declare une.
+              Une seule le fait aujourd hui — « site-web ».
+
+              PAS DE next/image ICI, evidemment, mais pas de <video> pilote par
+              du JS non plus : quatre attributs suffisent et ils sont tous
+              necessaires. `muted` EST CE QUI AUTORISE `autoPlay` — un
+              navigateur refuse de lancer seul une video qui a du son, et la
+              piste audio a d ailleurs ete retiree au reencodage. `playsInline`
+              empeche iOS de passer en plein ecran par-dessus la page. `loop`
+              parce que la boucle dure quatre secondes. `poster` s affiche
+              avant la premiere image et reste la seule chose visible si
+              l autoplay est refuse.
+
+              DEUX SOURCES, WEBM D ABORD : le navigateur prend la premiere
+              qu il sait lire, et le WebM pese 150 Ko contre 207 au MP4. Le MP4
+              reste pour Safari.
+
+              `aria-hidden` ET UNE LEGENDE : ce qui defile a l ecran ne se
+              raconte pas a un lecteur d ecran, et la legende — la seule partie
+              lue — porte l avertissement. */}
+          {famille.video ? (
+            <figure className="fam-video" data-reveal>
+              <video
+                autoPlay
+                muted
+                loop
+                playsInline
+                aria-hidden="true"
+                poster={`/video/${famille.video.nom}-poster.jpg`}
+              >
+                <source src={`/video/${famille.video.nom}.webm`} type="video/webm" />
+                <source src={`/video/${famille.video.nom}.mp4`} type="video/mp4" />
+              </video>
+              <figcaption className="vg-cap">
+                {locale === "en"
+                  ? (famille.video.legendeEn ?? famille.video.legende)
+                  : famille.video.legende}
+              </figcaption>
+            </figure>
+          ) : null}
         </div>
       </section>
 

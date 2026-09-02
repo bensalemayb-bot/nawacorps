@@ -248,7 +248,7 @@ const Photos = ({ t }: { t: Libelles }): ReactElement => (
 );
 
 /* -------------------------------------------------------------------- */
-/*  Imprimés & signalétique                                              */
+/*  Imprimés                                                            */
 /* -------------------------------------------------------------------- */
 
 /* PHOTO REELLE ICI — la photo des cartes imprimees, en main ou sur table,

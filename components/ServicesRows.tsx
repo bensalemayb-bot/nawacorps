@@ -142,11 +142,16 @@ export default function ServicesRows({ locale = "fr" }: { locale?: Locale }) {
     // Le 02 pointe sur /services et non sur une formule : le formulaire qui
     // chiffre commence avec Le Site, l'assistant qui repond avec L'Assistant —
     // renvoyer vers une seule des deux promettrait au mauvais palier.
+    // Le 04 et le 05 ont suivi le regroupement du 2 septembre 2026 : les
+    // reseaux sociaux vivent dans « identite », la ligne restaurant dans
+    // « imprimes ». Ils pointent DIRECTEMENT sur la bonne page — passer par la
+    // redirection marcherait, mais un lien interne qui rebondit est un lien
+    // qu on a oublie de corriger, pas un choix.
     { n: "01", titre: t.services.titre01, corps: t.services.corps01, renvoi: t.services.lien01, chemin: "/services" },
     { n: "02", titre: t.services.titre02, corps: t.services.corps02, renvoi: t.services.lien02, chemin: "/services" },
     { n: "03", titre: t.services.titre03, corps: t.services.corps03, renvoi: t.services.lien03, chemin: "/services/identite" },
-    { n: "04", titre: t.services.titre04, corps: t.services.corps04, renvoi: t.services.lien04, chemin: "/services/reseaux-sociaux" },
-    { n: "05", titre: t.services.titre05, corps: t.services.corps05, renvoi: t.services.lien05, chemin: "/services/restauration" },
+    { n: "04", titre: t.services.titre04, corps: t.services.corps04, renvoi: t.services.lien04, chemin: "/services/identite" },
+    { n: "05", titre: t.services.titre05, corps: t.services.corps05, renvoi: t.services.lien05, chemin: "/services/imprimes" },
   ];
 
   return (

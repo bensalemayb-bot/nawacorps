@@ -9,7 +9,7 @@ import { metadataFamille } from "@/lib/familles";
 import "@/app/services.css";
 
 /**
- * /services/suivi — Suivi & hébergement
+ * /services/site-web — Site web
  *
  * LA SEULE PAGE MIXTE DES CINQ : les deux abonnements mensuels y portent un
  * PRIX AFFICHE — les deux seuls de ces cinq pages — et la traduction FR / EN
@@ -25,14 +25,14 @@ import "@/app/services.css";
  *
  * SEGMENT STATIQUE, ET C EST VOLONTAIRE. Ce dossier voisine avec [slug], qui
  * ne sert que les trois formules de site. Un segment statique l emporte sur un
- * segment dynamique de meme niveau : « suivi » n atteint donc jamais
+ * segment dynamique de meme niveau : « site-web » n atteint donc jamais
  * [slug]/page.tsx, et il n y a aucun conflit de route a arbitrer.
  *
  * TOUT LE CORPS EST DANS components/PageFamille.tsx, et toute la matiere
  * editoriale dans lib/familles.ts. Les noms, les descriptions et les prix
  * viennent de Postgres : aucun montant n est ecrit dans ces trois fichiers.
  *
- * ELLE A UNE JUMELLE ANGLAISE — app/(site)/en/services/suivi/page.tsx.
+ * ELLE A UNE JUMELLE ANGLAISE — app/(site)/en/services/site-web/page.tsx.
  * Les deux rendent LE MEME composant et LA MEME matiere ; seule la locale
  * change. La locale « fr » est desormais passee EXPLICITEMENT ici, alors
  * qu elle est aussi le defaut : ecrite, elle se voit a la relecture et elle
@@ -46,8 +46,8 @@ import "@/app/services.css";
 // construction echouerait sur P1001.
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = metadataFamille("suivi", "fr");
+export const metadata: Metadata = metadataFamille("site-web", "fr");
 
 export default function Suivi() {
-  return <PageFamille slug="suivi" locale="fr" />;
+  return <PageFamille slug="site-web" locale="fr" />;
 }

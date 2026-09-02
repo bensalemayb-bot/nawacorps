@@ -8,7 +8,7 @@ import { metadataFamille } from "@/lib/familles";
 import "@/app/services.css";
 
 /**
- * /en/services/imprimes — Print & signage
+ * /en/services/imprimes — Print
  *
  * LA JUMELLE ANGLAISE DE /services/imprimes. Elle rend LE MEME COMPOSANT avec
  * une locale de plus : tout ce qui s affiche vient de `FAMILLES.imprimes`

@@ -93,11 +93,9 @@ import { SITE_NAME, alternatesPage, openGraphPage, whatsapp } from "@/lib/site";
  * qui sert aussi de garde-fou a la relecture.
  */
 export const FAMILLE_SLUGS = [
-  "identite",
+  "site-web",
   "imprimes",
-  "reseaux-sociaux",
-  "suivi",
-  "restauration",
+  "identite",
 ] as const;
 
 export type FamilleSlug = (typeof FAMILLE_SLUGS)[number];
@@ -243,6 +241,25 @@ type Famille = {
    * ferait deux sujets pour une seule conversation.
    */
   sujet: string;
+  /**
+   * UNE DEMONSTRATION FILMEE, quand la famille en a une. Optionnel, et il doit
+   * le rester : une seule famille en porte une aujourd hui, et les deux autres
+   * ne doivent pas se retrouver avec un cadre vide.
+   *
+   * `nom` designe un triplet de fichiers dans public/video/ — <nom>.mp4,
+   * <nom>.webm et <nom>-poster.jpg. Les trois se tiennent : le navigateur
+   * choisit le format qu il sait lire, et l affiche s affiche avant que la
+   * premiere image arrive.
+   *
+   * `legende` N EST PAS DECORATIVE. Ce qui est filme est une demonstration,
+   * pas une realisation cliente, et la phrase doit le dire a cote de l image
+   * — guide de voix §8, meme regle que la legende des vignettes.
+   */
+  video?: {
+    nom: string;
+    legende: string;
+    legendeEn?: string;
+  };
 };
 
 /**
@@ -379,17 +396,17 @@ export const MENTION_TVA_EN = `Prices in Swiss francs, ${mentionTva("en")}.`;
 export const FAMILLES: Record<FamilleSlug, Famille> = {
   /* ------------------------------------------------------------------ */
   identite: {
-    h1: ["Identité et photographie,", "à Genève."],
-    h1En: ["Identity and photography,", "in Geneva."],
-    libelle: "Logo, identité et photos",
-    libelleEn: "Logo, identity and photos",
-    seoTitre: "Identité, logo et photos à Genève",
-    seoTitreEn: "Identity, logo and photos in Geneva",
+    h1: ["Identité, photos", "et réseaux, à Genève."],
+    h1En: ["Identity, photos", "and social, in Geneva."],
+    libelle: "Identité et réseaux",
+    libelleEn: "Identity and social",
+    seoTitre: "Logo, photos et réseaux sociaux à Genève",
+    seoTitreEn: "Logo, photography and social media in Geneva",
     seoDescription:
       "Logotype, palette et photos de votre entreprise à Genève. La même identité du site à l'enseigne, et des images cadrées pour le site et vos réseaux.",
     seoDescriptionEn:
       "Logotype, palette and photos of your business in Geneva. One identity from site to shopfront sign, and images framed for the site and social media.",
-    serviceType: "Identité visuelle et photographie d'entreprise",
+    serviceType: "Identité visuelle, photographie et réseaux sociaux",
     serviceTypeEn: "Visual identity and business photography",
     resout:
       "Votre logotype a été dessiné une fois, il y a longtemps, et il ne dit plus ce que vous faites aujourd'hui. Vos devis, votre site et votre enseigne ne se ressemblent pas entre eux, et les seules images disponibles sortent d'un téléphone. Deux choses se règlent ici : une identité qui tient du site à l'enseigne — logotype, palette, typographies, et les règles qui disent où va quoi —, et des photographies prises sur votre lieu de travail, le jour où vous travaillez.",
@@ -440,14 +457,45 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
         raisonDevisEn:
           "A session is priced by the time spent on site and the number of images kept. A two-room practice and a workshop with its yard do not call for the same half-day or the same kit, and shooting outside depends on picking the right day.",
       },
+
+      {
+        slug: "reseaux-sociaux",
+        quoi: "Le calendrier du mois vous est proposé, vous le validez, et il part. Visuels, textes, publication aux heures utiles, réponses aux commentaires et aux messages : la ligne est tenue de bout en bout. La production est faite avec un partenaire de production du studio, et c'est le studio qui vous rend le travail.",
+        /**
+         * « de bout en bout » NE DEVIENT PAS « end-to-end ». Le terme est
+         * sature chez les concurrents et interdit par le glossaire anglais §4 ;
+         * la phrase dit donc ou la chaine commence et ou elle finit, ce qui est
+         * plus concret que l expression francaise.
+         */
+        quoiEn:
+          "You are shown the month's calendar, you approve it, and it goes out. Visuals, wording, posting at the hours that matter, replies to comments and messages: the whole of it is held, from the calendar to the last reply. The production is done with a production partner of the studio, and it is the studio that hands the work back to you.",
+        produit: [
+          "Un calendrier mensuel proposé à l'avance, et validé par vous",
+          "Les visuels et les textes, tenus dans votre identité",
+          "La publication programmée, sans que vous ayez à y penser",
+          "Le suivi des commentaires et des messages reçus",
+          "Un point sur ce qui a été publié, et sur ce qu'on change le mois suivant",
+        ],
+        produitEn: [
+          "A monthly calendar put to you in advance, and approved by you",
+          "The visuals and the wording, held to your identity",
+          "The posting scheduled, without you having to think about it",
+          "Comments and incoming messages kept up with",
+          "A look back at what went out, and at what changes the month after",
+        ],
+        raisonDevis:
+          "Le volume décide de tout : quelques publications par mois sur un seul réseau et un rythme soutenu sur trois réseaux avec de la vidéo ne se produisent pas dans le même temps. Le devis part du rythme que vous voulez tenir, pas d'un forfait qui n'irait à personne.",
+        raisonDevisEn:
+          "Volume decides everything: a few posts a month on one network and a steady rhythm on three networks with video do not take the same time to make. The quote starts from the rhythm you want to keep, not from a flat rate that would suit nobody.",
+      },
     ],
     horsPerimetre: [
       {
         quoi: "L'impression de vos cartes et de vos affiches",
         quoiEn: "Printing your cards and your posters",
         href: "/services/imprimes",
-        ou: "Imprimés & signalétique",
-        ouEn: "Print & signage",
+        ou: "Imprimés",
+        ouEn: "Print",
       },
       {
         quoi: "Le site qui portera cette identité",
@@ -457,18 +505,19 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
         ouEn: "The site packages",
       },
       {
-        quoi: "La production de vos réseaux sociaux au mois",
-        quoiEn: "Running your social media by the month",
-        href: "/services/reseaux-sociaux",
-        ou: "Réseaux sociaux",
-        ouEn: "Social media",
-      },
-      {
         quoi: "La carte et les supports de salle d'un restaurant",
         quoiEn: "The menu and a restaurant's front-of-house pieces",
-        href: "/services/restauration",
-        ou: "Restaurants et cafés",
-        ouEn: "Restaurants and cafés",
+        href: "/services/imprimes",
+        ou: "Imprimés",
+        ouEn: "Print",
+      },
+
+      {
+        quoi: "La publicité payante et son budget média",
+        quoiEn: "Paid advertising and its media budget",
+        href: null,
+        ou: "hors catalogue",
+        ouEn: "not in the catalogue",
       },
     ],
     questions: [
@@ -490,6 +539,25 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
         r: "Ces deux prestations se prennent seules. Le site n'est pas un préalable, et rien ne vous oblige à en commander un ensuite : vous repartez avec vos fichiers, utilisables partout.",
         rEn: "Both of these can be taken on their own. A site is not a prerequisite, and nothing obliges you to order one afterwards: you leave with your files, usable anywhere.",
       },
+
+      {
+        q: "Vous publiez à ma place, ou je dois valider chaque publication ?",
+        qEn: "Do you post for me, or do I have to approve every post?",
+        r: "Vous validez le calendrier du mois, une fois, et ensuite ça part. Si vous préférez relire chaque publication avant qu'elle sorte, c'est possible aussi — ça se décide au départ, pas en cours de route.",
+        rEn: "You approve the month's calendar, once, and after that it goes out. If you would rather read every post before it appears, that works too — it is decided at the start, not halfway through.",
+      },
+      {
+        q: "Qui fait le travail ?",
+        qEn: "Who does the work?",
+        r: "La production est faite avec un partenaire de production du studio. C'est nous qui portons le calendrier, qui vous répondons et qui vous rendons le travail : vous n'avez qu'une conversation à suivre.",
+        rEn: "The production is done with a production partner of the studio. We are the ones who carry the calendar, who answer you and who hand the work back: there is only one conversation for you to follow.",
+      },
+      {
+        q: "Je n'ai pas de site chez vous. C'est bloquant ?",
+        qEn: "My site isn't one of yours. Is that a problem?",
+        r: "Non. La ligne se prend seule, sans site chez nous. Si vous en avez un ailleurs, les publications renvoient dessus — il faut simplement qu'il tienne debout sur un téléphone, sinon le trafic qu'on lui envoie ne sert à rien.",
+        rEn: "No. This can be taken on its own, with no site of ours behind it. If you have one elsewhere, the posts point to it — it just has to hold up on a phone, otherwise sending people to it achieves nothing.",
+      },
     ],
     amorce: whatsapp(
       "Bonjour, j'aimerais un devis pour mon identité et mes photos.",
@@ -502,18 +570,18 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
 
   /* ------------------------------------------------------------------ */
   imprimes: {
-    h1: ["Imprimés et signalétique,", "à Genève."],
-    h1En: ["Print and signage,", "in Geneva."],
-    libelle: "Imprimés et signalétique",
-    libelleEn: "Print and signage",
-    seoTitre: "Imprimés et signalétique à Genève",
-    seoTitreEn: "Print and signage in Geneva",
+    h1: ["Vos imprimés,", "à Genève."],
+    h1En: ["Your printed pieces,", "in Geneva."],
+    libelle: "Imprimés",
+    libelleEn: "Print",
+    seoTitre: "Imprimés à Genève — cartes, affiches et supports de restaurant",
+    seoTitreEn: "Print in Geneva — cards, posters and restaurant material",
     seoDescription:
       "Cartes de visite 85 × 55 et affiches d'événement, à Genève. Conception, fichiers prêts à imprimer, tirage commandé et contrôlé. Sur devis.",
     seoDescriptionEn:
       "Business cards 85 × 55 and event posters, in Geneva. Design, print-ready files, and the print run ordered and checked. Priced by quote.",
-    serviceType: "Conception d'imprimés et de signalétique",
-    serviceTypeEn: "Print and signage design",
+    serviceType: "Conception et impression de supports",
+    serviceTypeEn: "Print design and production",
     resout:
       "Vous n'avez plus de cartes à donner, ou celles qui restent ne ressemblent plus à votre entreprise. Une affiche doit partir en vitrine la semaine prochaine et personne dans la maison ne sait la faire. Deux objets qu'on croise tous les jours, et qui font l'essentiel du contact hors écran : la carte qu'on garde, l'affiche qu'on lit de la rue. Les deux ressortent dans votre identité, avec leurs fichiers prêts à imprimer — et pour les cartes, le tirage commandé, contrôlé et livré.",
     resoutEn:
@@ -563,372 +631,7 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
         raisonDevisEn:
           "A single poster and a series running across the year are not the same amount of work, and the print size is not decided before it is known where the poster will go.",
       },
-    ],
-    horsPerimetre: [
-      {
-        quoi: "Le logotype, la palette et les typographies que ces imprimés appliquent",
-        quoiEn:
-          "The logotype, the palette and the typefaces these printed pieces apply",
-        href: "/services/identite",
-        ou: "Identité & photographie",
-        ouEn: "Identity & photography",
-      },
-      {
-        quoi: "La carte, les chevalets et les supports de salle d'un restaurant",
-        quoiEn: "The menu, the table tents and a restaurant's front-of-house pieces",
-        href: "/services/restauration",
-        ou: "Restaurants et cafés",
-        ouEn: "Restaurants and cafés",
-      },
-      {
-        quoi: "Le site, et le formulaire de demande qui va avec",
-        quoiEn: "The site, and the enquiry form that goes with it",
-        href: "/services",
-        ou: "Les formules de site",
-        ouEn: "The site packages",
-      },
-      {
-        quoi: "L'enseigne, la vitrophanie grand format et le marquage de véhicule",
-        quoiEn:
-          "Shopfront signs, large-format window graphics and vehicle livery",
-        href: null,
-        ou: "hors catalogue",
-        ouEn: "not in the catalogue",
-      },
-    ],
-    questions: [
-      {
-        q: "Vous imprimez, ou je dois trouver un imprimeur ?",
-        qEn: "Do you print, or do I have to find a printer?",
-        r: "Les deux marchent. Pour les cartes de visite, le tirage est compris : nous commandons, nous contrôlons, vous recevez. Pour l'affiche, vous repartez avec le fichier prêt à imprimer et vous le donnez à qui vous voulez — ou nous nous en chargeons aussi, et ça se décide au devis.",
-        rEn: "Either works. For business cards, the print run is included: we order it, we check it, you receive it. For the poster, you leave with the print-ready file and give it to whoever you like — or we take care of that too, and it is decided on the quote.",
-      },
-      {
-        q: "Il me faut une affiche pour la semaine prochaine.",
-        qEn: "I need a poster for next week.",
-        r: "Le délai du studio est d'une semaine, et il court dès votre feu vert : vous n'avez rien à réunir avant de démarrer. Reste le tirage lui-même, qui suit le calendrier de l'imprimeur et non le nôtre — on le vérifie avant de lancer, pas après.",
-        /**
-         * LA SEULE OCCURRENCE DE « one week » DE CE FICHIER, et elle porte son
-         * point de depart dans la meme phrase — « from your go-ahead » —, comme
-         * l exige le guide de voix §5. Ne pas l etendre a un logotype, a une
-         * seance photo ou a une carte de restaurant : le positionnement ne
-         * porte ce delai que sur le site.
-         */
-        rEn: "The studio works to one week, and it runs from your go-ahead: you have nothing to gather before it starts. What is left is the printing itself, which follows the printer's schedule and not ours — we check that before anything goes to press, not after.",
-      },
-      {
-        q: "Je n'ai pas d'identité, juste un vieux logo.",
-        qEn: "I have no identity, just an old logo.",
-        r: "On fait avec. Un imprimé se dessine autour de ce qui existe, et s'il faut d'abord remettre le logo au propre, ça apparaît sur le devis plutôt que dans une surprise à la fin.",
-        rEn: "That works. A printed piece is designed around what exists, and if the logo has to be tidied up first, that appears on the quote rather than as a surprise at the end.",
-      },
-    ],
-    amorce: whatsapp("Bonjour, j'aimerais un devis pour mes imprimés."),
-    amorceEn: whatsapp("Hello, I'd like a quote for my print work."),
-    sujet: "devis-imprimes",
-  },
 
-  /* ------------------------------------------------------------------ */
-  "reseaux-sociaux": {
-    h1: ["Vos réseaux sociaux,", "tenus depuis Genève."],
-    h1En: ["Your social media,", "run from Geneva."],
-    libelle: "Réseaux sociaux",
-    libelleEn: "Social media",
-    seoTitre: "Réseaux sociaux pour PME à Genève",
-    seoTitreEn: "Social media for small businesses in Geneva",
-    seoDescription:
-      "Calendrier, création, rédaction, publication et suivi de vos réseaux sociaux, depuis Genève. Vous validez le mois, vous ne produisez rien. Sur devis.",
-    seoDescriptionEn:
-      "Calendar, visuals, wording, posting and replies for your social media, from Geneva. You approve the month, you produce nothing. Priced by quote.",
-    serviceType: "Production et gestion de réseaux sociaux",
-    serviceTypeEn: "Social media production and management",
-    resout:
-      "Votre page existe, elle n'a pas bougé depuis des mois, et vous savez très bien pourquoi : ce n'est jamais la priorité de la semaine. Publier une fois ne coûte rien ; publier chaque semaine pendant un an, c'est un métier. Ici la ligne est prise en entier : le calendrier du mois vous est proposé, vous le validez, et il part — visuels, textes, publication aux heures utiles, réponses aux commentaires et aux messages. Vous validez le mois, vous ne produisez rien.",
-    resoutEn:
-      "Your page exists, it has not moved in months, and you know exactly why: it is never the priority of the week. Posting once costs nothing; posting every week for a year is a job in itself. Here the whole of it is taken on: you are shown the month's calendar, you approve it, and it goes out — visuals, wording, posting at the hours that matter, replies to comments and messages. You approve the month, you produce nothing.",
-    pieces: [
-      {
-        slug: "reseaux-sociaux",
-        quoi: "Le calendrier du mois vous est proposé, vous le validez, et il part. Visuels, textes, publication aux heures utiles, réponses aux commentaires et aux messages : la ligne est tenue de bout en bout. La production est faite avec un partenaire de production du studio, et c'est le studio qui vous rend le travail.",
-        /**
-         * « de bout en bout » NE DEVIENT PAS « end-to-end ». Le terme est
-         * sature chez les concurrents et interdit par le glossaire anglais §4 ;
-         * la phrase dit donc ou la chaine commence et ou elle finit, ce qui est
-         * plus concret que l expression francaise.
-         */
-        quoiEn:
-          "You are shown the month's calendar, you approve it, and it goes out. Visuals, wording, posting at the hours that matter, replies to comments and messages: the whole of it is held, from the calendar to the last reply. The production is done with a production partner of the studio, and it is the studio that hands the work back to you.",
-        produit: [
-          "Un calendrier mensuel proposé à l'avance, et validé par vous",
-          "Les visuels et les textes, tenus dans votre identité",
-          "La publication programmée, sans que vous ayez à y penser",
-          "Le suivi des commentaires et des messages reçus",
-          "Un point sur ce qui a été publié, et sur ce qu'on change le mois suivant",
-        ],
-        produitEn: [
-          "A monthly calendar put to you in advance, and approved by you",
-          "The visuals and the wording, held to your identity",
-          "The posting scheduled, without you having to think about it",
-          "Comments and incoming messages kept up with",
-          "A look back at what went out, and at what changes the month after",
-        ],
-        raisonDevis:
-          "Le volume décide de tout : quelques publications par mois sur un seul réseau et un rythme soutenu sur trois réseaux avec de la vidéo ne se produisent pas dans le même temps. Le devis part du rythme que vous voulez tenir, pas d'un forfait qui n'irait à personne.",
-        raisonDevisEn:
-          "Volume decides everything: a few posts a month on one network and a steady rhythm on three networks with video do not take the same time to make. The quote starts from the rhythm you want to keep, not from a flat rate that would suit nobody.",
-      },
-    ],
-    horsPerimetre: [
-      {
-        quoi: "La publicité payante et son budget média",
-        quoiEn: "Paid advertising and its media budget",
-        href: null,
-        ou: "hors catalogue",
-        ouEn: "not in the catalogue",
-      },
-      {
-        quoi: "Les photos et les vidéos à prendre sur place",
-        quoiEn: "The photographs and videos to be taken on site",
-        href: "/services/identite",
-        ou: "Identité & photographie",
-        ouEn: "Identity & photography",
-      },
-      {
-        quoi: "Le site vers lequel ces publications renvoient",
-        quoiEn: "The site these posts point to",
-        href: "/services",
-        ou: "Les formules de site",
-        ouEn: "The site packages",
-      },
-      {
-        quoi: "Les supports imprimés de la même campagne",
-        quoiEn: "The printed pieces for the same campaign",
-        href: "/services/imprimes",
-        ou: "Imprimés & signalétique",
-        ouEn: "Print & signage",
-      },
-    ],
-    questions: [
-      {
-        q: "Vous publiez à ma place, ou je dois valider chaque publication ?",
-        qEn: "Do you post for me, or do I have to approve every post?",
-        r: "Vous validez le calendrier du mois, une fois, et ensuite ça part. Si vous préférez relire chaque publication avant qu'elle sorte, c'est possible aussi — ça se décide au départ, pas en cours de route.",
-        rEn: "You approve the month's calendar, once, and after that it goes out. If you would rather read every post before it appears, that works too — it is decided at the start, not halfway through.",
-      },
-      {
-        q: "Qui fait le travail ?",
-        qEn: "Who does the work?",
-        r: "La production est faite avec un partenaire de production du studio. C'est nous qui portons le calendrier, qui vous répondons et qui vous rendons le travail : vous n'avez qu'une conversation à suivre.",
-        rEn: "The production is done with a production partner of the studio. We are the ones who carry the calendar, who answer you and who hand the work back: there is only one conversation for you to follow.",
-      },
-      {
-        q: "Je n'ai pas de site chez vous. C'est bloquant ?",
-        qEn: "My site isn't one of yours. Is that a problem?",
-        r: "Non. La ligne se prend seule, sans site chez nous. Si vous en avez un ailleurs, les publications renvoient dessus — il faut simplement qu'il tienne debout sur un téléphone, sinon le trafic qu'on lui envoie ne sert à rien.",
-        rEn: "No. This can be taken on its own, with no site of ours behind it. If you have one elsewhere, the posts point to it — it just has to hold up on a phone, otherwise sending people to it achieves nothing.",
-      },
-    ],
-    amorce: whatsapp(
-      "Bonjour, j'aimerais un devis pour la production de mes réseaux sociaux.",
-    ),
-    amorceEn: whatsapp("Hello, I'd like a quote for running my social media."),
-    sujet: "devis-reseaux-sociaux",
-  },
-
-  /* ------------------------------------------------------------------ */
-  suivi: {
-    h1: ["Suivi et hébergement", "de votre site, à Genève."],
-    h1En: ["Upkeep and hosting", "for your site, in Geneva."],
-    libelle: "Hébergement et suivi",
-    libelleEn: "Hosting and upkeep",
-    seoTitre: "Suivi et hébergement de site à Genève",
-    seoTitreEn: "Site upkeep and hosting in Geneva",
-    seoDescription:
-      "Hébergement, domaine, mises à jour, sauvegardes et version anglaise de votre site, à Genève. Le suivi démarre la 2ᵉ année, prix TVA comprise.",
-    seoDescriptionEn:
-      "Hosting, domain, updates, backups and the English version of your site, in Geneva. Upkeep starts in the second year, prices VAT included.",
-    serviceType: "Hébergement, maintenance et traduction de site web",
-    /**
-     * « maintenance » DISPARAIT EN ANGLAIS, alors qu il figure en francais.
-     * Le glossaire anglais l interdit explicitement au profit de `upkeep`, et
-     * l interdit porte sur le MOT ANGLAIS, pas sur le mot francais traduit :
-     * l ecrire ici le ferait rentrer par la donnee structuree, c est-a-dire par
-     * la porte que personne ne relit.
-     */
-    // « maintenance », et non « upkeep », ALORS QUE LE GLOSSAIRE L INTERDIT.
-    // serviceType est une donnee structuree : son lecteur est une machine,
-    // pas un visiteur. « Website maintenance » est un type de service
-    // reconnu ; « upkeep » ne l est pas. Le glossaire gouverne ce qu un
-    // humain lit a l ecran, pas les champs lus par les moteurs. C est le
-    // SEUL endroit du site ou le mot est permis — voir glossaire §7.
-    serviceTypeEn: "Website hosting, maintenance and translation",
-    resout:
-      "Un site n'est pas un objet qu'on pose et qu'on oublie : il s'héberge, il se met à jour, il se sauvegarde, et le nom de domaine se renouvelle chaque année sous peine de tout perdre d'un coup. Le suivi prend ça en charge pour que vous n'ayez plus à y penser — et pour qu'il reste quelqu'un à qui écrire l'année d'après, quand un tarif change ou qu'une prestation s'ajoute. Il démarre la deuxième année : la première est comprise dans le prix du site. La version anglaise se prend ici aussi, et elle s'ajoute à ce qui est en ligne sans rien refaire.",
-    resoutEn:
-      "A site is not something you put down and forget: it has to be hosted, updated and backed up, and the domain name has to be renewed every year or the lot goes at once. Upkeep takes that on so you no longer have to think about it — and so there is still someone to write to the year after, when a rate changes or a service is added. It starts in the second year: the first is included in the price of the site. The English version is taken here too, and it is added to what is already online without redoing anything.",
-    pieces: [
-      {
-        slug: "hebergement",
-        quoi: "Le suivi des deux premières formules de site. L'hébergement, le nom de domaine renouvelé, les mises à jour, les sauvegardes et le certificat de sécurité. Il démarre la deuxième année : la première est comprise dans le prix du site.",
-        quoiEn:
-          "The upkeep for the first two site packages. Hosting, the domain name renewed, the updates, the backups and the security certificate. It starts in the second year: the first is included in the price of the site.",
-        produit: [
-          "L'hébergement du site",
-          "Le nom de domaine renouvelé — il reste à votre nom, et il vous suit si vous partez",
-          "Les mises à jour et le certificat de sécurité",
-          "Les sauvegardes, pour pouvoir revenir en arrière",
-        ],
-        produitEn: [
-          "Hosting for the site",
-          "The domain name renewed — it stays in your name, and it goes with you if you leave",
-          "The updates and the security certificate",
-          "The backups, so it is possible to go back",
-        ],
-        suitFormules: ["la-vitrine", "le-site"],
-      },
-      {
-        slug: "suivi-assistant",
-        quoi: "Le suivi de la formule qui embarque l'assistant. Tout ce qui précède, plus l'assistant lui-même — il consomme des appels d'API tous les mois — et vos modifications de contenu comprises : un tarif qui change, une prestation qui s'ajoute, une photo à remplacer.",
-        /**
-         * LA FORMULE EST DESIGNEE PAR PERIPHRASE, en anglais comme en francais.
-         * `L Assistant` ne se traduit pas et son nom est lu en base ; « the
-         * package that carries the assistant » designe le palier sans le
-         * nommer, exactement comme le francais.
-         */
-        quoiEn:
-          "The upkeep for the package that carries the assistant. Everything above, plus the assistant itself — it uses API calls every month — and your content changes included: a rate that changes, a service that is added, a photograph to replace.",
-        produit: [
-          "Tout ce que comprend le suivi précédent",
-          "L'assistant maintenu en service, appels d'API compris",
-          "Vos modifications de contenu comprises",
-          "L'alerte sur votre téléphone et le tableau de bord des demandes, tenus",
-        ],
-        produitEn: [
-          "Everything the previous upkeep includes",
-          "The assistant kept in service, API calls included",
-          "Your content changes included",
-          "The alert on your phone and the enquiries dashboard, both kept running",
-        ],
-        suitFormules: ["l-assistant"],
-        obligatoire:
-          "L'assistant consomme des appels d'API tous les mois ; sans le suivi, il s'arrête.",
-        obligatoireEn:
-          "The assistant uses API calls every month; without the upkeep, it stops.",
-      },
-      {
-        /**
-         * ELLE EST ICI ET PLUS SOUS LA RESTAURATION. La ligne s appelait
-         * « Traduction de carte FR / EN » ; elle a ete renommee en base
-         * « Traduction du site FR / EN » — c est une prestation de site, et sa
-         * place est parmi ce qui s ajoute a un site deja en ligne. La laisser
-         * avec les cartes de restaurant faussait le rangement du catalogue,
-         * lib/catalogue-familles.ts compris, qui derive son index de ces
-         * `pieces`.
-         */
-        slug: "traduction",
-        quoi: "La version anglaise de votre site : rédigée et remise en page, pas passée à la machine. Genève travaille en deux langues, et l'anglais s'ajoute très bien à un site déjà en ligne — c'est pour ça que cette ligne se trouve ici. Si votre site est la formule qui embarque l'assistant, elle y est déjà comprise.",
-        quoiEn:
-          "The English version of your site: written and laid out again, not run through a machine. Geneva works in two languages, and English adds very well to a site that is already online — which is why this sits here. If your site is the package that carries the assistant, it is already included.",
-        produit: [
-          "La version anglaise rédigée, section par section",
-          "La mise en page refaite : l'anglais n'occupe pas la même place que le français",
-          "Les titres, les libellés de formulaire et les messages traduits eux aussi",
-          "Le sélecteur de langue posé sur le site, et les métadonnées de la version anglaise",
-        ],
-        produitEn: [
-          "The English version written, section by section",
-          "The layout redone: English does not take up the same room as French",
-          "The headings, the form labels and the messages translated as well",
-          "The language switch put on the site, and the metadata for the English version",
-        ],
-        raisonDevis:
-          "Le prix suit le nombre de signes et le nombre de pages : une page unique n'est pas un site de six sections, et la mise en page est à refaire dans les deux cas. Une carte de restaurant se traduit aussi — ça se dit au devis.",
-        raisonDevisEn:
-          "The price follows the number of characters and the number of pages: a single page is not a site of six sections, and the layout has to be redone either way. A restaurant menu can be translated too — that is said on the quote.",
-      },
-    ],
-    horsPerimetre: [
-      {
-        quoi: "La refonte du site elle-même, et les trois formules",
-        quoiEn: "The rebuild of the site itself, and the three packages",
-        href: "/services",
-        ou: "Les formules de site",
-        ouEn: "The site packages",
-      },
-      {
-        quoi: "Une page de plus, une fonction qui n'existait pas au départ",
-        quoiEn: "One more page, a function that was not there at the start",
-        href: "/services",
-        ou: "Le catalogue",
-        ouEn: "The catalogue",
-      },
-      {
-        quoi: "La production de vos réseaux sociaux au mois",
-        quoiEn: "Running your social media by the month",
-        href: "/services/reseaux-sociaux",
-        ou: "Réseaux sociaux",
-        ouEn: "Social media",
-      },
-      {
-        quoi: "La reprise d'un site fait ailleurs",
-        quoiEn: "Taking over a site made elsewhere",
-        href: null,
-        ou: "à regarder avant d'être chiffré",
-        ouEn: "to be looked at before it can be quoted",
-      },
-    ],
-    questions: [
-      {
-        q: "Le suivi est-il obligatoire ?",
-        qEn: "Is the upkeep compulsory?",
-        r: "Avec les deux premières formules, non : le site est à vous, et vous pouvez l'héberger ailleurs. Avec la formule qui embarque l'assistant, oui — c'est le prix affiché ci-dessus, et il est annoncé à la signature, pas découvert après. L'assistant consomme des appels d'API en permanence ; sans le suivi, il s'arrête.",
-        /**
-         * ELLE RENVOIE AU « prix affiche ci-dessus » ET NE LE RECOPIE PAS, en
-         * anglais comme en francais. Aucun montant n est ecrit dans ce fichier
-         * — ils viennent tous de Postgres —, et un chiffre recopie dans une
-         * phrase de FAQ est un chiffre qui devient faux le jour ou la base
-         * change. C est aussi ce qui evite d avoir a coller « VAT included »
-         * dans une reponse de FAQ.
-         */
-        rEn: "With the first two packages, no: the site is yours, and you can host it elsewhere. With the package that carries the assistant, yes — it is the price shown above, and it is stated when you sign, not discovered afterwards. The assistant uses API calls all the time; without the upkeep, it stops.",
-      },
-      {
-        q: "À partir de quand est-ce que ça se paie ?",
-        qEn: "When does it start being paid for?",
-        r: "La deuxième année. La première est comprise dans le prix du site, assistant compris. Le renouvellement se joue donc après douze mois de service rendu, pas au moment où vous décidez d'acheter.",
-        rEn: "The second year. The first is included in the price of the site, assistant included. So the renewal comes up after twelve months of service already given, not at the moment you decide to buy.",
-      },
-      {
-        q: "Et si je m'en vais ?",
-        qEn: "And if I leave?",
-        r: "Le nom de domaine est à votre nom : il vous appartient et il vous suit. Le site aussi. Le suivi s'arrête, et vous repartez avec ce que vous avez payé — il n'y a rien à récupérer chez nous.",
-        rEn: "The domain name is in your name: it belongs to you and it goes with you. So does the site. The upkeep stops, and you leave with what you paid for — there is nothing of yours left with us to get back.",
-      },
-    ],
-    amorce: whatsapp("Bonjour, j'aimerais un devis pour le suivi de mon site."),
-    amorceEn: whatsapp("Hello, I'd like a quote for the upkeep of my site."),
-    sujet: "devis-suivi",
-  },
-
-  /* ------------------------------------------------------------------ */
-  restauration: {
-    h1: ["Restaurants et cafés,", "à Genève."],
-    h1En: ["Restaurants and cafés,", "in Geneva."],
-    libelle: "Restaurants et cafés",
-    libelleEn: "Restaurants and cafés",
-    seoTitre: "Cartes et supports de restaurant à Genève",
-    seoTitreEn: "Restaurant menus and printed pieces in Geneva",
-    seoDescription:
-      "La carte repensée avec sa version en ligne et son QR, chevalets, carte de fidélité, bons cadeaux et supports de saison, pour un établissement genevois.",
-    seoDescriptionEn:
-      "The menu rethought with its online version and QR code, table tents, loyalty card, gift vouchers and seasonal pieces, for a Geneva restaurant or café.",
-    serviceType: "Supports imprimés et numériques pour la restauration",
-    serviceTypeEn: "Printed and digital pieces for restaurants and cafés",
-    resout:
-      "La carte est le document le plus lu de votre établissement, et c'est souvent celui qu'on refait le plus vite, entre deux services. Les prix ont bougé trois fois, des plats retirés y figurent encore, et la version en ligne date de l'an dernier. Cette ligne existe pour que la salle se tienne : la carte reprise en entier, avec ses fichiers d'impression et son QR ; ce qu'il y a sur les tables ; et ce qu'on donne au client avant qu'il parte. Elle se commande avec un site chez nous comme sans.",
-    resoutEn:
-      "The menu is the most-read document in your place, and it is often the one redone in the greatest hurry, between two services. Prices have moved three times, dishes you took off are still listed, and the online version dates from last year. This exists so that the room holds together: the whole menu reworked, with its print files and its QR code; what sits on the tables; and what is handed to the customer before they leave. It can be ordered whether or not your site is one of ours.",
-    pieces: [
       {
         slug: "la-carte",
         quoi: "La carte reprise en entier : l'ordre des sections, la hiérarchie, la lisibilité des prix, et la place des mentions obligatoires. Elle ressort en trois objets — les fichiers d'impression, une version en ligne lisible sur téléphone, et le QR qui l'ouvre.",
@@ -1051,32 +754,42 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
     ],
     horsPerimetre: [
       {
-        quoi: "Le site de l'établissement et sa prise de réservation",
-        quoiEn: "The site for the place and its table reservations",
-        href: "/services",
-        ou: "Les formules de site",
-        ouEn: "The site packages",
-      },
-      {
-        quoi: "Le logotype, la palette et l'enseigne",
-        quoiEn: "The logotype, the palette and the shopfront sign",
+        quoi: "Le logotype, la palette et les typographies que ces imprimés appliquent",
+        quoiEn:
+          "The logotype, the palette and the typefaces these printed pieces apply",
         href: "/services/identite",
         ou: "Identité & photographie",
         ouEn: "Identity & photography",
       },
       {
+        quoi: "Le site, et le formulaire de demande qui va avec",
+        quoiEn: "The site, and the enquiry form that goes with it",
+        href: "/services",
+        ou: "Les formules de site",
+        ouEn: "The site packages",
+      },
+      {
+        quoi: "L'enseigne, la vitrophanie grand format et le marquage de véhicule",
+        quoiEn:
+          "Shopfront signs, large-format window graphics and vehicle livery",
+        href: null,
+        ou: "hors catalogue",
+        ouEn: "not in the catalogue",
+      },
+
+      {
         quoi: "La production de vos réseaux sociaux au mois",
         quoiEn: "Running your social media by the month",
-        href: "/services/reseaux-sociaux",
-        ou: "Réseaux sociaux",
-        ouEn: "Social media",
+        href: "/services/identite",
+        ou: "Identité et réseaux",
+        ouEn: "Identity and social",
       },
       {
         quoi: "La version anglaise, du site comme de la carte",
         quoiEn: "The English version, of the site as well as the menu",
-        href: "/services/suivi",
-        ou: "Suivi & hébergement",
-        ouEn: "Upkeep & hosting",
+        href: "/services/site-web",
+        ou: "Site web",
+        ouEn: "Website",
       },
       {
         quoi: "Les plateformes de réservation et de commande en ligne",
@@ -1087,6 +800,32 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
       },
     ],
     questions: [
+      {
+        q: "Vous imprimez, ou je dois trouver un imprimeur ?",
+        qEn: "Do you print, or do I have to find a printer?",
+        r: "Les deux marchent. Pour les cartes de visite, le tirage est compris : nous commandons, nous contrôlons, vous recevez. Pour l'affiche, vous repartez avec le fichier prêt à imprimer et vous le donnez à qui vous voulez — ou nous nous en chargeons aussi, et ça se décide au devis.",
+        rEn: "Either works. For business cards, the print run is included: we order it, we check it, you receive it. For the poster, you leave with the print-ready file and give it to whoever you like — or we take care of that too, and it is decided on the quote.",
+      },
+      {
+        q: "Il me faut une affiche pour la semaine prochaine.",
+        qEn: "I need a poster for next week.",
+        r: "Le délai du studio est d'une semaine, et il court dès votre feu vert : vous n'avez rien à réunir avant de démarrer. Reste le tirage lui-même, qui suit le calendrier de l'imprimeur et non le nôtre — on le vérifie avant de lancer, pas après.",
+        /**
+         * LA SEULE OCCURRENCE DE « one week » DE CE FICHIER, et elle porte son
+         * point de depart dans la meme phrase — « from your go-ahead » —, comme
+         * l exige le guide de voix §5. Ne pas l etendre a un logotype, a une
+         * seance photo ou a une carte de restaurant : le positionnement ne
+         * porte ce delai que sur le site.
+         */
+        rEn: "The studio works to one week, and it runs from your go-ahead: you have nothing to gather before it starts. What is left is the printing itself, which follows the printer's schedule and not ours — we check that before anything goes to press, not after.",
+      },
+      {
+        q: "Je n'ai pas d'identité, juste un vieux logo.",
+        qEn: "I have no identity, just an old logo.",
+        r: "On fait avec. Un imprimé se dessine autour de ce qui existe, et s'il faut d'abord remettre le logo au propre, ça apparaît sur le devis plutôt que dans une surprise à la fin.",
+        rEn: "That works. A printed piece is designed around what exists, and if the logo has to be tidied up first, that appears on the quote rather than as a surprise at the end.",
+      },
+
       {
         q: "Je n'ai pas de site chez vous.",
         qEn: "My site isn't one of yours.",
@@ -1106,14 +845,195 @@ export const FAMILLES: Record<FamilleSlug, Famille> = {
         rEn: "That is decided on the quote. We can deliver print-ready files for you to give to your usual printer, or take care of the print run and deliver the finished pieces.",
       },
     ],
-    amorce: whatsapp(
-      "Bonjour, j'aimerais un devis pour les supports de mon établissement.",
-    ),
-    amorceEn: whatsapp(
-      "Hello, I'd like a quote for the pieces for my restaurant.",
-    ),
-    sujet: "devis-restauration",
+    amorce: whatsapp("Bonjour, j'aimerais un devis pour mes imprimés."),
+    amorceEn: whatsapp("Hello, I'd like a quote for my print work."),
+    sujet: "devis-imprimes",
   },
+
+  /* ------------------------------------------------------------------ */
+  /* ------------------------------------------------------------------ */
+  "site-web": {
+    h1: ["Votre site web,", "à Genève."],
+    h1En: ["Your website,", "in Geneva."],
+    libelle: "Site web",
+    libelleEn: "Website",
+    seoTitre: "Site web à Genève — création, hébergement et suivi",
+    seoTitreEn: "Website in Geneva — build, hosting and upkeep",
+    seoDescription:
+      "Hébergement, domaine, mises à jour, sauvegardes et version anglaise de votre site, à Genève. Le suivi démarre la 2ᵉ année, prix TVA comprise.",
+    seoDescriptionEn:
+      "Hosting, domain, updates, backups and the English version of your site, in Geneva. Upkeep starts in the second year, prices VAT included.",
+    serviceType: "Création, hébergement et suivi de site web",
+    /**
+     * « maintenance » DISPARAIT EN ANGLAIS, alors qu il figure en francais.
+     * Le glossaire anglais l interdit explicitement au profit de `upkeep`, et
+     * l interdit porte sur le MOT ANGLAIS, pas sur le mot francais traduit :
+     * l ecrire ici le ferait rentrer par la donnee structuree, c est-a-dire par
+     * la porte que personne ne relit.
+     */
+    // « maintenance », et non « upkeep », ALORS QUE LE GLOSSAIRE L INTERDIT.
+    // serviceType est une donnee structuree : son lecteur est une machine,
+    // pas un visiteur. « Website maintenance » est un type de service
+    // reconnu ; « upkeep » ne l est pas. Le glossaire gouverne ce qu un
+    // humain lit a l ecran, pas les champs lus par les moteurs. C est le
+    // SEUL endroit du site ou le mot est permis — voir glossaire §7.
+    serviceTypeEn: "Website design, hosting and upkeep",
+    resout:
+      "Un site n'est pas un objet qu'on pose et qu'on oublie : il s'héberge, il se met à jour, il se sauvegarde, et le nom de domaine se renouvelle chaque année sous peine de tout perdre d'un coup. Le suivi prend ça en charge pour que vous n'ayez plus à y penser — et pour qu'il reste quelqu'un à qui écrire l'année d'après, quand un tarif change ou qu'une prestation s'ajoute. Il démarre la deuxième année : la première est comprise dans le prix du site. La version anglaise se prend ici aussi, et elle s'ajoute à ce qui est en ligne sans rien refaire.",
+    resoutEn:
+      "A site is not something you put down and forget: it has to be hosted, updated and backed up, and the domain name has to be renewed every year or the lot goes at once. Upkeep takes that on so you no longer have to think about it — and so there is still someone to write to the year after, when a rate changes or a service is added. It starts in the second year: the first is included in the price of the site. The English version is taken here too, and it is added to what is already online without redoing anything.",
+    pieces: [
+      {
+        slug: "hebergement",
+        quoi: "Le suivi des deux premières formules de site. L'hébergement, le nom de domaine renouvelé, les mises à jour, les sauvegardes et le certificat de sécurité. Il démarre la deuxième année : la première est comprise dans le prix du site.",
+        quoiEn:
+          "The upkeep for the first two site packages. Hosting, the domain name renewed, the updates, the backups and the security certificate. It starts in the second year: the first is included in the price of the site.",
+        produit: [
+          "L'hébergement du site",
+          "Le nom de domaine renouvelé — il reste à votre nom, et il vous suit si vous partez",
+          "Les mises à jour et le certificat de sécurité",
+          "Les sauvegardes, pour pouvoir revenir en arrière",
+        ],
+        produitEn: [
+          "Hosting for the site",
+          "The domain name renewed — it stays in your name, and it goes with you if you leave",
+          "The updates and the security certificate",
+          "The backups, so it is possible to go back",
+        ],
+        suitFormules: ["la-vitrine", "le-site"],
+      },
+      {
+        slug: "suivi-assistant",
+        quoi: "Le suivi de la formule qui embarque l'assistant. Tout ce qui précède, plus l'assistant lui-même — il consomme des appels d'API tous les mois — et vos modifications de contenu comprises : un tarif qui change, une prestation qui s'ajoute, une photo à remplacer.",
+        /**
+         * LA FORMULE EST DESIGNEE PAR PERIPHRASE, en anglais comme en francais.
+         * `L Assistant` ne se traduit pas et son nom est lu en base ; « the
+         * package that carries the assistant » designe le palier sans le
+         * nommer, exactement comme le francais.
+         */
+        quoiEn:
+          "The upkeep for the package that carries the assistant. Everything above, plus the assistant itself — it uses API calls every month — and your content changes included: a rate that changes, a service that is added, a photograph to replace.",
+        produit: [
+          "Tout ce que comprend le suivi précédent",
+          "L'assistant maintenu en service, appels d'API compris",
+          "Vos modifications de contenu comprises",
+          "L'alerte sur votre téléphone et le tableau de bord des demandes, tenus",
+        ],
+        produitEn: [
+          "Everything the previous upkeep includes",
+          "The assistant kept in service, API calls included",
+          "Your content changes included",
+          "The alert on your phone and the enquiries dashboard, both kept running",
+        ],
+        suitFormules: ["l-assistant"],
+        obligatoire:
+          "L'assistant consomme des appels d'API tous les mois ; sans le suivi, il s'arrête.",
+        obligatoireEn:
+          "The assistant uses API calls every month; without the upkeep, it stops.",
+      },
+      {
+        /**
+         * ELLE EST ICI ET PLUS SOUS LA RESTAURATION. La ligne s appelait
+         * « Traduction de carte FR / EN » ; elle a ete renommee en base
+         * « Traduction du site FR / EN » — c est une prestation de site, et sa
+         * place est parmi ce qui s ajoute a un site deja en ligne. La laisser
+         * avec les cartes de restaurant faussait le rangement du catalogue,
+         * lib/catalogue-familles.ts compris, qui derive son index de ces
+         * `pieces`.
+         */
+        slug: "traduction",
+        quoi: "La version anglaise de votre site : rédigée et remise en page, pas passée à la machine. Genève travaille en deux langues, et l'anglais s'ajoute très bien à un site déjà en ligne — c'est pour ça que cette ligne se trouve ici. Si votre site est la formule qui embarque l'assistant, elle y est déjà comprise.",
+        quoiEn:
+          "The English version of your site: written and laid out again, not run through a machine. Geneva works in two languages, and English adds very well to a site that is already online — which is why this sits here. If your site is the package that carries the assistant, it is already included.",
+        produit: [
+          "La version anglaise rédigée, section par section",
+          "La mise en page refaite : l'anglais n'occupe pas la même place que le français",
+          "Les titres, les libellés de formulaire et les messages traduits eux aussi",
+          "Le sélecteur de langue posé sur le site, et les métadonnées de la version anglaise",
+        ],
+        produitEn: [
+          "The English version written, section by section",
+          "The layout redone: English does not take up the same room as French",
+          "The headings, the form labels and the messages translated as well",
+          "The language switch put on the site, and the metadata for the English version",
+        ],
+        raisonDevis:
+          "Le prix suit le nombre de signes et le nombre de pages : une page unique n'est pas un site de six sections, et la mise en page est à refaire dans les deux cas. Une carte de restaurant se traduit aussi — ça se dit au devis.",
+        raisonDevisEn:
+          "The price follows the number of characters and the number of pages: a single page is not a site of six sections, and the layout has to be redone either way. A restaurant menu can be translated too — that is said on the quote.",
+      },
+    ],
+    horsPerimetre: [
+      {
+        quoi: "La refonte du site elle-même, et les trois formules",
+        quoiEn: "The rebuild of the site itself, and the three packages",
+        href: "/services",
+        ou: "Les formules de site",
+        ouEn: "The site packages",
+      },
+      {
+        quoi: "Une page de plus, une fonction qui n'existait pas au départ",
+        quoiEn: "One more page, a function that was not there at the start",
+        href: "/services",
+        ou: "Le catalogue",
+        ouEn: "The catalogue",
+      },
+      {
+        quoi: "La production de vos réseaux sociaux au mois",
+        quoiEn: "Running your social media by the month",
+        href: "/services/identite",
+        ou: "Identité et réseaux",
+        ouEn: "Identity and social",
+      },
+      {
+        quoi: "La reprise d'un site fait ailleurs",
+        quoiEn: "Taking over a site made elsewhere",
+        href: null,
+        ou: "à regarder avant d'être chiffré",
+        ouEn: "to be looked at before it can be quoted",
+      },
+    ],
+    questions: [
+      {
+        q: "Le suivi est-il obligatoire ?",
+        qEn: "Is the upkeep compulsory?",
+        r: "Avec les deux premières formules, non : le site est à vous, et vous pouvez l'héberger ailleurs. Avec la formule qui embarque l'assistant, oui — c'est le prix affiché ci-dessus, et il est annoncé à la signature, pas découvert après. L'assistant consomme des appels d'API en permanence ; sans le suivi, il s'arrête.",
+        /**
+         * ELLE RENVOIE AU « prix affiche ci-dessus » ET NE LE RECOPIE PAS, en
+         * anglais comme en francais. Aucun montant n est ecrit dans ce fichier
+         * — ils viennent tous de Postgres —, et un chiffre recopie dans une
+         * phrase de FAQ est un chiffre qui devient faux le jour ou la base
+         * change. C est aussi ce qui evite d avoir a coller « VAT included »
+         * dans une reponse de FAQ.
+         */
+        rEn: "With the first two packages, no: the site is yours, and you can host it elsewhere. With the package that carries the assistant, yes — it is the price shown above, and it is stated when you sign, not discovered afterwards. The assistant uses API calls all the time; without the upkeep, it stops.",
+      },
+      {
+        q: "À partir de quand est-ce que ça se paie ?",
+        qEn: "When does it start being paid for?",
+        r: "La deuxième année. La première est comprise dans le prix du site, assistant compris. Le renouvellement se joue donc après douze mois de service rendu, pas au moment où vous décidez d'acheter.",
+        rEn: "The second year. The first is included in the price of the site, assistant included. So the renewal comes up after twelve months of service already given, not at the moment you decide to buy.",
+      },
+      {
+        q: "Et si je m'en vais ?",
+        qEn: "And if I leave?",
+        r: "Le nom de domaine est à votre nom : il vous appartient et il vous suit. Le site aussi. Le suivi s'arrête, et vous repartez avec ce que vous avez payé — il n'y a rien à récupérer chez nous.",
+        rEn: "The domain name is in your name: it belongs to you and it goes with you. So does the site. The upkeep stops, and you leave with what you paid for — there is nothing of yours left with us to get back.",
+      },
+    ],
+    amorce: whatsapp("Bonjour, j'aimerais un devis pour le suivi de mon site."),
+    amorceEn: whatsapp("Hello, I'd like a quote for the upkeep of my site."),
+    sujet: "devis-site-web",
+    video: {
+      nom: "site-web",
+      legende:
+        "Démonstration — un site fait pour cette page, pour une compagnie qui n'existe pas.",
+      legendeEn:
+        "Demonstration — a site made for this page, for a company that does not exist.",
+    },
+  },
+
+  /* ------------------------------------------------------------------ */
 };
 
 /**

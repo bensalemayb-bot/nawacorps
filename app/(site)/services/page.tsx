@@ -250,52 +250,36 @@ type TextesCatalogue = {
  * build vaut mieux qu un bloc muet en production.
  */
 const BLOCS: TextesCatalogue["blocs"] = {
-  identite: {
-    titre: ["Ce qui fait", "qu'on vous reconnaît."],
-    lien: "Voir l'identité",
+  "site-web": {
+    titre: ["Le site vit,", "et il est tenu."],
+    lien: "Voir le site web",
   },
   imprimes: {
     titre: ["Ce qui se voit", "ailleurs qu'à l'écran."],
     lien: "Voir les imprimés",
   },
-  "reseaux-sociaux": {
-    titre: ["Vos réseaux,", "tenus au mois."],
-    lien: "Voir les réseaux sociaux",
-  },
-  suivi: {
-    titre: ["Le site vit,", "et il est tenu."],
-    lien: "Voir le suivi",
-  },
-  restauration: {
-    titre: ["La ligne", "restauration."],
-    lien: "Voir la restauration",
+  identite: {
+    titre: ["Ce qui fait", "qu'on vous reconnaît."],
+    lien: "Voir l'identité et les réseaux",
   },
 };
 
 /** Les memes cinq blocs en anglais. Meme regle, meme garde de type. */
 const BLOCS_EN: TextesCatalogue["blocs"] = {
-  identite: {
-    titre: ["What makes you", "recognisable."],
-    lien: "See identity and photographs",
+  "site-web": {
+    titre: ["The site lives on,", "and it is looked after."],
+    lien: "See the website line",
   },
   imprimes: {
     // « print », jamais « printed collateral » (glossaire §3).
     titre: ["What is seen", "away from a screen."],
-    lien: "See print and signage",
+    lien: "See print",
   },
-  "reseaux-sociaux": {
+  identite: {
     // « kept up », et non « upkeep » : ce dernier ne vaut que pour
     // l abonnement mensuel du site (glossaire §7).
-    titre: ["Your social media,", "kept up by the month."],
-    lien: "See social media",
-  },
-  suivi: {
-    titre: ["The site lives on,", "and it is looked after."],
-    lien: "See hosting and upkeep",
-  },
-  restauration: {
-    titre: ["The restaurant", "line."],
-    lien: "See restaurants and cafés",
+    titre: ["What makes you", "recognisable."],
+    lien: "See identity and social media",
   },
 };
 
@@ -303,7 +287,7 @@ const TEXTES: Record<Locale, TextesCatalogue> = {
   fr: {
     seoTitre: "Services et tarifs à Genève",
     seoDescription:
-      "Le catalogue du studio genevois : trois formules de site, le suivi mensuel, le logo et les imprimés, les réseaux sociaux et les supports de restaurant.",
+      "Le catalogue du studio genevois : trois formules de site, l'hébergement et le suivi, les imprimés et les supports de restaurant, le logo, les photos et les réseaux sociaux.",
     meta: "Catalogue",
     h1: ["Tout ce que fait", "le studio, à Genève."],
     chapo:

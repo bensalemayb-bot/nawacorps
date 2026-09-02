@@ -42,8 +42,8 @@ import "@/app/services.css";
 // echouerait sur P1001.
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = metadataFamille("suivi", "en");
+export const metadata: Metadata = metadataFamille("site-web", "en");
 
 export default function SuiviEn() {
-  return <PageFamille slug="suivi" locale="en" />;
+  return <PageFamille slug="site-web" locale="en" />;
 }

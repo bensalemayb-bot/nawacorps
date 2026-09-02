@@ -410,7 +410,7 @@ const fr = {
     titre05: "Restaurants et cafés",
     corps05:
       "Pour les cafés et les restaurants : la carte reprise en entier — l'ordre des sections, la lisibilité des prix, la place des mentions obligatoires —, avec ses fichiers d'impression, sa version en ligne et son QR. Puis ce qui tient la salle : chevalets de table, carte de fidélité, bons cadeaux et supports de saison. Une ligne à part, tenue depuis le début, et ouverte à qui n'a pas de site chez nous. Sur devis.",
-    lien05: "Voir la ligne restaurant →",
+    lien05: "Voir les imprimés →",
   },
 
   /**

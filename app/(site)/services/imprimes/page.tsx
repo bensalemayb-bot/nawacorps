@@ -9,7 +9,7 @@ import { metadataFamille } from "@/lib/familles";
 import "@/app/services.css";
 
 /**
- * /services/imprimes — Imprimés & signalétique
+ * /services/imprimes — Imprimés
  *
  * Trois prestations : la carte de visite (conception ET tirage), l affiche
  * d evenement et le sticker vitrine avec son QR. C est la seule des cinq

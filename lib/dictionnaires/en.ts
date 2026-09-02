@@ -287,7 +287,7 @@ const en: Dictionnaire = {
     titre05: "Restaurants and cafés",
     corps05:
       "For cafés and restaurants: the menu reworked in full — the order of the sections, how legible the prices are, where the compulsory notices go — with its print files, its online version and its QR code. Then what holds the room: table tents, loyalty card, gift vouchers and seasonal pieces. A line of its own, kept up since the start, and open to anyone who has no site with us. On request.",
-    lien05: "See the restaurant line →",
+    lien05: "See print →",
   },
 
   /**

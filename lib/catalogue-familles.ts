@@ -50,11 +50,17 @@ export const CATEGORIES_FAMILLES = ["continu", "annee", "saison"] as const;
  * `annee` retombe sur les imprimes et non sur l identite : les lignes de cette
  * categorie qui ne sont pas nommees ailleurs sont des objets qu on fait
  * imprimer, et c est ce qu on ajoutera le plus probablement demain.
+ *
+ * `saison` retombe DESORMAIS SUR LES IMPRIMES AUSSI (2 septembre 2026) : la
+ * famille « restauration » a ete absorbee par les imprimes, ou vivent
+ * maintenant la carte, les chevalets, la fidelite, les bons cadeaux et le pack
+ * saisonnier. Une ligne `saison` ajoutee demain est un support de restaurant,
+ * donc un imprime.
  */
 const FAMILLE_PAR_CATEGORIE: Record<string, FamilleSlug> = {
-  continu: "suivi",
+  continu: "site-web",
   annee: "imprimes",
-  saison: "restauration",
+  saison: "imprimes",
 };
 
 /**
@@ -93,11 +99,9 @@ const FAMILLE_PAR_SERVICE: Record<string, FamilleSlug> = Object.fromEntries(
 export type RangDeVitrine = "vitrine" | "second";
 
 const RANG_PAR_FAMILLE: Record<FamilleSlug, RangDeVitrine> = {
-  identite: "second",
+  "site-web": "vitrine",
   imprimes: "vitrine",
-  "reseaux-sociaux": "vitrine",
-  suivi: "second",
-  restauration: "second",
+  identite: "second",
 };
 
 /**
@@ -159,11 +163,12 @@ export function hrefFamille(slug: FamilleSlug): string {
  * le rende, app/(site)/services/page.tsx, ne l appelle donc pas pour lui et
  * l affiche sans lien.
  *
- * ATTENTION, LE SEGMENT EST PARTAGE. `reseaux-sociaux` est a la fois un slug de
- * famille et un slug de la table Service ; un segment statique l emporte
- * toujours sur le dynamique, et c est bien la page de famille qui repond. Ce
- * n est pas un lien mort — cette famille ne contient QUE cette ligne —, mais
- * aucune page produit distincte ne pourra jamais vivre a cette adresse.
+ * LE SEGMENT PARTAGE N EXISTE PLUS. `reseaux-sociaux` etait a la fois un slug
+ * de famille et un slug de la table Service, et la page de famille l emportait.
+ * Depuis le regroupement du 2 septembre 2026 il n est plus qu une ligne de la
+ * table, rattachee a la famille « identite » : cette fonction rend donc
+ * `/services/identite#reseaux-sociaux`, et l ancienne adresse est servie par
+ * une redirection permanente (next.config.ts) plutot que par un 404.
  */
 export function hrefService(slug: string): string {
   const famille = FAMILLE_PAR_SERVICE[slug];

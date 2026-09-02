@@ -1001,3 +1001,27 @@
   object-fit: cover;
   display: block;
 }
+
+/* LA DEMONSTRATION FILMEE D UNE FAMILLE (2 septembre 2026).
+   Elle occupe toute la largeur du texte plutot qu une demi-colonne : la video
+   est en 2,14:1, tres large, et la reduire de moitie rendrait illisible ce
+   qu elle montre — une page qui defile.
+   `aspect-ratio` porte sur le conteneur ET la video : sans lui, la hauteur
+   vaut zero jusqu a ce que les metadonnees arrivent, et tout ce qui suit
+   remonte puis redescend d un coup. */
+.fam-video {
+  margin: clamp(28px, 4vw, 48px) 0 0;
+}
+.fam-video video {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2474 / 1158;
+  display: block;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--bone-2);
+  object-fit: cover;
+}
+.fam-video .vg-cap {
+  margin-top: 10px;
+}

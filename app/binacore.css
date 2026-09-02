@@ -706,7 +706,7 @@ a.cat-it:hover{border-color:var(--ink);background:var(--bone-2);transform:transl
 .green .cat-it .px-devis{color:var(--brass-l)}
 /* LA FAMILLE EST NOMMEE AU PIED DE LA CARTE, et ce n est pas decoratif : la
    carte entiere est un lien, et un lien doit dire ou il mene. Sans ce libelle,
-   cliquer « Cartes de visite » ouvrait « Imprimés & signalétique » sans
+   cliquer « Cartes de visite » ouvrait « Imprimés » sans
    prevenir. Il n apparait que sur les cartes qui sont des liens. */
 .cat-it .go{margin-top:14px;font-size:.68rem;font-weight:600;letter-spacing:.14em;
   text-transform:uppercase;color:var(--brass)}

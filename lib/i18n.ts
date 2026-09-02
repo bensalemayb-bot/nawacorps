@@ -111,12 +111,16 @@ export const CHEMINS_TRADUITS: readonly string[] = [
   "/services/le-site",
   "/services/l-assistant",
 
-  // Les cinq familles de prestations.
-  "/services/identite",
+  // Les trois familles de prestations. Elles etaient cinq jusqu au
+  // 2 septembre 2026 : « restauration » a rejoint les imprimes,
+  // « reseaux-sociaux » l identite, et « suivi » s appelle « site-web ». Les
+  // trois adresses disparues sont servies par une redirection permanente
+  // (next.config.ts) et n ont donc PAS a figurer ici : cette liste sert aux
+  // alternates hreflang, et declarer une paire de langues pour une URL qui
+  // redirige ferait annoncer a Google une page qui n existe plus.
+  "/services/site-web",
   "/services/imprimes",
-  "/services/reseaux-sociaux",
-  "/services/restauration",
-  "/services/suivi",
+  "/services/identite",
 
   // Les pages de confiance et de conversion.
   "/studio",
