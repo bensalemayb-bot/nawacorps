@@ -13,11 +13,12 @@ declare global {
  * La logique et son ORDRE sont conserves a l'identique : un seul effet, pas de
  * useState, pas de decoupage en hooks.
  *
- * Les comparateurs .ba et le carrousel #car2 ne sont plus geres ici depuis B5 :
- * components/ui/feature-carousel.tsx les porte lui-meme.
+ * Les comparateurs .ba et le carrousel #car2 de la maquette ne sont plus geres
+ * ici depuis B5, et le carrousel a quitte le site le 24 octobre 2026 avec la
+ * page des demonstrations.
  *
- * Zero match encore tolere sur `[data-scale]` : la maquette le posait sur
- * .stack, que le composant du carrousel ne rend pas (ecart signale en B5).
+ * Zero match tolere sur `[data-scale]` : la maquette le posait sur .stack, que
+ * le site ne rend plus.
  * `footer.contact h2` a trouve sa cible depuis B7.
  *
  * Adaptations signalees, sans changement de comportement au runtime :
@@ -32,14 +33,10 @@ declare global {
  *    `[href^="#"]`. Depuis B7 le site a plusieurs pages : les liens du menu
  *    sont `/#ancre`, que `^=` ne matchait plus — le menu ne se serait plus
  *    referme au clic.
- *    DEPUIS QUE « Travaux » EST DEVENU « Démonstrations » ET A SA PROPRE
- *    PAGE, LE SELECTEUR NE MATCHE PLUS RIEN. Toutes les entrees du menu
- *    changent desormais de page : le document est remplace et html.menu-open
- *    part avec lui, donc il n y a plus rien a fermer au clic. Le burger et
- *    Échap referment toujours le menu. La ligne reste — elle ne coute rien et
- *    redeviendra utile a la premiere ancre remise au menu — mais elle ne doit
- *    plus etre lue comme le mecanisme de fermeture. .m-foot, lui, ne contient
- *    que wa.me et mailto:, sans `#`.
+ *    Le menu ne porte qu une ancre, « L offre » (`/#offres`) : sur
+ *    l accueil, ce selecteur referme le menu au clic ; depuis une autre page,
+ *    le document est remplace et html.menu-open part avec lui. Le burger et
+ *    Échap referment toujours le menu.
  */
 export default function Interactions() {
   // volontaire — portage verbatim du <script> de la maquette, aucune réécriture permise, voir décision B4
@@ -251,18 +248,23 @@ export default function Interactions() {
            pour toujours. La boucle porte sur TOUTES les lignes, pas sur la
            seule cliquee : un clic en referme d autres. Le selecteur vise
            l attribut plutot que `.row-h`, pour rester juste que le bouton soit
-           l en-tete lui-meme ou un bouton a l interieur du <h3>. */
-        document.querySelectorAll("[data-row]").forEach(function (r) { r.querySelector("[aria-expanded]")!.setAttribute("aria-expanded", String(r.classList.contains("open"))); });
+           l en-tete lui-meme ou un bouton a l interieur du <h3>.
+           MEME BOUCLE POUR `inert` : un corps replie (hauteur nulle, pas
+           display:none) garderait ses liens dans la tabulation, focus
+           invisible (WCAG 2.4.7). ServicesRows le rend `inert` au depart. */
+        document.querySelectorAll("[data-row]").forEach(function (r) {
+          var ouvert = r.classList.contains("open");
+          r.querySelector("[aria-expanded]")!.setAttribute("aria-expanded", String(ouvert));
+          var corps = r.querySelector<HTMLElement>(".row-b");
+          if (corps) corps.inert = !ouvert;
+        });
       });
     });
 
     /* ---------- comparateurs .ba + carrousel car2 ----------
-       Blocs RETIRES au bloc B5 : geres par components/ui/feature-carousel.tsx.
-       Le composant React rend id="car2" mais aucun des ids que ce code
-       attendait (chipList, stack, carIdx, carDesc, c2Prev, c2Next, car2Toggle).
-       Les conserver provoquait une TypeError sur null.addEventListener, en plus
-       de handlers concurrents sur les .ba et un autoplay duplique.
-       Le composant gere lui-meme la classe drag du curseur, via globalCursor(). */
+       Blocs RETIRES au bloc B5 : aucun des ids qu ils attendaient (chipList,
+       stack, carIdx, carDesc, c2Prev, c2Next, car2Toggle) n existe sur le site,
+       et les conserver provoquait une TypeError sur null.addEventListener. */
   }, []);
 
   return null;

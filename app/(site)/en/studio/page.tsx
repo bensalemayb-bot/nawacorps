@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import FooterContact from "@/components/FooterContact";
+import { METIERS } from "@/lib/metiers";
 import SchemaPage from "@/components/SchemaPage";
-import { dictionnaire } from "@/lib/dictionnaires";
 import { lien, LANGUE_HTML, type Locale } from "@/lib/i18n";
 import {
+  CONTACT,
   SITE_NAME,
   SITE_URL,
   alternatesPage,
@@ -12,66 +13,20 @@ import {
 } from "@/lib/site";
 
 /**
- * /en/studio — QUI EST LE STUDIO, POUR UN LECTEUR ANGLOPHONE DE GENEVE.
+ * /en/studio — WHO DOES THE WORK, pour un lecteur anglophone de Geneve.
  *
- * ELLE DIT LA MEME CHOSE QUE app/(site)/studio/page.tsx, dans le meme ordre :
- * qui fait le travail, comment ca se passe, ce que le studio sait faire, ce
- * qu'il refuse, et la seule preuve que le visiteur peut manipuler. Cinq
+ * Meme page que app/(site)/studio/page.tsx, dans le meme ordre : cinq
  * sections (01) a (05), un pied de page en (06). Une version anglaise qui
- * reordonnerait ne serait plus la meme page, et le couple `hreflang`
- * perdrait son sens.
+ * reordonnerait ne serait plus la meme page pour le couple `hreflang`.
+ * Textes : docs/agents/copy/studio.md, colonne EN.
  *
- * ELLE N'EST PAS UN CALQUE MOT A MOT. Le francais tient sa voix de tournures
- * qui n'ont pas d'equivalent — « la rentrée » — et le glossaire
- * (docs/agents/brand/glossaire-anglais.md §7) la tranche : elle se dit par son
- * moment, « when September comes round ».
+ * Memes interdits qu en francais : aucune reference, aucun avis, aucun
+ * effectif, aucun bureau, aucune mention du developpeur, aucun montant. Anglais
+ * britannique (`enquiry`), `we` pour le studio, jamais `our team`.
  *
- * DEUX DECISIONS DU 31 AOUT 2026 GOUVERNENT CE FICHIER.
- *  1. « NOUS » REMPLACE « JE » — `we`, `us`, `our` (glossaire §2, renverse).
- *     Cette page-ci ne s'est pas contentee de changer de personne : elle
- *     vendait le fait qu'UNE SEULE personne fasse tout — h1, section (01),
- *     « one pair of hands » en (03). Ces phrases-la sont REECRITES. Ce qui
- *     reste : le travail, ce qui est refuse, l'absence de bureau. Ce qui n'est
- *     PAS ajoute : aucun effectif, aucune equipe, aucun bureau, aucune
- *     anciennete — jamais `our team of X`, `our offices`, `since 20XX`.
- *  2. GOOGLE SORT DE L'OFFRE. La sixieme ligne de travail — « Google
- *     listing » — est retiree de la section (03), qui en compte donc cinq. Le
- *     mot peut decrire un fait ; il ne nomme plus une chose vendue.
+ * Pas d image : voir le docblock de la page francaise.
  *
- * LES REGLES DE VOIX QUI GOUVERNENT CE FICHIER, et qu'un relecteur doit
- * pouvoir verifier ligne par ligne :
- *  - `we`, `us`, `our`. `I`, `me`, `my` ne s'ecrivent plus dans la voix du
- *    studio. Le piege a change de bord : l'anglais commercial fabrique tout
- *    seul « our team », « our offices », « since 2019 » — et ceux-la restent
- *    interdits, parce qu'un pluriel n'autorise rien de plus qu'un singulier.
- *  - Anglais BRITANNIQUE : `enquiry`, jamais `inquiry`.
- *  - `La Vitrine`, `Le Site`, `L'Assistant` NE SE TRADUISENT PAS, article
- *    compris — ce sont des noms propres (glossaire §5). Cette page n'en nomme
- *    qu'un, L'Assistant, en section (05).
- *  - AUCUN DELAI EN HEURES. « one week » existe seul comme duree, et il ne
- *    VOYAGE jamais seul : la meme unite de lecture porte soit son point de
- *    depart, soit ce qui est livre. C'est ce que fait le bandeau .facts, et
- *    c'est aussi pour cela que la colonne « From your go-ahead » est a cote.
- *  - `Geneva`. Jamais « Switzerland », jamais « across Europe ».
- *  - AUCUNE COMPARAISON, aucun concurrent nomme ou sous-entendu.
- *
- * AUCUNE ANCIENNETE, AUCUN EFFECTIF, AUCUNE REFERENCE CLIENT N'EST INVENTEE.
- * Le studio est jeune et sans bureau ; le francais le dit sans detour, cette
- * page aussi. La LCD art. 3 vise les indications trompeuses et elle ne
- * s'arrete pas a la frontiere de la langue.
- *
- * AUCUN MONTANT ICI, ni a l'ecran ni en donnee structuree — donc aucune
- * mention de TVA a porter. Les prix vivent en base (table Service) et se
- * lisent sur /en/services. La page ne lit donc PAS Postgres et reste
- * statique : pas de force-dynamic, et `next build` passe base eteinte.
- *
- * ZERO CLASSE NOUVELLE : .wrap, .sec-head, .meta, .index, h1.t / h2.t, .lede,
- * .studio-txt, .facts, .prest-inc, .sm-grp, .c-row, .btn, .btn-line, .ar,
- * .lnk. Aucune regle n'est ajoutee a app/binacore.css ni ailleurs.
- *
- * PAS DE next/link : Interactions.tsx ne s'initialise qu'une fois, une
- * navigation client-side laisserait les [data-reveal] de la page d'arrivee a
- * opacity:0 (decision B7). Des <a> classiques, comme partout sur le public.
+ * PAS DE next/link (decision B7). Tous les liens internes passent par `lien`.
  */
 
 /** La langue de cette page. TOUS ses liens internes passent par `lien`. */
@@ -80,36 +35,16 @@ const LOCALE: Locale = "en";
 /** Le chemin SANS prefixe : c'est `lien` et `alternatesPage` qui posent `/en`. */
 const CHEMIN = "/studio";
 
-const t = dictionnaire(LOCALE);
+/** Ce qu un humain lit ; `CONTACT.ville` reste reserve aux donnees structurees. */
+const VILLE = CONTACT.villeEn;
 
 /**
- * « Geneva ».
- *
- * `CONTACT.ville` (lib/site.ts) vaut « Genève » : c'est le NAP, il est ecrit
- * pour la fiche Google et la donnee structuree, et lib/site.ts n'a pas encore
- * de jumeau anglais. Plutot que d'ouvrir une SECONDE graphie de la ville dans
- * ce fichier — exactement ce que la source unique existe pour empecher —, on
- * lit le mot la ou le chantier anglais l'a deja pose : le dictionnaire.
+ * Le suffixe « — Nawa Corps » vient du `template` du layout (site). Titre et
+ * description de l audit CRO/SEO du 25.10.2026 (§4.4), en miroir.
  */
-const VILLE = t.nav.horlogeVille;
-
-/**
- * Le suffixe « — Nawa Corps » vient du `template` du layout (site) : l'ecrire
- * dans `title` le doublerait.
- *
- * LE BLOC `twitter` EST REDECLARE EN ENTIER, et ce n'est pas une redondance :
- * la fusion des metadata de Next ne descend pas dans les objets. Sans lui,
- * cette page heriterait du `twitter` de l'accueil — titre et description de
- * l'accueil sur la carte de partage de /en/studio.
- *
- * `alternatesPage(CHEMIN, "en")` rend la canonique `/en/studio` et les
- * `hreflang`. Sans elle, la page heriterait de `alternates: { canonical: "/" }`
- * declare par app/(site)/layout.tsx et s'auto-desindexerait au profit de
- * l'accueil francais.
- */
-const TITRE = "Ayoub Bensalem, digital design studio in Geneva";
+const TITRE = "Ayoub Bensalem, AI assistants in Geneva";
 const DESCRIPTION =
-  "Who does the work, in Geneva. What the studio can do, what it does not take on, and how a rebuild runs from the first message to going live.";
+  "Who makes the first call, runs the demo and follows up. A base for each trade. It never commits on your behalf. What we do not take on.";
 
 export const metadata: Metadata = {
   title: TITRE,
@@ -123,6 +58,7 @@ export const metadata: Metadata = {
     },
     LOCALE,
   ),
+  // Redeclare en entier : la fusion des metadata ne descend pas dans les objets.
   twitter: {
     card: "summary_large_image",
     title: `${TITRE} — ${SITE_NAME}`,
@@ -131,25 +67,10 @@ export const metadata: Metadata = {
 };
 
 /**
- * AboutPage anglaise, rattachee PAR REFERENCE aux deux entites qui existent
- * deja — et surtout, qui n'en redeclare aucune.
- *
- * LE STUDIO N'EST PAS REDECLARE : components/SchemaStudio.tsx emet le
- * `ProfessionalService` sur l'accueil sous l'`@id` `/#studio`, et cet
- * identifiant designe UNE entite. Un prestataire n'a pas deux fiches parce
- * qu'il a deux langues ; il en a une, referencee depuis les deux.
- *
- * LA `Person` NON PLUS. app/(site)/studio/page.tsx decrit `/#ayoub` en entier
- * — nom, fonction, langues, employeur. La redecrire ici avec un `jobTitle`
- * anglais donnerait DEUX fonctions a un seul @id, et un moteur qui les fond
- * n'aurait aucun moyen de savoir laquelle repondre a qui. On la designe donc
- * par son seul `@id` : c'est ce que les references JSON-LD sont faites pour
- * faire, et elles se resolvent a l'echelle du site, pas de la page.
- *
- * CE QUI EST PROPRE A CETTE PAGE, EN REVANCHE, C'EST LA PAGE ELLE-MEME :
- * `@id` distinct (`/en/studio#page`), URL distincte, titre et description
- * anglais, et `inLanguage` — c'est lui qui dit au moteur que ce document-ci
- * est la version anglaise, et non un doublon du francais.
+ * AboutPage anglaise, rattachee PAR REFERENCE au studio (`/#studio`) et a la
+ * Person (`/#ayoub`) decrits ailleurs : les redeclarer ici donnerait deux
+ * fonctions a un seul @id. `inLanguage` dit au moteur que ce document est la
+ * version anglaise, pas un doublon.
  */
 const SCHEMA = {
   "@context": "https://schema.org",
@@ -179,7 +100,7 @@ export default function StudioEn() {
         ]}
       />
 
-      {/* ---------- Qui, où, et en combien de temps ---------- */}
+      {/* ---------- En-tête ---------- */}
       <section>
         <div className="wrap">
           <div className="sec-head">
@@ -187,9 +108,7 @@ export default function StudioEn() {
               The studio
             </span>
             {/* Interactions.tsx decoupe h1.t sur ses <br> et lui pose lui-meme
-                un [data-reveal] : ne pas en ecrire un a la main. Les deux
-                lignes restent courtes, comme en francais — une ligne longue
-                casse la mise en page a la revelation. */}
+                un [data-reveal] : ne pas en ecrire un a la main. */}
             <h1 className="t">
               Who does the work,
               <br />
@@ -198,36 +117,34 @@ export default function StudioEn() {
           </div>
 
           <p className="lede" data-reveal>
-            Nawa Corps is Ayoub Bensalem&apos;s digital design studio, in{" "}
-            {VILLE}. This page says how a rebuild runs, what we can do, and what
+            Nawa Corps is a {VILLE} studio that sets up AI assistants in small
+            businesses. This page says who does it, how the trial runs, and what
             we do not take on.
           </p>
 
-          {/* .facts : le meme bandeau que la page francaise. « One week » NE
-              VOYAGE JAMAIS SEULE (glossaire §5) — la colonne suivante porte
-              son point de depart, dans la meme unite de lecture. */}
           <div className="facts" data-reveal>
             <div>
               <b>Ayoub Bensalem</b>
-              <span>Designer and developer</span>
+              <span>First call and follow-up</span>
             </div>
             <div>
               <b>{VILLE}</b>
               <span>And the surrounding region</span>
             </div>
             <div>
-              <b>One week</b>
-              <span>Site rebuilt</span>
+              {/* A verifiable fact, said without a counter effect. */}
+              <b>By trade</b>
+              <span>{`${METIERS.length} trades, a base for each`}</span>
             </div>
             <div>
-              <b>From your go-ahead</b>
-              <span>When the clock starts</span>
+              <b>In Switzerland</b>
+              <span>The assistant&apos;s data</span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ---------- Qui fait le travail ---------- */}
+      {/* ---------- (01) Who you talk to ---------- */}
       <section style={{ paddingTop: 0 }}>
         <div className="wrap">
           <div className="sec-head">
@@ -245,44 +162,19 @@ export default function StudioEn() {
 
           <div className="studio-txt" data-reveal>
             <p>
-              Ayoub Bensalem, designer and developer, in {VILLE}. The studio has
-              no sales person and no account manager: nobody sells you the work
-              and then hands the file to someone else. You talk to whoever does
-              the work, from the first message to going live.
-            </p>
-            {/* « On se voit chez vous » ⇒ « We come to you ». Le glossaire §2
-                proscrivait `we` ; il est renverse depuis le 31 aout 2026, et
-                c'est desormais la forme normale. Ce que le pluriel n'autorise
-                toujours pas : un bureau. La phrase dit donc l'inverse — il n'y
-                en a pas, et on se deplace. */}
-            <p>
-              No offices either, and that is said plainly. We come to you: that
-              is where your trade is, and often the photographs that will have
-              to be taken. Or the phone, if that is easier for you.
-            </p>
-            {/* « Aucune sous-traitance » serait FAUX : la production des
-                reseaux sociaux se fait avec un partenaire, et lib/familles.ts
-                comme ServicesRows l ecrivent en toutes lettres. Une page qui
-                affirmerait le contraire se contredirait a un clic d ici. Le
-                partenaire n est PAS nomme : c est une decision fermee du
-                projet, et elle vaut dans les deux langues. */}
-            <p>
-              One exception, and it is written down: social media production is
-              done with a production partner of the studio. The calendar, the
-              replies and the finished work stay on our side — you have only one
-              conversation to follow.
+              Ayoub Bensalem founded the studio. He makes the first call, runs
+              the demo and does the weekly follow-up. You are not passed from a
+              salesperson to a project manager.
             </p>
             <p>
-              A year after going live, the address to write to has not changed,
-              and the studio that built the site is still the one that answers.
-              A price that moves, a poster for when September comes round, one
-              more question on the form: it is the same thread.
+              No office, and we say so. The first call is made by phone. Your
+              enquiries are where you are.
             </p>
           </div>
         </div>
       </section>
 
-      {/* ---------- Comment ça se passe, du premier message à la mise en ligne ---------- */}
+      {/* ---------- (02) How it runs ---------- */}
       <section style={{ paddingTop: 0 }}>
         <div className="wrap">
           <div className="sec-head">
@@ -291,153 +183,100 @@ export default function StudioEn() {
             </span>
             <div data-reveal>
               <h2 className="t">
-                From the first message
+                From the first call
                 <br />
-                to going live.
+                to the Monday report.
               </h2>
             </div>
           </div>
 
           <p className="lede" data-reveal>
-            Six moments, and only one asks anything of you — the second, and it
-            is a conversation, not files.
+            Four moments. None of them asks you to prepare anything.
           </p>
 
-          {/* Les intitules sont des <h3> PORTANT .sm-grp, jamais des <h3> nus :
-              sans regle propre, un h3 prend `font-size:inherit` du preflight
-              Tailwind en production et la taille par defaut du navigateur en
-              developpement — deux rendus differents pour le meme titre. */}
+          {/* Les intitules sont des <h3> PORTANT .sm-grp : un h3 nu change de
+              taille entre le developpement et la production (preflight). */}
           <div className="studio-txt" data-reveal style={{ marginTop: 34 }}>
-            <h3 className="sm-grp">The first message</h3>
+            <h3 className="sm-grp">The call</h3>
             <p>
-              WhatsApp, the phone, the form, or the assistant at the bottom of
-              the screen. You say what you have and what is wrong with it; the
-              message lands on our phone.
+              A short call. You tell us what takes up your evenings. We sell you
+              nothing that day.
             </p>
 
-            <h3 className="sm-grp">The stocktake</h3>
-            {/* « On regarde ensemble » ⇒ « We go through … with you ». Et
-                « the Google listing » a quitte cette liste le 31 aout 2026 :
-                l'etat des lieux regarde ce que le client trouve, ce qui est un
-                fait — pas une prestation a vendre. */}
+            <h3 className="sm-grp">The demo</h3>
             <p>
-              We go through what is online today with you: the site, and what a
-              customer finds when they search for your trade in {VILLE}. You say
-              what you want to receive — quotes, appointments, calls. It is the
-              only moment where you have something to give, and it is given by
-              talking.
+              We show you the assistant at work on enquiries from your trade:
+              what it prepares, what you approve, what you correct. You have
+              nothing to prepare, and we have access to none of your tools. At the end, we set
+              the subscription tier with you, in writing.
             </p>
 
-            <h3 className="sm-grp">Your go-ahead</h3>
+            <h3 className="sm-grp">The two-week trial</h3>
             <p>
-              The clock starts there, and nowhere else: one week, from the
-              go-ahead to going live. You have nothing to prepare — we take the
-              words from your current site, and we write the mockup if you are
-              starting from nothing.
+              For two weeks, the assistant works on your real enquiries. It never commits on
+              your behalf. You pay nothing during the trial.
             </p>
 
-            <h3 className="sm-grp">The mockup, early in the week</h3>
+            <h3 className="sm-grp">Every Monday</h3>
             <p>
-              You see the before and the after. You approve it, or you ask for
-              changes: two rounds of corrections are included, charged beyond
-              that. The limit is written down before anything starts rather than
-              discovered on the invoice.
-            </p>
-
-            <h3 className="sm-grp">Approval, then going live</h3>
-            <p>
-              The finished site is shown to you and approved. Payment happens on
-              delivery, and going live follows. Domain, hosting, the form,
-              online appointments: everything is wired up — you install nothing
-              and you configure nothing.
-            </p>
-
-            <h3 className="sm-grp">The year after</h3>
-            {/* « upkeep », jamais « maintenance » ni « support » (glossaire
-                §3). Et la formule est NOMMEE plutot que categorisee (§6) :
-                « compulsory with L'Assistant » vaut mieux que « with this
-                package ». */}
-            <p>
-              The first year of hosting and domain name is included in the price
-              of the site. From the second year, upkeep takes over: it is not
-              picked from a menu, it follows from the package bought. With
-              L&apos;Assistant it is compulsory — the assistant uses API calls
-              every month, and without upkeep it stops.
+              A short report: what was handled, followed up, prepared, and what
+              is waiting for you. If the report suits you, you pay for the
+              set-up and the subscription carries on.
             </p>
 
             <p style={{ marginTop: 30 }}>
               <a className="lnk" href={lien(LOCALE, "/services")}>
-                See the packages and the prices →
+                See the assistant in detail →
               </a>
             </p>
           </div>
         </div>
       </section>
 
-      {/* ---------- Ce que le studio sait faire ---------- */}
+      {/* ---------- (03) Trades ---------- */}
       <section style={{ paddingTop: 0 }}>
         <div className="wrap">
           <div className="sec-head">
             <span className="meta" data-reveal>
-              <span className="index">(03)</span>&nbsp; The trade
+              <span className="index">(03)</span>&nbsp; Trades
             </span>
             <div data-reveal>
               <h2 className="t">
-                Five lines of work,
+                A base for
                 <br />
-                one place.
+                each trade.
               </h2>
             </div>
           </div>
 
-          <p className="lede" data-reveal>
-            The site is the way in, not the catalogue. Here is the rest — and it
-            is the fact that all of it comes out of the same place that makes
-            the argument.
-          </p>
-
-          <ul className="prest-inc" data-reveal style={{ marginTop: 34 }}>
-            <li>
-              Websites — a rebuild or a start from nothing, an enquiry form,
-              online appointments, a priced quote, an assistant.
-            </li>
-            <li>
-              Identity — a logotype, colours, typefaces, and the files to use
-              them with.
-            </li>
-            <li>
-              Print — business cards, posters, window stickers, restaurant
-              menus, ready for the printer.
-            </li>
-            <li>
-              Photography — your premises, your team, your products: for the
-              site as much as for your print.
-            </li>
-            <li>
-              Social media — the month&apos;s calendar, the images, the words,
-              the posting. Produced with a production partner of the studio, and
-              delivered by us.
-            </li>
-          </ul>
-
+          {/* Chiffres sources, chacun avec sa source et son pays. */}
           <div className="studio-txt" data-reveal style={{ marginTop: 34 }}>
             <p>
-              This is not a list of skills, it is what makes the whole thing
-              hold together. A business card that looks nothing like the site, a
-              poster whose typeface belongs to nothing: that is what happens
-              when every piece is ordered somewhere different. Here they
-              resemble each other because they come out of the same place.
+              Geneva has 441 plumbing and heating-ventilation establishments (OCSTAT
+              2024). Construction is the sector hit hardest by staff shortages
+              in the canton (CCIG 2026).
             </p>
             <p>
-              <a className="lnk" href={lien(LOCALE, "/services")}>
-                See the whole catalogue →
+              In the building trades, quotes are often done in the evening. In
+              France, 42% of owners find their admin load stressful (CAPEB
+              2023). In Geneva, we are checking it owner by owner.
+            </p>
+            <p>
+              Each trade has its base: its usual enquiries, its vocabulary, its
+              documents. Building tradespeople, property managers, accounting
+              firms, garages and other service businesses each have their page,
+              with a demo example.
+            </p>
+            <p>
+              <a className="lnk" href={lien(LOCALE, "/metiers")}>
+                See the trades →
               </a>
             </p>
           </div>
         </div>
       </section>
 
-      {/* ---------- Ce que le studio ne fait pas ---------- */}
+      {/* ---------- (04) What we do not take on ---------- */}
       <section style={{ paddingTop: 0 }}>
         <div className="wrap">
           <div className="sec-head">
@@ -454,41 +293,26 @@ export default function StudioEn() {
           </div>
 
           <p className="lede" data-reveal>
-            A page that can refuse nothing says nothing. These four go
-            elsewhere, and we say so on the first message rather than at the
-            third meeting.
+            We say so on the first call, not after the demo.
           </p>
 
           <ul className="prest-inc" data-reveal style={{ marginTop: 34 }}>
             <li>
-              Online shops. Stock, payments, returns, disputes: another trade,
-              and another thing to keep running.
+              Medical practices, physiotherapy and dentists. Medical secrecy
+              rules it out, and their appointments already have their tools.
             </li>
+            <li>Lawyers. Professional secrecy rules it out.</li>
+            <li>Large accounts and public bodies. Tenders and long cycles.</li>
             <li>
-              Tenders, large accounts and public bodies. The procedures and the
-              payment terms do not go with a studio this small.
+              Businesses that want an AI that does everything on its own. With
+              us, the assistant never commits on your behalf.
             </li>
-            <li>
-              Companies that already have developers. They build their site
-              themselves, better and for less.
-            </li>
-            <li>
-              Half-day emergencies. It is one week from the go-ahead to going
-              live, and it holds because it is not shorter.
-            </li>
+            <li>Tech companies. They do it themselves.</li>
           </ul>
-
-          <div className="studio-txt" data-reveal style={{ marginTop: 34 }}>
-            <p>
-              Refusing is not a pose. A studio that accepts everything stops
-              holding any of its dates, and it is the next customer who pays for
-              the delay.
-            </p>
-          </div>
         </div>
       </section>
 
-      {/* ---------- La seule preuve que le visiteur peut vérifier lui-même ---------- */}
+      {/* ---------- (05) The demonstration ---------- */}
       <section style={{ paddingTop: 0 }}>
         <div className="wrap">
           <div className="sec-head">
@@ -497,56 +321,42 @@ export default function StudioEn() {
             </span>
             <div data-reveal>
               <h2 className="t">
-                The product runs
+                Leo, at the bottom
                 <br />
-                on this screen.
+                of the screen.
               </h2>
             </div>
           </div>
 
           <div className="studio-txt" data-reveal>
             <p>
-              The third package is called L&apos;Assistant, and it is not
-              described here: it runs on this site. The button at the bottom of
-              the screen opens it. Ask it about a service or a price — it
-              answers with the catalogue and the rates read from this
-              site&apos;s database, not with generalities.
+              Leo is this site&apos;s assistant. It is a demonstration of what
+              we can do, not a client.
             </p>
             <p>
-              The rest of the product is behind it: when the conversation ends,
-              the enquiry lands on our phone, and we find it again in a
-              dashboard with what was said and the number left behind. That is
-              exactly what would be installed at your place, with your services
-              and your rates instead of ours.
+              Ask it a question about your office work. It answers, then offers
+              you the demo. When the conversation ends, it reaches our phone.
             </p>
             <p>
-              So for that one you have nobody to take at their word. It is at
-              the bottom of the screen, and you can catch it out yourself.
+              Your own assistant shows itself on enquiries from your trade.
+              That is what the demo is for.
             </p>
           </div>
 
-          {/* Un VRAI LIEN vers /en/devis, et non une interception de clic : il
-              fonctionne sans JavaScript, et la page d arrivee ouvre
-              l assistant — c est-a-dire, ici, la piece dont la section vient de
-              parler. Le sujet `devis-studio` est un IDENTIFIANT : il ne se
-              traduit pas, il part en base (Lead.subject) et lib/devis.ts sait
-              le resoudre dans les deux langues. */}
+          {/* « See the demo » shows the examples (/en/demonstrations); only
+              « Get my demo » opens Leo (decision d Ayoub du 25.10.2026). */}
           <div className="c-row" data-reveal>
-            <a className="btn" href={lien(LOCALE, "/devis?p=devis-studio")}>
-              Ask for a quote <span className="ar">→</span>
+            <a className="btn" href={lien(LOCALE, "/demonstrations")}>
+              See the demo on my trade <span className="ar">→</span>
             </a>
             <a className="btn btn-line" href={lien(LOCALE, "/services")}>
-              See the packages
+              See the assistant in detail
             </a>
           </div>
         </div>
       </section>
 
-      {/* L index du pied de page suit la derniere section de CETTE page :
-          cinq sections (01) a (05), donc le contact porte (06). Le defaut
-          « 07 » du composant est celui de l accueil, qui compte sept sections.
-          `locale` fait descendre l anglais dans le pied de page ET dans le
-          formulaire qu il embarque. */}
+      {/* Cinq sections (01) a (05) : le contact porte (06). */}
       <FooterContact indexSection="06" locale={LOCALE} />
     </>
   );

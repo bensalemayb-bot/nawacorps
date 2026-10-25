@@ -7,6 +7,7 @@ import {
   lien,
   type Locale,
 } from "@/lib/i18n";
+import LiensLegaux from "@/components/LiensLegaux";
 
 /**
  * 404 RACINE — le filet de dernier recours, DANS LES DEUX LANGUES.
@@ -14,8 +15,7 @@ import {
  * Il en existe deux autres sous app/(site)/ — la francaise et l anglaise — et
  * elles sont plus riches : elles heritent du chrome public (nav, curseur,
  * chatbot) parce qu elles vivent dans le groupe de routes. Mais elles ne
- * repondent QUE pour les `notFound()` leves depuis une page de leur segment :
- * une formule supprimee, une famille dont toutes les lignes sont masquees.
+ * repondent QUE pour les `notFound()` leves depuis une page de leur segment.
  *
  * Une URL qui ne correspond a AUCUNE route du projet — une faute de frappe, un
  * vieux lien, un robot qui devine des chemins — ne traverse aucun layout de
@@ -79,10 +79,10 @@ async function localeDeLaRequete(): Promise<Locale> {
  * une section pour un consommateur unique. La regle du depot — une chaine, une
  * source — est respectee : elle n est ecrite qu une fois.
  *
- * L ANGLAIS SUIT LE GLOSSAIRE : anglais britannique, `services` pour la page
- * du catalogue, et la meme voix sobre que app/(site)/en/not-found.tsx — dont
- * le texte, lui, parle du cas VOISIN mais different (une prestation qui a
- * quitte le catalogue). Ici, c est l adresse elle-meme qui n a jamais existe.
+ * L ANGLAIS SUIT LE GLOSSAIRE (anglais britannique), et la meme voix sobre
+ * que app/(site)/en/not-found.tsx — dont le texte, lui, parle du changement
+ * de metier du studio. Ici, c est l adresse elle-meme qui n a jamais existe.
+ * Le lien `services` mene a la page de detail de l assistant.
  */
 const TEXTES: Record<Locale, {
   erreur: string;
@@ -100,7 +100,7 @@ const TEXTES: Record<Locale, {
     corps:
       "Le lien est peut-être ancien, ou l'adresse comporte une faute de frappe. Rien n'est perdu : tout le site se rejoint depuis l'accueil.",
     accueil: "← Retour à l'accueil",
-    services: "Voir tous les services →",
+    services: "Voir l'assistant en détail →",
   },
   en: {
     erreur: "Error 404",
@@ -108,7 +108,7 @@ const TEXTES: Record<Locale, {
     corps:
       "The link may be an old one, or the address may carry a typo. Nothing is lost: the whole site can be reached from the home page.",
     accueil: "← Back to the home page",
-    services: "See all the services →",
+    services: "See the assistant in detail →",
   },
 };
 
@@ -132,7 +132,12 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function NotFound() {
   const locale = await localeDeLaRequete();
   const t = TEXTES[locale];
+  // CETTE 404 NE TRAVERSE PAS app/(site)/layout.tsx : ni <main> ni bande des
+  // liens legaux ne lui viennent du layout. Elle les pose donc elle-meme
+  // (25 octobre 2026) — une impasse doit au moins dire qui exploite le site.
   return (
+    <>
+    <main id="contenu">
     <section>
       <div className="wrap">
         <div className="sec-head">
@@ -157,5 +162,8 @@ export default async function NotFound() {
         </div>
       </div>
     </section>
+    </main>
+    <LiensLegaux locale={locale} />
+    </>
   );
 }

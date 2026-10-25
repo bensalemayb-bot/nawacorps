@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import ContactForm from "@/components/ContactForm";
 import SchemaPage from "@/components/SchemaPage";
 import { dictionnaire } from "@/lib/dictionnaires";
-import { MENTION_REPONSE_EN } from "@/lib/familles";
+import { MENTION_REPONSE_EN } from "@/lib/mentions";
 import { lien, LANGUE_HTML, type Locale } from "@/lib/i18n";
 import {
   CONTACT,
@@ -12,7 +12,7 @@ import {
   alternatesPage,
   jsonLd,
   openGraphPage,
-  whatsapp,
+  whatsappHref,
 } from "@/lib/site";
 
 /**
@@ -30,12 +30,10 @@ import {
  * deux pages, ou dans deux langues — suffisent a brouiller le rapprochement
  * avec la fiche Google.
  *
- * UNE SEULE ADRESSE EST MISE EN AVANT, `CONTACT.email` (ayoub@), pour la
- * raison exacte qui l'a imposee en francais : la boite generale existe pour
- * que le tout-venant ne noie pas les demandes de projet, ce qui est un
- * probleme de tri interne — pas un arbitrage a demander au visiteur a
- * l'instant precis ou il veut ecrire. `CONTACT.emailGeneral` (contact@) reste
- * ou elle sert vraiment : /en/mentions-legales et /en/confidentialite.
+ * UNE SEULE ADRESSE EST MISE EN AVANT, `CONTACT.email` — depuis le
+ * 25 octobre 2026 la seule du site (lib/site.ts), la meme que celle des pages
+ * legales. Aucun arbitrage n'est demande au visiteur a l'instant precis ou il
+ * veut ecrire.
  *
  * LE PIED DE PAGE COMPLET (FooterContact) N'EST PAS RENDU ICI, ET C'EST
  * DELIBERE : il embarque le meme ContactForm. Deux formulaires sur une page de
@@ -44,7 +42,7 @@ import {
  * legaux, dans la meme .c-cols — sans le formulaire.
  *
  * L'ENGAGEMENT DE REACTIVITE EST IMPORTE, PAS RECOPIE. `MENTION_REPONSE_EN`
- * vient de lib/familles.ts : le guide de voix §8 impose UNE seule formulation
+ * vient de lib/mentions.ts : le guide de voix §8 impose UNE seule formulation
  * au caractere pres, et la contrainte ne s'allege pas parce qu'on change de
  * langue — deux tournures anglaises du meme engagement seraient lues comme
  * deux engagements.
@@ -59,9 +57,9 @@ import {
  * liste de ce qu'on peut ecrire a cette adresse, et la liste des maux du
  * lecteur. Le mot peut decrire un fait, jamais une chose vendue.
  *
- * AUCUN MONTANT ICI, donc aucune mention de TVA a porter : les prix vivent en
- * base et se lisent sur /en/services. La page ne lit pas Postgres et reste
- * statique — `next build` passe base eteinte.
+ * AUCUN MONTANT ICI, donc aucune mention de TVA a porter : le seul prix du
+ * site (la mise en place) vit en base, lu par lib/catalogue.ts. La page ne lit
+ * pas Postgres et reste statique — `next build` passe base eteinte.
  *
  * ZERO CLASSE NOUVELLE : .wrap, .sec-head, .meta, .index, h1.t / h2.t, .lede,
  * .studio-txt, .facts, .prest-inc, .sm-grp, .c-row, .c-cols, .btn, .lnk.
@@ -134,17 +132,24 @@ const PLAGE = `${enHeure(HORAIRES.ouverture)}–${enHeure(HORAIRES.fermeture)}`;
  * ne descend pas dans les objets, et sans lui cette page porterait le titre et
  * la description de l'accueil sur sa carte de partage.
  */
-const TITRE = "Contacting the studio in Geneva";
+/**
+ * TITRE ET DESCRIPTION DE L AUDIT CRO/SEO DU 25.10.2026 (§4.4,
+ * docs/agents/reviews/audit-cro-seo-2026-10-25.md). Le titre est
+ * `absolute` : il tient ses 60 signes sans le suffixe « — Nawa Corps » du
+ * `template`, qui l aurait fait deborder (ou, pour /contact, aurait ecrit la
+ * marque deux fois).
+ */
+const TITRE = "Contact Nawa Corps in Geneva: phone, WhatsApp";
 const DESCRIPTION =
-  "WhatsApp, the phone, email or the form: the four ways to reach the studio in Geneva, and what is worth putting in your message.";
+  "Phone, WhatsApp, email or the form. Tell us your trade and what takes up your evenings. A reply the next working day.";
 
 export const metadata: Metadata = {
-  title: TITRE,
+  title: { absolute: TITRE },
   description: DESCRIPTION,
   alternates: alternatesPage(CHEMIN, LOCALE),
   openGraph: openGraphPage(
     {
-      titre: `${TITRE} — ${SITE_NAME}`,
+      titre: TITRE,
       description: DESCRIPTION,
       chemin: CHEMIN,
     },
@@ -152,7 +157,7 @@ export const metadata: Metadata = {
   ),
   twitter: {
     card: "summary_large_image",
-    title: `${TITRE} — ${SITE_NAME}`,
+    title: TITRE,
     description: DESCRIPTION,
   },
 };
@@ -163,7 +168,7 @@ export const metadata: Metadata = {
  * LE `contactPoint` N'EST PAS REDECLARE ICI, et c'est le point a comprendre
  * avant de « completer » ce noeud. app/(site)/contact/page.tsx attache DEJA un
  * ContactPoint a l'`@id` `/#studio` — un seul, `sales`, apres qu'un second ait
- * ete retire en meme temps que le bloc contact@ de l'ecran. Les noeuds de meme
+ * ete retire en meme temps que le second bloc d'adresse de l'ecran. Les noeuds de meme
  * `@id` se fondent a l'echelle du site : en poser un second ici, avec un `name`
  * anglais, donnerait DEUX canaux de contact la ou le studio n'en presente
  * qu'un. `availableLanguage` du noeud francais annonce deja `fr` et `en`,
@@ -185,15 +190,12 @@ const SCHEMA = {
 };
 
 /**
- * Amorce propre a cette page : elle dit d'ou vient le message.
+ * Amorce propre a cette page : elle demande la demo.
  *
- * ELLE RESTE A LA PREMIERE PERSONNE DU SINGULIER, et ce n'est pas un oubli du
- * passage a `we` le 31 aout 2026 : c'est le VISITEUR qui parle ici, pas le
- * studio.
+ * ELLE EST A LA PREMIERE PERSONNE DU SINGULIER : c'est le VISITEUR qui parle
+ * ici, pas le studio.
  */
-const AMORCE_WHATSAPP = whatsapp(
-  "Hello, I'd like to talk about a project for my business.",
-);
+const AMORCE_WHATSAPP = whatsappHref("en");
 
 export default function ContactEn() {
   // volontaire — next/link casserait les reveals (Interactions ne tourne qu'une fois), voir décision B7
@@ -235,7 +237,9 @@ export default function ContactEn() {
 
           <div className="facts" data-reveal>
             <div>
-              <b>{CONTACT.telephoneAffiche}</b>
+              <b>
+                <a href={`tel:${CONTACT.telephone}`}>{CONTACT.telephoneAffiche}</a>
+              </b>
               <span>Phone and WhatsApp</span>
             </div>
             <div>
@@ -275,9 +279,8 @@ export default function ContactEn() {
           <div className="studio-txt" data-reveal>
             <h3 className="sm-grp">WhatsApp</h3>
             <p>
-              The most direct, and the one that asks the least formatting. A
-              photo of your business card, the address of your site, two lines
-              on what is wrong: that is often all it takes to start.{" "}
+              The most direct. Two lines on your trade and on what takes up
+              your evenings are enough to start.{" "}
               <a
                 className="lnk"
                 href={AMORCE_WHATSAPP}
@@ -290,8 +293,7 @@ export default function ContactEn() {
 
             <h3 className="sm-grp">The phone</h3>
             <p>
-              If it is easier said than written — and for a stocktake, it almost
-              always is.{" "}
+              If it is easier to say than to write. The first call is short.{" "}
               <a className="lnk" href={`tel:${CONTACT.telephone}`}>
                 {CONTACT.telephoneAffiche}
               </a>
@@ -305,11 +307,10 @@ export default function ContactEn() {
                 qu en francais. L adresse generale n a pas disparu du site :
                 elle vit dans /en/mentions-legales et /en/confidentialite, ou
                 la loi la demande. */}
-            <h3 className="sm-grp">{CONTACT.email}</h3>
+            <h3 className="sm-grp">Email</h3>
             <p>
-              Our inbox, and it is the only one to write to: a site rebuild,
-              identity, print, photography, social media, a quote. It lands on
-              our phone like the rest.{" "}
+              To attach a photo or a document. We read your emails as quickly
+              as WhatsApp.{" "}
               <a className="lnk" href={`mailto:${CONTACT.email}`}>
                 Write to {CONTACT.email} →
               </a>
@@ -348,37 +349,26 @@ export default function ContactEn() {
             </span>
             <div data-reveal>
               <h2 className="t">
-                Five lines, and we
+                Four lines, and we
                 <br />
-                can already price it.
+                prepare the demo.
               </h2>
             </div>
           </div>
 
           <p className="lede" data-reveal>
-            You have nothing to prepare for what comes next — but these five
-            things, given straight away, stop the first reply being one more
+            You have nothing to prepare. These four answers only save us one more
             question.
           </p>
 
           <ul className="prest-inc" data-reveal style={{ marginTop: 34 }}>
+            <li>Your trade.</li>
             <li>
-              The address of your current site, if there is one. That is where
-              we take your words from.
+              How your enquiries arrive: phone, WhatsApp, email, property
+              managers.
             </li>
-            <li>
-              Your trade and the area you cover: a garage and an accountancy
-              firm do not have the same pages.
-            </li>
-            <li>
-              What you want to receive: quotes, appointments, calls.
-            </li>
-            <li>
-              What bothers you today, even in one sentence — the site that is
-              not readable on a phone, the form that no longer works, the
-              photographs that have aged.
-            </li>
-            <li>Your deadline, if you have one.</li>
+            <li>What takes up your evenings, even in one sentence.</li>
+            <li>The best time to call you back.</li>
           </ul>
 
           <div data-reveal>
@@ -402,12 +392,11 @@ export default function ContactEn() {
           .green, sans quoi la bande serait illisible sur beige. */}
       <section className="green">
         <div className="wrap">
-          {/* « studio de création digitale » ⇒ `digital design studio`
-              (glossaire §3) — jamais `web agency` ni `creative agency`. Le
-              dictionnaire porte `pied.metier`, mais il y colle « — Geneva »,
-              qui ferait doublon avec la ligne juste en dessous. */}
+          {/* « studio genevois » ⇒ `Geneva studio` — jamais `agency`
+              (glossaire du guide de voix). Ecrit ici plutot que lu dans
+              `pied.metier`, qui porte aussi « Assistants for small businesses ». */}
           <span className="meta" data-reveal>
-            Nawa Corps · Digital design studio
+            Nawa Corps · Geneva studio
           </span>
           <div className="c-cols" data-reveal>
             <span>{t.pied.lieu}</span>

@@ -32,7 +32,8 @@ type ServiceSeed = {
 /**
  * CATALOGUE — repositionnement PME (voir .agents/product-marketing.md).
  *
- * Prix en centimes CHF, TVA COMPRISE. priceCents null pour les prestations
+ * Prix en centimes CHF, montant paye : PAS DE TVA (entreprise non assujettie,
+ * lib/format.ts). priceCents null pour les prestations
  * sur devis (QUOTE).
  *
  * REGLE D AFFICHAGE, tranchee par le proprietaire : seules les trois formules
@@ -66,6 +67,78 @@ type ServiceSeed = {
  * interdit toute affirmation sans source.
  */
 const services: ServiceSeed[] = [
+  // ---------- L assistant (24 octobre 2026) ----------
+  //
+  // LES QUATRE LIGNES QUE LE SITE PUBLIC LIT. Decision d Ayoub du 24.10.2026
+  // (.agents/product-marketing.md, « Prix et donnees ») : la mise en place
+  // coute 1'500.– (pas de TVA, entreprise non assujettie), payee apres l essai. Le slug est connu du code
+  // (`SLUG_MISE_EN_PLACE`, lib/catalogue.ts) : le hero, la section (04), la
+  // FAQ, /services et le prompt de Leo le lisent.
+  //
+  // L ABONNEMENT MENSUEL A TROIS PALIERS DEPUIS LE 25.10.2026
+  // (founder/pricing.md) : Essentiel, Standard, Complet, lus par leurs slugs
+  // (`SLUGS_ABONNEMENT`, lib/catalogue.ts). MEMES VALEURS que
+  // scripts/ajouter-abonnements.ts, qui les pose sur une base existante sans
+  // reecrire le reste : qui change l un change l autre.
+  //
+  // Toutes les lignes apres celles-ci (formules de site, suivi, imprimes...)
+  // sont l ANCIENNE OFFRE : elles restent en base pour /admin, mais le site
+  // public ne les lit plus.
+  {
+    slug: "assistant-mise-en-place",
+    name: "Mise en place de l'assistant",
+    description: "L'assistant réglé sur votre métier et votre entreprise, payé après l'essai si le relevé vous convient.",
+    nameEn: "Assistant set-up",
+    descriptionEn: "The assistant set to your trade and your business, paid after the trial if the report suits you.",
+    category: "assistant",
+    priceType: "FIXED",
+    priceCents: 150000,
+    priceFrom: false,
+    isMonthly: false,
+    sortOrder: 0,
+  },
+  {
+    slug: "abonnement-essentiel",
+    name: "Essentiel",
+    description: "Une tâche, jusqu'à 100 demandes par mois, relevé chaque lundi.",
+    nameEn: "Essential",
+    descriptionEn: "One task, up to 100 requests a month, a report every Monday.",
+    category: "assistant",
+    priceType: "FIXED",
+    priceCents: 19000,
+    priceFrom: false,
+    isMonthly: true,
+    sortOrder: 1,
+  },
+  {
+    slug: "abonnement-standard",
+    name: "Standard",
+    description: "Deux tâches, jusqu'à 300 demandes par mois, relevé chaque lundi.",
+    nameEn: "Standard",
+    descriptionEn: "Two tasks, up to 300 requests a month, a report every Monday.",
+    category: "assistant",
+    priceType: "FIXED",
+    priceCents: 29000,
+    priceFrom: false,
+    isMonthly: true,
+    sortOrder: 2,
+  },
+  {
+    slug: "abonnement-complet",
+    name: "Complet",
+    description:
+      "Trois tâches dont le téléphone (300 minutes incluses), jusqu'à 800 demandes par mois.",
+    nameEn: "Complete",
+    descriptionEn:
+      "Three tasks including the phone (300 minutes included), up to 800 requests a month.",
+    category: "assistant",
+    priceType: "FIXED",
+    priceCents: 49000,
+    priceFrom: false,
+    isMonthly: true,
+    sortOrder: 3,
+  },
+
   // ---------- Les trois formules de site ----------
   //
   // LES NOMS DES TROIS FORMULES NE SE TRADUISENT PAS. `nameEn` y vaut `null`,

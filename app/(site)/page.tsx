@@ -1,4 +1,4 @@
-import CarteDuStudio from "@/components/CarteDuStudio";
+import Chiffres from "@/components/Chiffres";
 import Faq from "@/components/Faq";
 import FooterContact from "@/components/FooterContact";
 import Methode from "@/components/Methode";
@@ -8,59 +8,22 @@ import SchemaStudio from "@/components/SchemaStudio";
 import ServicesRows from "@/components/ServicesRows";
 import Strip from "@/components/Strip";
 import Studio from "@/components/Studio";
-import Travaux from "@/components/Travaux";
-import type { Metadata } from "next";
-import { chargerCatalogue, prixEntreeCents } from "@/lib/catalogue";
-import { formatChfAmount } from "@/lib/format";
 
 /**
- * DESCRIPTION DE L ACCUEIL — construite a chaque requete, prix compris.
- *
- * Le prix d entree est un signal fort dans un extrait Google pour une
- * prestation de service : il qualifie le clic avant meme la visite. Mais la
- * regle du depot interdit tout montant en dur, et une metadata statique ne
- * peut pas relire Postgres — le prix avait donc disparu de l extrait.
- *
- * `generateMetadata` sur une page deja `force-dynamic` s execute a la requete,
- * comme le reste de la page : le montant est toujours celui de la base.
- *
- * ELLE PASSE PAR chargerCatalogue(), ET SUREMENT PAS PAR UNE REQUETE A ELLE.
- * Une `prisma.service.findFirst` propre a cette fonction rouvrait une decision
- * deja mesuree et consignee plus bas : l accueil ne doit lire Postgres qu UNE
- * fois par requete. `chargerCatalogue()` est memoisee par le `cache()` de
- * React, donc la promesse est celle que Faq, Offres et CarteDuStudio attendent
- * deja — zero aller-retour en plus sur la page la plus visitee du site. Le prix
- * d entree se derive ensuite EN MEMOIRE, exactement comme le font NoyauHero et
- * Faq : la table tient en dix-huit lignes de quelques champs.
- *
- * LE `try` N EST PAS DECORATIF. L etage builder du Dockerfile n a pas de base ;
- * si Next tentait malgre tout de pre-generer cette metadata, une exception
- * ferait echouer le build entier — exactement le mode d echec qui a deja fait
- * abandonner l ISR ici. Sans base, on sert la meme phrase sans le prix.
+ * L ACCUEIL N A PAS DE `generateMetadata` : son titre et sa description sont
+ * ceux du layout (app/(site)/layout.tsx), sans montant (docs/agents/copy/
+ * meta.md). Le seul prix du site, la mise en place, se lit dans la page :
+ * hero (temps 3), (05) L offre et la FAQ, avec sa mention de TVA.
  */
-export async function generateMetadata(): Promise<Metadata> {
-  const socle =
-    "Nawa Corps refait le site des PME genevoises en une semaine : demande de devis, prise de rendez-vous, mise en ligne comprise. Vous n'avez rien à préparer.";
-  try {
-    // Base vide, formules masquees depuis /admin, toutes passees sur devis :
-    // l extrait se referme sans le montant plutot que d en inventer un.
-    const cents = prixEntreeCents(await chargerCatalogue());
-    if (cents === null) return { description: socle };
-    return {
-      description: `${socle} Dès ${formatChfAmount(cents)}.–, TVA comprise.`,
-    };
-  } catch {
-    return { description: socle };
-  }
-}
 
 /**
  * Rendu a chaque requete, volontairement.
  *
- * Offres et CarteDuStudio sont des Server Components async qui lisent Postgres.
- * Sans ce force-dynamic, Next prerendrait la page au build :
- *  - les prix seraient figes au moment du build, alors que tout l'interet du
- *    bloc est que le site lise la base ;
+ * NoyauHero, Offres et Faq sont des Server Components async qui lisent le
+ * montant de la mise en place dans Postgres. Sans ce force-dynamic, Next
+ * prerendrait la page au build :
+ *  - le montant serait fige au moment du build, alors que tout l'interet est
+ *    que le site lise la base ;
  *  - et surtout `next build` reclamerait une base, or l'etage builder du
  *    Dockerfile n'en a aucune — le build de production echouerait.
  *
@@ -85,9 +48,9 @@ export async function generateMetadata(): Promise<Metadata> {
  * pourrait donc jamais prerendre cette page en production. Vingt millisecondes
  * ne valent pas une construction cassee.
  *
- * Ce qui a ete fait a la place : les deux lectures Postgres de cet ecran n'en
- * font plus qu'une (lib/catalogue.ts). Les prix restent lus a chaque requete,
- * donc toujours exacts — aucune invalidation a tenir.
+ * Ce qui a ete fait a la place : une seule lecture Postgres par requete
+ * (lib/catalogue.ts, memoisee). Le montant reste lu a chaque requete, donc
+ * toujours exact — aucune invalidation a tenir.
  */
 export const dynamic = "force-dynamic";
 
@@ -100,61 +63,25 @@ export default function Home() {
       {/* .page-body est OPAQUE, et doit le rester : le noyau est une scene
           position:fixed peinte derriere le contenu (cf. app/noyau.css). Sans
           fond ici, il transparaitrait sous toutes les sections suivantes. */}
-      {/* ORDRE DES SECTIONS — deux raisons, qui vont dans le meme sens.
-
-          1. LE VERT EST CONTIGU. Trois sections portent .green : Offres, la
-             carte du studio et le pied de page. Dans l'ordre precedent, Methode
-             / Studio / Faq s'inseraient entre les deux premieres et le pied de
-             page : le vert apparaissait donc en DEUX blocs separes par du
-             beige. Regroupees, elles forment un seul aplat qui ferme la page.
-
-          2. LES OBJECTIONS PASSENT AVANT LE PRIX. La FAQ repondait apres la
-             grille tarifaire, c'est-a-dire apres le moment ou le visiteur
-             decide. Une objection traitee apres la decision ne sert plus a
-             rien. La revue de persuasion l'avait signale, la porte G2 l'avait
-             laissee en question ouverte : elle est tranchee ici.
-
-          Aucune section n'est modifiee, seul leur ordre change. Les ancres de
-          la nav (#services, #offres, #methode, #contact) restent valides.
-
-          LES BADGES SUIVENT CET ORDRE, ET IL FAUT LES RENUMEROTER AVEC LUI.
-          Chaque section porte son rang en dur dans son propre composant
-          (<span className="index">) : le reordonnancement les avait laisses
-          defiler 01, 02, 04, 05, 06, 03, 07 — « (03) Offres » apparaissait
-          apres « (06) Questions ». Ils lisent desormais Travaux 01, Services
-          02, Methode 03, Le studio 04, Questions 05, Offres 06, Contact 07.
-          La numerotation du MENU (components/MenuOverlay.tsx) est une autre
-          suite, dans un autre ordre : elle n a pas a etre alignee. */}
-      {/* `locale="fr"` EST ECRITE, ALORS QUE C EST DEJA LE DEFAUT DE CHAQUE
-          COMPOSANT. Deux raisons, et la seconde est la vraie. D abord, la page
-          jumelle app/(site)/en/page.tsx ecrit `locale="en"` sur exactement les
-          memes composants dans le meme ordre : les deux fichiers se relisent
-          l un a cote de l autre, et une prop presente d un cote et absente de
-          l autre donne a croire a une difference qui n existe pas. Ensuite, le
-          defaut « fr » de chaque composant existe pour les DIX-SEPT AUTRES
-          pages qui les rendent sans connaitre leur langue ; ici, la page la
-          connait, et une page qui connait sa langue la dit. */}
+      {/* ORDRE DES SECTIONS (docs/agents/copy/accueil.md §0, plus les
+          chiffres du 25.10.2026) : (01) Les chiffres, (02) Par metier,
+          (03) Comment ca se passe, (04) Le controle, (05) L offre,
+          (06) Questions, (07) Contact. Les chiffres suivent la bande parce
+          qu ils prouvent la douleur qu elle nomme (voir components/
+          Chiffres.tsx). Chaque composant porte son badge en dur ; un
+          reordonnancement les renumerote. La numerotation du menu
+          (components/MenuOverlay.tsx) est une autre suite.
+          `locale="fr"` est ecrite, comme `locale="en"` dans la page jumelle :
+          une page qui connait sa langue la dit. */}
       <div className="page-body">
-        <Travaux locale="fr" />
         <Strip locale="fr" />
+        <Chiffres locale="fr" />
         <ServicesRows locale="fr" />
         <Methode locale="fr" />
         <Studio locale="fr" />
-        {/* L ORDRE A CHANGE LE 31 AOUT 2026 : les prix passent AVANT les
-            questions. L argument n est pas une preference, il est dans la FAQ
-            elle-meme — sa cinquieme question demande « À ce prix-là,
-            qu'est-ce qui n'est pas fait ? » alors qu aucun prix n avait encore
-            ete montre. Une objection de prix posee avant le prix ne leve rien :
-            elle l invente. La grille passe donc devant, la FAQ derriere, ou son
-            travail est de lever les dernieres reserves juste avant le
-            formulaire. Le catalogue reste colle aux formules : son chapo
-            dit « a cote des formules » et suppose de les avoir vues.
-            Les index des deux sections suivent l ordre — Offres (05),
-            Questions (06). */}
         <Offres locale="fr" />
-        <CarteDuStudio locale="fr" />
         <Faq locale="fr" />
-        <FooterContact locale="fr" />
+        <FooterContact indexSection="07" locale="fr" />
       </div>
     </>
   );

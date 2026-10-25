@@ -11,46 +11,54 @@ import type { NextConfig } from "next";
  */
 
 /**
- * LES ADRESSES DES FAMILLES REGROUPEES LE 2 SEPTEMBRE 2026.
+ * LES ANCIENNES ADRESSES, REDIRIGEES : l ancienne offre vers l accueil, la
+ * premiere page metier vers sa place dans /metiers (en fin de liste).
  *
- * Le catalogue est passe de CINQ familles a TROIS : « restauration » a ete
- * absorbee par les imprimes, « reseaux-sociaux » par l identite, et « suivi »
- * s appelle desormais « site-web ». Trois adresses ont donc disparu de chaque
- * langue, soit six en tout.
+ * Le 24 octobre 2026, le site a cesse de vendre des sites, de l identite et
+ * des imprimes : il vend un assistant (.agents/product-marketing.md). Toutes
+ * les pages `/services/<slug>` — les trois formules (la-vitrine, le-site,
+ * l-assistant) comme les six familles regroupees puis retirees
+ * (restauration, reseaux-sociaux, suivi, imprimes, identite, site-web) ont
+ * disparu. L offre vit sur l accueil.
  *
- * POURQUOI DES REDIRECTIONS ET NON DES 404. Ces six adresses etaient publiees :
- * elles figuraient dans app/sitemap.ts, qui les derivait de FAMILLE_SLUGS, et
- * elles etaient liees depuis la navigation et depuis les blocs « voir aussi »
- * des autres familles. Un lien externe ou un signet qui les atteint doit
- * arriver sur la page qui porte maintenant le contenu, pas sur une erreur.
+ * `/demonstrations` N EST PLUS REDIRIGEE (25 octobre 2026). Elle avait suivi
+ * l ancienne offre vers l accueil le 24 ; elle est revenue avec un contenu de
+ * la nouvelle — les exemples d automatisation par metier
+ * (app/(site)/demonstrations/page.tsx). Une redirection laissee ici rendrait
+ * la page inatteignable : les redirections passent avant les routes.
  *
- * 308 ET NON 302 : `permanent: true`. La page n est pas deplacee le temps d un
- * chantier, elle a fusionne — c est definitif, et c est ce qu il faut dire aux
- * moteurs pour qu ils transferent ce que l ancienne adresse avait acquis.
+ * POURQUOI DES REDIRECTIONS ET NON DES 404. Ces adresses etaient publiees :
+ * au sitemap, dans la nav, dans les liens « voir aussi », et peut-etre dans
+ * des signets ou des liens externes. Une ancienne adresse doit arriver sur la
+ * page qui porte maintenant l offre, pas sur une erreur. Chaque ancienne
+ * adresse pointe directement sur la destination finale, sans saut
+ * intermediaire. « /services/l-assistant » en particulier ne doit jamais
+ * montrer un ancien prix sous le nom du nouveau produit.
  *
- * CHAQUE LANGUE GARDE LA SIENNE. Le prefixe /en n est pas une variante de
- * casse : c est une autre page, avec son propre hreflang, et rediriger
- * /en/services/restauration vers la page francaise enverrait un anglophone
- * dans le mauvais arbre.
+ * `/services/:chemin+` COUVRE TOUS LES SEGMENTS, y compris ceux qu on aurait
+ * oublies ; `/services` lui-meme n est pas touche : il a une page.
  *
- * ELLES NE SE DERIVENT PAS DE FAMILLE_SLUGS, volontairement : cette liste-la ne
- * contient plus que les familles VIVANTES. Les anciennes n existent nulle part
- * ailleurs dans le depot, et c est precisement pour cela qu il faut les ecrire
- * ici a la main — sinon plus rien ne se souviendrait qu elles ont existe.
+ * 308 ET NON 302 : `permanent: true`. C est definitif, et c est ce qu il faut
+ * dire aux moteurs pour qu ils transferent ce que l ancienne adresse avait
+ * acquis.
+ *
+ * CHAQUE LANGUE GARDE LA SIENNE : `/en/...` mene a `/en`, jamais a l accueil
+ * francais.
  */
-const FAMILLES_REGROUPEES: ReadonlyArray<readonly [string, string]> = [
-  ["/services/restauration", "/services/imprimes"],
-  ["/services/reseaux-sociaux", "/services/identite"],
-  ["/services/suivi", "/services/site-web"],
-  ["/en/services/restauration", "/en/services/imprimes"],
-  ["/en/services/reseaux-sociaux", "/en/services/identite"],
-  ["/en/services/suivi", "/en/services/site-web"],
+const ANCIENNES_ADRESSES: ReadonlyArray<readonly [string, string]> = [
+  ["/services/:chemin+", "/"],
+  ["/en/services/:chemin+", "/en"],
+  // LA PREMIERE PAGE METIER (25.10.2026) devient une page de la famille
+  // /metiers, generee depuis lib/metiers.ts. Elle avait ete publiee (sitemap,
+  // llms.txt, prospection) : sa nouvelle adresse herite de ce qu elle a acquis.
+  ["/sanitaire-chauffage-geneve", "/metiers/sanitaire-chauffage"],
+  ["/en/sanitaire-chauffage-geneve", "/en/metiers/sanitaire-chauffage"],
 ];
 
 const nextConfig: NextConfig = {
   output: process.env.VERCEL ? undefined : "standalone",
   async redirects() {
-    return FAMILLES_REGROUPEES.map(([source, destination]) => ({
+    return ANCIENNES_ADRESSES.map(([source, destination]) => ({
       source,
       destination,
       permanent: true,

@@ -1,6 +1,6 @@
 "use client";
 
-import { whatsapp } from "@/lib/site";
+import { whatsappHref } from "@/lib/site";
 import { NAWA_CHAT_OUVRIR, type DetailOuverture } from "@/lib/chat-ouvrir";
 import { type Locale, lien } from "@/lib/i18n";
 import { Fragment, useEffect, useRef, useState } from "react";
@@ -12,10 +12,14 @@ import { Fragment, useEffect, useRef, useState } from "react";
  * un ancetre transforme creerait un bloc conteneur et le ferait defiler avec
  * la page. Meme regle que nav/loader/cursor, decision B4.
  *
- * AUCUNE PERSISTANCE : l historique vit en etat React et meurt avec l onglet.
- * L enregistrement des conversations est le bloc B10 ; la mention de
- * confidentialite ci-dessous l annonce des maintenant, avant que ce soit vrai,
- * parce qu il vaut mieux l annoncer trop tot que trop tard.
+ * LA CONVERSATION EST ENREGISTREE, ET LE PANNEAU LE DIT. L historique vit en
+ * etat React, mais il part en base par /api/chat/finalize quand le visiteur
+ * clique « Demander ma démo » ET, sans clic, quand il quitte la page
+ * (sendBeacon sur pagehide, au-dela de SEUIL_ABANDON messages). Chaque message
+ * part aussi chez un fournisseur d IA aux Etats-Unis (lib/llm.ts). La note du
+ * panneau (`note`, ci-dessous) l annonce depuis le 25 octobre 2026 en toutes
+ * lettres : une capture a la fermeture que rien n annonce serait un traitement
+ * cache (nLPD art. 19). /confidentialite detaille le reste.
  *
  * La cle du modele ne touche jamais ce fichier : tout passe par /api/chat.
  *
@@ -174,7 +178,6 @@ const SEUIL_BOUTON = 6;
 /** En dessous, un abandon ne vaut pas la peine d etre finalise. */
 const SEUIL_ABANDON = 4;
 
-const WA_LINK = whatsapp();
 
 /**
  * OU ENVOYER LE VISITEUR QUAND L ASSISTANT LACHE.
@@ -225,6 +228,14 @@ const TEXTES: Record<
   {
     accueil: string;
     accueilCible: (libelle: string) => string;
+    /**
+     * LES BOUTONS DE LA PREMIERE QUESTION. L accueil est ecrit ici, pas par
+     * le modele : ses reponses suggerees doivent donc l etre aussi. Les
+     * suivantes arrivent avec chaque reponse de /api/chat (lib/chat-choix.ts).
+     */
+    choixAccueil: string[];
+    /** Le nom de la rangee de boutons, pour les lecteurs d ecran. */
+    choixLabel: string;
     bulle: string;
     titre: string;
     sousTitre: string;
@@ -232,7 +243,7 @@ const TEXTES: Record<
     note: string;
     ecrit: string;
     indispo: string;
-    allerFormulaire: string;
+    renvoyer: string;
     clos: string;
     terminer: string;
     completeDebut: string;
@@ -247,41 +258,49 @@ const TEXTES: Record<
 > = {
   fr: {
     accueil:
-      "Bonjour, je suis Leo, l'assistant de Nawa Corps. Nous faisons le logotype, les imprimés, les photos, les réseaux sociaux, les supports de restaurant et les sites. Qu'est-ce que vous cherchez à faire faire ?",
+      "Bonjour, je suis Leo, l'assistant de ce site. Quel est votre métier ?",
+    choixAccueil: ["Artisan du bâtiment", "Régie / agence", "Fiduciaire", "Autre"],
+    choixLabel: "Réponses suggérées",
     /**
-     * L ACCUEIL QUAND ON SAIT DEJA CE QUE LE VISITEUR EST VENU CHERCHER.
+     * L ACCUEIL QUAND ON SAIT DEJA POURQUOI LE VISITEUR EST VENU.
      *
-     * Il arrive de /devis, qui a resolu le nom de la prestation en base et le
-     * transmet dans l evenement d ouverture. Lui reposer « qu est-ce que vous
-     * cherchez a faire faire ? » apres qu il vient de cliquer « Le Site » lui
-     * apprend une seule chose : que personne n a regarde. La phrase NOMME donc
-     * ce qu il a clique, puis pose la premiere vraie question — celle dont la
-     * reponse n est nulle part dans l URL.
+     * Il arrive de /devis, qui transmet un sujet dans l evenement d ouverture.
+     * La phrase le nomme, puis pose UNE question, la premiere du deroule du
+     * prompt (lib/chat-prompt.ts) : le metier. Elle ne promet rien de plus que
+     * l accueil ordinaire — le seul engagement, « Réponse le jour ouvrable
+     * suivant », est deja dans l en-tete du panneau.
      *
-     * ELLE NE PROMET RIEN DE PLUS que l accueil ordinaire : pas de delai, pas
-     * de prix, pas de methode. Le seul engagement du site est « Réponse le jour
-     * ouvrable suivant », et il est deja ecrit dans l en-tete du panneau.
+     * « L ASSISTANT DE CE SITE » ET « ASSISTANT DE DEMONSTRATION » (titre) :
+     * Leo est la demonstration de ce que le studio installe, jamais une
+     * reference client (.agents/product-marketing.md §6), et un prenom seul
+     * ferait croire a une personne (LCD art. 3).
      *
-     * ELLE NE POSE QU UNE QUESTION, ET ELLE NE PRESUME PLUS LE SITE. Elle en
-     * posait deux d un coup — le metier ET l adresse du site actuel — alors que
-     * le prompt interdit l enchainement au modele et lui interdit de presumer
-     * qu on vient pour un site. Le libelle clique peut etre « Cartes de
-     * visite » : demander l adresse d un site y est hors sujet, et le panneau
-     * n a pas a s autoriser ce que le modele a interdit. L adresse du site se
-     * demande a l etape 2 du deroule, quand elle a un sens.
+     * LA NOTE DU PANNEAU renvoie a /confidentialite, qui dit que les echanges
+     * de Leo passent par un fournisseur d IA (Groq, Etats-Unis, tant que
+     * LLM_PROVIDER n est pas « infomaniak ») : la promesse « Les donnees de
+     * votre assistant sont hebergees en Suisse » vise l assistant livre au
+     * client, pas Leo (revue psy-A tour 2, M2).
      */
     accueilCible: (libelle) =>
-      `Bonjour, je suis Leo, l'assistant de Nawa Corps. Votre demande porte sur « ${libelle} » — c'est noté. Pour commencer : quel est votre métier ?`,
-    bulle: "Décrivez votre besoin — réponse le jour ouvrable suivant",
-    titre: "Leo — assistant Nawa Corps",
+      `Bonjour, je suis Leo, l'assistant de ce site. Vous venez pour « ${libelle} », c'est noté. Pour commencer : quel est votre métier ?`,
+    // LE BOUTON DIT CE QU IL OUVRE (25.10.2026) : l ancienne bulle posait une
+    // question sans dire qu un clic ouvrait une conversation.
+    bulle: "Parler à Leo, l'assistant du site",
+    titre: "Leo, assistant de démonstration",
     sousTitre: "Réponse le jour ouvrable suivant",
     fermer: "Fermer la conversation",
-    note: "Conversation enregistrée pour traiter votre demande — voir ",
+    // UNE LIGNE ET UN LIEN, PLUS UN PARAGRAPHE (demande d Ayoub du 25.10.2026 :
+    // le bloc de quatre lignes ecrasait la conversation). L information
+    // complete — enregistrement, fournisseur d IA hors de Suisse, extraction
+    // des coordonnees — vit dans /confidentialite (rubrique Leo), a un clic :
+    // c est l information « par couches » que la nLPD admet. Ne pas retirer
+    // le lien.
+    note: "Démonstration : n'y confiez rien de sensible. Données : ",
     ecrit: "Leo écrit",
-    indispo: "Assistant indisponible — utilisez le formulaire juste en dessous ou ",
-    allerFormulaire: "Aller au formulaire",
-    clos: "C'est noté — nous revenons vers vous le jour ouvrable suivant.",
-    terminer: "Envoyer ma demande",
+    indispo: "Leo n'a pas pu répondre à l'instant. Renvoyez votre message, ou écrivez-nous sur ",
+    renvoyer: "Renvoyer mon message",
+    clos: "C'est noté. Réponse le jour ouvrable suivant, pour fixer la démo.",
+    terminer: "Demander ma démo",
     completeDebut: "Conversation complète — la suite directement sur ",
     completeMilieu: ", ou par le ",
     completeFin: ".",
@@ -293,20 +312,22 @@ const TEXTES: Record<
   },
   en: {
     accueil:
-      "Hello, I'm Leo, the Nawa Corps assistant. We do logotypes, print, photography, social media, restaurant material and sites. What are you looking to have done?",
+      "Hello, I'm Leo, this site's assistant. What is your trade?",
+    choixAccueil: ["Building trades", "Property / estate agent", "Accounting firm", "Other"],
+    choixLabel: "Suggested replies",
     /** Meme role et memes limites que la version francaise ci-dessus. */
     accueilCible: (libelle) =>
-      `Hello, I'm Leo, the Nawa Corps assistant. Your enquiry is about “${libelle}” — noted. To start: what do you do?`,
-    bulle: "Tell us what you need — an answer on the next working day",
-    titre: "Leo — Nawa Corps assistant",
+      `Hello, I'm Leo, this site's assistant. You're here for “${libelle}”, noted. To start: what is your trade?`,
+    bulle: "Talk to Leo, this site's assistant",
+    titre: "Leo, demonstration assistant",
     sousTitre: "An answer on the next working day",
     fermer: "Close the conversation",
-    note: "This conversation is recorded so that your enquiry can be handled — see ",
+    note: "Demonstration: do not share anything sensitive. Data: ",
     ecrit: "Leo is typing",
-    indispo: "Assistant unavailable — use the form just below, or ",
-    allerFormulaire: "Go to the form",
-    clos: "Noted — we'll come back to you on the next working day.",
-    terminer: "Send my enquiry",
+    indispo: "Leo couldn't answer just now. Send your message again, or write to us on ",
+    renvoyer: "Send my message again",
+    clos: "Noted. A reply the next working day, to set up the demo.",
+    terminer: "Get my demo",
     completeDebut: "Conversation complete — carry on directly on ",
     completeMilieu: ", or through the ",
     completeFin: ".",
@@ -337,6 +358,9 @@ export default function ChatWidget({ locale = "fr" }: { locale?: Locale }) {
   const [messages, setMessages] = useState<Message[]>([
     { role: "assistant", content: TEXTES[locale].accueil },
   ]);
+  // LES REPONSES SUGGEREES DU DERNIER MESSAGE DE LEO, et de lui seul : elles
+  // disparaissent des que le visiteur repond, par bouton ou au clavier.
+  const [choix, setChoix] = useState<string[]>(() => TEXTES[locale].choixAccueil);
   const [saisie, setSaisie] = useState("");
   const [envoi, setEnvoi] = useState(false);
   const [replie, setReplie] = useState(false);
@@ -382,24 +406,23 @@ export default function ChatWidget({ locale = "fr" }: { locale?: Locale }) {
    * Ouverture pilotee de l'exterieur — voir lib/chat-ouvrir.ts.
    *
    * LE `sujet` DE L'EVENEMENT EST ENFIN LU. Il etait transmis depuis le bloc B9
-   * et ignore ici : la conversation s'ouvrait identique, que le visiteur ait
-   * clique « Le Site » ou rien du tout, et la demande finissait chez Ayoub sans
-   * dire sur quoi elle portait. Il est desormais garde en etat, ecrit dans la
+   * et ignore ici : la conversation s'ouvrait identique quel que soit le bouton
+   * clique, et la demande finissait chez Ayoub sans dire sur quoi elle
+   * portait. Il est desormais garde en etat, ecrit dans la
    * premiere phrase, et pose sur Lead.subject a la finalisation.
    *
-   * LE `libelle` VIENT DE LA BASE, pas d'ici. Le sujet est un identifiant
-   * (« devis-le-site ») ; c'est app/(site)/devis qui lit Postgres et transmet le
-   * NOM (« Le Site »). Tenir ici une table sujet -> nom ferait une seconde
-   * source de verite, qui divergerait au premier renommage en base.
+   * LE `libelle` VIENT DE LA PAGE APPELANTE, pas d'ici. Le sujet est un
+   * identifiant (« devis-studio ») ; c'est app/(site)/devis, via lib/devis.ts,
+   * qui le resout et transmet son libelle. Tenir ici une table sujet -> nom
+   * ferait une seconde source de verite.
    *
    * LA PHRASE D'ACCUEIL N'EST REMPLACEE QUE SI LA CONVERSATION N'A PAS COMMENCE
    * (`suite.length === 1`). Une ouverture pilotee alors que le visiteur a deja
    * ecrit trois messages effacerait ce qu'il vient de dire.
    *
-   * LE LIBELLE N EST PAS TRADUIT ICI. Il arrive deja resolu de la page
-   * appelante, qui a lu la base — c est a elle d appeler `nomService` avec sa
-   * langue. Le retraduire ici demanderait au widget de connaitre le catalogue,
-   * ce que tout ce fichier evite depuis le debut.
+   * LE LIBELLE N EST PAS TRADUIT ICI. Il arrive deja resolu, dans sa langue,
+   * de la page appelante (lib/devis.ts). Le retraduire ici demanderait au
+   * widget de connaitre les sujets, ce que tout ce fichier evite.
    */
   useEffect(() => {
     function surDemande(e: Event) {
@@ -478,14 +501,39 @@ export default function ChatWidget({ locale = "fr" }: { locale?: Locale }) {
     }
   }
 
-  async function envoyer(e: React.FormEvent<HTMLFormElement>) {
+  function envoyer(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const texte = saisie.trim();
+    void envoyerTexte(saisie);
+  }
+
+  // Un seul chemin d envoi pour la saisie et les boutons suggeres : un clic
+  // sur « Électricité » est exactement le message « Électricité ».
+  async function envoyerTexte(brut: string) {
+    const texte = brut.trim();
     if (!texte || envoi || verrouille || clos) return;
 
     const suite: Message[] = [...messages, { role: "user", content: texte }];
     setMessages(suite);
     setSaisie("");
+    await demander(suite);
+  }
+
+  /**
+   * RENVOYER, PLUTOT QU ENVOYER AU FORMULAIRE (demande d Ayoub du 25.10.2026).
+   * Un echec de Leo est presque toujours passager — quota du fournisseur ou
+   * debit par minute — et le repli « Aller au formulaire » faisait croire au
+   * visiteur que la conversation etait finie. Le message du visiteur reste
+   * affiche ; le bouton reposte la meme suite, sans la dupliquer.
+   */
+  function renvoyer() {
+    if (envoi || verrouille || clos) return;
+    const derniere = messages[messages.length - 1];
+    if (derniere?.role !== "user") return;
+    void demander(messages);
+  }
+
+  async function demander(suite: Message[]) {
+    setChoix([]);
     setEnvoi(true);
     setReplie(false);
 
@@ -499,9 +547,10 @@ export default function ChatWidget({ locale = "fr" }: { locale?: Locale }) {
       });
 
       if (res.ok) {
-        const data = (await res.json()) as { reply?: string };
+        const data = (await res.json()) as { reply?: string; choix?: string[] };
         if (data.reply) {
           setMessages([...suite, { role: "assistant", content: data.reply }]);
+          setChoix(Array.isArray(data.choix) ? data.choix : []);
         } else {
           setReplie(true);
         }
@@ -573,16 +622,25 @@ export default function ChatWidget({ locale = "fr" }: { locale?: Locale }) {
             <i></i>
           </div>
         ) : null}
+        {choix.length > 0 && !envoi && !verrouille && !clos ? (
+          <div className="chat-choix" role="group" aria-label={t.choixLabel}>
+            {choix.map((c) => (
+              <button key={c} type="button" onClick={() => void envoyerTexte(c)}>
+                {c}
+              </button>
+            ))}
+          </div>
+        ) : null}
         <div ref={finRef}></div>
       </div>
 
       {replie ? (
         <p className="chat-alert" role="status">
           {t.indispo}
-          <a href={WA_LINK} target="_blank" rel="noopener">WhatsApp</a>.{" "}
-          <a href={sujet ? ANCRE_FORMULAIRE : lien(locale, HREF_ACCUEIL_CONTACT)}>
-            {t.allerFormulaire}
-          </a>
+          <a href={whatsappHref(locale)} target="_blank" rel="noopener">WhatsApp</a>.{" "}
+          <button type="button" className="chat-renvoyer" onClick={renvoyer}>
+            {t.renvoyer}
+          </button>
         </p>
       ) : null}
 
@@ -603,7 +661,7 @@ export default function ChatWidget({ locale = "fr" }: { locale?: Locale }) {
       {verrouille && !clos ? (
         <p className="chat-alert" role="status">
           {t.completeDebut}
-          <a href={WA_LINK} target="_blank" rel="noopener">WhatsApp</a>
+          <a href={whatsappHref(locale)} target="_blank" rel="noopener">WhatsApp</a>
           {t.completeMilieu}
           <a href={sujet ? ANCRE_FORMULAIRE : lien(locale, HREF_ACCUEIL_CONTACT)}>
             {t.formulaire}
@@ -613,12 +671,15 @@ export default function ChatWidget({ locale = "fr" }: { locale?: Locale }) {
       ) : null}
 
       <form className="chat-form" onSubmit={envoyer}>
+        {/* Un vrai libelle, masque visuellement : le panneau est unique, un id
+            fixe ne peut pas entrer en collision. */}
+        <label className="sr-only" htmlFor="chat-saisie">{t.labelSaisie}</label>
         <input
+          id="chat-saisie"
           type="text"
           value={saisie}
           onChange={(e) => setSaisie(e.target.value)}
           placeholder={verrouille || clos ? t.placeholderTermine : t.placeholder}
-          aria-label={t.labelSaisie}
           maxLength={1500}
           disabled={envoi || verrouille || clos}
           autoComplete="off"

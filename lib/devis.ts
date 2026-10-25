@@ -1,291 +1,77 @@
-import { nomService, type ServiceCatalogue } from "@/lib/catalogue";
-import { familleDuService } from "@/lib/catalogue-familles";
-import { FAMILLES, FAMILLE_SLUGS } from "@/lib/familles";
-import { FORMULES, FORMULE_SLUGS, estFormule } from "@/lib/formules";
 import type { Locale } from "@/lib/i18n";
 import { whatsapp } from "@/lib/site";
 
 /**
- * CE QUE `?p=` VEUT DIRE — la table de resolution de la page /devis.
+ * CE QUE `?p=` VEUT DIRE — la table de resolution de la page /devis, devenue
+ * la demande de demo le 24.10.2026 (docs/agents/copy/devis.md).
  *
- * POURQUOI CE FICHIER EXISTE. Les huit CTA « Demander un devis » du site
- * emettaient chacun un `sujet` (« devis-le-site », « devis-imprimes »…) que
- * PERSONNE NE LISAIT : l'evenement partait, le widget de chat l'ignorait, et la
- * demande arrivait chez Ayoub sans dire sur quoi elle portait. Il fallait
- * rappeler le visiteur pour lui demander ce qu'il venait de cliquer. La page
- * /devis lit desormais ce sujet dans l'URL, et ce fichier est le seul endroit
- * qui sache le traduire.
+ * Un bouton du site peut mener a `/devis?p=<sujet>` : la page lit ce sujet,
+ * le passe a l assistant (components/OuvrirDevis.tsx) et au formulaire en
+ * champ cache, si bien que la demande arrive chez Ayoub en disant d ou elle
+ * vient (`Lead.subject`).
  *
- * DEUX FORMES SONT ACCEPTEES, ET C'EST DELIBERE :
- *  - un SLUG DE LA TABLE Service (« le-site », « carte-visite »), parce que
- *    c'est ce qu'une carte de catalogue a sous la main et que le nom comme le
- *    prix se lisent alors directement en base ;
- *  - un SUJET DE CTA (« devis-imprimes »), parce que cinq familles et trois
- *    boutons generaux ne designent AUCUNE ligne unique du catalogue — une
- *    famille en regroupe plusieurs.
- * Un `p` inconnu, ou absent, ne casse rien : la page s'ouvre sans prestation
- * nommee. Elle ne jette JAMAIS — un 404 sur un parcours de devis est une
- * demande perdue, pas une erreur a signaler.
+ * L ANCIENNE OFFRE N EST PLUS RECONNUE. Les formules de site, le sur-mesure,
+ * la carte du studio et les familles ont quitte le site : leurs sujets
+ * (« devis-le-site », « devis-imprimes »…) et les slugs de la table Service
+ * retombent sur la demande generale, comme tout `p` inconnu. La page ne jette
+ * JAMAIS — un 404 sur une demande de demo est une demande perdue.
  *
- * LES NOMS ET LES PRIX NE SONT PAS ECRITS ICI. Ils viennent de Postgres, comme
- * partout ailleurs sur le site : ce fichier ne connait que des slugs et des
- * libelles de FAMILLE, qui sont eux de la matiere editoriale (lib/familles.ts)
- * et n'ont pas de ligne en base.
+ * AUCUN NOM DE PRESTATION NI AUCUN PRIX : il n y a plus qu une demande
+ * possible, la demo de l assistant.
  *
- * LES AMORCES WHATSAPP SONT REPRISES, PAS RECOPIEES. Elles vivaient dans le
- * `href` de components/BoutonDevis.tsx, qui pointait sur WhatsApp et
- * interceptait son propre clic ; le bouton est devenu un vrai lien vers /devis,
- * et l'amorce a suivi le visiteur jusqu'ici — c'est sur cette page qu'elle sert
- * encore, comme repli si l'assistant ne demarre pas. Celles des formules et des
- * familles sont LUES dans lib/formules.ts et lib/familles.ts ; seules les
- * quatre qui n'appartenaient a aucun des deux sont ecrites plus bas.
- *
- * CE FICHIER EST BILINGUE DEPUIS /en/devis, ET LE PARAMETRE `locale` EST EN
- * DERNIERE POSITION AVEC « fr » POUR DEFAUT — meme convention que
- * lib/format.ts. app/(site)/devis/page.tsx appelle `resoudreDevis` sans
- * troisieme argument et rend donc exactement ce qu'il rendait avant.
- *
- * TROIS CHOSES CHANGENT DE LANGUE, ET TROIS SEULEMENT :
- *  - le LIBELLE d'une ligne de catalogue, lu par `nomService(service, locale)`
- *    (lib/catalogue.ts) — c'est-a-dire `nameEn` quand la base en porte un. Les
- *    trois formules ont `nameEn = null` VOLONTAIREMENT : « La Vitrine »,
- *    « Le Site » et « L'Assistant » sont des noms propres et le repli sur le
- *    francais est ici le comportement voulu, pas un trou a boucher ;
- *  - le libelle d'une FAMILLE, qui n'a pas de ligne en base et vit dans
- *    lib/familles.ts (`libelleEn`) ;
- *  - l'AMORCE WhatsApp, deja ecrite en anglais dans lib/formules.ts et
- *    lib/familles.ts (`amorceEn`). Les quatre sujets qui n'appartiennent a
- *    aucun des deux recoivent la leur plus bas.
- * Le SUJET, lui, ne change jamais : c'est un identifiant, il part en base
- * (`Lead.subject`) et le traduire ferait deux cles pour une seule conversation.
+ * Le SUJET ne se traduit jamais : c est un identifiant qui part en base. Seule
+ * l amorce WhatsApp change de langue.
  */
 
 /**
- * Le repli quand la demande ne designe rien de precis — et le seul endroit ou
- * cette phrase est ecrite, dans chaque langue.
- *
- * L'enregistrement est indexe par `Locale` : ajouter une langue a lib/i18n.ts
- * casse la compilation ICI tant que sa colonne n'est pas remplie. C'est la
- * meme garde que `PREFIXE` et `LANGUE_HTML` — une amorce manquante ouvrirait
- * WhatsApp sur un message vide, ce qui ne se voit qu'une fois le visiteur
- * parti.
+ * L amorce WhatsApp de repli, dans chaque langue. Indexee par `Locale` : une
+ * langue ajoutee a lib/i18n.ts casse la compilation ici tant que sa phrase
+ * manque, au lieu d ouvrir WhatsApp sur un message vide.
  */
 const AMORCES_GENERALES: Record<Locale, string> = {
-  fr: whatsapp("Bonjour, j'aimerais un devis pour mon entreprise."),
-  en: whatsapp("Hello, I'd like a quote for my business."),
+  fr: whatsapp("Bonjour, j'aimerais une démo de l'assistant sur mon métier."),
+  en: whatsapp("Hello, I'd like a demo of the assistant on my trade."),
 };
-
-/** Ce qu'un sujet de CTA designe. */
-type Entree = {
-  /**
-   * Slug de la table Service, quand le sujet designe UNE ligne chiffrable.
-   * C'est elle qui portera le nom et le prix affiches.
-   */
-  service?: string;
-  /**
-   * Nom lisible, quand aucune ligne de base ne porte ce nom — une famille, ou
-   * un bouton general. Sert aussi de repli si la ligne `service` a ete masquee
-   * depuis /admin.
-   */
-  libelle?: string;
-  /** Idem en anglais. Absent = la demande retombe sur `libelle`. */
-  libelleEn?: string;
-  /** Amorce WhatsApp : le repli si l'assistant ne demarre pas. */
-  amorce: string;
-  /**
-   * Idem en anglais. C'EST UN LIEN COMPLET, pas une phrase : il se construit
-   * avec `whatsapp()` comme son jumeau francais, sinon le message pre-rempli
-   * n'est pas encode et WhatsApp s'ouvre vide. Absent = repli sur `amorce`,
-   * c'est-a-dire une amorce francaise — visible, donc corrigible.
-   */
-  amorceEn?: string;
-};
-
-/** Le champ anglais s'il existe, le francais sinon. */
-function selon<T>(locale: Locale, fr: T, en: T | undefined): T {
-  return locale === "en" ? (en ?? fr) : fr;
-}
 
 /**
- * Les trois formules, DERIVEES de lib/formules.ts. Une formule ajoutee la-bas
- * est reconnue ici sans qu'on y revienne, et son sujet ne peut pas diverger.
+ * Les sujets encore emis par un bouton du site. `devis-studio` vient du bas
+ * de /studio (components/BoutonDevis.tsx) : il dit d ou vient la demande, sans
+ * nommer de prestation, et prend l amorce generale.
  */
-const DES_FORMULES: Record<string, Entree> = Object.fromEntries(
-  FORMULE_SLUGS.map((slug) => [
-    FORMULES[slug].sujet,
-    {
-      service: slug,
-      amorce: FORMULES[slug].amorce,
-      amorceEn: FORMULES[slug].amorceEn,
-    },
-  ]),
-);
+const SUJETS_CONNUS: ReadonlySet<string> = new Set(["devis-studio"]);
 
 /**
- * Les cinq familles, DERIVEES de lib/familles.ts. Elles n'ont pas de ligne en
- * base — une famille regroupe plusieurs prestations —, donc pas de prix : le
- * libelle editorial est ce qu'on peut nommer honnetement.
- */
-const DES_FAMILLES: Record<string, Entree> = Object.fromEntries(
-  FAMILLE_SLUGS.map((slug) => [
-    FAMILLES[slug].sujet,
-    {
-      libelle: FAMILLES[slug].libelle,
-      libelleEn: FAMILLES[slug].libelleEn,
-      amorce: FAMILLES[slug].amorce,
-      amorceEn: FAMILLES[slug].amorceEn,
-    },
-  ]),
-);
-
-/**
- * Les quatre sujets qui n'appartiennent ni a une formule ni a une famille.
- * Leurs amorces viennent des pages qui les emettaient — components/Offres.tsx,
- * components/CarteDuStudio.tsx, app/(site)/services/page.tsx et
- * app/(site)/studio/page.tsx —, deplacees et non dupliquees.
- *
- * DEUX D'ENTRE EUX N'ONT PAS DE LIBELLE, et c'est exact. `devis-studio` vient
- * du bas de la page du studio, `devis-carte-du-studio` du pied du catalogue de
- * l'accueil : ni l'un ni l'autre ne designe une prestation — ils designent le
- * catalogue entier. Leur donner un nom reviendrait a mettre un mot dans la
- * bouche du visiteur, et l'assistant poserait sa question de depart en faisant
- * semblant de savoir. Le sujet, lui, est quand meme retenu : il dit d'ou vient
- * la demande, ce qui est deja beaucoup plus que rien.
- */
-const AUTRES: Record<string, Entree> = {
-  "devis-sur-mesure": {
-    service: "site-sur-mesure",
-    amorce: whatsapp(
-      "Bonjour, j'aimerais un devis pour un site à plusieurs pages.",
-    ),
-    amorceEn: whatsapp(
-      "Hello, I'd like a quote for a site with several pages.",
-    ),
-  },
-  "devis-formules": {
-    libelle: "Les formules de site",
-    // Glossaire anglais §7 : « formule » se dit `package`, et non `option` ni
-    // `plan` — ce dernier sent l'abonnement logiciel. Le §6 impose par-dessus
-    // de NOMMER la formule quand la phrase le permet ; ici elle ne le permet
-    // pas, le bouton designe les trois a la fois.
-    libelleEn: "The site packages",
-    amorce: whatsapp(
-      "Bonjour, j'aimerais un devis pour la refonte du site de mon entreprise.",
-    ),
-    amorceEn: whatsapp(
-      "Hello, I'd like a quote to rebuild my company's website.",
-    ),
-  },
-  "devis-carte-du-studio": {
-    amorce: whatsapp("Bonjour, j'aimerais un devis pour une prestation."),
-    amorceEn: whatsapp("Hello, I'd like a quote for one of your services."),
-  },
-  "devis-studio": {
-    amorce: whatsapp("Bonjour, j'ai lu la page du studio et j'aimerais un devis."),
-    amorceEn: whatsapp(
-      "Hello, I have read the studio page and I'd like a quote.",
-    ),
-  },
-};
-
-const SUJETS: Record<string, Entree> = {
-  ...DES_FORMULES,
-  ...DES_FAMILLES,
-  ...AUTRES,
-};
-
-/**
- * BORNE DE LONGUEUR, ALIGNEE SUR LA BASE. `Lead.subject` est un `String?` que
- * les deux routes d'ecriture plafonnent a 80 caracteres ; une valeur d'URL plus
- * longue que ca ne peut de toute facon designer aucun de nos sujets, et la
- * laisser passer ferait rejeter la demande cote serveur.
+ * BORNE DE LONGUEUR, ALIGNEE SUR LA BASE : `Lead.subject` est plafonne a 80
+ * caracteres par les routes d ecriture. Au-dela, aucun sujet connu.
  */
 const SUJET_MAX = 80;
 
 /** Ce que la page /devis a besoin de savoir de la demande. */
 export type DemandeDevis = {
-  /**
-   * L'identifiant qui part a l'assistant puis sur le Lead. `null` quand `p` est
-   * absent ou inconnu — un champ vide vaut mieux qu'un champ invente.
-   */
+  /** L identifiant qui part a l assistant puis sur le Lead ; `null` si inconnu. */
   sujet: string | null;
-  /** Le nom lisible, lu en base des qu'une ligne le porte. */
-  libelle: string | null;
   /**
-   * La ligne du catalogue, quand la demande en designe une. C'est d'elle que
-   * viennent le nom ET le prix affiches — jamais de ce fichier.
+   * Un nom lisible a montrer au visiteur. Toujours `null` aujourd hui : aucun
+   * sujet connu ne designe une prestation. Le champ reste parce que la page et
+   * l assistant savent deja l afficher le jour ou un sujet en aura un.
    */
-  service: ServiceCatalogue | null;
-  /** L'amorce WhatsApp de repli, toujours renseignee. */
+  libelle: string | null;
+  /** L amorce WhatsApp de repli, toujours renseignee. */
   amorce: string;
 };
 
-/** L'amorce qui accompagne une ligne de catalogue, selon ou elle est rangee. */
-function amorceDuService(service: ServiceCatalogue, locale: Locale): string {
-  if (estFormule(service.slug)) {
-    const formule = FORMULES[service.slug];
-    return selon(locale, formule.amorce, formule.amorceEn);
-  }
-  const famille = familleDuService(service)?.contenu;
-  if (!famille) return AMORCES_GENERALES[locale];
-  return selon(locale, famille.amorce, famille.amorceEn);
-}
-
-/**
- * Resout le `?p=` de /devis contre le catalogue deja charge.
- *
- * Le catalogue est PASSE EN ARGUMENT plutot que relu ici : la page l'a deja en
- * main (lib/catalogue.ts memoise par requete), et une fonction pure se relit
- * mieux qu'une fonction qui interroge Postgres au passage.
- */
+/** Resout le `?p=` de /devis. Fonction pure : ni base, ni exception. */
 export function resoudreDevis(
   brut: string | string[] | undefined,
-  catalogue: readonly ServiceCatalogue[],
   locale: Locale = "fr",
 ): DemandeDevis {
-  const inconnu: DemandeDevis = {
-    sujet: null,
-    libelle: null,
-    service: null,
-    amorce: AMORCES_GENERALES[locale],
-  };
-
-  // `?p=a&p=b` rend un tableau : on prend la premiere valeur plutot que de
-  // refuser la demande pour une URL malformee.
+  // `?p=a&p=b` rend un tableau : on prend la premiere valeur.
   const p = (Array.isArray(brut) ? brut[0] : brut)?.trim();
-  if (!p || p.length > SUJET_MAX) return inconnu;
-
-  // 1. Un slug de la table Service — le cas le plus riche : nom ET prix.
-  const direct = catalogue.find((s) => s.slug === p);
-  if (direct) {
-    return {
-      sujet: direct.slug,
-      // Le nom vient de la base, dans la langue demandee — jamais de ce
-      // fichier. `nomService` porte le repli sur le francais, qui est le
-      // comportement VOULU pour les trois formules (noms propres).
-      libelle: nomService(direct, locale),
-      service: direct,
-      amorce: amorceDuService(direct, locale),
-    };
-  }
-
-  // 2. Un sujet de CTA.
-  const entree = SUJETS[p];
-  if (!entree) return inconnu;
-
-  // La ligne peut avoir ete masquee depuis /admin : on retombe alors sur le
-  // libelle editorial, et la page se referme sans prix plutot qu'avec un trou.
-  const service = entree.service
-    ? (catalogue.find((s) => s.slug === entree.service) ?? null)
-    : null;
+  const connu = !!p && p.length <= SUJET_MAX && SUJETS_CONNUS.has(p);
 
   return {
-    sujet: p,
-    libelle:
-      (service ? nomService(service, locale) : null) ??
-      selon(locale, entree.libelle, entree.libelleEn) ??
-      null,
-    service,
-    amorce: selon(locale, entree.amorce, entree.amorceEn),
+    sujet: connu ? p : null,
+    libelle: null,
+    amorce: AMORCES_GENERALES[locale],
   };
 }

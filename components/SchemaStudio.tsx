@@ -1,96 +1,98 @@
+import type { Locale } from "@/lib/i18n";
 import {
   CONTACT,
   FONDE_EN,
   HORAIRES,
   LANGUES,
   NAP_CONFIRME,
+  SAME_AS,
   SITE_NAME,
   SITE_URL,
   jsonLd,
 } from "@/lib/site";
 
 /**
- * DONNEE STRUCTUREE DU STUDIO — ProfessionalService.
+ * DONNEE STRUCTUREE DU STUDIO — ProfessionalService, rendue sur l accueil.
  *
  * C est la fiche d identite que lisent Google et les moteurs de reponse. Elle
  * ne dessine rien : le composant n emet qu une balise <script>.
  *
- * TOUT CE QUI EST ICI EST DEJA ECRIT QUELQUE PART SUR LA PAGE. Les horaires
- * viennent du pied de page (« Lu–Sa · 9h–19h »), les langues de la section
- * « Le studio », les prestations de ServicesRows, et le delai du hero
- * (une semaine). `foundingDate` est la seule donnee sans reflet a
- * l ecran depuis le retrait de « Depuis 2026 » (.facts de Studio.tsx ne montre
- * plus que Geneve / une semaine / FR-EN) — c est un fait d etat civil, pas un
- * argument marketing, donc une exception assumee a la regle ci-dessus. Une
- * donnee structuree qui promet ce que la page ne montre pas est une donnee
- * structuree que Google finit par ignorer, au mieux.
+ * TOUT CE QUI EST ICI EST DEJA ECRIT SUR LA PAGE (docs/agents/copy/meta.md
+ * §5) : la description reprend le hero et la section (04), le slogan est la
+ * sortie du hero et la bande legale du pied de page, les prestations sont les
+ * gestes de l assistant decrits en (02) et sur /services, les horaires et les
+ * coordonnees sont ceux du pied de page. `foundingDate` est la seule donnee
+ * sans reflet a l ecran — un fait d etat civil, assume. Une donnee structuree
+ * qui promet ce que la page ne montre pas finit ignoree, au mieux.
  *
- * LA FICHE COUVRE TOUT LE CATALOGUE, PAS LES SEULS SITES. Elle ne listait que
- * des fonctions de site ; le studio vend aussi de l identite, des imprimes, des
- * photos, la production des reseaux sociaux et une ligne restauration. Une
- * fiche qui tait la moitie du catalogue prive le studio des requetes qui vont
- * avec, et contredit ce que la page montre desormais.
+ * LES ENTITES SONT NOMMEES EN ENTIER (studio, Geneve, PME, assistant IA) : un
+ * moteur de reponse cite un bloc autonome, il ne devine pas un pronom.
  *
- * LE NAP SORT D ICI DEPUIS QUE LE VERROU EST OUVERT. NAP_CONFIRME vaut true
- * (lib/site.ts) : le telephone, l e-mail et la localite sont ceux d Ayoub
- * Bensalem, et les trois champs partent donc bien dans la fiche. C est ce qui
- * la rend eligible au pack local et au rapprochement avec la fiche Google — et
- * la regle du dessus tient toujours, les trois sont affiches en pied de page.
+ * NI `priceRange`, NI `Offer`, NI `aggregateRating` : le seul montant du
+ * site vit en base et s affiche avec sa mention de TVA dans la page, et il
+ * n existe aucun avis (LCD art. 3, CLAUDE.md). Le catalogue liste donc des
+ * `Service` nus (schema.org accepte un Thing dans `itemListElement`) : un
+ * `Offer` sans prix est une offre vide. Le seul `Offer` du site est celui de
+ * /services, emis seulement quand le montant est lu en base.
  *
- * LE VERROU RESTE, ET IL FAUT COMPRENDRE POURQUOI. Le bloc conditionnel plus
- * bas n est pas un vestige : une coordonnee declaree ici remonte dans une
- * fiche, un panneau de connaissance, une reponse d assistant — elle se propage
- * hors du site et se corrige mal. Tant que les valeurs etaient des
- * remplissages, le silence valait mieux qu une donnee structuree fausse.
- * Refermer le verrou est donc le bon geste le jour ou une coordonnee redevient
- * incertaine : on ne corrige pas ici, on cesse d emettre.
+ * LE NAP SORT D ICI TANT QUE LE VERROU EST OUVERT. NAP_CONFIRME (lib/site.ts)
+ * coupe l emission entiere du telephone, de l e-mail et de l adresse le jour
+ * ou une coordonnee redevient incertaine : on ne corrige pas ici, on cesse
+ * d emettre. L adresse est volontairement sans rue : le studio n a pas de
+ * bureau.
  *
- * L adresse est volontairement sans rue : le studio n a pas de bureau, et
- * inventer une voie « pour faire serieux » serait exactement la donnee fausse
- * que ce verrou existe pour empecher.
- *
- * Pas de priceRange non plus : les prix vivent en base et varient. L annoncer
- * en dur ici, c est prendre le risque qu il contredise la grille affichee.
+ * RENDU SUR `/` ET SUR `/en` DEPUIS LE 25.10.2026 (audit CRO/SEO v3, 3.8) :
+ * les `Service` anglais pointent vers `provider: {@id …/#studio}`, qui n etait
+ * defini que sur l accueil francais. C est LA MEME ENTITE — meme `@id`, memes
+ * coordonnees, meme `url` — dont seuls les textes (description, slogan,
+ * prestations) passent dans la langue de la page. Ils se tiennent ici, cote a
+ * cote, pour qu un mot change dans une langue se change dans l autre.
  */
 
-/**
- * Les prestations, dans l ordre de ServicesRows.
- *
- * « FICHE GOOGLE » A QUITTE CETTE LISTE LE 31 AOUT 2026, avec la decision qui
- * la sort de l offre : le mot Google ne designe plus une prestation nulle part
- * sur le site, et un OfferCatalog qui la declarerait encore vendrait a un
- * moteur ce que les pages ne vendent plus.
- *
- * ELLES NE SUIVENT PLUS LE DECOUPAGE EDITORIAL DES SIX LIGNES. « Identite,
- * imprimes et photographie » et « Fiche Google et reseaux sociaux » sont des
- * titres de section : ils groupent des metiers distincts pour tenir sur une
- * ligne a l ecran. Un OfferCatalog n a pas cette contrainte, et un moteur
- * n apparie pas une requete « logotype Geneve » avec un intitule qui melange
- * trois prestations. Chacune est donc nommee separement — toutes sont ecrites
- * dans le corps des lignes 04, 05 et 06 de ServicesRows, la regle du docblock
- * ci-dessus tient.
- */
-const PRESTATIONS = [
-  "Refonte de site",
-  "Demande de devis et prise de rendez-vous en ligne",
-  "Assistant et relances automatiques",
-  "Identité visuelle et logotype",
-  "Cartes de visite, affiches et stickers vitrine",
-  "Photographie d'entreprise",
-  "Réseaux sociaux",
-  "Supports pour la restauration",
-];
+/** Les textes de la fiche, dans la langue de la page. */
+const TEXTES: Record<
+  Locale,
+  { description: string; slogan: string; catalogue: string; prestations: readonly string[] }
+> = {
+  fr: {
+    description:
+      "Studio genevois qui installe dans les PME un assistant IA qui connaît déjà leur métier. L'assistant répond aux demandes, relance les clients et prépare les documents ; il ne s'engage jamais à la place du patron. Démo sur des demandes de votre métier avant de signer, sans rien à préparer.",
+    slogan: "Vous validez. Il s'occupe du reste.",
+    catalogue: "L'assistant",
+    // Ce que fait l assistant, dans l ordre de /services (01).
+    prestations: [
+      "Assistant IA pour PME",
+      "Réponse aux demandes des clients",
+      "Relance des devis et des pièces manquantes",
+      "Préparation de brouillons de devis et de documents",
+      "Relevé hebdomadaire de l'activité",
+    ],
+  },
+  en: {
+    description:
+      "Geneva studio that sets up for small businesses an AI assistant that already knows their trade. The assistant answers enquiries, follows up clients and prepares documents; it never commits on the owner's behalf. A demo on enquiries from your trade before you sign, with nothing to prepare.",
+    slogan: "You approve. It handles the rest.",
+    catalogue: "The assistant",
+    prestations: [
+      "AI assistant for small businesses",
+      "Replies to client enquiries",
+      "Follow-up of quotes and missing documents",
+      "Draft quotes and documents",
+      "Weekly activity report",
+    ],
+  },
+};
 
-export default function SchemaStudio() {
+export default function SchemaStudio({ locale = "fr" }: { locale?: Locale }) {
+  const t = TEXTES[locale];
   const schema = {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
     "@id": `${SITE_URL}/#studio`,
     name: SITE_NAME,
     url: SITE_URL,
-    description:
-      "Studio de création digitale indépendant à Genève : sites, identité et logotype, imprimés, photographie d'entreprise, réseaux sociaux et supports pour la restauration. Le site des PME genevoises est refait en une semaine, sans que le client ait de contenu à fournir.",
-    slogan: "L'essentiel. Bien conçu.",
+    description: t.description,
+    slogan: t.slogan,
     image: `${SITE_URL}/brand/nawa-corps-logo-principal-transparent.png`,
     logo: `${SITE_URL}/brand/nawa-corps-logo-principal-transparent.png`,
     foundingDate: FONDE_EN,
@@ -103,16 +105,25 @@ export default function SchemaStudio() {
     },
     knowsLanguage: [...LANGUES],
     currenciesAccepted: "CHF",
-    areaServed: {
-      "@type": "City",
-      name: CONTACT.ville,
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: CONTACT.ville,
-        addressRegion: CONTACT.region,
-        addressCountry: CONTACT.pays,
+    // Genève d abord (la ville du NAP), puis sa region : le marche est
+    // « Genève et sa région (Suisse romande) » (CLAUDE.md). La region est un
+    // `Place` nomme, pas un `AdministrativeArea` : la Suisse romande n est pas
+    // une entite administrative, et le dire serait faux.
+    areaServed: [
+      {
+        "@type": "City",
+        name: CONTACT.ville,
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: CONTACT.ville,
+          addressRegion: CONTACT.region,
+          addressCountry: CONTACT.pays,
+        },
       },
-    },
+      { "@type": "Place", name: "Suisse romande" },
+    ],
+    // Vide tant que la fiche Google et LinkedIn n existent pas (lib/site.ts).
+    ...(SAME_AS.studio.length ? { sameAs: [...SAME_AS.studio] } : {}),
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",
@@ -123,15 +134,12 @@ export default function SchemaStudio() {
     ],
     hasOfferCatalog: {
       "@type": "OfferCatalog",
-      name: "Services du studio",
-      itemListElement: PRESTATIONS.map((nom) => ({
-        "@type": "Offer",
-        itemOffered: {
-          "@type": "Service",
-          name: nom,
-          areaServed: CONTACT.ville,
-          provider: { "@id": `${SITE_URL}/#studio` },
-        },
+      name: t.catalogue,
+      itemListElement: t.prestations.map((nom) => ({
+        "@type": "Service",
+        name: nom,
+        areaServed: CONTACT.ville,
+        provider: { "@id": `${SITE_URL}/#studio` },
       })),
     },
 

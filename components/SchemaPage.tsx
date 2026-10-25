@@ -12,17 +12,16 @@ import { LANGUE_HTML, type Locale } from "@/lib/i18n";
  *     titre). Le moteur, lui, ne voyait qu une suite d URL sans hierarchie —
  *     et c est ce qui lui permet d afficher « nawacorps.ch > Services > Le
  *     Site » au lieu de l URL brute dans un resultat.
- *  2. `FAQPage` sur l accueil SEULEMENT, alors que huit pages portent des
- *     questions/reponses : les trois formules et les cinq familles. Elles
- *     etaient rendues en `<details>` sans jamais etre declarees.
+ *  2. `FAQPage` sur l accueil seulement, alors que des pages internes
+ *     portaient des questions/reponses rendues en `<details>` sans jamais etre
+ *     declarees. Le parametre `questions` reste disponible pour elles.
  *
  * POURQUOI LES DEUX DANS UN SEUL COMPOSANT. Ils vont toujours ensemble sur
  * une page interne, et un `@graph` unique evite d empiler deux balises
  * `<script>` qui disent chacune un morceau de la meme page.
  *
- * LES QUESTIONS VIENNENT DE LA MEME SOURCE QUE L AFFICHAGE — `questions` de
- * lib/formules.ts ou lib/familles.ts, le tableau que la page rend en
- * `<details>`. C est la seule protection contre la derive : un balisage de Q/R
+ * LES QUESTIONS DOIVENT VENIR DE LA MEME SOURCE QUE L AFFICHAGE — le tableau
+ * que la page rend en `<details>`. C est la seule protection contre la derive : un balisage de Q/R
  * qui ne correspond plus au texte visible est une declaration fausse au
  * moteur, et Google la traite comme telle.
  *
@@ -42,8 +41,7 @@ export type QuestionReponse = {
 };
 
 /**
- * `locale` est OPTIONNELLE et vaut « fr » par defaut : les huit appels ecrits
- * avant le chantier anglais continuent de rendre exactement le meme JSON-LD.
+ * `locale` est OPTIONNELLE et vaut « fr » par defaut.
  *
  * Elle ne sert qu a poser `inLanguage`. Sans lui, deux fils d Ariane — l un
  * francais, l autre anglais — decrivent la meme entite dans deux langues sans

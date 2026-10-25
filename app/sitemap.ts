@@ -1,41 +1,35 @@
 import type { MetadataRoute } from "next";
-import { FAMILLE_SLUGS } from "@/lib/familles";
-import { FORMULE_SLUGS } from "@/lib/formules";
 import { SITE_URL } from "@/lib/site";
 import { estTraduit, lien } from "@/lib/i18n";
+import { CHEMIN_DEMONSTRATIONS } from "@/lib/automatisations";
+import { CHEMIN_METIERS, METIERS, cheminMetier } from "@/lib/metiers";
+import { cgvEstBrouillon } from "./(site)/cgv/page";
+import { BROUILLON as CONFIDENTIALITE_BROUILLON } from "./(site)/confidentialite/page";
+import { BROUILLON as CONFIDENTIALITE_EN_BROUILLON } from "./(site)/en/confidentialite/page";
+import { BROUILLON as MENTIONS_EN_BROUILLON } from "./(site)/en/mentions-legales/page";
+import { BROUILLON as MENTIONS_BROUILLON } from "./(site)/mentions-legales/page";
 
 /**
  * sitemap.xml, genere.
  *
- * L accueil, le catalogue, les trois formules de site, les cinq familles, la
- * demande de devis, les demonstrations, la page du studio, celle du contact,
- * les deux pages legales. Sans ce plan, la decouverte reposerait entierement
- * sur les liens de la nav et du pied de page, et une page atteinte par un seul
- * lien est une page mal signalee.
+ * L accueil, la page de detail de l assistant (/services), le hub des metiers
+ * (/metiers) et une page par metier (/metiers/<slug>, lib/metiers.ts), la
+ * demande de demo (/devis), le studio, le contact, les trois pages legales (mentions,
+ * confidentialite, CGV) — ces trois-la seulement quand elles ne portent plus
+ * aucun marqueur de brouillon (`brouillon`, plus bas) — et les exemples
+ * d automatisation par metier (/demonstrations), revenus le 25 octobre 2026.
+ * Les pages de l ancienne offre (`/services/<slug>`) en sont sorties le
+ * 24 octobre 2026 : elles redirigent vers l accueil (next.config.ts), et un
+ * plan qui annonce une redirection apprend au moteur a ne plus le croire.
  *
- * LE COMPTE N EST PLUS ECRIT. Il disait « douze URL » et il en annoncait deja
- * quatorze : un chiffre dans un commentaire est faux a la premiere page
- * ajoutee, et deux des lignes ci-dessous sont des `map` dont la longueur se
- * decide ailleurs.
- *
- * `lastModified` est volontairement la date du build et non `new Date()` a
- * chaque requete : ce fichier est un Route Handler mis en cache par Next, et
- * une date qui bouge a chaque appel apprend au moteur a ne plus la croire.
+ * `lastModified` EST UNE DATE FIXE PAR PAGE, ecrite a la main dans `PAGES`
+ * (audit CRO/SEO du 25.10.2026). C etait `new Date()` au chargement du
+ * module : les routes du site etant dynamiques, la date changeait a chaque
+ * lecture du plan, et une date qui bouge a chaque appel apprend au moteur a ne
+ * plus la croire. QUI MODIFIE LE CONTENU D UNE PAGE MET SA DATE A JOUR ICI.
  *
  * QUAND DE NOUVELLES PAGES ARRIVERONT, elles se listent ici — c est le seul
- * endroit a modifier. Si elles finissent par etre pilotees par la base, cette
- * fonction passe `async` et lit Prisma comme le fait deja Offres.
- *
- * LES TROIS FORMULES SONT DERIVEES DE `FORMULE_SLUGS`, la meme constante que
- * `generateStaticParams` de app/(site)/services/[slug]/page.tsx. Les ecrire
- * une seconde fois ici garantissait qu un jour le plan annoncerait une page qui
- * n existe plus, ou en oublierait une nouvelle.
- *
- * LES CINQ FAMILLES SUIVENT LA MEME REGLE, derivees de `FAMILLE_SLUGS`
- * (lib/familles.ts) — la constante qui indexe aussi FAMILLES et donc les cinq
- * segments statiques de app/(site)/services/. Ces pages sont bien listees
- * malgre leur `force-dynamic` : le rendu dynamique dit comment la page est
- * fabriquee, pas si elle merite d etre indexee.
+ * endroit a modifier.
  *
  * LES ENTREES SONT DES CHEMINS, PLUS DES URL ABSOLUES. Elles s ecrivaient
  * `${SITE_URL}/services` ; elles s ecrivent `/services`, et c est la fonction
@@ -44,14 +38,22 @@ import { estTraduit, lien } from "@/lib/i18n";
  * l URL anglaise et les `hreflang` qui les relient — et les fabriquer a partir
  * d une URL absolue aurait demande de la decouper pour la recomposer.
  */
-const BUILD = new Date();
-
 /** Une page du plan, dans sa forme francaise et sans domaine. */
 type Entree = {
   /** Le chemin SANS prefixe de langue : `/services`, jamais `/en/services`. */
   chemin: string;
   changeFrequency: NonNullable<MetadataRoute.Sitemap[number]["changeFrequency"]>;
   priority: number;
+  /** Derniere modification reelle du contenu, `AAAA-MM-JJ`. */
+  modifie: string;
+  /**
+   * Vrai tant que la page (francaise OU anglaise) porte un marqueur
+   * « [À COMPLÉTER] » / « [À VÉRIFIER] » : elle est alors en `noindex` et
+   * sort du plan, les deux langues ensemble — un couple hreflang dont une
+   * moitie est en noindex ne forme plus un groupe. Calcule par la page meme
+   * (lib/brouillon.ts) : l entree revient seule quand le marqueur part.
+   */
+  brouillon?: boolean;
 };
 
 /**
@@ -80,7 +82,7 @@ type Entree = {
 function bilingue(entree: Entree): MetadataRoute.Sitemap {
   const urlFr = `${SITE_URL}${entree.chemin}`;
   const commun = {
-    lastModified: BUILD,
+    lastModified: entree.modifie,
     changeFrequency: entree.changeFrequency,
     priority: entree.priority,
   };
@@ -100,49 +102,77 @@ function bilingue(entree: Entree): MetadataRoute.Sitemap {
 }
 
 /**
- * LE PLAN, EN FRANCAIS — l ordre et les priorites de la version d origine,
- * inchanges. C est `bilingue` qui en tire les URL anglaises.
+ * LE PLAN, EN FRANCAIS. C est `bilingue` qui en tire les URL anglaises.
  */
 const PAGES: readonly Entree[] = [
-  { chemin: "/", changeFrequency: "weekly", priority: 1 },
-  { chemin: "/services", changeFrequency: "monthly", priority: 0.8 },
-  // Priorite juste sous celle du catalogue : ce sont les pages de vente que
-  // le studio veut voir remonter sur « refonte de site Genève », mais elles
-  // se rejoignent toutes depuis /services.
-  ...FORMULE_SLUGS.map((slug) => ({
-    chemin: `/services/${slug}`,
-    changeFrequency: "monthly" as const,
-    priority: 0.7,
-  })),
-  // Un cran sous les formules, et pour la meme raison qui les place sous le
-  // catalogue : ce sont des pages de vente reelles, mais le site vend
-  // d abord la refonte, et ces cinq-la se rejoignent depuis /services.
-  ...FAMILLE_SLUGS.map((slug) => ({
-    chemin: `/services/${slug}`,
-    changeFrequency: "monthly" as const,
-    priority: 0.6,
-  })),
-  // LA DEMANDE DE DEVIS. Meme priorite que les formules : c est la page ou
-  // se termine le parcours de vente, celle que le hero et chaque fin de page
-  // designent. « demande de devis site internet Genève » est une requete de
-  // transaction, pas de catalogue — elle merite d etre trouvee seule.
-  { chemin: "/devis", changeFrequency: "monthly", priority: 0.7 },
-  // LES DEMONSTRATIONS. Un cran sous le devis : la page ne vend rien, elle
-  // prouve. Elle existe justement parce que le carrousel n avait pas d URL a
-  // lui — enterre dans l accueil, il etait introuvable autrement.
-  { chemin: "/demonstrations", changeFrequency: "monthly", priority: 0.6 },
-  // LES DEUX PAGES QUE LA NAV OUVRE SANS PASSER PAR LE CATALOGUE. Elles ne
-  // vendent pas une prestation, elles repondent aux deux questions qui
-  // restent quand le prix est lu : qui fait le travail, et comment on le
-  // joint. Meme priorite que les familles, parce qu elles se cherchent
-  // autant — « qui refait mon site à Genève » n est pas une requete de
-  // catalogue.
-  { chemin: "/studio", changeFrequency: "monthly", priority: 0.6 },
-  { chemin: "/contact", changeFrequency: "monthly", priority: 0.6 },
-  { chemin: "/mentions-legales", changeFrequency: "yearly", priority: 0.3 },
-  { chemin: "/confidentialite", changeFrequency: "yearly", priority: 0.3 },
+  { chemin: "/", changeFrequency: "weekly", priority: 1, modifie: "2026-10-25" },
+  // La page de detail de l offre : elle repond a « assistant IA PME Genève »
+  // et se rejoint depuis l accueil.
+  { chemin: "/services", changeFrequency: "monthly", priority: 0.8, modifie: "2026-10-25" },
+  // LES METIERS (25 octobre 2026) : le hub, puis une page par metier, lues
+  // dans lib/metiers.ts — un metier ajoute la-bas entre ici sans retouche.
+  // Ce sont les pages envoyees en prospection, et celles qui repondent a
+  // « assistant IA <metier> Genève ».
+  { chemin: CHEMIN_METIERS, changeFrequency: "monthly", priority: 0.8, modifie: "2026-10-25" },
+  ...METIERS.map(
+    (m): Entree => ({
+      chemin: cheminMetier(m.slug),
+      changeFrequency: "monthly",
+      priority: 0.8,
+      modifie: "2026-10-25",
+    }),
+  ),
+  // LES EXEMPLES D AUTOMATISATION PAR METIER (25 octobre 2026), lus dans
+  // lib/automatisations.ts : la page qui montre comment ca marche.
+  { chemin: CHEMIN_DEMONSTRATIONS, changeFrequency: "monthly", priority: 0.7, modifie: "2026-10-25" },
+  // LA DEMANDE DE DEMO : la page ou se termine le parcours, celle que le hero
+  // et chaque fin de page designent.
+  { chemin: "/devis", changeFrequency: "monthly", priority: 0.7, modifie: "2026-10-25" },
+  // LES GUIDES (25 octobre 2026), francais seulement : ils repondent aux
+  // questions que les gerants posent aux moteurs et aux IA (« combien coute un
+  // assistant IA », nLPD…). Pas de version anglaise, donc pas d `hreflang` —
+  // `bilingue` le sait seul, aucun de ces chemins n est dans CHEMINS_TRADUITS.
+  // Meme poids que /services pour les quatre articles ; l index un cran
+  // en dessous, comme /demonstrations. Ni /llms.txt ni /tarifs.md ne vont dans
+  // le plan : ce sont des fichiers techniques, pas des pages.
+  { chemin: "/guides", changeFrequency: "monthly", priority: 0.7, modifie: "2026-10-25" },
+  ...[
+    "/guides/automatisation-ia-pme-geneve",
+    "/guides/assistant-ia-ou-secretaire",
+    "/guides/prix-assistant-ia-suisse",
+    "/guides/ia-et-protection-des-donnees",
+  ].map(
+    (chemin): Entree => ({ chemin, changeFrequency: "monthly", priority: 0.8, modifie: "2026-10-25" }),
+  ),
+  // Les deux pages qui repondent a ce qui reste quand l offre est lue : qui
+  // fait le travail, et comment on le joint.
+  { chemin: "/studio", changeFrequency: "monthly", priority: 0.6, modifie: "2026-10-25" },
+  { chemin: "/contact", changeFrequency: "monthly", priority: 0.6, modifie: "2026-10-25" },
+  {
+    chemin: "/mentions-legales",
+    changeFrequency: "yearly",
+    priority: 0.3,
+    modifie: "2026-10-25",
+    brouillon: MENTIONS_BROUILLON || MENTIONS_EN_BROUILLON,
+  },
+  {
+    chemin: "/confidentialite",
+    changeFrequency: "yearly",
+    priority: 0.3,
+    modifie: "2026-10-25",
+    brouillon: CONFIDENTIALITE_BROUILLON || CONFIDENTIALITE_EN_BROUILLON,
+  },
+  // Les CGV (B2B), ajoutees le 25 octobre 2026 : publiques et citables par
+  // l offre ecrite, elles se signalent comme les deux autres pages legales.
+  {
+    chemin: "/cgv",
+    changeFrequency: "yearly",
+    priority: 0.3,
+    modifie: "2026-10-25",
+    brouillon: cgvEstBrouillon("fr") || cgvEstBrouillon("en"),
+  },
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return PAGES.flatMap(bilingue);
+  return PAGES.filter((p) => !p.brouillon).flatMap(bilingue);
 }

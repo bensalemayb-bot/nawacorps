@@ -148,8 +148,8 @@ function construireSchema(t: Refus) {
       message: z.string({ error: t.messageLong }).max(1000, t.messageLong),
       website: z.string().optional(),
       // CE QUE LA DEMANDE CONCERNE, quand la page le sait — le champ cache pose
-      // par app/(site)/devis (« le-site », « devis-imprimes »). OPTIONNEL, et il
-      // doit le rester : le meme formulaire est rendu en pied de page et sur
+      // par app/(site)/devis (aujourd hui « devis-studio », lib/devis.ts).
+      // OPTIONNEL, et il doit le rester : le meme formulaire est rendu en pied de page et sur
       // /contact, ou le visiteur n a rien clique de precis, et une demande
       // spontanee sans sujet vaut mieux qu un sujet invente.
       // BORNE A 80 CARACTERES : ce champ vient du CLIENT, donc de n importe qui.
@@ -266,7 +266,7 @@ export async function POST(req: Request) {
   const contact = [phone.trim(), email.trim()].filter(Boolean).join(" · ");
   // LE SUJET PART DANS LA NOTIFICATION, PAS SEULEMENT EN BASE. C est la seule
   // ligne qu Ayoub lit sur son telephone avant de rappeler : savoir que la
-  // demande porte sur « le-site » change ce qu il prepare avant de decrocher.
+  // demande vient de « devis-studio » change ce qu il prepare avant de decrocher.
   // Il ne s ecrit que s il existe — pas de « sujet : — » sur les demandes
   // spontanees.
   const objet = sujet ? ` [${sujet}]` : "";

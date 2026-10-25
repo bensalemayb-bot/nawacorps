@@ -8,8 +8,8 @@
    est desormais noir. Les trois couleurs de son fond et de ses filets sont
    declarees SUR .chat-panel et .chat-fab eux-memes, pas dans :root — et c est
    la seule facon correcte de le faire ici : --pine, --pine-2 et --line-g sont
-   definies dans le :root de binacore.css et lues par noyau.css, services.css
-   et admin.css. Les repeindre en noir la-bas repeindrait le site entier pour
+   definies dans le :root de binacore.css et lues par noyau.css et
+   admin/admin.css. Les repeindre en noir la-bas repeindrait le site entier pour
    changer la couleur d une bulle. Portees par le composant, elles n existent
    que sous lui, et les descendants en heritent sans une ligne de plus.
    Le reste continue de venir de binacore.css : --bone pour le texte, --brass-l
@@ -190,6 +190,36 @@
   color: var(--bone);
 }
 .chat-alert a { color: var(--brass-l); font-weight: 600; }
+/* Le bouton « Renvoyer mon message » se lit comme les liens de l alerte. */
+.chat-alert .chat-renvoyer {
+  display: block; margin-top: 8px; padding: 0; background: none; border: 0;
+  color: var(--brass-l); font: inherit; font-weight: 600; text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Reponses suggerees (lib/chat-choix.ts) : sous la derniere bulle de Leo,
+   alignees a droite comme les messages du visiteur qu elles deviennent. */
+.chat-choix {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 2px;
+}
+.chat-choix button {
+  padding: 0.5em 0.9em;
+  border: 1px solid var(--chat-line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--bone);
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: border-color 0.25s var(--ease), color 0.25s var(--ease);
+}
+.chat-choix button:hover,
+.chat-choix button:focus-visible { border-color: var(--brass-l); color: var(--brass-l); }
 
 /* Cloture explicite — bloc B10. Volontairement discret : c est une sortie
    offerte, pas un appel a l action. Il n emprunte donc ni .btn ni le bouton

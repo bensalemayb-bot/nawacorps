@@ -17,7 +17,8 @@ import { lien, type Locale } from "@/lib/i18n";
  * n est pas cosmetique : LE BOUTON FONCTIONNE MAINTENANT SANS JAVASCRIPT, ce
  * qui n etait pas le cas — la page d arrivee rend le formulaire cote serveur,
  * avec le sujet en champ cache. Avec JavaScript, elle ouvre en plus l assistant
- * deja renseigne du nom de la prestation, lu en base.
+ * deja renseigne du sujet (lib/devis.ts). Depuis le 24 octobre 2026, /devis est
+ * la demande de demo, et un sujet inconnu y retombe sur la demande generale.
  *
  * IL N EST PLUS UN COMPOSANT CLIENT. Il n a plus d etat ni de gestionnaire :
  * c est un `<a>`, rendu sur le serveur comme le reste de la page. Un composant
@@ -36,8 +37,7 @@ import { lien, type Locale } from "@/lib/i18n";
  * precis ou il decide d acheter. Le defaut n apparaissait qu une fois la
  * version anglaise en place ; il est corrige ici plutot que contourne par un
  * <a> recopie dans chaque page.
- * Defaut « fr » : les huit appels ecrits avant le chantier anglais sont
- * inchanges, et rendent le meme balisage a l octet.
+ * Defaut « fr » pour les appelants qui ne passent pas leur langue.
  */
 export default function BoutonDevis({
   sujet,

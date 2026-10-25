@@ -1,6 +1,4 @@
-import { nomService } from "@/lib/catalogue";
 import type { Locale } from "@/lib/i18n";
-import { prisma } from "@/lib/prisma";
 
 /**
  * System prompt d extraction — bloc B10.
@@ -8,9 +6,13 @@ import { prisma } from "@/lib/prisma";
  * Second appel au modele, apres la conversation : il ne parle plus au
  * visiteur, il rend un objet. D ou askLlmJson et non askLlm.
  *
- * La liste des libelles de services vient de Postgres a CHAQUE appel, comme le
- * catalogue de prix du prompt de conversation (B9). Le modele ne peut donc
- * ranger le besoin que dans des services qui existent vraiment.
+ * LES LIBELLES DE `services` SONT LES GESTES DE L ASSISTANT, PAS LA TABLE
+ * Service. Depuis le 24 octobre 2026 le studio vend un seul produit,
+ * l assistant (.agents/product-marketing.md §5) ; la table, elle, garde les
+ * anciennes formules pour /admin. Les lire ici ferait ranger chaque demande
+ * de demo dans « La Vitrine » ou « Le Site ». Le modele range donc le besoin
+ * dans les quatre gestes que le site decrit — meme cle `services`, meme type
+ * `string[]`, le schema relu par app/api/chat/finalize/route.ts ne bouge pas.
  *
  * >>> TROIS CHOSES NE CHANGENT PAS D UNE LANGUE A L AUTRE. <<<
  *
@@ -38,13 +40,8 @@ import { prisma } from "@/lib/prisma";
  * RIEN.
  *
  * LES DEUX DECISIONS DU 31 AOUT 2026 — « nous » a la place de « je », Google
- * hors de l offre — NE TOUCHENT PAS CE PROMPT, et c est verifie plutot que
- * suppose. Ce modele-ci ne parle a personne : il rend un objet, il n a donc ni
- * voix ni pronom, et « nous » n a rien a y remplacer. Il ne cite pas davantage
- * une prestation de lui-meme — les libelles autorises viennent de la base et
- * `buildServiceList` ne lit que les services visibles, donc la ligne Google
- * retiree du catalogue disparait d ici sans qu une ligne de ce fichier bouge.
- * Le prompt de conversation (lib/chat-prompt.ts), lui, a change des deux cotes.
+ * hors de l offre — NE TOUCHENT PAS CE PROMPT : ce modele-ci ne parle a
+ * personne, il rend un objet, et il ne cite aucune prestation de lui-meme.
  *
  * LA CONSIGNE « Réponds UNIQUEMENT avec un objet JSON valide » EST OBLIGATOIRE
  * DANS LES DEUX LANGUES. Le mode `json_object` des API au format OpenAI
@@ -58,31 +55,16 @@ import { prisma } from "@/lib/prisma";
  */
 
 /**
- * Les libelles autorises, dans la langue de la conversation.
- *
- * Meme lecture que le prompt de conversation : `nomService` (lib/catalogue.ts),
- * repli sur le francais compris. Les trois formules restent donc « La
- * Vitrine », « Le Site », « L'Assistant » en anglais aussi — `nameEn` y est
- * null volontairement.
- *
- * CONSEQUENCE A CONNAITRE : le tableau `services` que rend le modele porte les
- * libelles de la langue du visiteur, et il atterrit tel quel dans
- * `Conversation.extracted`. Le back-office affiche donc des libelles anglais
- * pour une conversation anglaise. C est voulu — l alternative aurait ete de
- * fournir les libelles francais a un modele qui lit de l anglais, ce qui
- * l aurait fait choisir entre traduire (interdit) et recopier une chaine
- * qu il ne voit nulle part dans la conversation.
- *
- * `select` reduit a deux colonnes : c est tout ce que `nomService` demande.
+ * Les libelles autorises, dans la langue de la conversation : les quatre
+ * gestes de l assistant tels que /services les nomme. Le tableau `services`
+ * rendu par le modele atterrit tel quel dans `Conversation.extracted`, dans la
+ * langue du visiteur — c est voulu, le modele ne doit ni traduire ni recopier
+ * une chaine qu il ne voit pas dans la conversation.
  */
-async function buildServiceList(locale: Locale): Promise<string> {
-  const services = await prisma.service.findMany({
-    where: { visible: true },
-    orderBy: { sortOrder: "asc" },
-    select: { name: true, nameEn: true },
-  });
-  return services.map((s) => nomService(s, locale)).join(" ; ");
-}
+const GESTES: Record<Locale, string> = {
+  fr: "Répondre aux demandes ; Relancer les devis et les pièces ; Préparer les devis et les documents ; Relevé du lundi",
+  en: "Answering enquiries ; Following up quotes and documents ; Preparing quotes and documents ; Monday report",
+};
 
 /**
  * LA `locale` EST OBLIGATOIRE, meme raison qu a `buildSystemPrompt` : l unique
@@ -91,7 +73,7 @@ async function buildServiceList(locale: Locale): Promise<string> {
  * descendre.
  */
 export async function buildExtractPrompt(locale: Locale): Promise<string> {
-  const libelles = await buildServiceList(locale);
+  const libelles = GESTES[locale];
   return locale === "en" ? extractEn(libelles) : extractFr(libelles);
 }
 

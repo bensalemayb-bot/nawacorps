@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { lien, type Locale } from "@/lib/i18n";
 
 /**
@@ -5,9 +6,7 @@ import { lien, type Locale } from "@/lib/i18n";
  *
  * CE QU'ELLE COUVRE EXACTEMENT, et c'est plus etroit qu'il n'y parait. Un
  * `not-found` repond aux `notFound()` leves DANS son segment et en dessous —
- * ici, tout ce qui vit sous `/en`. C'est le cas des pages de prestations
- * anglaises : slug inconnu, formule absente de la base, famille dont plus
- * aucune ligne n'est publiee. Sans ce fichier, ces chemins remontaient a
+ * ici, tout ce qui vit sous `/en`. Sans ce fichier, ces chemins remontaient a
  * app/(site)/not-found.tsx et rendaient un ecran FRANCAIS sous
  * `<html lang="en-CH">` — une contradiction que le visiteur voit avant le
  * moteur.
@@ -33,8 +32,10 @@ import { lien, type Locale } from "@/lib/i18n";
  * sur h1.t, le reste reste lisible meme si le script ne demarre jamais. Une
  * 404 qui resterait a opacity:0 serait pire que celle qu'on remplace.
  *
- * Pas de bloc `metadata` : Next injecte deja <meta name="robots"
- * content="noindex"> sur les reponses 404, et le titre du layout convient.
+ * Next injecte deja <meta name="robots" content="noindex"> sur les reponses
+ * 404. Le bloc `metadata` ne porte que le TITRE : sans lui, la 404 reprenait
+ * celui de l accueil (audit CRO/SEO v3, 3.8). Le suffixe vient du `template`
+ * du layout (site).
  *
  * PAS DE next/link : Interactions.tsx ne s'initialise qu'une fois (decision
  * B7).
@@ -42,6 +43,8 @@ import { lien, type Locale } from "@/lib/i18n";
 
 /** La langue de cette page. Tous ses liens internes passent par `lien`. */
 const LOCALE: Locale = "en";
+
+export const metadata: Metadata = { title: "Page not found" };
 
 export default function NotFoundEn() {
   // volontaire — next/link casserait les reveals (Interactions ne tourne qu'une fois), voir décision B7
@@ -53,9 +56,9 @@ export default function NotFoundEn() {
         </div>
         <h1 className="t">This page no longer exists.</h1>
         <div className="studio-txt" style={{ marginTop: 40 }}>
-          <p>The address may be an old one, or the service it described may have left the catalogue. Nothing is lost: the rest of the site is intact, and the studio still answers.</p>
-          <p>The whole catalogue — the three site packages, upkeep, identity, print, social media and the pieces for restaurants — is on the services page.</p>
-          <p style={{ marginTop: 40 }}><a className="lnk" href={lien(LOCALE, "/services")}>See all the services</a></p>
+          <p>The address may be an old one. Since October 2026, Nawa Corps no longer builds websites: we set up assistants in Geneva small businesses.</p>
+          <p>The assistant already knows your trade. It takes the evening paperwork off you, and it never commits on your behalf.</p>
+          <p style={{ marginTop: 40 }}><a className="lnk" href={lien(LOCALE, "/services")}>See the assistant in detail</a></p>
           <p><a className="lnk" href={lien(LOCALE, "/")}>← Back to the site</a></p>
         </div>
       </div>

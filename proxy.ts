@@ -1,8 +1,10 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { EN_TETE_LOCALE, localeDepuisChemin } from "@/lib/i18n";
+import { EN_TETE_CHEMIN, EN_TETE_LOCALE, localeDepuisChemin } from "@/lib/i18n";
 
 /**
- * PROXY — il ne fait qu'UNE chose : dire au layout racine quelle langue servir.
+ * PROXY — il ne fait qu'UNE chose : dire aux layouts quelle page ils servent,
+ * c'est-à-dire sa langue (`x-nawa-locale`) et, depuis le 25 octobre 2026, son
+ * chemin (`x-nawa-chemin`, lu par app/(site)/layout.tsx).
  *
  * POURQUOI CE FICHIER S'APPELLE `proxy.ts` ET NON `middleware.ts`. La
  * convention `middleware.js|ts` est DÉPRÉCIÉE depuis Next 16 et renommée en
@@ -44,6 +46,10 @@ export function proxy(request: NextRequest) {
 
   const enTetes = new Headers(request.headers);
   enTetes.set(EN_TETE_LOCALE, locale);
+  // LE CHEMIN, POUR LE LAYOUT PUBLIC (25 octobre 2026) : il decide s il rend
+  // la bande des liens legaux, que les pages a pied complet portent deja
+  // (lib/i18n.ts, `CHEMINS_AVEC_PIED`). Meme canal, meme raison que la langue.
+  enTetes.set(EN_TETE_CHEMIN, request.nextUrl.pathname);
 
   return NextResponse.next({ request: { headers: enTetes } });
 }

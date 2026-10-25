@@ -78,14 +78,18 @@ export const CONTACT = {
   telephoneAffiche: "+41 78 912 40 35",
   /** Numero WhatsApp, sans le « + » : wa.me n en veut pas. */
   whatsapp: "41789124035",
-  /** Boite d Ayoub : c est elle qui recoit les demandes de projet. */
-  email: "ayoub@nawacorps.ch",
   /**
-   * Boite generale. Sert aux questions qui ne sont pas une demande de projet :
-   * exercice des droits nLPD, mentions legales, sollicitations diverses.
-   * Les separer evite qu une demande client se perde dans le tout-venant.
+   * L ADRESSE UNIQUE DU SITE, depuis le 25 octobre 2026.
+   *
+   * Il en existait deux : ayoub@ (pied de page, menu, /contact, JSON-LD) et
+   * contact@ (mentions legales, confidentialite, exercice des droits). Deux
+   * adresses pour un exploitant seul obligeaient le visiteur a choisir, et la
+   * LCD (art. 3 al. 1 let. s) demande UNE adresse de contact directe et
+   * fiable. contact@ est retenue parce qu elle etait deja la reference des
+   * pages legales ; ayoub@ reste a confirmer (redirection vers celle-ci) —
+   * voir docs/legal/CONFORMITE-2026-10-25.md.
    */
-  emailGeneral: "contact@nawacorps.ch",
+  email: "contact@nawacorps.ch",
   /**
    * LA LOCALITE DU NAP. Elle s ecrit « Genève », et cette graphie-la est la
    * seule que voient les donnees structurees — voir `villeEn` juste dessous.
@@ -119,16 +123,39 @@ export const CONTACT = {
 } as const;
 
 /**
+ * L EXPLOITANT — l identite JURIDIQUE, distincte du NAP ci-dessus.
+ *
+ * Lue par /mentions-legales, /confidentialite et /cgv, dans les deux langues.
+ * Elle ne part JAMAIS en donnee structuree : le JSON-LD reste au niveau de la
+ * localite (voir le docblock de CONTACT), et NAP_CONFIRME ne la concerne pas.
+ *
+ * POURQUOI UNE ADRESSE POSTALE COMPLETE ICI, alors que CONTACT n en a pas.
+ * La LCD (art. 3 al. 1 let. s ch. 1) impose a qui vend par voie electronique
+ * d indiquer « son identite et son adresse » de facon claire et complete —
+ * la localite seule ne suffit pas. Le studio n a pas de bureau : c est donc
+ * l adresse de domicile ou une adresse de domiciliation qui doit figurer ici.
+ * Elle n est PAS inventee : Ayoub l a fournie le 25.10.2026 (Promenade de
+ * l Europe 17, NPA 1203, quartier des Charmilles).
+ *
+ * Raison individuelle non inscrite au registre du commerce (CA < 100'000.–,
+ * ORC art. 36) et non assujettie a la TVA (LTVA art. 10 al. 2 let. a) :
+ * aucun numero IDE/UID ni numero de TVA n est donc affiche, parce qu il n en
+ * existe pas.
+ */
+export const EXPLOITANT = {
+  titulaire: "Ayoub Bensalem",
+  nomCommercial: SITE_NAME,
+  adresse: "Promenade de l'Europe 17, 1203 Genève, Suisse",
+  adresseEn: "Promenade de l'Europe 17, 1203 Geneva, Switzerland",
+} as const;
+
+/**
  * Lien WhatsApp, avec message pre-rempli optionnel.
  *
- * Le site multiplie les amorces WhatsApp — le hero, le pied de page, la carte
- * du studio, le menu, chaque formule (lib/formules.ts), chaque famille de
- * prestations (lib/familles.ts), le chatbot — et chacune porte sa propre phrase
- * (« je souhaite faire refaire le site de mon entreprise », « l Assistant m
- * interesse »…). LEUR NOMBRE N EST PAS ECRIT ICI, DELIBEREMENT : ce commentaire
- * a annonce « neuf » jusqu a ce que formules.ts, familles.ts et les pages de
- * prestations le rendent faux, et il redeviendra faux a la prochaine page. Ces
- * phrases sont editoriales et doivent rester distinctes ; c est le NUMERO qui
+ * Le site porte plusieurs amorces WhatsApp — le pied de page, le menu,
+ * /contact, /devis (lib/devis.ts), le chatbot — et chacune peut porter sa
+ * propre phrase. LEUR NOMBRE N EST PAS ECRIT ICI, DELIBEREMENT : il devient
+ * faux a la prochaine page. Ces phrases sont editoriales ; c est le NUMERO qui
  * ne doit exister qu une fois. D ou cette fonction plutot qu une constante :
  * elle centralise le seul fragment qui ne varie pas.
  *
@@ -144,19 +171,15 @@ export function whatsapp(message?: string): string {
  * L AMORCE PAR DEFAUT, DANS LES DEUX LANGUES.
  *
  * `whatsapp()` reste volontairement sans langue : c est l appelant qui ecrit sa
- * phrase, et les amorces editoriales vivent chez lui (lib/formules.ts,
- * lib/familles.ts, lib/devis.ts, qui ont deja leur couple `amorce` /
- * `amorceEn`). Seule celle-ci n avait pas de jumeau anglais, et elle est
- * pourtant la plus visible : le CTA du pied de page, rendu sur toutes les
- * pages, anglaises comprises. Le message partait donc en francais depuis une
- * page anglaise — le visiteur ouvrait WhatsApp sur une phrase qu il n avait
- * pas ecrite et ne comprenait pas forcement.
+ * phrase (lib/devis.ts a la sienne). Celle-ci est la plus visible : le CTA du
+ * pied de page, rendu sur toutes les pages, dans les deux langues.
  *
- * Glossaire §3 : « refonte » se dit `rebuild`, jamais `revamp`.
+ * DEPUIS LE 24 OCTOBRE 2026 ELLE DEMANDE LA DEMO, comme tout le site : c est
+ * l amorce de docs/agents/copy/contact.md, mot pour mot.
  */
 const AMORCE_DEFAUT: Record<Locale, string> = {
-  fr: "Bonjour, j'aimerais faire refaire le site de mon entreprise.",
-  en: "Hello, I'd like my company's website rebuilt.",
+  fr: "Bonjour, j'aimerais une démo de l'assistant sur mon métier.",
+  en: "Hello, I'd like a demo of the assistant on my trade.",
 };
 
 /**
@@ -185,6 +208,26 @@ export const HORAIRES = {
   ouverture: "09:00",
   fermeture: "19:00",
 } as const;
+
+/**
+ * PROFILS PUBLICS (`sameAs` du JSON-LD) — VIDES, ET C EST VOULU.
+ *
+ * `sameAs` dit au moteur « cette entite est aussi celle-la » : c est ce qui
+ * relie le site a la fiche Google et a un profil LinkedIn, et ce qui aide le
+ * pack local a reconnaitre le meme etablissement partout. Mais un lien vers une
+ * fiche qui n existe pas encore est une donnee fausse, et un moteur qui suit un
+ * 404 ne fait plus confiance au reste du bloc.
+ *
+ * Le jour ou la fiche Google Business Profile, la page LinkedIn du studio ou
+ * le profil LinkedIn d Ayoub existent, on colle ici leur URL publique exacte,
+ * et rien d autre a changer : `studio` sort dans le ProfessionalService
+ * (components/SchemaStudio.tsx), `ayoub` dans le Person de /studio. Tant
+ * qu une liste est vide, la propriete n est pas emise du tout.
+ */
+export const SAME_AS: { studio: readonly string[]; ayoub: readonly string[] } = {
+  studio: [],
+  ayoub: [],
+};
 
 /** Langues de travail, annoncees dans la section « Le studio ». */
 export const LANGUES = ["fr", "en"] as const;
@@ -277,8 +320,8 @@ export function openGraphPage(
         // choisie.
         alt:
           locale === "en"
-            ? `${SITE_NAME} — digital design studio in Geneva`
-            : `${SITE_NAME} — studio de création digitale à Genève`,
+            ? `${SITE_NAME} — assistants for Geneva small businesses`
+            : `${SITE_NAME} — assistants pour les PME genevoises`,
       },
     ],
   };
@@ -312,6 +355,12 @@ export function openGraphPage(
  * groupe entier est ignore. Le jour ou une page est traduite, on l ajoute a
  * cette liste et les `hreflang` suivent, ici comme dans le sitemap.
  *
+ * UNE PAGE NON TRADUITE (les guides) NE PORTE AUCUN `hreflang`, seulement sa
+ * canonique (audit SEO v5, 25.10.2026). Elle annoncait `fr-CH` + `x-default`
+ * vers elle-meme, alors que app/sitemap.ts ne lui en donne aucun : deux canaux
+ * qui se contredisent, pour un groupe d une seule langue qui ne dit rien a
+ * personne. Les deux canaux disent maintenant la meme chose : rien.
+ *
  * LES URL SONT RELATIVES, et c est volontaire : `metadataBase` (declaree dans
  * app/(site)/layout.tsx) les rend absolues au rendu. Ecrire SITE_URL ici
  * doublerait le domaine le jour ou il change.
@@ -326,15 +375,17 @@ export function alternatesPage(
   chemin: string,
   locale: Locale = LOCALE_DEFAUT,
 ): NonNullable<Metadata["alternates"]> {
+  if (!estTraduit(chemin)) return { canonical: lien(locale, chemin) };
+
   const versionFr = lien("fr", chemin);
   // Le type vient de Next lui-meme plutot que d un Record<string, string> : il
   // n accepte que de vrais codes hreflang, et il refuserait donc une coquille
   // comme « fr_CH » ou « x-defaut ».
   const languages: NonNullable<NonNullable<Metadata["alternates"]>["languages"]> = {
     "fr-CH": versionFr,
+    "en-CH": lien("en", chemin),
     "x-default": versionFr,
   };
-  if (estTraduit(chemin)) languages["en-CH"] = lien("en", chemin);
 
   return { canonical: lien(locale, chemin), languages };
 }

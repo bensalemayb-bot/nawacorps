@@ -11,14 +11,28 @@ apport d'affaires 2 % + production réseaux sociaux sur devis).
 **Marché** : Genève et sa région (Suisse romande). Marché unique — aucun autre
 pays n'est visé aujourd'hui.
 
-**Cible (ICP)** : le gérant d'une PME de services genevoise, 1 à 20 employés,
-dont le site a plus de cinq ans. Métiers qui **devisent** (artisans, bâtiment,
-garage, architecte) ou qui **prennent rendez-vous** (cabinets, santé, beauté),
-ou qui **conseillent** (fiduciaire, avocat, régie, courtier).
+**Cible (ICP)** : le patron d'une PME de services genevoise, 1 à 20 employés,
+qui fait lui-même le travail de bureau le soir. Premier métier visé :
+**sanitaires et chauffagistes** ; ensuite électriciens, régies, fiduciaires,
+agences immobilières. Le site reste général, la prospection se fait par métier.
 
-**Offre** : refonte du site en **une semaine**, en trois formules — La Vitrine
-699.–, Le Site 1'499.–, L'Assistant 2'499.– — TVA comprise, plus un suivi
-mensuel et des prestations en complément.
+**Offre (depuis le 24 octobre 2026)** : « **L'assistant qui connaît déjà votre
+métier** » — un assistant IA sur mesure, construit sur une base par métier et
+adapté à chaque client : il répond aux demandes, relance, prépare ; le patron
+valide. Démo sur le métier du client avant signature (jamais « trois
+demandes »), essai de deux semaines sur ses vraies demandes, relevé chaque lundi, mise en place
+payée après l'essai. **Mise en place : 1'500.–, lue en base** (ligne Service
+`assistant-mise-en-place`). **Abonnement mensuel : une grille de trois
+paliers lue en base** (lignes `abonnement-essentiel` 190.–,
+`abonnement-standard` 290.–, `abonnement-complet` 490.–, sans engagement,
+résiliable chaque mois), affichée sur l'accueil, /services et la FAQ, avec
+une offre d'introduction jusqu'au 31.01.2027 (`lib/catalogue.ts`).
+**Ton** : rien qui montre que le studio débute (ni « pas encore de client »,
+ni « parmi les premiers »), et aucune fausse preuve — on parle méthode,
+contrôle, démo et essai.
+Les anciennes formules de refonte de site (La Vitrine, Le Site, L'Assistant)
+sortent de l'offre et ne sont plus lues par le site public. Détail : `.agents/product-marketing.md` et
+`founder/offre-agent-metier.md`.
 
 **Le délai s'écrit « une semaine », jamais en heures.** « 72 h » et « 48 h » ont
 circulé dans le projet ; aucun n'est tenu, et ils sont désormais proscrits
@@ -96,4 +110,7 @@ dans le navigateur.
   configs de production ou au déploiement.
 - Aucune référence client inventée, aucun avis fabriqué, aucun compteur fictif.
   En Suisse, la LCD (art. 3) vise les indications trompeuses.
-- Aucun prix affiché sans la mention **TVA comprise**.
+- Aucun prix affiché sans la mention **pas de TVA (entreprise non assujettie)**
+  (anglais : « no VAT (business not VAT-registered) »). Elle vit dans
+  `lib/format.ts` (`mentionTva`) et nulle part ailleurs. « TVA comprise » est
+  proscrit depuis le 25.10.2026 : Nawa Corps n'est pas assujettie à la TVA.

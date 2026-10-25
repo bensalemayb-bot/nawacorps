@@ -6,6 +6,11 @@ import "./binacore.css";
 import "./chat.css";
 import "./noyau.css";
 import "./fonts.css";
+// Les exemples d automatisation et leur schema (/demonstrations) : une
+// feuille a part, chargee ici comme les autres feuilles maison.
+import "./demonstrations.css";
+// Les guides (/guides) : titres a taille de lecture, listes et tableaux.
+import "./guides.css";
 
 /**
  * Layout RACINE — reduit au strict minimum au bloc B11.
@@ -66,9 +71,9 @@ const instrument = Instrument_Serif({
  *
  * CE QUE CELA COÛTE, ET IL FAUT LE SAVOIR : `headers()` est une API DE TEMPS
  * DE REQUÊTE. L'appeler ici bascule TOUTES les routes en rendu dynamique,
- * y compris les cinq pages qui étaient encore prérendues au build
- * (/studio, /contact, /demonstrations, /mentions-legales, /confidentialite) et
- * la 404. Les neuf autres pages du site publiques étaient déjà en
+ * y compris les pages qui étaient encore prérendues au build (/studio,
+ * /contact, /mentions-legales, /confidentialite — et l'ancienne
+ * /demonstrations, recréée le 25.10.2026 sans base non plus) et la 404. Les neuf autres pages du site publiques étaient déjà en
  * `force-dynamic` parce qu'elles lisent Postgres — pour elles, rien ne change.
  * Ces cinq-là ne lisent aucune base : ce qu'elles perdent, c'est du HTML
  * fabriqué une fois au build plutôt qu'à chaque visite, pas un aller-retour

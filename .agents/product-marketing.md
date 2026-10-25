@@ -1,43 +1,76 @@
 # Contexte marketing — Nawa Corps
 
-> Document de référence lu par toutes les compétences marketing.
-> Dernière révision : 30 août 2026.
-> **Statut : repositionnement.** Le site en ligne reflète encore l'ancien
-> positionnement (bars et cafés). Ce document décrit la cible.
+> Document de référence lu par tous les agents et toutes les compétences
+> marketing. **Dernière révision : 24 octobre 2026.**
+> **Statut : changement de métier.** Nawa Corps ne vend plus de refonte de
+> site. Il installe des assistants IA sur mesure dans les PME genevoises.
+> L'ancienne version de ce document est archivée dans
+> `.agents/_archive/product-marketing-2026-10-24.md` : elle ne s'applique plus.
+>
+> Sources de cette version : `founder/offre-agent-metier.md`,
+> `founder/board.md` (séance 9), `founder/brand.md`, `founder/marketing.md`,
+> `founder/research/agences-ia-positionnement.md`,
+> `founder/research/vraies-voix-patrons.md`,
+> `founder/research/acces-metiers-geneve.md`.
+>
+> **Règle d'usage.** Une promesse, un prix, un délai ou une référence absents
+> de ce fichier ne s'écrivent nulle part. Ce qui est marqué « à confirmer »
+> ou « à décider » ne s'écrit pas sur le site public tant que ce fichier
+> n'a pas été mis à jour.
 
 ---
 
-> ## Deux décisions du 31 août 2026 — elles priment sur ce qui suit
->
-> **1. Google sort de l'offre.** Le studio ne vend plus « fiche Google
-> complétée » ni le sticker vitrine « Avis Google ». Ces lignes ont été
-> retirées de la grille des formules, du catalogue et de la liste des maux du
-> client. Le mot « Google » ne doit plus désigner **une prestation** nulle part
-> sur le site ; il peut encore décrire un fait (« vos clients vous cherchent
-> sur Google »), jamais une chose vendue.
->
-> **2. « Nous » remplace « je », et « une seule personne » disparaît.** La
-> revendication d'être seul ne se lit plus nulle part sur le site public. Voir
-> `docs/agents/brand/voice-guide.md` §4 pour la règle et, surtout, pour sa
-> limite : un pluriel n'autorise **aucun** effectif, bureau ou ancienneté
-> inventé. Ce qui suit dans ce document décrit encore par endroits une
-> structure d'une personne — c'est un fait interne exact, qui ne s'écrit plus
-> côté public.
-
 ## 1. Le produit
 
-**Studio de création digitale** indépendant à Genève, opéré par **Ayoub Bensalem**
-(designer + développeur). **Pas de bureau** : c'est une structure volontairement
-légère, et c'est ce qui explique les prix.
-Structure d'une personne, avec un partenaire commercial et de production
-(voir §7).
+**Nawa Corps installe dans les PME genevoises un assistant IA qui connaît
+déjà leur métier.**
+
+Nous partons d'une **base d'assistant par métier** (le vocabulaire, les
+demandes types, les documents du métier), puis nous l'adaptons à chaque
+entreprise : ses prestations, ses clients, ses mots. L'assistant répond aux
+demandes, relance les clients et prépare les documents. **Le patron valide.
+L'assistant ne s'engage jamais à sa place.**
+
+> **Formule interdite (décision d'Ayoub, 25.10.2026)** : « Rien ne part sans
+> votre accord / sans vous » et « nothing goes out without… », partout. C'est
+> faux : l'accusé de réception, validé une fois, part seul. On écrit « Il ne
+> s'engage jamais à votre place », ou, quand la précision tient, « Aucun prix,
+> aucune date, aucun devis ne part sans votre accord ».
 
 Ce qui est vendu, en une phrase :
-**le site des PME genevoises, refait en une semaine, et transformé en source de
-demandes — devis, rendez-vous, contact.**
+**le travail de bureau que le patron fait le soir, repris par un assistant
+qu'il contrôle, et qu'il a vu tourner sur ses propres demandes avant de
+signer.**
 
-Ce n'est pas « du web design ». C'est la remise à niveau d'un actif commercial
-que le client possède déjà et qui ne travaille plus pour lui.
+Ce n'est pas un chatbot de site. Ce n'est pas un logiciel de plus à
+apprendre. C'est un assistant réglé pour une entreprise, suivi chaque
+semaine.
+
+**Qui le fait.** Ayoub Bensalem (fondateur, la vente et le suivi du client)
+et un développeur spécialisé en IA (assistants, modèles de langage,
+apprentissage profond). Studio genevois, sans bureau. Côté public, on écrit
+« nous » ; aucun effectif, bureau ou ancienneté inventé. Le développeur
+n'est pas nommé tant que le contrat n'est pas signé (§10).
+
+**Les engagements du produit** (vrais dès le premier client) :
+
+1. **Vous le voyez travailler avant de signer.** On le règle sur vos vraies
+   demandes. Vous n'avez rien à préparer.
+2. **Il ne s'engage jamais à votre place.** Aucun prix, aucune date, aucun
+   devis ne part sans votre accord. Vous lisez, vous validez.
+3. **Chaque lundi, un relevé** : ce qui a été traité, relancé, préparé, et
+   ce qui vous attend.
+4. **La mise en place n'est payée qu'après l'essai, si le relevé vous
+   convient.**
+
+Engagement **décidé le 24.10.2026** (voir §5, « Prix et données ») :
+- **« Les données de votre assistant sont hébergées en Suisse. »** Traitées
+  selon la nLPD. La promesse vise l'assistant livré au client, jamais le site
+  ni Leo, dont les échanges passent par un fournisseur d'IA hors de Suisse.
+
+Engagement **à confirmer avant publication** :
+- **« Si vous arrêtez, vous gardez tout. »** Ce que « tout » couvre
+  (historique, textes, réglages) est à définir par écrit.
 
 ---
 
@@ -45,274 +78,242 @@ que le client possède déjà et qui ne travaille plus pour lui.
 
 ### L'avatar
 
-**Le gérant d'une PME de services à Genève, dont le site a plus de cinq ans.**
+**Le patron d'une PME de services genevoise, de 1 à 20 personnes, qui fait
+lui-même le travail de bureau, souvent le soir.**
 
-Il a entre 1 et 20 employés. Il dirige, il vend, et il fait le métier. Le site
-a été fait une fois — par un prestataire, un stagiaire, un proche — puis plus
-personne ne s'en est occupé. Il le sait, ça l'agace, ce n'est jamais la
-priorité de la semaine.
+Il dirige, il vend et il fait le métier. Il ne trouve personne pour le
+secrétariat (le bâtiment est le secteur n°1 de la pénurie de personnel à
+Genève, CCIG 2026). Les devis, les factures, les rappels et les demandes
+reçues pendant la journée s'empilent. Il les traite le soir, à la maison,
+ou c'est son conjoint qui s'en charge.
 
-Ce qu'il perd sans le mesurer : les gens qui cherchent son métier à Genève
-tombent sur un site daté, ne trouvent pas comment demander un devis, et
-appellent le concurrent.
+Sa douleur n'est pas « je rate des clients ». Beaucoup ont déjà trop de
+travail. Sa douleur, c'est **le bureau qui mange ses soirées**.
+
+### Le premier métier : sanitaires et chauffagistes genevois
+
+Décision unanime du board (séance 9). **441 entreprises** dans le canton
+(227 sanitaires, 214 chauffage-ventilation, OCSTAT 2024), puis 291
+électriciens.
+
+Pourquoi eux d'abord :
+- la douleur la plus documentée (21 voix de patrons sur la paperasse du
+  soir, États-Unis et France) ;
+- le patron décide seul ;
+- aucun secret professionnel ;
+- le plus grand vivier joignable (note d'accès 19/25, la meilleure).
+
+**Limite connue :** aucune voix de patron romand n'a encore été entendue.
+Dix appels de découverte sont prévus avant d'écrire une ligne de code.
 
 ### Le signal de qualification
 
-Le prospect qualifié coche au moins deux de ces cases :
+Le prospect qualifié coche au moins deux cases :
+- il traite devis, factures ou demandes le soir ou le week-end ;
+- des demandes arrivent pendant qu'il est sur le chantier ;
+- des devis partent sans relance ;
+- il travaille avec des régies (bons d'intervention, rendez-vous
+  locataires) ;
+- personne au bureau, ou le conjoint qui tient le téléphone.
 
-- un site en ligne, visiblement antérieur à 2020
-- pas de formulaire de devis, ou un formulaire qui ne fonctionne plus
-- pas de prise de rendez-vous alors que son métier en vit
-- illisible ou cassé sur téléphone
+### Le site est général, la prospection non
 
-### Les métiers
-
-Ceux qui **devisent** : plombier, électricien, chauffagiste, menuisier,
-peintre, serrurier, entreprise générale, rénovation, paysagiste, déménageur,
-garage, carrosserie, architecte.
-
-Ceux qui **prennent rendez-vous** : physiothérapeute, ostéopathe, dentiste,
-cabinet médical, vétérinaire, coiffeur, institut, spa, coach.
-
-Ceux qui **conseillent** : fiduciaire, avocat, courtier, régie immobilière,
-conseiller en assurance.
+Le site parle aux PME genevoises en général, avec le sanitaire et le
+chauffage en exemple principal. La prospection, elle, se fait **un métier à
+la fois** (§5 bis), jusqu'à 3 clients dans le premier.
 
 ### Anti-ICP — à qui ne pas vendre
 
 | Segment | Pourquoi non |
 |---|---|
-| Startups et sociétés tech | Elles font leur site elles-mêmes |
-| E-commerce / boutique en ligne | Autre produit, autre maintenance, autre métier |
-| Grands comptes, administrations | Appels d'offres, délais de paiement, procédures |
-| Micro-entrepreneur qui compare à 300.– | Ne paiera pas, demandera le plus de support |
-
-### Ce qui a changé
-
-L'ancien positionnement visait les bars, cafés et commerces genevois. Il est
-abandonné comme **cœur de cible**. La restauration reste une ligne secondaire
-(voir §5), parce qu'il existe un client payant et que la prestation est bonne
-— mais elle ne définit plus le studio.
+| Cabinets médicaux, physio, dentaire | Secret médical (art. 321 CP), rendez-vous déjà pris par OneDoc ou agenda.ch. Derniers au classement du board |
+| Avocats | Secret professionnel |
+| Entreprises sans travail de bureau répétitif | Rien à reprendre |
+| Grands comptes, administrations | Appels d'offres, cycles longs |
+| Le patron qui veut « une IA qui fait tout seule » | Contraire à la règle « il ne s'engage jamais à votre place » |
+| Startups et sociétés tech | Elles le font elles-mêmes |
 
 ---
 
 ## 3. Le positionnement
 
-### La revendication de catégorie
+### La phrase
 
-Pas « une agence web ». Pas « un freelance ». **Un studio de création** — le
-mot dit qu'on fabrique : sites, cartes, affiches, identité, photographie.
+> **L'assistant qui connaît déjà votre métier.**
+>
+> Il répond à vos demandes, relance vos clients et prépare vos documents.
+> Vous validez. Vous récupérez vos soirées.
 
-**Le studio qui remet à niveau le site des PME genevoises, en une semaine,
-sans que le client ait quoi que ce soit à préparer.**
+Positionnement complet (`founder/marketing.md` §1) : pour les patrons de PME
+genevoises qui font le bureau le soir, Nawa Corps installe un assistant IA
+qui connaît déjà leur métier et qu'on voit travailler sur ses propres
+demandes avant de signer, alors que les agences IA romandes partent d'une
+page blanche ou d'un audit.
 
 ### Les trois piliers
 
-**1. Vous n'avez rien à préparer.**
+**1. Il connaît déjà votre métier.**
+Nous partons d'une base par métier, pas d'une page blanche. C'est l'écart
+vérifié du marché romand : aucune des agences relevées (NexaLab, Fluxel,
+IAtelier, Agence iA, Aladin AI) ne le dit. Conséquence pour le client : il
+n'a rien à préparer, et le sur mesure va vite.
 
-C'est le pilier, et il ne repose sur aucun compte d'heures.
+**2. Vous le voyez sur votre métier avant de signer, puis à l'essai sur vos vraies demandes.**
+On lui montre l'assistant à l'œuvre sur des demandes de son métier. Il n'a
+rien à préparer ni à payer, et nous n'avons accès à aucun de ses outils.
+Puis l'essai tourne sur ses vraies demandes. C'est notre réponse au doute
+n°1 (« aucune référence ») : pas une preuve qu'on n'a pas, mais sa propre
+preuve. Jamais « trois demandes » (25.10.2026 : le nombre ne disait rien au
+patron).
 
-**Le délai annoncé est « une semaine ».** Pas 72 h, pas 48 h. Le chiffre exact
-a bougé plusieurs fois et n'est pas tenu ; une semaine est le seul délai que le
-le studio a confirmé pouvoir tenir, et il suffit largement : la veille relève des
-concurrents à **deux à huit semaines**. Promettre moins vite qu'on ne peut est
-un avantage, pas une faiblesse — un délai raté coûte plus cher que le délai
-gagné.
+**3. Il ne s'engage jamais à votre place, et chaque lundi vous voyez ce qui a été fait.**
+Le contrôle reste au patron. Le relevé du lundi rend le travail visible :
+c'est ce qui protège l'abonnement (un assistant qu'on ne voit plus
+travailler finit résilié).
 
-**Ne jamais écrire « personne à Genève ne fait aussi vite ».** La veille ne peut
-pas porter ce superlatif : trois acteurs proprement genevois relevés, plus huit
-voisins nommés sans que leur délai ait été vérifié.
+### Le différenciateur n'est pas la vitesse
 
-**Le vrai différenciateur, sourcé, ne parle pas de vitesse.** Les deux seuls
-concurrents rapides relevés **conditionnent leur délai à la fourniture du
-contenu par le client** (« après validation du contenu » chez l'un, « une fois
-le contenu fourni » chez l'autre). Le studio, lui, démarre au feu vert : il
-reprend les textes de l'ancien site et rédige la maquette lui-même (§5, « Les
-conditions »).
-
-> Chez les autres, le compteur part quand vous avez fourni vos textes.
-> Ici, quand vous dites oui.
-
-C'est un fait sur le studio, vérifiable, qui n'oblige à prouver aucun négatif
-et ne dépend d'aucun chronomètre.
-
-**2. Le site fait entrer des demandes.**
-Devis, rendez-vous, contact, appel, itinéraire. Le site n'est pas une plaquette
-en ligne, c'est un canal d'entrée. C'est ce qui sort le studio de la
-comparaison avec la vitrine à 300.–, parce que ce n'est pas le même objet.
-
-**3. Un interlocuteur, à Genève, qui reste.**
-Le prospect a déjà été abandonné une fois : son site actuel en est la preuve.
-Quelqu'un l'a construit, encaissé, puis a disparu. La continuité est l'argument
-de vente le plus fort du studio, et le problème du client en est la
-démonstration.
-
-### La promesse
-
-> Votre site a dix ans. En une semaine, il redevient un site qui vous amène
-> des demandes — et vous n'avez rien à préparer pour ça.
+Le délai court dès le feu vert du client, parce qu'on travaille sur ce
+qu'il reçoit déjà. **Le délai ne s'écrit jamais en heures.** Le délai de la
+démo et de la mise en place n'est pas encore fixé (§10) ; s'il s'écrit, ce
+sera en jours ou en semaines.
 
 ---
 
 ## 4. La concurrence
 
-| Concurrent | Prix | Sa force | Sa faille |
-|---|---|---|---|
-| Freelance IA / offshore | 300–600.– | Le prix | Disparaît, aucun suivi, aucune fonction, pas à Genève |
-| Agence genevoise | 4'000–8'000.– | La crédibilité | 6 à 12 semaines, chargé de compte, cher pour une PME |
-| Le neveu / le stagiaire | gratuit | La confiance | Le site actuel du prospect, précisément |
-| Wix / Squarespace en autonomie | 20.–/mois | Le contrôle | Le gérant n'a pas le temps, et ça se voit |
+Relevé du 24.10.2026 (`founder/research/agences-ia-positionnement.md`).
+Prix HT déclarés par les agences, non audités.
 
-### Sur la vitrine à 300.–
+| Concurrent | Ce qu'il vend | Prix relevé | Sa force | Sa faille, pour nous |
+|---|---|---|---|---|
+| **NexaLab** (Genève) | Audit → sprint → partenariat, toutes PME | Sprint dès 1'900, partenariat dès 490/mois | Genevois, affiche ses prix | Part d'un audit, aucun métier en tête |
+| **Fluxel** (Romandie) | 10 services IA, 6 pages métier | ~590 + ~390/mois | Large, prix bas | Généraliste ; compteurs à zéro affichés comme résultats |
+| **IAtelier** (Valais) | Automatisations, copilote, sites | Pilote 890, suivi dès 290/mois | Brouillons à valider, pilote déduit | Part d'une page blanche ; fait aussi SEO et sites |
+| **Agence iA** (Vaud) | Formation + produits, bâtiment en tête | Non publié | Cible le bâtiment | Devis « à venir », pas de prix |
+| **Aladin AI** (Winterthour) | Catalogue à prix fixe | Dès 990 à 2'500, suivi dès 250/mois | Prix fixe écrit | Alémanique, aucun métier romand |
+| **Sparkana** (France) | « Répond, relance, prépare vos devis » | Non publié | Démo sur vraies données, rien sans validation | Hors Suisse ; même promesse générique |
+| Logiciels (bexio, Abacus, Jobber…) | Outils de gestion | Abonnement | Déjà installés | Ne relancent pas le client, ne répondent pas aux demandes |
+| Le conjoint, la soirée du patron | — | « gratuit » | La confiance | C'est la douleur |
 
-Elle existe, et elle ne se combat pas par le prix. Trois raisons :
+**Ce qu'on ne fait pas :** se battre sur le générique « répond, relance,
+devis » (Sparkana, Fluxel, IAtelier le disent déjà). On se bat sur **la base
+métier, la démo sur ses demandes et le relevé du lundi**.
 
-1. **Ce n'est pas le même acheteur.** Le gérant de PME genevoise avec quinze
-   ans de métier ne va pas sur une plateforme de petites annonces. Il demande à
-   son fiduciaire, à son voisin de zone industrielle, ou il est démarché.
-   Un prix trop bas le rend méfiant, pas intéressé.
-
-2. **Ce n'est pas le même produit.** La vitrine à 300.– ne pose pas de prise de
-   rendez-vous, ne chiffre pas un devis, n'embarque pas d'assistant, et n'est
-   là ni le mois suivant ni l'année suivante.
-
-3. **Le vrai coût n'est pas la production, c'est tout le reste.** L'IA réduit
-   le temps de fabrication, pas le temps de vente, de cadrage, de révisions ni
-   de support. Un prix calé sur le seul temps de production ne couvre pas le
-   métier.
-
-*(La commission d'apport d'affaires est de 2 % — trop faible pour peser sur la
-politique de prix. Elle ne constitue pas un argument.)*
-
-**La concession retenue :** une entrée à 699.– pour annoncer « dès 699.– » et
-faire tomber l'objection, sans toucher aux paliers supérieurs.
+**Interdit :** « personne à Genève ne fait ça », « le seul », tout
+superlatif. La veille ne couvre pas tout le marché.
 
 ---
 
 ## 5. Les offres
 
-**Tous les prix s'entendent TVA comprise**, et la mention figure sous la
-grille. C'est la règle envers un consommateur en Suisse, et pour un dirigeant
-de PME c'est surtout un prix qu'il n'a pas à recalculer.
+### Ce qui sort de l'offre
 
-### Ligne principale — les sites
+**Les formules de site La Vitrine, Le Site et L'Assistant sortent de
+l'offre**, avec le suivi mensuel de site, les cartes de visite, l'identité,
+la photo, les imprimés et la ligne restauration. Elles ne s'écrivent plus
+sur le site public, ni dans le chatbot, ni en prospection.
 
-Trois formules, et trois seulement, sur la grille d'accueil.
+**La table `Service` en base n'est pas modifiée pour l'instant** (prod Neon,
+aucune écriture sans accord explicite). Elle contient encore les anciens
+prix. Conséquence pour les agents : **aucun composant du site ni le prompt
+du chatbot ne doit afficher ces prix comme offre en cours.** La règle
+« les prix viennent de la base » reste valable pour le jour où le nouveau
+prix y sera inscrit.
 
-| | **La Vitrine** | **Le Site** ⭐ | **L'Assistant** |
-|---|---|---|---|
-| **Prix** | **699.–** | **1'499.–** | **2'499.–** |
-| **Pour qui** | Le site est daté, il faut qu'il soit présentable | Le site doit faire entrer des demandes et les traiter seul | Le site répond, qualifie et relance à votre place |
-| **Délai** | 1 semaine | 1 semaine | 1 semaine |
-| One-page, mobile d'abord | ✓ | ✓ | ✓ |
-| **Formulaire de demande** | ✓ | ✓ | ✓ |
-| Appel, itinéraire, horaires | ✓ | ✓ | ✓ |
-| Reprise du contenu existant | ✓ | ✓ | ✓ |
-| Domaine + hébergement 1ʳᵉ année | ✓ | ✓ | ✓ |
-| **Prise de rendez-vous en ligne** | — | ✓ | ✓ |
-| **Devis automatisé** (estimation immédiate) | — | ✓ | ✓ |
-| Photos de l'entreprise | — | ✓ | ✓ |
-| **Assistant IA personnalisé** — formé sur vos prestations et vos tarifs, répond 24/7 | — | — | ✓ |
-| **Alerte instantanée** sur votre téléphone à chaque demande | — | — | ✓ |
-| **Tableau de bord des demandes** | — | — | ✓ |
-| **Relance automatique** des prospects sans réponse | — | — | ✓ |
-| FR / EN | — | — | ✓ |
+### L'offre unique : l'assistant
 
-Écarts : ×2,1 puis ×1,7. « Le Site » est l'ancrage et la formule recommandée.
-Le passage au palier 3 est volontairement court (+1'000.–) : c'est un
-sur-classement facile à accepter en rendez-vous.
+Un seul produit : **un assistant IA réglé pour l'entreprise, avec un suivi
+chaque semaine.** Au téléphone, on vend **un premier geste** au départ :
+« Commencez par la tâche qui vous prend le plus de soirées » (jamais « une
+seule tâche pour commencer », qui contredisait le Standard à deux tâches et
+l'offre d'introduction).
 
-**Le formulaire est dans le socle, dès 699.–.** C'est assumé : en 2026 un site
-sans formulaire qui fonctionne n'est pas un site. Ce qui fait monter en gamme,
-ce n'est plus de *recevoir* une demande, c'est de la **traiter sans y penser**
-— rendez-vous, devis chiffré, assistant, relance.
+**Le parcours, en trois temps :**
 
-> **Le palier 3 existe déjà.** Assistant conversationnel, notification Telegram,
-> tableau de bord des leads : tout tourne sur le site de Nawa Corps
-> (`ChatWidget`, `lib/chat-prompt.ts`, `lib/llm.ts`, `lib/telegram.ts`,
-> `/admin`). Le site du studio est la démonstration du produit — à ouvrir en
-> rendez-vous plutôt qu'à décrire.
-
-**Contrainte à ne pas oublier :** un assistant IA consomme des appels API en
-permanence. Vendu 2'499.– une fois, il devient une charge perpétuelle sans
-revenu. **Le palier 3 impose l'abonnement de suivi** — ce n'est pas une option.
-
-### Le récurrent
-
-**Le suivi n'est pas un choix offert au client : il découle du palier acheté.**
-C'est le point clé. Ajouter un menu d'abonnements à une grille qui compte déjà
-trois formules crée une deuxième décision, et une deuxième décision fait perdre
-la première. Le suivi est donc annoncé comme la suite naturelle du palier, à un
-seul prix par palier.
-
-| Palier acheté | Suivi | Comprend |
+| Étape | Ce qui se passe | Ce que paie le client |
 |---|---|---|
-| La Vitrine · Le Site | **49.–/mois** | Hébergement, nom de domaine, mises à jour, sauvegardes, sécurité |
-| L'Assistant | **129.–/mois** | Idem + assistant IA (coûts d'API) + modifications de contenu incluses |
+| **1. La démo** | On lui montre l'assistant sur des demandes types de son métier. Il n'a rien à préparer. Aucun accès à ses outils. | Rien |
+| **2. L'essai** | L'assistant tourne sur ses vraies demandes. Il valide tout. Il reçoit le relevé chaque lundi. | Rien pendant l'essai (durée à décider) |
+| **3. L'abonnement** | Si le relevé lui convient, il paie la mise en place et l'abonnement continue. | **Mise en place 1'500.–, une fois, après l'essai ; puis l'abonnement mensuel, trois paliers (Essentiel 190.–, Standard 290.–, Complet 490.–), palier fixé par écrit à la fin de la démo. Tous lus en base, pas de TVA (entreprise non assujettie)** |
 
-**Départ la 2ᵉ année** — la première est comprise dans le prix du site, assistant
-compris. Le rendez-vous de renouvellement se joue donc après douze mois de
-service rendu, pas au moment de l'achat : c'est une reconduction, pas une
-objection de vente.
+**Le prix.** Mise en place décidée le 24.10.2026, grille de l'abonnement
+le 25.10.2026 (voir « Prix et données » plus bas et `founder/pricing.md`) :
+tout est affiché, lu en base, sans « dès », chaque montant avec la mention
+**pas de TVA (entreprise non assujettie)**. Repère de marché, à ne jamais
+citer comme notre prix : 590 à 2'900 CHF de mise en place, 250 à 490 CHF
+par mois en Romandie.
 
-**Pourquoi 49.– et pas 89.– :** le studio n'a aucun abonné aujourd'hui. À ce
-stade le taux de souscription vaut plus que le prix unitaire — 49.– se dit sans
-réfléchir, 89.– se discute. Le vrai revenu récurrent se construit sur
-L'Assistant à 129.–, où le montant est justifié par un coût réel et visible.
+**La garantie :** la mise en place n'est payée qu'après l'essai, si le
+relevé vous convient.
 
-| Autre | Prix | Note |
-|---|---|---|
-| **Réseaux sociaux** | **sur devis** | Produit avec 101 Agency (§7) |
+### Ce que l'assistant fait (la base)
 
-Le récurrent est le seul revenu qui compose. Il s'annonce à la signature,
-jamais après.
+- **Répondre aux demandes** : il demande l'adresse, une photo, l'urgence ;
+  le patron trouve une liste triée.
+- **Relancer** : les devis sans réponse, les pièces manquantes, les anciens
+  contacts.
+- **Préparer** : un brouillon de devis, de réponse ou de document, à valider.
+- **Le relevé du lundi** : ce qui a été traité, relancé, préparé, et ce qui
+  attend le patron.
+
+Toujours : **le patron valide avant que ça parte.** Pas d'accès aux
+paiements.
 
 ### Les conditions
 
 | | |
 |---|---|
-| **Révisions** | 2 allers-retours compris, facturés au-delà |
-| **Textes** | Compris dans le prix. Site existant : les textes sont repris, le client signale ses modifications. Départ de zéro : maquette proposée, le client ajuste |
-| **Réponse à une demande** | **Le jour ouvrable suivant.** Seul engagement de réactivité conservé après les 28 retraits faute de preuve : il est tenable un dimanche, contrairement à « sous 24 h » qui figurait sur trois pages sans avoir jamais été décidé. |
-| **Paiement** | À la livraison |
-| **Livraison** | Le site fini est présenté et validé, le paiement intervient, **puis** la mise en ligne |
+| **Préparation demandée au client** | Aucune. On part de ce qu'il reçoit déjà |
+| **Validation** | L'assistant ne s'engage jamais à la place du patron : aucun prix, aucune date, aucun devis sans son accord |
+| **Relevé** | Chaque lundi |
+| **Réponse à une demande du client** | Le jour ouvrable suivant au plus tard |
+| **Résiliation, durée d'engagement** | **Tranché le 25.10.2026** : sans engagement, résiliable chaque mois, effet à la fin du mois en cours (CGV art. 6) |
+| **Ce qui s'ajoute à ses outils** | L'assistant s'ajoute à WhatsApp et à son logiciel ; il ne les remplace pas. **À confirmer techniquement par outil** |
 
-La séquence de livraison n'est pas un détail : sans acompte, présenter le site
-avant de pointer le domaine est la seule protection du studio contre un
-impayé — et elle ne demande aucune avance au client.
+### Ce qu'on ne promet pas
 
-### En complément
+Un nombre de clients en plus, un gain d'heures chiffré, un taux de devis
+signés, une première place sur Google ou dans les moteurs IA, un assistant
+« 100 % automatique ». Google n'est pas une prestation vendue.
 
-| Prestation | Prix |
-|---|---|
-| **Cartes de visite** — conception + impression 75 ex. | **200.–** |
-| Site multi-pages / sur-mesure | sur devis |
-| Identité complète / logo | sur devis |
-| Photos de l'entreprise | sur devis |
+---
 
-### Ligne secondaire — restauration
+### Prix et données — décidés par Ayoub le 24.10.2026
 
-Conservée, hors de la grille principale.
+- **Mise en place : 1'500.– CHF, pas de TVA (entreprise non assujettie)**, prix fixe, payé après l'essai si le relevé convient. Le montant est lu en base (table `Service`), jamais écrit en dur.
+- **Abonnement mensuel : trois paliers selon le volume** (décision d'Ayoub du 25.10.2026, `founder/pricing.md`), lus en base (table `Service`, slugs `abonnement-essentiel`, `abonnement-standard`, `abonnement-complet`), affichés sur l'accueil (section offre), /services, la FAQ « Combien ça coûte ? », le JSON-LD, llms.txt et le prompt de Leo :
+  - **Essentiel 190.–/mois** : 1 tâche, jusqu'à 100 demandes par mois ;
+  - **Standard 290.–/mois** : 2 tâches, jusqu'à 300 demandes par mois ;
+  - **Complet 490.–/mois** : 3 tâches dont le téléphone (300 minutes incluses), jusqu'à 800 demandes par mois. **Partout où le téléphone est cité (pages métiers, FAQ, llms.txt, Leo), on précise qu'il est inclus dans le palier Complet.**
+  Par mois, sans engagement, résiliable chaque mois ; pas de TVA (entreprise non assujettie). Le palier se fixe par écrit à la fin de la démo. Aucun palier mis en avant (ni « Recommandé », ni « Populaire »).
+- **Offre d'introduction** (jusqu'au 31 janvier 2027) : « Tarif d'introduction : le palier Standard au prix de l'Essentiel pendant 12 mois, pour 3 entreprises par trimestre, jusqu'au 31 janvier 2027 ». Le montant de l'Essentiel, lu en base, peut suivre ; **jamais « au lieu de »** ni le prix du Standard à côté (pas d'effet de prix barré, décision d'Ayoub du 25.10.2026). Cadrée comme une **limite de capacité** (chaque mise en place se fait à la main), jamais comme « premiers clients ». Une seule mention sobre (section offre de l'accueil, /services, et les reprises automatiques : llms.txt, Leo), montants lus en base, sans compte à rebours ni faux stock. Elle disparaît seule du site après la date (`offreIntroductionActive`, lib/catalogue.ts).
+- **Données : les données de l'assistant du client sont hébergées en Suisse, traitées selon la nLPD.** Formule publique unique : « Les données de votre assistant sont hébergées en Suisse. » (« conforme à la nLPD » attend un avis juridique). La promesse ne vaut ni pour le site ni pour Leo.
 
-| Prestation | Prix |
-|---|---|
-| **La Carte** — menu repensé, fichiers d'impression, version en ligne + QR | **sur devis** |
-| Affiche d'événement | dès 180.– |
-| Carte de fidélité à tampons | 220.– |
-| Bons cadeaux | dès 250.– |
-| Chevalets de table | 140.– |
-| Traduction de carte FR / EN | dès 220.– |
-| Pack saisonnier | 490.– |
+### Le contrôle (arbitré le 24.10.2026)
 
-**Règle : minimum 300.– de commande, ou client déjà suivi.**
-En dessous, la prestation coûte plus cher en échanges qu'elle ne rapporte.
+L'assistant ne s'engage jamais à la place du patron : aucun prix, aucune date, aucun devis, aucune réponse de fond ne part sans son accord. Seule exception : un accusé de réception que le patron a relu et validé une fois pour toutes (« Bien reçu, pouvez-vous m'envoyer l'adresse, une photo et l'urgence ? ») part tout seul. Formulation publique : « Il ne s'engage jamais à votre place. »
 
-### Ce qui disparaît
+### Ce que dit le panel de 100 PME simulées (24.10.2026, founder/panel/results.md)
 
-- **Le Pack Complet à 2'900.–** — il coûtait plus cher que ses composants
-  achetés séparément (450 + 1'950 = 2'400) tout en s'appelant « pack ». Il
-  appartenait de toute façon à la ligne restauration.
-- **Les prix barrés et « tarif de lancement »** — −31 % sur les trois formules,
-  systématiquement : le prix de référence n'a jamais existé et ça se voit.
+6 % d'achat. Refus : confiance 67 (aucune référence, données), prix caché 12, habitude 8. Acheteurs : curieux du numérique (50 %), petits sanitaires (9 %). Fiduciaires : 0 %. Ce qui lèverait les refus : un collègue genevois à appeler, un prix écrit avant la démo, une garantie écrite sur l'hébergement des données.
+
+## 5 bis. Déclinaisons par métier
+
+Le site est général. La prospection, elle, vise **un métier à la fois, avec
+un seul assistant**, jusqu'à 3 clients. Ordre : sanitaire et chauffage
+d'abord (board, séance 9), électricité ensuite, puis les autres.
+
+| Métier | Ordre | Ce que fait l'assistant | Phrase d'appel | Point d'attention |
+|---|---|---|---|---|
+| **Sanitaire / chauffage** | 1er | **Par défaut : la réponse à chaque demande.** Il demande l'adresse, une photo et l'urgence pendant que le patron est sur le chantier ; le soir, une liste triée. Variantes à trancher par les 10 appels : la relance des devis, ou le bon de régie (il lit l'ordre de la régie, fixe le rendez-vous avec le locataire, confirme à la régie) | « Plus aucune demande sans réponse, même quand vous êtes sur le chantier. » Variantes : « Plus aucun devis sans relance. Vous validez, on envoie. » / « Chaque bon de régie reçoit son rendez-vous locataire, même quand vous êtes sur le chantier. » | On garde l'assistant dont la douleur revient chez au moins la moitié des 10 patrons. Le bon de régie ouvre ensuite la porte des régies |
+| **Électricité** | 2e | Le même que le sanitaire : prendre la demande pendant le chantier, préparer le devis, le relancer | « Combien de soirées par semaine passez-vous sur vos devis ? » | 291 entreprises. Après 3 clients sanitaires |
+| **Fiduciaires** | Plus tard | Réclamer les pièces aux clients jusqu'à ce que le dossier soit complet, trier ce qui arrive | « Combien d'heures par semaine passez-vous à courir après les pièces de vos clients ? » | Saison fiscale. Secret de la clientèle : à vérifier. Peuvent aussi apporter des clients artisans. L'échéance LBA/OAR citée dans la recherche est à vérifier avant usage |
+| **Régies** | Plus tard | Trier les demandes des locataires, demander les photos, préparer le bon d'intervention | « Combien de demandes de locataires traitez-vous par semaine ? » | Vente lente (36 régies tiennent 70 % du parc). À vendre comme **assistant du gérant**, jamais comme remplaçant. On y entre avec une référence d'artisan |
+| **Agences immobilières** | Plus tard | Relancer les anciens contacts propriétaires et les vendeurs venus des portails | « Combien d'anciens contacts propriétaires n'avez-vous jamais relancés ? » | Vise les mandats, pas les acheteurs |
+
+Les phrases d'appel sont des **questions ou des engagements de
+fonctionnement**, jamais des résultats chiffrés.
 
 ---
 
@@ -320,108 +321,142 @@ En dessous, la prestation coûte plus cher en échanges qu'elle ne rapporte.
 
 ### Ce qui existe
 
-| Preuve | Nature | Utilisable ? |
-|---|---|---|
-| Une carte de restaurant | Travail réalisé par Ayoub, client payant | ✅ Oui, avec l'accord du client |
-| Travaux 101 Agency | Réseaux sociaux, réalisés au sein de l'agence | ⚠️ Oui, si le rôle est indiqué |
-| « Le Comptoir » (carrousel) | **Client fictif inventé** | ❌ À retirer |
+| Preuve | Utilisable ? |
+|---|---|
+| Le nombre de clients | ❌ **Jamais écrit, ni dans un sens ni dans l'autre** (décision d'Ayoub du 25.10.2026) : ni client affirmé, ni « pas encore de client », ni « vous seriez parmi les premiers » |
+| La démo sur son métier, puis l'essai sur ses vraies demandes | ✅ C'est notre preuve principale : la sienne |
+| Le chatbot du site (Léo, `ChatWidget`) | ✅ Comme **démonstration** de ce que nous savons faire, jamais comme référence client |
+| Un relevé du lundi de démonstration | ✅ Étiqueté « démonstration » sans ambiguïté |
+| Le studio genevois, le développeur spécialisé en IA, la base métier | ✅ Faits vérifiables (le dev sans nom tant que le contrat n'est pas signé) |
+| Travaux de site passés, carte de restaurant | ❌ Hors sujet pour l'assistant ; ne pas s'en servir comme preuve |
+| Les phrases du panel simulé et les citations de la recherche | ❌ Recherche, jamais des citations de clients |
 
 ### Le trou à combler
 
-**Zéro référence de site PME.** Le positionnement repose entièrement sur une
-prestation dont il n'existe aucun exemple. C'est le risque numéro un du plan.
+**Aucun client, aucun patron genevois entendu.** C'est le risque n°1 (board,
+3/3). Réponse dans l'ordre :
+1. 10 appels de découverte (sanitaires et chauffagistes) ;
+2. une démo faite à la main sur des demandes types de son métier ;
+3. le premier essai, puis, avec son accord écrit, son relevé et deux phrases
+   de lui.
 
-Les deux réponses possibles, dans l'ordre :
+### Le ton : « on maîtrise », sans mentir (25.10.2026)
 
-1. **Un cas réel, vite.** Un site de PME genevoise à prix réduit ou offert,
-   contre l'autorisation de le montrer, des captures avant / après et deux
-   phrases du gérant. Un seul suffit à débloquer le discours.
-2. **Une démonstration assumée.** Un avant / après construit par le studio,
-   étiqueté « démonstration » sans ambiguïté. Honnête, et bien plus fort qu'une
-   référence inventée.
+Ayoub ne veut rien, sur le site ni dans Leo, qui montre que le studio
+débute. On supprime donc tout aveu (« pas encore de client », « parmi les
+premiers », « among the first », « no clients yet »). On le remplace par
+ce qui est vrai et vérifiable : la méthode (une base par métier, réglée sur
+l'entreprise), le contrôle (rien de fond ne part sans le patron), les
+données de l'assistant en Suisse, la démo sur son métier, l'essai sur ses
+vraies demandes — **« vous jugez sur pièces avant de payer »**. À la
+question des références, la réponse est la démo et l'essai, sans affirmer
+de clients et sans dire qu'il n'y en a pas. La FAQ « Vous avez des
+références ? » est devenue « Comment savoir si ça marche chez moi ? ».
 
 ### Règle absolue
 
-Aucun travail présenté comme une réalisation cliente s'il n'en est pas une.
-En Suisse, la LCD (art. 3) vise les indications trompeuses sur ses prestations.
-Pour les travaux 101 Agency : mention explicite du cadre et du rôle
-(« réalisé au sein de 101 Agency »), et accord du partenaire.
+Aucun avis, compteur, logo, témoignage ou résultat inventé. Aucun nombre
+de clients, d'années, de projets ou de demandes traitées. Aucune
+démonstration présentée comme un cas client. En Suisse, la LCD (art. 3)
+vise les indications trompeuses. Avant chaque appel, vérifier l'astérisque
+(refus de publicité, LCD art. 3 u).
 
 ---
 
 ## 7. Le partenariat — 101 Agency
 
-Ancien employeur d'Ayoub, agence aujourd'hui fermée. Le dirigeant conserve le
-portfolio et les exemples.
+Ancien employeur d'Ayoub, agence aujourd'hui fermée. Le dirigeant garde son
+réseau et son portfolio.
 
-**Deux rôles distincts :**
+**Son rôle aujourd'hui :**
+1. **Apporteur d'affaires** : il présente des patrons, contre **2 %**.
+   C'est le canal n°3 du plan (`founder/marketing.md` §4) : une introduction
+   vaut plus qu'une référence absente.
+2. **Production réseaux sociaux, sur devis** : n'a plus de lien avec l'offre
+   principale. Ne se met pas en avant sur le site.
 
-1. **Production réseaux sociaux.** Vendu **sur devis**, cas par cas. Le
-   partenaire pose son prix, le studio ajoute le sien, l'écart est la marge.
-   Le studio reste l'interlocuteur du client.
-2. **Apporteur d'affaires.** Il amène des prospects, y compris pour les sites,
-   contre **2 %**.
+**À formaliser (non défini à ce jour) :** ce que couvre le 2 % (mise en
+place seule, ou aussi l'abonnement ?), qui facture, et si 2 % suffit à le
+motiver.
 
-**Conséquence :** à 2 %, la commission ne contraint pas la grille tarifaire
-(30.– sur un site à 1'499.–). Elle est en revanche assez faible pour qu'il
-faille vérifier qu'elle motive réellement l'apport — un apporteur qui ne gagne
-rien n'apporte pas longtemps.
-
-**À formaliser (non défini à ce jour) :**
-- qui facture le client final, et qui porte la garantie
-- l'autorisation écrite d'utiliser le portfolio 101 Agency, avec la mention du
-  rôle exact d'Ayoub sur chaque pièce
+Aucun travail de 101 Agency ne sert de preuve pour l'assistant.
 
 ---
 
 ## 8. La voix
 
-Le slogan : **« L'essentiel. Bien conçu. »** — et il est respecté par le texte
-actuel du site, ce qui est rare.
+Référence complète : `founder/brand.md` §3.
 
-### Ce qui fonctionne, à conserver
+**Trois mots : concret, franc, posé.** Vouvoiement. Phrases courtes. On
+parle comme un patron parle à un autre patron.
 
-- **Le concret plutôt que l'adjectif.** « une semaine », « 85 × 55
-  recto-verso », « 8 à 12 publications par mois ». C'est le meilleur actif
-  d'écriture du site.
-- **« Vous parlez à celui qui fait le travail. »** L'argument le plus net face
-  à une agence. À garder mot pour mot.
-- **Le vouvoiement, la phrase courte, aucune emphase.**
+**On vend le résultat d'abord.** Le mot « IA » et le mot « assistant »
+sont permis. L'IA vient **après** le résultat : « Il répond à vos demandes.
+C'est une IA réglée sur votre métier. » Jamais l'IA en ouverture, jamais
+la technique en titre.
 
-### Ce qui doit changer
-
-| Règle | Pourquoi |
-|---|---|
-| Ne jamais tourner en dérision le « avant » du client | Le carrousel actuel se moque de sites et de cartes qui sont exactement ceux du prospect. « Daté », jamais « ridicule ». |
-| Retirer « Depuis 2026 » | On est en 2026 : présenté comme un marqueur d'ancienneté, ça souligne la jeunesse. |
-| Une seule promesse de délai | **« une semaine »**, partout, sans exception. Aucun compte d'heures — ni 72 h, ni 48 h : ces chiffres ont circulé, aucun n'est tenu. |
-| Nommer le point de départ du délai | Il court **dès le feu vert**, pas dès la réception du contenu : les textes sont repris de l'ancien site ou proposés en maquette. C'est ce qui rend la promesse tenable, et c'est le différenciateur. |
-| Trancher la contradiction sur le suivi | « 3 mois » côté services, « compris dans le suivi » côté FAQ. |
+Slogan recommandé : **« Vous validez. Il s'occupe du reste. »**
 
 ### Vocabulaire
 
 | Employer | Éviter |
 |---|---|
-| remise à niveau, refonte | « refonte digitale », « transformation » |
-| demandes, devis, rendez-vous | « leads », « conversion », « funnel » |
-| votre site | « votre présence digitale » |
-| une semaine | « rapidement », « dans les meilleurs délais », et tout compte d'heures |
+| l'assistant, l'IA (après le résultat) | agent autonome, LLM, RAG, n8n, « automatisation intelligente » |
+| vos demandes, vos devis, vos relances, vos pièces, le bon de régie | leads, funnel, conversion, workflow |
+| vous validez, il ne s'engage jamais à votre place | « 100 % automatique », « sans intervention », « rien ne part sans vous » |
+| il vous décharge, vos soirées | « remplace votre secrétaire », « supprimez un poste » |
+| le relevé du lundi | dashboard, reporting, KPI |
+| une semaine, en jours, dès votre feu vert | tout délai en heures (72 h, 48 h, 24 h) |
+| nous | « je », « une seule personne », un effectif inventé |
+| prix fixe, annoncé après la démo | « dès », « à partir de », « sur devis » pour l'assistant |
+
+### Les leviers retenus (`marketing-psychology`)
+
+Détail et justification : `founder/marketing.md` §3.
+
+- **Retenus**, parce qu'ils reposent sur un fait vrai : le job à accomplir
+  (vos soirées), l'énergie d'activation (rien à préparer), le pied dans la
+  porte (appel → démo → essai), l'effet de possession (ses propres
+  demandes dans la démo), l'aversion au regret (payé après l'essai), le
+  contrôle (il ne s'engage jamais à votre place), la fin d'expérience (le relevé du
+  lundi), la preuve par soi-même (il juge sur pièces avant de payer), la similarité (genevois,
+  vocabulaire du métier), moins de choix (un seul assistant).
+- **Refusés** : preuve sociale inventée, rareté fabriquée, prix barré ou
+  « valeur de », leurre de prix, autorité empruntée, peur de l'IA ou des
+  concurrents.
+
+### À ne jamais écrire
+
+- Un délai en heures.
+- Un prix écrit en dur, un prix « dès », un montant non lu en base.
+- Un aveu de débutant (« pas encore de client », « parmi les premiers ») —
+  et, à l'inverse, un client, un logo, un avis ou un chiffre inventé.
+- « Vos données » sans borne : la seule formule est « Les données de votre
+  assistant sont hébergées en Suisse ».
+- Un superlatif sur le marché (« le seul », « personne d'autre »).
+- Une moquerie du « avant » du client.
 
 ---
 
 ## 9. Les chiffres du studio
 
+Chiffres INTERNES, pour décider. Le nombre de clients ne s'écrit jamais
+sur le site ni dans Leo (§6, « Le ton »).
+
 | | |
 |---|---|
-| Clients à ce jour | **1** (une carte de restaurant) |
-| Références de site | **0** |
+| Clients de l'assistant | **0** |
+| Patrons genevois entendus | **0** (10 appels prévus) |
 | Revenu récurrent | **0** |
-| Délai annoncé | **1 semaine**, refonte comme départ de zéro. Le chiffre a bougé plusieurs fois : on annonce le seul qui soit tenu. |
-| Zone | Genève et alentours |
-| Langues | FR / EN |
+| Prix de l'assistant | Mise en place **1'500.–** ; abonnement **190.– / 290.– / 490.– par mois** (Essentiel, Standard, Complet) ; pas de TVA (entreprise non assujettie) ; tout en table `Service` |
+| Premier métier | Sanitaire et chauffage, Genève (441 entreprises) |
+| Équipe | Ayoub (vente, suivi) + un développeur spécialisé en IA (contrat à signer) |
+| Zone | Genève |
+| Langues | Français ; anglais prévu (chantier d'architecture, pas une traduction) |
+| Panel simulé | 0 achat sur 100, **sur l'ancienne offre** « site + relances ». Rien encore sur l'assistant |
 
-Le studio est en phase d'amorçage : la contrainte n'est pas le prix, c'est
-**la première référence et le premier canal d'acquisition**.
+La contrainte n'est pas le prix. C'est **le premier patron genevois qui
+accepte l'essai sur ses vraies demandes**.
 
 ---
 
@@ -429,7 +464,14 @@ Le studio est en phase d'amorçage : la contrainte n'est pas le prix, c'est
 
 | # | Décision | Bloque |
 |---|---|---|
-| 1 | Nombre de révisions incluses par palier | La rentabilité de La Vitrine à 699.– : sans limite écrite, un client bavard mange toute la marge |
-| 2 | ~~Qui rédige les textes~~ — **tranché** : le studio reprend les textes de l'ancien site, ou propose une maquette que le client ajuste, compris dans le prix (§5) | — |
-| 4 | Conditions de paiement (acompte, solde) | La trésorerie, et le risque d'impayé sur un premier client |
-| 5 | La première référence de site PME | Toute la crédibilité du positionnement |
+| 1 | ~~**Le prix**~~ **Tranché les 24 et 25.10.2026** : mise en place 1'500.–, abonnement en trois paliers 190.– / 290.– / 490.– par mois, offre d'introduction jusqu'au 31.01.2027 | L'étape 3 du parcours, la section offres du site, le prompt du chatbot |
+| 2 | **Quel assistant unique** pour le sanitaire : réponse aux demandes (défaut), relance des devis ou bon de régie | La démo, la phrase d'appel. Tranché par les 10 appels |
+| 3 | ~~**Données en Suisse**~~ **Tranché le 24.10.2026** : hébergées en Suisse. Reste à choisir l'hébergement et le modèle suisses de l'assistant livré | La vérité de la promesse « Les données de votre assistant sont hébergées en Suisse » |
+| 4 | **« Vous gardez tout »** : ce que ça couvre | La promesse de sortie |
+| 5 | **Contrat avec le développeur** : cession des droits sur le code et la base métier, confidentialité | Tout premier client. Le nom du dev sur le site |
+| 6 | **Délai de la démo** (durée de l'essai **tranchée le 25.10.2026 : deux semaines**, soit deux relevés du lundi ; engagement et résiliation tranchés le même jour : sans engagement, résiliable chaque mois, effet à la fin du mois en cours) | Le parcours affiché |
+| 7 | **Branchements réels** (WhatsApp, Abacus, bexio, e-mail) | La phrase « vous gardez vos outils » |
+| 8 | ~~**Assujettissement TVA d'Ayoub**~~ **Tranché le 25.10.2026** : raison individuelle non assujettie (CA < 100'000.–). Mention « pas de TVA (entreprise non assujettie) », jamais « TVA comprise ». À revoir si le seuil est franchi | Toute mention de prix (lib/format.ts), les CGV (/cgv), le JSON-LD de /services |
+| 9 | **Table `Service`** : insérer la ligne `assistant-mise-en-place` (1'500.–) ; les anciennes formules restent en base, le site ne les lit plus | L'affichage du montant (sans la ligne, le site s'affiche sans montant) |
+| 10 | **CLAUDE.md** décrit encore l'ancienne offre (699 / 1'499 / 2'499, refonte en une semaine) | La cohérence des agents : à mettre à jour par Ayoub |
+| 11 | **Limite de capacité** (nombre d'essais menés en même temps) | Toute mention de places limitées |

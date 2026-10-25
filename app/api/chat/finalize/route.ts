@@ -54,7 +54,8 @@ const SchemaRequete = z.object({
   reason: z.enum(["completed", "abandoned"]),
   /**
    * CE QUE LA CONVERSATION CONCERNE, quand le widget le sait — le sujet pose
-   * par app/(site)/devis a l ouverture (« le-site », « devis-imprimes »).
+   * par app/(site)/devis a l ouverture (aujourd hui « devis-studio »,
+   * lib/devis.ts).
    *
    * OPTIONNEL, et il doit le rester : la bulle s ouvre aussi toute seule, sur
    * n importe quelle page, sans que rien n ait ete clique. Une conversation

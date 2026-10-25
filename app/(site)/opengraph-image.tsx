@@ -18,7 +18,13 @@ import { ImageResponse } from "next/og";
  * pas la peine d ajouter une dependance reseau au build pour une image qui ne
  * change jamais.
  */
-export const alt = "Nawa Corps — Studio de création digitale, Genève";
+/**
+ * LE TEXTE SUIT docs/agents/copy/meta.md §3 : la promesse, puis le slogan.
+ * L image est en francais pour les deux langues (une seule convention de
+ * fichier). Aucun montant : une image de partage ne porte pas de mention de
+ * TVA lisible a cote.
+ */
+export const alt = "Nawa Corps — L'assistant IA qui connaît déjà votre métier, Genève";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -59,11 +65,11 @@ export default function Image() {
             maxWidth: 980,
           }}
         >
-          <span>Votre site a dix ans.</span>
-          <span>Refait en une semaine. Vous n&apos;avez rien à préparer.</span>
+          <span>L&apos;assistant qui connaît déjà votre métier.</span>
+          <span>Vous validez. Il s&apos;occupe du reste.</span>
         </div>
         <div style={{ display: "flex", fontSize: 28, opacity: 0.7 }}>
-          Nawa Corps — Studio de création digitale, Genève
+          Nawa Corps — studio genevois
         </div>
       </div>
     ),

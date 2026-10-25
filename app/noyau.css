@@ -154,6 +154,20 @@ html.has-intro:not(.loaded) .noyau-enter{animation-play-state:paused}
   font-size:clamp(1.7rem,3.6vw,3.1rem);
 }
 .noyau-say .serif-i{font-size:1.06em}
+/* Les douleurs qui tournent (components/RotationDouleurs.tsx) : les mots
+   partagent une cellule ; celui qui sort est barre d un trait (laiton),
+   puis s efface. */
+.noyau-say .douleurs{display:inline-grid;justify-items:start;vertical-align:bottom}
+.noyau-say .douleur{grid-area:1/1;position:relative;opacity:0;transform:translateY(40%);
+  transition:opacity .35s ease .35s,transform .35s ease .35s;white-space:nowrap}
+.noyau-say .douleur::after{content:"";position:absolute;left:0;top:55%;height:.08em;width:0;
+  background:var(--brass);transition:width .35s ease}
+.noyau-say .douleur.is-on{opacity:1;transform:none;transition-delay:.7s}
+.noyau-say .douleur.is-off{opacity:0;transform:none}
+.noyau-say .douleur.is-off::after{width:100%}
+.noyau-say .noyau-reponse{margin-top:.5em;font-size:clamp(1.1rem,2vw,1.6rem);
+  font-weight:500;color:var(--pine)}
+@media (prefers-reduced-motion:reduce){.noyau-say .douleur,.noyau-say .douleur::after{transition:none}}
 
 /* Temps 3 — la plongee. Le noyau remplit l'ecran : le texte passe en clair.
    C'est le moment ou la page bascule dans le coeur. */

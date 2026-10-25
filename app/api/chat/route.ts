@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { extraireChoix } from "@/lib/chat-choix";
 import { buildSystemPrompt } from "@/lib/chat-prompt";
 import { LOCALES, LOCALE_DEFAUT, type Locale, localeDuCorps } from "@/lib/i18n";
 import { clientIp, hashIp } from "@/lib/iphash";
@@ -122,6 +123,12 @@ function budgetQuotidien(): number {
   return Number.isFinite(brut) && brut > 0 ? brut : BUDGET_DEFAUT;
 }
 
+/** La phrase posee devant des boutons que le modele a envoyes sans texte. */
+const QUESTION_SANS_PHRASE: Record<Locale, string> = {
+  fr: "Laquelle de ces réponses vous correspond ?",
+  en: "Which of these fits you best?",
+};
+
 export async function POST(req: Request) {
   let brut: unknown;
   try {
@@ -181,11 +188,11 @@ export async function POST(req: Request) {
   await prisma.rateLimit.create({ data: { ipHash, action: ACTION } });
 
   // 5. Le modele. askLlm ne jette jamais.
-  //    LE PROMPT EST BATI DANS LA LANGUE DU VISITEUR : prix lus en base avec
-  //    `nomService`/`formatServicePrice`, regles transposees une par une
-  //    (lib/chat-prompt.ts). Il ne suffit PAS de demander au modele de repondre
-  //    en anglais — les regles de prix, de delai et de « feu vert » doivent
-  //    exister dans la langue ou il redige, sinon il improvise.
+  //    LE PROMPT EST BATI DANS LA LANGUE DU VISITEUR : montant de la mise en
+  //    place lu en base, regles transposees une par une (lib/chat-prompt.ts).
+  //    Il ne suffit PAS de demander au modele de repondre en anglais — les
+  //    regles de prix, de delai et de donnees doivent exister dans la langue
+  //    ou il redige, sinon il improvise.
   const system = await buildSystemPrompt(locale);
   const resultat = await askLlm(system, messages);
 
@@ -193,5 +200,25 @@ export async function POST(req: Request) {
     return NextResponse.json({ fallback: true }, { status: 503 });
   }
 
-  return NextResponse.json({ reply: resultat.reply }, { status: 200 });
+  // 6. Les reponses suggerees : la derniere ligne `CHOIX:` sort du texte et
+  //    part a cote, en tableau borne (lib/chat-choix.ts). Si le modele n en a
+  //    pas ecrit, `choix` est vide et le widget n affiche aucun bouton.
+  //    Le modele ecrit parfois la ligne CHOIX SEULE, sans phrase (vu le
+  //    25.10.2026 sur gpt-oss, apres « Artisan du batiment ») : les boutons
+  //    portent alors toute la reponse, et une question neutre les precede au
+  //    lieu de jeter la conversation dans le repli formulaire.
+  const extrait = extraireChoix(resultat.reply);
+  //    gpt-oss laisse parfois une virgule orpheline avant le point
+  //    d interrogation (« le soir,? », vu le 25.10.2026) : on la retire.
+  const texte = (extrait.texte || (extrait.choix.length > 0 ? QUESTION_SANS_PHRASE[locale] : ""))
+    .replace(/\s*,\s*([?？!.])/g, " $1")
+    .replace(/\s+([.])/g, "$1");
+  //    Des boutons sous une phrase qui ne pose aucune question ne repondent a
+  //    rien (vu le meme jour : les taches du metier, recopiees sous
+  //    l explication). Sans point d interrogation, pas de boutons.
+  const choix = /[?？]/.test(texte) ? extrait.choix : [];
+  if (!texte) {
+    return NextResponse.json({ fallback: true }, { status: 503 });
+  }
+  return NextResponse.json({ reply: texte, choix }, { status: 200 });
 }

@@ -1,16 +1,14 @@
 import type { Metadata } from "next";
-import CarteDuStudio from "@/components/CarteDuStudio";
+import Chiffres from "@/components/Chiffres";
 import Faq from "@/components/Faq";
 import FooterContact from "@/components/FooterContact";
 import Methode from "@/components/Methode";
 import NoyauHero from "@/components/NoyauHero";
 import Offres from "@/components/Offres";
+import SchemaStudio from "@/components/SchemaStudio";
 import ServicesRows from "@/components/ServicesRows";
 import Strip from "@/components/Strip";
 import Studio from "@/components/Studio";
-import Travaux from "@/components/Travaux";
-import { chargerCatalogue, prixEntreeCents } from "@/lib/catalogue";
-import { formatChfAmount, mentionTva } from "@/lib/format";
 import { SITE_NAME, alternatesPage, openGraphPage } from "@/lib/site";
 
 /**
@@ -28,23 +26,21 @@ import { SITE_NAME, alternatesPage, openGraphPage } from "@/lib/site";
  * francais, et affichait donc du francais sous un `lang="en-CH"` — une
  * contradiction que Google releve, et une fiche de partage qui annoncait un
  * anglais inexistant. Un bandeau d avertissement le disait ici meme. Il est
- * retire : les neuf composants prennent une `locale` et lisent leurs chaines
- * dans lib/dictionnaires, la table Service porte ses colonnes `nameEn` /
- * `descriptionEn`, et lib/format.ts rend « VAT included » au lieu de « TVA
- * comprise ».
+ * retire : les composants prennent une `locale` et lisent leurs chaines dans
+ * lib/dictionnaires, et lib/format.ts rend la mention de TVA en anglais
+ * (« no VAT (business not VAT-registered) »).
  *
  * `"/"` EST DANS `CHEMINS_TRADUITS` (lib/i18n.ts) : c est ce qui autorise
  * `alternatesPage` et le sitemap a annoncer cette page. La liste et cette page
  * doivent bouger ensemble — un `hreflang` vers une URL absente est pire que
  * pas de `hreflang` du tout.
  *
- * `components/SchemaStudio` N EST VOLONTAIREMENT PAS RENDU ICI, alors que
- * l accueil francais le rend. Il emet le `ProfessionalService` du studio sous
- * l `@id` `/#studio`, et cet identifiant designe UNE entite : le declarer une
- * seconde fois depuis une autre URL n ajoute rien et ouvre la porte a deux
- * fiches du meme prestataire qui divergeraient d un mot. La question — une
- * fiche traduite, ou une seule fiche ? — reste ouverte, et elle se tranche
- * dans le composant, pas ici.
+ * `components/SchemaStudio` EST RENDU ICI EN ANGLAIS DEPUIS LE 25.10.2026
+ * (decision d Ayoub, audit CRO/SEO v3, 3.8). Les `Service` des pages
+ * anglaises pointent vers `/#studio` : sans fiche sur `/en`, ce renvoi ne
+ * menait a rien dans la langue de la page. C est la meme entite, sous le meme
+ * `@id` ; le composant tient les deux langues cote a cote pour qu elles ne
+ * divergent pas d un mot.
  *
  * PAS DE next/link, comme partout sur le site public (decision B7). Les liens
  * internes des neuf composants passent par `lien(locale, …)`, qui prefixe
@@ -53,54 +49,23 @@ import { SITE_NAME, alternatesPage, openGraphPage } from "@/lib/site";
 
 /**
  * Rendu a chaque requete, exactement pour la raison qui l impose a l accueil
- * francais : `Offres` et `CarteDuStudio` sont des composants serveur qui lisent
- * Postgres, et l etage builder du Dockerfile n a pas de base — un prerendu
+ * francais : `NoyauHero`, `Offres` et `Faq` lisent le montant de la mise en
+ * place dans Postgres, et l etage builder du Dockerfile n a pas de base — un prerendu
  * ferait echouer `next build`. Voir le long releve de mesures en tete de
  * app/(site)/page.tsx : la question est tranchee, ne la rouvrez pas.
  */
 export const dynamic = "force-dynamic";
 
 /**
- * TITRE ET DESCRIPTION — et trois interdits du glossaire anglais qui s y
- * jouaient, parce que ce sont les deux chaines que Google lit en premier.
- *
- *  - « SMEs » EST PROSCRIT (§3) : « PME » se dit `small business`. Le titre
- *    l ecrivait.
- *  - « redesign » EST UN FAUX AMI de « refonte » (§3) : on dit `rebuild`, ou
- *    `brought up to date`.
- *  - GOOGLE A QUITTE L OFFRE le 31 aout 2026 : la description listait
- *    « Google listing » parmi les prestations vendues, elle ne le fait plus.
- *    Le mot peut decrire un fait ; il ne nomme plus une chose vendue.
- *
- * ET « one week » NE VOYAGE PAS SEUL, ici non plus : le titre le fait suivre
- * de `nothing to prepare`, qui est le benefice n°1 et la seule chose que le
- * lecteur achete vraiment. C est aussi ce qui distingue cet extrait de tous
- * les autres — un delai isole ne differencie plus rien.
+ * TITRE ET DESCRIPTION (docs/agents/copy/meta.md §1), miroir de l accueil
+ * francais. « small business » et jamais « SME » (glossaire §3). Aucun montant
+ * dans l extrait : le seul prix du site se lit dans la page, avec sa mention.
  */
-const TITRE = "Website rebuild in Geneva — one week, nothing to prepare";
+const TITRE = "AI assistant for tradespeople and small firms in Geneva";
 const DESCRIPTION =
-  "Digital design studio in Geneva: websites, identity, print, photography, social media. Your site rebuilt in one week — you have nothing to prepare.";
+  "It drafts your quotes, follows up and takes enquiries, never committing on your behalf. You see it, try it for two weeks, pay after.";
 
-/**
- * DESCRIPTION CONSTRUITE A CHAQUE REQUETE, PRIX COMPRIS — le meme dispositif
- * que app/(site)/page.tsx, et pour la meme raison : dans un extrait Google, le
- * prix d entree qualifie le clic avant la visite. La page francaise l avait,
- * l anglaise ne l avait pas ; deux extraits de la meme page qui ne disent pas
- * la meme chose sont un ecart que personne ne relit.
- *
- * ELLE PASSE PAR chargerCatalogue(), memoisee par requete, donc zero
- * aller-retour en plus : c est la promesse que Offres, CarteDuStudio, Faq et
- * le hero attendent deja.
- *
- * LE `try` N EST PAS DECORATIF : l etage builder du Dockerfile n a pas de
- * base, et une exception ici ferait echouer le build entier. Sans base, on
- * sert la meme phrase sans le prix — jamais un montant invente.
- *
- * LA MENTION DE TVA EST DANS LA MEME PHRASE QUE LE MONTANT, parce que la regle
- * vaut par unite de lecture et qu un extrait de resultat EST une unite de
- * lecture : il est lu hors de toute page.
- */
-export async function generateMetadata(): Promise<Metadata> {
+export function generateMetadata(): Metadata {
   const commun = {
     /**
      * `absolute` — SANS LE SUFFIXE DE MARQUE, comme l accueil francais.
@@ -131,36 +96,27 @@ export async function generateMetadata(): Promise<Metadata> {
     twitter: { ...commun.twitter, description },
   });
 
-  try {
-    const cents = prixEntreeCents(await chargerCatalogue());
-    if (cents === null) return habiller(DESCRIPTION);
-    return habiller(
-      `${DESCRIPTION} From ${formatChfAmount(cents)}.–, ${mentionTva("en")}.`,
-    );
-  } catch {
-    return habiller(DESCRIPTION);
-  }
+  return habiller(DESCRIPTION);
 }
 
 export default function AccueilEn() {
   return (
     <>
+      {/* Donnee structuree du studio, en anglais. N emet qu un <script>. */}
+      <SchemaStudio locale="en" />
       <NoyauHero locale="en" />
       {/* MEME ORDRE DE SECTIONS QUE L ACCUEIL FRANCAIS, et il doit le rester :
-          cet ordre porte deux decisions documentees dans app/(site)/page.tsx —
-          le vert contigu en bas de page, et les prix avant les questions. Une
-          version anglaise qui reordonne ne serait plus la meme page, et le
+          une version anglaise qui reordonne ne serait plus la meme page, et le
           couple hreflang perdrait son sens. */}
       <div className="page-body">
-        <Travaux locale="en" />
         <Strip locale="en" />
+        <Chiffres locale="en" />
         <ServicesRows locale="en" />
         <Methode locale="en" />
         <Studio locale="en" />
         <Offres locale="en" />
-        <CarteDuStudio locale="en" />
         <Faq locale="en" />
-        <FooterContact locale="en" />
+        <FooterContact indexSection="07" locale="en" />
       </div>
     </>
   );

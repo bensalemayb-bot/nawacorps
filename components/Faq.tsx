@@ -1,143 +1,81 @@
-/* LA DECISION B7 TIENT TOUJOURS — des <a> classiques, jamais next/link : la
-   navigation client ne rejoue pas les revelations au scroll d'Interactions.tsx,
-   qui ne s'initialisent qu'une fois.
-   CE QUI A DISPARU, C'EST LE `eslint-disable` QUI L'ACCOMPAGNAIT, et il ne faut
-   pas le remettre : `@next/next/no-html-link-for-pages` ne reconnait que les
-   `href` litteraux, et les deux liens de ce fichier passent desormais par
-   `lien(locale, …)`. La directive est devenue inutile, et une directive inutile
-   est elle-meme signalee par ESLint. Si un `href` litteral revient un jour, la
-   regle se remettra a parler — c'est exactement ce qu'on veut d'elle. */
-import { chargerCatalogue } from "@/lib/catalogue";
-import { CHF_UNIT, formatChfAmount, mentionTva, suffixeMensuel } from "@/lib/format";
+/* DES <a> CLASSIQUES, JAMAIS next/link (decision B7) : la navigation client ne
+   rejoue pas les revelations au scroll d Interactions.tsx. */
+import {
+  avecPrix,
+  lireMiseEnPlace,
+  lirePaliers,
+  phrasePaliers,
+  type PalierAbonnement,
+} from "@/lib/catalogue";
 import { jsonLd } from "@/lib/site";
 import { dictionnaire, type Dictionnaire } from "@/lib/dictionnaires";
 import { LANGUE_HTML, lien, type Locale } from "@/lib/i18n";
 
-// Section FAQ — reference/binacore.html lignes 1105-1133.
+// Section (06) Questions — reference/binacore.html lignes 1105-1133.
 //
-// AUCUN JS : le depliage est celui de <details>/<summary>, natif. La maquette
-// ne pose aucun ecouteur dessus, seulement du CSS (.faq summary .pl2 pivote via
-// `details[open]`). Interactions.tsx attache par ailleurs `summary` au curseur
-// magnetique (ligne 186) — selecteur deja en place depuis B4.
+// AUCUN JS : le depliage est celui de <details>/<summary>, natif.
 //
-// SEO — les cinq questions vivent dans construireQuestions(), et non plus en
-// dur dans le JSX. Le markup rendu est identique au caractere pres ; ce qui
-// change, c est qu une SECONDE sortie lit la meme liste : le JSON-LD FAQPage.
-// Une seule source, donc aucun risque de voir la donnee structuree promettre a
-// Google une reponse que la page n affiche pas.
-//
-// Le composant est devenu ASYNC : les deux prix du suivi sont lus en base au
-// lieu d etre ecrits en dur. Voir le docblock de construireQuestions().
-//
-// PUIS BILINGUE. Le texte des cinq questions vit dans lib/dictionnaires ; ce
-// fichier ne connait plus que leur ordre et la mecanique qui recolle les deux
-// montants. Le JSON-LD suit la langue par `inLanguage` — sans lui, deux
-// FAQPage disant la meme chose dans deux langues sont indistinguables pour un
-// moteur, et c est exactement le cas que `hreflang` existe pour lever.
+// UNE SEULE LISTE, DEUX SORTIES : le rendu et le JSON-LD FAQPage lisent les
+// memes questions. Une donnee structuree qui promettrait a un moteur une
+// reponse que la page n affiche pas est exactement ce qu il sanctionne. Les
+// reponses sont des blocs autonomes de 60 mots au plus, lisibles tels quels par
+// un moteur de reponse. `inLanguage` distingue les deux FAQPage FR et EN.
+
 /**
- * LES DEUX PRIX DU SUIVI SONT LUS EN BASE, PAS ECRITS ICI.
+ * LES NEUF OBJECTIONS, dans l ordre du panel de 100 PME (revue A tour 2, m1) :
+ * la confiance d abord (est-ce que ca marche chez moi, donnees, l IA qui
+ * ecrit, l erreur), le
+ * besoin ensuite (dont la penurie d embauche — ces deux questions sont
+ * arrivees le 25.10.2026), l habitude, le prix en dernier.
  *
- * La question 3 les annoncait en dur (« 49.–/mois », « 129.–/mois ») alors que
- * la grille juste au-dessus, elle, sort de Postgres : au premier changement de
- * tarif, la FAQ contredisait la grille sur le meme ecran — et elle le faisait
- * AUSSI dans la donnee structuree FAQPage, que Google republie telle quelle.
+ * « VOUS AVEZ DES REFERENCES ? » EST DEVENUE « COMMENT SAVOIR SI CA MARCHE
+ * CHEZ MOI ? » le 25.10.2026 : la reponse est la demo et l essai, que le
+ * patron verifie lui-meme. Aucun client, aucun chiffre affirme (LCD art. 3).
  *
- * Si une des deux lignes manque ou passe sur devis, la reponse se referme sans
- * chiffre plutot que d en inventer un.
- *
- * « TVA COMPRISE » EST DANS LA PHRASE, ET DOIT Y RESTER — « VAT included » en
- * anglais, et il vient de `mentionTva()`, jamais recopie. La regle du depot est
- * absolue (CLAUDE.md) : aucun prix affiche sans la mention. Elle ne pouvait pas
- * etre deleguee aux mentions d Offres ni de CarteDuStudio — depuis que les
- * objections passent avant le prix, la FAQ est rendue AVANT ces deux sections,
- * et ces deux montants n etaient couverts par rien. Une note de bas de section
- * n aurait pas suffi non plus : la reponse repart telle quelle dans le JSON-LD
- * FAQPage ci-dessous, que Google republie hors de tout contexte de page.
+ * LA REPONSE SUR LE PRIX PORTE CHAQUE MONTANT ET SA MENTION DE TVA DANS LA
+ * MEME PHRASE : elle repart telle quelle dans le JSON-LD, hors de tout
+ * contexte de page. La mise en place et les trois paliers sont lus en base ;
+ * ce qui manque se dit sans montant, chaque morceau independamment.
  */
 function construireQuestions(
   t: Dictionnaire,
   locale: Locale,
-  prix: (slug: string) => string | null,
+  montant: string | null,
+  paliers: readonly PalierAbonnement[] | null,
 ): { q: string; r: string }[] {
-  const suivi = prix("hebergement");
-  const suiviAssistant = prix("suivi-assistant");
-  const tarifs =
-    suivi && suiviAssistant
-      ? `${t.faq.tarifsAvant}${suivi}${t.faq.tarifsMilieu}${suiviAssistant}${t.faq.tarifsApres}${mentionTva(locale)}.`
-      : t.faq.tarifsSansMontant;
-
+  const prix = [
+    t.faq.prixDebut,
+    montant
+      ? avecPrix(t.faq.prixMiseEnPlace, montant, locale)
+      : t.faq.prixMiseEnPlaceSansMontant,
+    paliers
+      ? avecPrix(
+          t.faq.prixAbonnement.replace("{paliers}", phrasePaliers(paliers, locale)),
+          "",
+          locale,
+        )
+      : t.faq.prixAbonnementSansMontant,
+  ].join(" ");
   return [
-    {
-      // « Oui, quand vous avez deja un site … si on part de zero, comptez une
-      // semaine » faisait deux promesses de delai la ou le guide de voix n en
-      // autorise qu une : le depart de zero n a plus de delai distinct, c est
-      // la meme semaine. La reponse le dit d une phrase, et la seconde
-      // condition disparait avec.
-      q: t.faq.question1,
-      r: t.faq.reponse1,
-    },
-    {
-      q: t.faq.question2,
-      r: t.faq.reponse2,
-    },
-    {
-      q: t.faq.question3,
-      r: `${t.faq.reponse3Avant}${tarifs}${t.faq.reponse3Apres}`,
-    },
-    {
-      // « c'est corrigé dans la journée » est tombe : c etait un engagement de
-      // reactivite sans source, et le seul autorise — « réponse le jour
-      // ouvrable suivant » — vit au formulaire, une seule fois. Ce qui le
-      // remplace est un fait de perimetre, verifiable au contrat.
-      // LES CINQ QUESTIONS PRESUPPOSAIENT TOUTES UN SITE. Celle-ci est la
-      // seule ou le reste du catalogue s installe sans forcer : « apres » vaut
-      // aussi bien pour une correction que pour une affiche de rentree. Elle
-      // s elargit donc, et c est elle qui dit au visiteur venu pour des cartes
-      // de visite qu il est au bon endroit.
-      q: t.faq.question4,
-      r: t.faq.reponse4,
-    },
-    {
-      // ANCIENNE VERSION, RETIREE EN ENTIER : « Pourquoi moins cher qu'une
-      // agence ? … livré en trois jours au lieu de trois mois. » Trois fautes
-      // dans deux phrases — une comparaison publiee (interdite, nommee ou
-      // non), un delai de « trois jours » alors que la seule promesse est une
-      // semaine, et un plaidoyer de prix qui attire l attention sur le doute
-      // qu il veut lever. La question devient celle que le lecteur se pose
-      // vraiment, et la reponse BORNE la prestation au lieu de la defendre.
-      // La version anglaise obeit au meme interdit : le glossaire §4 proscrit
-      // « faster than », « unlike other agencies », « the only studio in
-      // Geneva » — la LCD art. 3 ne s arrete pas a la frontiere de la langue.
-      //
-      // « NI SOUS-TRAITANCE » NE REVIENT PAS. C etait faux : la production des
-      // reseaux sociaux est faite avec un partenaire, et /services/
-      // reseaux-sociaux comme lib/familles.ts le disent noir sur blanc. La
-      // contradiction etait a deux clics sur le site public. La phrase a deja
-      // ete corrigee une fois puis reintroduite par une reecriture : la portee
-      // exacte est « le site est dessine et construit par la meme personne »,
-      // ce qui est vrai, et non une negation en bloc, qui ne l est pas.
-      // Meme correction dans components/Studio.tsx, second paragraphe.
-      q: t.faq.question5,
-      r: t.faq.reponse5,
-    },
+    { q: t.faq.questionPreuve, r: t.faq.reponsePreuve },
+    { q: t.faq.questionDonnees, r: t.faq.reponseDonnees },
+    { q: t.faq.questionIa, r: t.faq.reponseIa },
+    { q: t.faq.questionErreur, r: t.faq.reponseErreur },
+    { q: t.faq.questionBesoin, r: t.faq.reponseBesoin },
+    { q: t.faq.questionPersonne, r: t.faq.reponsePersonne },
+    { q: t.faq.questionOutils, r: t.faq.reponseOutils },
+    { q: t.faq.questionTemps, r: t.faq.reponseTemps },
+    { q: t.faq.questionPrix, r: prix },
   ];
 }
 
 export default async function Faq({ locale = "fr" }: { locale?: Locale }) {
   const t = dictionnaire(locale);
-  // Lecture PARTAGEE avec Offres, CarteDuStudio et le hero, sur le meme ecran
-  // (lib/catalogue.ts memoise par requete) : aucun aller-retour en plus.
-  const catalogue = await chargerCatalogue();
-  const prix = (slug: string) => {
-    const service = catalogue.find((s) => s.slug === slug);
-    if (!service || service.priceCents === null) return null;
-    return `${formatChfAmount(service.priceCents)}${CHF_UNIT}${suffixeMensuel(locale)}`;
-  };
-  const QUESTIONS = construireQuestions(t, locale, prix);
+  // Lecture memoisee, partagee avec le hero et Offres : aucun aller-retour en
+  // plus. `lireMiseEnPlace` ne leve jamais.
+  const [montant, paliers] = await Promise.all([lireMiseEnPlace(), lirePaliers(locale)]);
+  const QUESTIONS = construireQuestions(t, locale, montant, paliers);
 
-  // Le JSON-LD est bati sur la MEME liste que le rendu : une donnee structuree
-  // qui promettrait a Google une reponse que la page n affiche pas est
-  // exactement ce que Google sanctionne.
   const SCHEMA = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -157,7 +95,7 @@ export default async function Faq({ locale = "fr" }: { locale?: Locale }) {
       />
       <div className="wrap">
         <div className="sec-head">
-          <span className="meta" data-reveal><span className="index">(06)</span>{`\u00A0 ${t.faq.section}`}</span>
+          <span className="meta" data-reveal><span className="index">(06)</span>{`  ${t.faq.section}`}</span>
           <h2 className="sr-only">{t.faq.titreCache}</h2>
         </div>
         <div data-reveal>
@@ -169,32 +107,26 @@ export default async function Faq({ locale = "fr" }: { locale?: Locale }) {
           ))}
         </div>
 
-        {/* LA SECTION SE TERMINAIT SUR UNE PORTE FERMEE. Les cinq reponses
-            levent les objections une par une, et le lecteur arrivait au bas
-            de la derniere sans rien a faire de ce qu il venait de decider.
-            Les deux FAQ de pages — components/PageFamille.tsx et
-            app/(site)/services/[slug]/page.tsx — closent la leur par ce meme
-            bloc .c-row depuis leur ecriture ; l accueil etait le seul a ne
-            pas l avoir.
-
-            Le motif est repris tel quel, a une difference pres : le bouton
-            principal pointe vers /devis et non vers WhatsApp. Les pages de
-            famille et de formule connaissent la prestation demandee et
-            peuvent amorcer la conversation avec son sujet (BoutonDevis) ;
-            l accueil, lui, ne sait pas encore ce que le visiteur veut — le
-            formulaire est l endroit ou il le dit.
-
-            L ESPACE AVANT LA FLECHE EST DANS LA CHAINE du dictionnaire, pas
-            dans le JSX : ecrit ici, il ferait un troisieme enfant et React
-            intercalerait un `<!-- -->` dans le HTML francais. */}
+        {/* LA SECTION NE SE TERMINE PAS SUR UNE PORTE FERMEE : la demande de
+            demo, puis la page de detail de l assistant. L espace avant la
+            fleche est dans la chaine du dictionnaire, pas dans le JSX. */}
         <div className="c-row" data-reveal>
-          <a className="btn" href={lien(locale, "/devis")}>
+          <a className="btn" href={lien(locale, "/demonstrations")}>
             {t.faq.ctaDevis}<span className="ar">→</span>
           </a>
           <a className="btn btn-line" href={lien(locale, "/services")}>
-            {t.faq.ctaFormules}
+            {t.faq.ctaDetail}
           </a>
         </div>
+        {/* UNE LIGNE VERS LE GUIDE DE REFERENCE (25.10.2026), sous les deux
+            boutons, sans toucher a leur rangee. Le guide n existe qu en
+            francais : le lien n est jamais prefixe. */}
+        <p className="meta" data-reveal style={{ marginTop: 28 }}>
+          {t.faq.lienGuideDebut}
+          <a className="lnk" href="/guides/automatisation-ia-pme-geneve">{t.faq.lienGuide}</a>
+          {" · "}
+          <a className="lnk" href="/guides/assistant-ia-ou-secretaire">{t.faq.lienGuideSecretaire}</a>
+        </p>
       </div>
     </section>
   );

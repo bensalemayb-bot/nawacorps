@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { dictionnaire } from "@/lib/dictionnaires";
-import type { Locale } from "@/lib/i18n";
+import { type Locale, lien } from "@/lib/i18n";
 
 /**
  * Formulaire de contact — bloc B8.
@@ -46,6 +46,14 @@ import type { Locale } from "@/lib/i18n";
  * `.default()` : une valeur inattendue retombe sur le francais AU LIEU de
  * refuser la demande, parce qu un champ decoratif ne doit jamais coûter un lead.
  *
+ * ACCESSIBILITE ET INFORMATION (25 octobre 2026). Chaque champ a desormais un
+ * vrai <label for>, masque visuellement (`sr-only`) pour ne pas toucher a la
+ * mise en page : un `aria-label` seul n est pas lu par tous les outils, et un
+ * placeholder disparait des qu on tape. Le libelle dit ce qui est obligatoire.
+ * Sous le bouton, une mention courte dit a quoi servent les donnees et mene a
+ * la page de confidentialite — sans case a cocher, puisque aucun traitement ne
+ * repose sur le consentement (voir /confidentialite).
+ *
  * RESERVE CONNUE : seul `erreur.error` est affiche, jamais les `issues`. Le
  * message precis (« Indiquez votre nom (2 caracteres au moins). ») part bien
  * dans la reponse mais reste invisible ; le visiteur lit « Donnees invalides. ».
@@ -82,6 +90,9 @@ export default function ContactForm({
 }) {
   const t = dictionnaire(locale);
   const [etat, setEtat] = useState<Etat>({ statut: "repos" });
+  // Ids uniques : ce formulaire peut etre rendu deux fois sur un meme ecran
+  // (pied de page et page), et deux `for="nom"` designeraient le meme champ.
+  const id = useId();
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -133,7 +144,7 @@ export default function ContactForm({
         // « réponse sous 24 h » a survecu ici a la purge des delais parce
         // qu il vivait dans une chaine JS et non dans du JSX. C est pourtant
         // le meme engagement interdit : le seul autorise est « réponse le
-        // jour ouvrable suivant » (MENTION_REPONSE, lib/familles.ts), et il
+        // jour ouvrable suivant » (MENTION_REPONSE, lib/mentions.ts), et il
         // est ecrit au-dessus du formulaire partout ou ce composant est
         // rendu — FooterContact.tsx et /contact — le repeter ici en ferait
         // une seconde formulation du meme engagement. Le message de succes
@@ -157,41 +168,46 @@ export default function ContactForm({
   return (
     <form onSubmit={onSubmit} noValidate style={{ marginTop: 22, maxWidth: "46ch" }}>
       <div style={{ display: "grid", gap: 12 }}>
+        <label className="sr-only" htmlFor={`${id}-nom`}>{t.formulaire.labelNom}</label>
         <input
+          id={`${id}-nom`}
           style={champ}
           type="text"
           name="name"
           required
+          aria-required="true"
           minLength={2}
           maxLength={80}
           placeholder={t.formulaire.nom}
-          aria-label={t.formulaire.nom}
           autoComplete="name"
         />
+        <label className="sr-only" htmlFor={`${id}-tel`}>{t.formulaire.labelTelephone}</label>
         <input
+          id={`${id}-tel`}
           style={champ}
           type="tel"
           name="phone"
           placeholder={t.formulaire.telephone}
-          aria-label={t.formulaire.telephone}
           autoComplete="tel"
         />
+        <label className="sr-only" htmlFor={`${id}-email`}>{t.formulaire.labelEmail}</label>
         <input
+          id={`${id}-email`}
           style={champ}
           type="email"
           name="email"
           maxLength={160}
           placeholder={t.formulaire.email}
-          aria-label={t.formulaire.email}
           autoComplete="email"
         />
+        <label className="sr-only" htmlFor={`${id}-message`}>{t.formulaire.messageLabel}</label>
         <textarea
+          id={`${id}-message`}
           style={{ ...champ, resize: "vertical", minHeight: 110 }}
           name="message"
           maxLength={1000}
           rows={4}
           placeholder={t.formulaire.message}
-          aria-label={t.formulaire.messageLabel}
         />
 
         {/* Le sujet, quand la page en connait un. `type="hidden"` et non le
@@ -203,8 +219,8 @@ export default function ContactForm({
         ) : null}
 
         <div style={leurre} aria-hidden="true">
-          <label htmlFor="website">{t.formulaire.leurre}</label>
-          <input id="website" type="text" name="website" tabIndex={-1} autoComplete="off" />
+          <label htmlFor={`${id}-website`}>{t.formulaire.leurre}</label>
+          <input id={`${id}-website`} type="text" name="website" tabIndex={-1} autoComplete="off" />
         </div>
 
         <div>
@@ -220,6 +236,15 @@ export default function ContactForm({
 
       <p className="meta" role="status" aria-live="polite" style={{ marginTop: 14, minHeight: "1.4em" }}>
         {etat.message ?? ""}
+      </p>
+
+      {/* LA MENTION D INFORMATION (nLPD art. 19) : ce qui est obligatoire, a
+          quoi servent les donnees, ou lire le reste. Le lien suit la langue
+          du formulaire. Taille et couleur des notes du site, rien de neuf. */}
+      <p style={{ marginTop: 6, fontSize: ".78rem", color: "var(--muted)", maxWidth: "46ch" }}>
+        {t.formulaire.mentionRequis}{" "}
+        {t.formulaire.mentionDebut}
+        <a className="lnk" href={lien(locale, "/confidentialite")}>{t.formulaire.mentionLien}</a>.
       </p>
     </form>
   );

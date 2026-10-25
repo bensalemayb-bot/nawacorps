@@ -1,411 +1,303 @@
 import type { Metadata } from "next";
-import BoutonDevis from "@/components/BoutonDevis";
-import CarteService from "@/components/CarteService";
-import SchemaPage from "@/components/SchemaPage";
 import FooterContact from "@/components/FooterContact";
+import GrilleAbonnement from "@/components/GrilleAbonnement";
+import SchemaPage from "@/components/SchemaPage";
 import {
-  CHF_UNIT,
-  formatChfAmount,
-  isQuote,
-  libelleDevis,
-  mentionTva,
-  prefixeDes,
-  suffixeMensuel,
-} from "@/lib/format";
-import { POUR_QUI, POUR_QUI_EN, estFormule } from "@/lib/formules";
-import {
-  type FamilleSlug,
-  MENTION_DEVIS,
-  MENTION_DEVIS_EN,
-  MENTION_REPONSE,
-  MENTION_REPONSE_EN,
-  MENTION_TVA,
-  MENTION_TVA_EN,
-} from "@/lib/familles";
-import {
-  CATEGORIES_FAMILLES,
-  FAMILLES_EN_SECOND,
-  FAMILLES_EN_VITRINE,
-  type FamilleRangee,
-  hrefService,
-  parFamilles,
-} from "@/lib/catalogue-familles";
-import {
-  type ServiceCatalogue,
-  chargerCatalogue,
-  descriptionService,
-  nomService,
-  parCategories,
+  avecPrix,
+  lireCentsMiseEnPlace,
+  lireMiseEnPlace,
+  lirePaliers,
+  offreMiseEnPlace,
+  offresAbonnement,
 } from "@/lib/catalogue";
-import { type Locale, lien } from "@/lib/i18n";
-import { SITE_NAME, alternatesPage, openGraphPage } from "@/lib/site";
+import { cheminGuide } from "@/lib/guides";
+import { CHEMIN_METIERS, METIERS, cheminMetier } from "@/lib/metiers";
+import { MENTION_REPONSE, MENTION_REPONSE_EN } from "@/lib/mentions";
+import { LANGUE_HTML, type Locale, lien } from "@/lib/i18n";
+import {
+  SITE_NAME,
+  SITE_URL,
+  alternatesPage,
+  jsonLd,
+  openGraphPage,
+} from "@/lib/site";
 
 /**
- * /services — LE CATALOGUE EN ENTIER.
+ * /services — « L'assistant, en détail » (copy : docs/agents/copy/services.md,
+ * revue A tour 2, bloc 6).
  *
- * Pourquoi cette page existe. L offre etait eclatee en deux endroits qui ne se
- * parlaient pas : la grille d accueil montrait les trois formules de site, la
- * « carte du studio » montrait les supports. Le visiteur qui voulait savoir
- * ce que le studio vend devait donc reconstituer le catalogue de tete. Ici il
- * le voit d un coup, groupe, avec les prix.
+ * LA PAGE DE DETAIL DE L OFFRE UNIQUE. Depuis le 24.10.2026, le studio vend un
+ * assistant IA pour les PME genevoises ; l ancien catalogue (formules de site,
+ * imprimes, identite, restauration) est sorti de l offre et n est plus lu ici.
  *
- * ELLE S APPELAIT /prestations. La navigation portait « Services », « Offres »
- * et « Prestations » — trois mots pour la meme chose, dont deux ancres de
- * l accueil et une page. Le visiteur devait deviner laquelle contenait quoi.
- * Il ne reste qu un mot et qu une page generale : celle-ci. Le site n etait pas
- * en ligne, aucune redirection n a donc ete posee.
+ * LES MONTANTS SONT LUS EN BASE, ET SEULEMENT DANS LA SECTION (04) : la mise
+ * en place (`lireMiseEnPlace`, lib/catalogue.ts) a l etape 3 du parcours, puis
+ * la grille des trois paliers de l abonnement et l offre d introduction
+ * (components/GrilleAbonnement, decision d Ayoub du 25.10.2026). Chaque
+ * montant est suivi de la mention de TVA. Ligne absente, masquee ou base
+ * injoignable : la phrase se lit sans montant, la grille disparait.
  *
- * ET CHAQUE LIGNE S OUVRE — MAIS PAS SUR UNE PAGE PAR LIGNE. La page promet
- * qu on y voit tout ce qui est vendu ; elle promet donc aussi qu on peut lire
- * chaque ligne en entier. Les cartes ouvraient `/services/<slug de la table
- * Service>` : quatorze de ces adresses n existaient pas et repondaient 404
- * (constat 10 de la revue du 31 aout). Elles ouvrent desormais le bloc de la
- * ligne sur la page de sa FAMILLE, a l ancre — `hrefService` decide, dans
- * lib/catalogue-familles.ts, et c est la ou le contenu vit deja. Les trois
- * formules gardent leur page et leur bouton ; `site-sur-mesure`, qui n a ni
- * l une ni l autre, est rendu sans lien.
- *
- * TOUT VIENT DE POSTGRES. Aucun montant n est ecrit dans ce fichier : noms,
- * descriptions et prix sortent de la table Service (visible: true), comme dans
- * components/CarteDuStudio.tsx. Corriger un prix en base le corrige ici aussi.
- *
- * TOUT EST EN CARTES, ET C EST UN CHANGEMENT. Les trois formules l ont
- * toujours ete — cartes sur fond pin, comme la grille d accueil. Le reste du
- * catalogue s affichait en LIGNES : intitule, filet pointille, prix a droite,
- * la mise en page d une carte de restaurant. Elle rangeait quatorze
- * « sur devis » les uns sous les autres en invitant a les comparer, alors
- * qu aucun ne se compare — un tirage, un format et un papier se chiffrent
- * apres un echange. Meme grammaire partout, desormais : un titre, ce que c est
- * en une phrase, le prix ou « sur devis ».
- *
- * ET LE REGROUPEMENT A CHANGE AVEC. La page suivait les CATEGORIES de la table
- * Service — `continu`, `annee`, `saison` —, c est-a-dire un rangement de base.
- * Elle suit maintenant les cinq FAMILLES, qui sont un rangement de lecture et
- * qui ont chacune leur page : le bloc porte le titre de la famille, son
- * accroche, ses prestations et la porte qui l ouvre en entier. Le rangement
- * lui-meme vit dans lib/catalogue-familles.ts, partage avec l accueil.
- *
- * PUIS LES CINQ FAMILLES ONT CESSE D ETRE EGALES. Cinq blocs de meme poids
- * disent que tout se vend pareil ; ce n est pas le cas. La page s ouvre donc
- * sur ce que le studio met en vitrine — les trois formules de site, puis les
- * imprimes, puis les reseaux sociaux — et bascule ensuite, bande a l appui,
- * sur l identite, le suivi et la restauration. Le classement est lu dans
- * lib/catalogue-familles.ts et non decide ici : l accueil rend le meme.
- *
- * LA BASCULE NE RETIRE RIEN. Les dix-huit lignes visibles en base sont
- * rendues, toutes, descriptions comprises ; les trois blocs du second rang
- * gardent leur accroche, leur lien, leur mention de TVA et leur devis. Ce qui
- * change tient au titre, qui descend d une echelle, et au bloc, qui respire
- * moins. Un catalogue qui coupe ses lignes n est plus un catalogue.
- *
- * ---------------------------------------------------------------------------
- * DEPUIS LE CHANTIER ANGLAIS : CE FICHIER REND DEUX PAGES, PAS UNE.
- *
- * `corpsServices(locale)` porte le corps ; `/services` l appelle en francais,
- * `/en/services` en anglais (app/(site)/en/services/page.tsx). Les deux pages
- * ne partagent pas seulement leur mise en page : elles partagent leur ORDRE de
- * blocs, leur numerotation et leurs mentions legales. Deux corps recopies
- * auraient diverge au premier arbitrage editorial, et la divergence aurait ete
- * invisible — personne ne relit deux pages cote a cote dans deux langues.
- *
- * C EST UNE FONCTION, PAS UN COMPOSANT, et ce n est pas un detail : appelee
- * (`return corpsServices("fr")`) plutot que rendue (`<CorpsServices />`), elle
- * n introduit AUCUNE frontiere de composant supplementaire dans l arbre. Le
- * HTML rendu en francais est donc rigoureusement celui d avant le chantier —
- * c est la condition qui rendait la bascule sure, et elle se verifie par diff.
- *
- * TOUTES LES CHAINES VISIBLES VIVENT DANS `TEXTES`, indexe par `Locale`. Une
- * langue ajoutee a lib/i18n.ts casse la compilation ici tant que sa colonne
- * n est pas remplie : un bloc de catalogue muet ne doit pas pouvoir atteindre
- * la production. Ce qui n est PAS dans cette table vient d ailleurs et doit y
- * rester — les noms, descriptions et prix sont en base (`nomService`,
- * `descriptionService`, `lib/format.ts`), les accroches de famille sont dans
- * lib/familles.ts, les libelles de formule dans lib/formules.ts, la mention de
- * TVA dans lib/familles.ts (`MENTION_TVA`, `MENTION_TVA_EN`) et l affordance
- * des cartes dans lib/dictionnaires (`carte.voirLeDetail`), lue par le
- * composant qui la rend.
- *
- * ---------------------------------------------------------------------------
- * LES DEUX COMPOSANTS RECOPIES ONT ETE SUPPRIMES.
- *
- * Cette page portait deux fonctions locales, `CarteCatalogue` et `LienDevis`,
- * qui recopiaient a l octet pres components/CarteService.tsx et
- * components/BoutonDevis.tsx. Elles n existaient que parce que ces deux
- * composants ne prenaient pas de `locale` et rendaient donc « sur devis » et
- * « TVA comprise » sous les prix d une page anglaise. Les deux en prennent une
- * desormais : la page appelle `<CarteService versSaPage locale=… />` et
- * `<BoutonDevis locale=… />`, et les copies sont parties.
- *
- * LA DIVERGENCE QU ELLES AVAIENT DEJA CREEE, relevee au moment du repli : la
- * copie ecrivait « See the details » au pied des cartes anglaises, la source
- * (`lib/dictionnaires/en.ts`) dit « See the detail ». C est le mot du
- * dictionnaire qui s affiche maintenant — une chaine editoriale ne se decide
- * pas dans une page. C est exactement le genre d ecart qu une seconde copie
- * produit sans que personne le voie.
+ * CE FICHIER REND DEUX PAGES. `corpsServices(locale)` est appele par
+ * `/services` en francais et par `/en/services` en anglais : une seule
+ * structure, deux colonnes de textes dans `TEXTES`.
  */
 
-// Rendu a chaque requete, meme raison qu app/(site)/page.tsx : cette page lit
-// Postgres, et `next build` doit passer sans base joignable — l etage builder
-// du Dockerfile n en a aucune. Sans force-dynamic, Next tenterait de
-// prerendre la page au build et la construction echouerait.
-//
-// Essaye et VERIFIE : avec `export const revalidate`, `next build` s arrete
-// sur P1001 des que la base ne repond pas. Le detail de la mesure et le
-// pourquoi du renoncement a l ISR sont dans le docblock d app/(site)/page.tsx.
+// Rendu a chaque requete : le montant de l etape 3 vient de Postgres, et
+// `next build` doit passer sans base joignable (etage builder du Dockerfile).
 export const dynamic = "force-dynamic";
 
-/**
- * Le chemin SANS prefixe de langue — la forme qu attendent `lien()`,
- * `alternatesPage()` et `openGraphPage()`. Il ne s ecrit qu ici : c est de lui
- * que sortent la canonique francaise, la canonique anglaise et les `hreflang`
- * qui les croisent.
- */
+/** Le chemin sans prefixe de langue, source de la canonique et des hreflang. */
 const CHEMIN = "/services";
 
-/**
- * TOUT CE QUE LA PAGE ECRIT ELLE-MEME, DANS LES DEUX LANGUES.
- *
- * L ANGLAIS SUIT docs/agents/brand/glossaire-anglais.md, ET IL EST CONTRAIGNANT.
- * Les quatre regles qui se verifient ligne par ligne ci-dessous :
- *  - « I / me / my », jamais « we », « our », « the agency » (§2) ;
- *  - anglais BRITANNIQUE — `enquiry`, `organisation`, `catalogue` (§1) ;
- *  - « une formule » se dit `package` et non `option` ni `tier` (§7), et quand
- *    la phrase le permet on nomme la formule plutot que la categorie ;
- *  - aucun delai en heures : seul `one week`, et jamais seul — il porte son
- *    point de depart `from your go-ahead` dans la meme unite de lecture (§5).
- *
- * AUCUN PRIX N EST ECRIT ICI, dans aucune des deux langues. Les montants
- * viennent de la base et leur mise en forme de lib/format.ts ; la mention
- * « TVA comprise » / « VAT included » vient de `mentionTva`, jamais d une
- * chaine de ce fichier — elle a valeur legale et une seconde graphie finirait
- * par diverger.
- */
-type TextesCatalogue = {
+type Item = { titre: string; texte: string };
+
+type TextesServices = {
   seoTitre: string;
+  /** ≤ 155 signes, SANS montant : la version chiffree depasse le budget. */
   seoDescription: string;
-  /** Le sur-titre de la page, au-dessus du h1. */
   meta: string;
-  /** Le h1, en deux lignes separees par un <br>. */
   h1: readonly [string, string];
-  /** Le chapo : il annonce l ORDRE REEL des blocs, et doit le suivre. */
+  /** Bloc-reponse autonome (< 60 mots) : qui, quoi, ou. */
   chapo: string;
-  /** Le delai et son point de depart. Contient un <strong>. */
-  delai: React.ReactNode;
-  /** Les deux moities de la phrase qui compte les deux regimes de prix. */
-  comptePrixFerme: string;
-  compteSurDevis: string;
-  /** Le raisonnement du devis, puis le seul engagement de reactivite admis. */
-  mentionDevis: string;
+  rienAPreparer: string;
   mentionReponse: string;
-  /** La mention de TVA en phrase complete, sous chaque bloc de prix. */
-  mentionTvaPhrase: string;
-  /** Le libelle des huit CTA de devis de la page. */
-  devisLabel: string;
-  /**
-   * Ce qui suit le montant dans la grille des formules.
-   *
-   * EN FRANCAIS C EST « .– CHF », EN ANGLAIS « .– » SEUL, et c est une regle,
-   * pas une omission : le glossaire §5 proscrit `699 CHF` comme `CHF 699` en
-   * anglais, tout en imposant de garder le format suisse `699.–`. La devise
-   * n est donc pas perdue pour autant — elle est nommee en toutes lettres par
-   * `mentionTvaPhrase` au pied de la meme grille (« Prices in Swiss francs »).
-   */
-  uniteMontant: string;
-  formules: {
+  gestes: { meta: string; h2: readonly [string, string]; items: readonly Item[] };
+  /** Les cartes viennent de lib/metiers.ts ; ici, l en-tete et les liens. */
+  metiers: {
     meta: string;
     h2: readonly [string, string];
     lede: string;
-    /** Le lien de chaque carte vers sa page de formule. */
-    voir: string;
+    lienCarte: string;
+    tous: string;
   };
-  bascule: { titre: string; texte: string };
+  controle: {
+    meta: string;
+    h2: readonly [string, string];
+    points: readonly string[];
+    pasPromisTitre: string;
+    pasPromis: string;
+    /**
+     * Ce que mesurent les etudes, et pourquoi ce n est pas une promesse :
+     * renvoie aux chiffres sources de l accueil (#chiffres), sans en recopier
+     * aucun ici — une seule unite de lecture porte chiffre ET source.
+     */
+    etudes: string;
+    etudesLien: string;
+  };
+  parcours: {
+    meta: string;
+    h2: readonly [string, string];
+    demo: Item;
+    essai: Item;
+    abonnementTitre: string;
+    /** Gabarit avec `{montant}` et `{tva}` (voir `avecPrix`). */
+    abonnementAvecPrix: string;
+    abonnementSansPrix: string;
+    note: string;
+  };
+  cta: string;
   /**
-   * L habillage des cinq blocs de famille — voir le docblock de `BLOCS`.
-   * Le Record est indexe par FamilleSlug DANS LES DEUX LANGUES : une famille
-   * ajoutee sans titre anglais ne compile pas.
+   * LES GUIDES QUI PROLONGENT LA PAGE (audit SEO v5) : la nLPD sous le
+   * controle, le prix sous le parcours. `null` en anglais : les guides
+   * n existent qu en francais, et un lien anglais vers eux changerait de
+   * langue sans prevenir.
    */
-  blocs: Record<FamilleSlug, { titre: readonly [string, string]; lien: string }>;
-  /** Les deux segments du fil d Ariane, en donnee structuree. */
+  guides: { donnees: string; prix: string } | null;
+  /** Le nom de l Offer en donnee structuree. */
+  offreNom: string;
+  serviceNom: string;
   fil: { accueil: string; services: string };
 };
 
-/**
- * L HABILLAGE DES CINQ BLOCS DE FAMILLE, PROPRE A CETTE PAGE.
- *
- * Tout le reste — libelle, accroche, amorce, prestations — est lu dans
- * lib/familles.ts : c est la page de la famille qui fait autorite sur ce
- * qu elle est, et le recopier ici garantirait qu un jour les deux se
- * contredisent. Ne restent ici que deux choses qui n existent QUE sur l index.
- *
- * 1. LE TITRE. Le h1 d une page de famille se termine par « à Genève » — c est
- *    son travail, elle est seule sur son ecran. Empiles, les cinq donneraient
- *    cinq « Genève » sur une meme page : le mot cesse d etre une precision et
- *    devient du bruit. Le titre de bloc dit donc ce que la famille resout.
- * 2. LE LIBELLE DU LIEN. « Voir » + libelle donnerait « Voir Identité &
- *    photographie » ; la langue se decide phrase par phrase, pas par
- *    concatenation.
- *
- * Le Record est INDEXE PAR FamilleSlug : ajouter une famille dans
- * lib/familles.ts sans lui donner de titre ici ne compile pas. Une erreur de
- * build vaut mieux qu un bloc muet en production.
- */
-const BLOCS: TextesCatalogue["blocs"] = {
-  "site-web": {
-    titre: ["Le site vit,", "et il est tenu."],
-    lien: "Voir le site web",
-  },
-  imprimes: {
-    titre: ["Ce qui se voit", "ailleurs qu'à l'écran."],
-    lien: "Voir les imprimés",
-  },
-  identite: {
-    titre: ["Ce qui fait", "qu'on vous reconnaît."],
-    lien: "Voir l'identité et les réseaux",
-  },
-};
-
-/** Les memes cinq blocs en anglais. Meme regle, meme garde de type. */
-const BLOCS_EN: TextesCatalogue["blocs"] = {
-  "site-web": {
-    titre: ["The site lives on,", "and it is looked after."],
-    lien: "See the website line",
-  },
-  imprimes: {
-    // « print », jamais « printed collateral » (glossaire §3).
-    titre: ["What is seen", "away from a screen."],
-    lien: "See print",
-  },
-  identite: {
-    // « kept up », et non « upkeep » : ce dernier ne vaut que pour
-    // l abonnement mensuel du site (glossaire §7).
-    titre: ["What makes you", "recognisable."],
-    lien: "See identity and social media",
-  },
-};
-
-const TEXTES: Record<Locale, TextesCatalogue> = {
+const TEXTES: Record<Locale, TextesServices> = {
   fr: {
-    seoTitre: "Services et tarifs à Genève",
+    seoTitre: "Assistant IA en détail : devis, relances, demandes · Genève",
     seoDescription:
-      "Le catalogue du studio genevois : trois formules de site, l'hébergement et le suivi, les imprimés et les supports de restaurant, le logo, les photos et les réseaux sociaux.",
-    meta: "Catalogue",
-    h1: ["Tout ce que fait", "le studio, à Genève."],
+      "Ce qu'il fait, métier par métier, et ce qu'il ne fait jamais seul. Il ne s'engage jamais à votre place. Données de l'assistant hébergées en Suisse.",
+    meta: "L'assistant",
+    h1: ["L'assistant IA,", "en détail."],
     chapo:
-      "Trois lignes en vitrine. Le site d'abord — c'est le produit d'entrée, et ce sur quoi tout le reste vient se brancher. Puis les cartes de visite et les imprimés, ce que vos clients gardent en main. Puis les réseaux sociaux, tenus au mois. Le logo, l'hébergement et les supports de restaurant suivent plus bas, entiers.",
-    delai: (
-      <>
-        Le délai est d&apos;<strong>une semaine</strong>, et il court dès votre
-        feu vert — pas dès que vous nous aurez envoyé vos textes. Vous
-        n&apos;avez rien à préparer : nous reprenons ce qui est déjà en ligne.
-      </>
-    ),
-    comptePrixFerme: " lignes portent un prix ferme, ",
-    compteSurDevis: " sont annoncées sur devis.",
-    mentionDevis: MENTION_DEVIS,
+      "Nawa Corps est un studio genevois. Il installe dans les PME un assistant IA qui connaît déjà leur métier. L'assistant répond aux demandes, relance les clients et prépare les documents. Il ne s'engage jamais à la place du patron. Chaque lundi, un relevé dit ce qui a été fait.",
+    rienAPreparer:
+      "Vous n'avez rien à préparer : nous partons de ce que vous recevez déjà.",
     mentionReponse: MENTION_REPONSE,
-    mentionTvaPhrase: MENTION_TVA,
-    devisLabel: "Demander un devis →",
-    uniteMontant: `${CHF_UNIT} CHF`,
-    formules: {
-      meta: "Les formules",
-      h2: ["Trois paliers,", "un seul site."],
-      lede: "Pour la PME genevoise dont le site a plus de cinq ans. Du site simplement présentable à celui qui répond et relance tout seul — chaque palier contient le précédent en entier. Livré en une semaine, dès votre feu vert.",
-      voir: "Voir la formule",
+    gestes: {
+      meta: "Ce qu'il fait",
+      h2: ["Quatre gestes,", "et vous validez."],
+      items: [
+        {
+          titre: "Répondre aux demandes.",
+          texte:
+            "Un accusé de réception, validé par vous une fois, demande l'adresse, une photo et l'urgence. Vous trouvez une liste triée, et vous validez chaque réponse de fond.",
+        },
+        {
+          titre: "Relancer.",
+          texte: "Les devis sans réponse, les pièces qui manquent, les anciens contacts.",
+        },
+        {
+          titre: "Préparer.",
+          texte:
+            "Un brouillon de devis, de réponse ou de document. Vous le corrigez si besoin, puis vous l'envoyez.",
+        },
+        {
+          titre: "Le relevé du lundi.",
+          texte: "Ce qui a été traité, relancé, préparé, et ce qui vous attend.",
+        },
+      ],
     },
-    bascule: {
-      titre: "Le reste du catalogue",
-      texte:
-        "Logo et photos, hébergement du site, restaurants et cafés. Trois lignes entières, avec leurs prestations, leurs prix et leur devis — elles passent après, pas au rabais.",
+    metiers: {
+      meta: "Par métier",
+      h2: ["Il connaît déjà", "votre métier."],
+      lede: "Nous partons d'une base par métier : le vocabulaire, les demandes types, les documents. Puis nous la réglons sur votre entreprise : vos prestations, vos clients, vos mots. Chaque métier a sa page, avec un exemple de démonstration.",
+      lienCarte: "L'assistant pour ce métier →",
+      tous: "Tous les métiers →",
     },
-    blocs: BLOCS,
-    fil: { accueil: "Accueil", services: "Services" },
+    controle: {
+      meta: "Le contrôle",
+      h2: ["Ce qu'il ne fait", "jamais seul."],
+      points: [
+        "Il ne s'engage jamais à votre place : aucun prix, aucune date, aucun devis, aucune réponse de fond sans votre accord.",
+        "Un seul message part sans vous : l'accusé de réception, que vous avez relu et validé une fois.",
+        "Il n'a pas accès à vos paiements.",
+        "Les données de votre assistant sont hébergées en Suisse, sous la nLPD.",
+        "Pour la démo, il n'a accès à aucun de vos outils.",
+      ],
+      pasPromisTitre: "Ce que nous ne promettons pas : ",
+      pasPromis:
+        "un nombre de clients en plus, un nombre d'heures gagnées, un taux de devis signés, une première place sur Google, un assistant « 100 % automatique ».",
+      etudes:
+        "Des études publiées mesurent des gains nets quand l'IA aide à rédiger et à répondre aux clients. Ce sont leurs chiffres, pas une promesse pour vous : ce que l'assistant fait chez vous, le relevé du lundi le montre. ",
+      etudesLien: "Les chiffres et leurs sources →",
+    },
+    parcours: {
+      meta: "Le parcours",
+      h2: ["Vous le voyez, vous l'essayez,", "vous payez après."],
+      demo: {
+        titre: "La démo.",
+        texte:
+          "L'assistant sur des demandes de votre métier. Rien à préparer, rien à payer. À la fin, nous fixons avec vous, par écrit, le palier de l'abonnement.",
+      },
+      essai: {
+        titre: "L'essai, deux semaines.",
+        texte:
+          "Pendant deux semaines, il travaille sur vos vraies demandes, sans jamais s'engager à votre place ; le relevé arrive chaque lundi. Rien à payer pendant l'essai.",
+      },
+      abonnementTitre: "L'abonnement.",
+      abonnementAvecPrix:
+        "Si le relevé vous convient, vous payez la mise en place, {montant}, {tva}, une seule fois. Puis l'abonnement mensuel continue, selon votre palier. Sans engagement, résiliable chaque mois.",
+      abonnementSansPrix:
+        "Si le relevé vous convient, vous payez la mise en place, une seule fois. Puis l'abonnement mensuel continue, selon votre volume. Sans engagement, résiliable chaque mois.",
+      note: "L'abonnement, selon votre volume : le palier se fixe par écrit à la fin de la démo, avant l'essai.",
+    },
+    cta: "Voir la démo sur mon métier ",
+    guides: {
+      donnees: "IA et protection des données : le guide nLPD →",
+      prix: "Combien coûte un assistant IA en Suisse : le guide →",
+    },
+    offreNom: "Mise en place de l'assistant",
+    serviceNom: "Assistant IA pour PME",
+    fil: { accueil: "Accueil", services: "L'assistant" },
   },
 
   en: {
-    seoTitre: "Services and prices in Geneva",
-    // « small business » et non « SME », « print » et non « printed
-    // collateral », « upkeep » et non « maintenance » : glossaire §3.
+    seoTitre: "The AI assistant in detail: quotes, follow-ups · Geneva",
     seoDescription:
-      "The Geneva studio's catalogue: three site packages, monthly upkeep, logo and print, social media and the pieces a restaurant needs.",
-    meta: "Catalogue",
-    h1: ["Everything the studio", "does, in Geneva."],
+      "What it does, trade by trade, and what it never does alone. It never commits on your behalf. The assistant's data is hosted in Switzerland.",
+    meta: "The assistant",
+    h1: ["The AI assistant,", "in detail."],
     chapo:
-      "Three lines up front. The site first — it is the entry product, and what everything else plugs into. Then business cards and print, what your customers keep in their hands. Then social media, kept up by the month. Logo, hosting and the restaurant pieces follow further down, in full.",
-    // « one week » ne voyage jamais seul : « from your go-ahead » est dans la
-    // meme phrase, et la phrase suivante dit ce que le client n a pas a faire.
-    // « turnaround » est proscrit (glossaire §3, entree « une semaine »).
-    delai: (
-      <>
-        The work takes <strong>one week</strong>, and it starts from your
-        go-ahead — not from the day you send us your text. You have nothing to
-        prepare: we take what is already online.
-      </>
-    ),
-    // Le libelle du prix libre est celui de lib/format.ts (« on request ») : la
-    // phrase qui compte les lignes et l etiquette des cartes doivent dire le
-    // meme mot, sinon le lecteur cherche deux regimes de prix la ou il n y en
-    // a qu un.
-    comptePrixFerme: " lines carry a firm price, ",
-    compteSurDevis: " are priced on request.",
-    mentionDevis: MENTION_DEVIS_EN,
+      "Nawa Corps is a Geneva studio. It sets up, in small businesses, an AI assistant that already knows their trade. The assistant answers enquiries, follows up clients and prepares documents. It never commits on the owner's behalf. Every Monday, a report says what was done.",
+    rienAPreparer: "You have nothing to prepare: we start from what you already receive.",
     mentionReponse: MENTION_REPONSE_EN,
-    // Les deux mentions sont IMPORTEES, jamais assemblees ici. La phrase
-    // anglaise etait construite sur place (`Prices in Swiss francs, …`) alors
-    // que sa jumelle francaise vivait deja dans lib/familles.ts : deux
-    // graphies d une mention a valeur legale, dont une hors de la source
-    // unique. `MENTION_TVA_EN` les reunit, et elle se construit elle-meme
-    // depuis `mentionTva("en")` (lib/format.ts) — les deux mots qui portent
-    // l obligation ne s ecrivent toujours qu a un seul endroit.
-    mentionTvaPhrase: MENTION_TVA_EN,
-    devisLabel: "Request a quote →",
-    uniteMontant: CHF_UNIT,
-    formules: {
-      // « the site packages » : §7 renverse le §6 et tranche pour `package`,
-      // qui est l usage normal d un studio de creation britannique.
-      meta: "The site packages",
-      h2: ["Three packages,", "one site."],
-      lede: "For the Geneva small business whose site is more than five years old. From a site that is simply presentable to one that answers and follows up on its own — each package contains the one before it, in full. Delivered in one week, from your go-ahead.",
-      voir: "See the package",
+    gestes: {
+      meta: "What it does",
+      h2: ["Four tasks,", "and you approve."],
+      items: [
+        {
+          titre: "Answering enquiries.",
+          texte:
+            "An acknowledgement, approved by you once, asks for the address, a photo and the urgency. You find a sorted list, and you approve every real reply.",
+        },
+        {
+          titre: "Following up.",
+          texte: "Quotes with no answer, missing documents, past contacts.",
+        },
+        {
+          titre: "Preparing.",
+          texte:
+            "A draft quote, reply or document. You correct it if needed, then you send it.",
+        },
+        {
+          titre: "The Monday report.",
+          texte: "What was handled, followed up, prepared, and what is waiting for you.",
+        },
+      ],
     },
-    bascule: {
-      titre: "The rest of the catalogue",
-      texte:
-        "Logo and photographs, site hosting, restaurants and cafés. Three full lines, with their services, their prices and their quotes — they come later, not cut down.",
+    metiers: {
+      meta: "By trade",
+      h2: ["It already knows", "your trade."],
+      lede: "We start from a base for each trade: the vocabulary, the usual enquiries, the documents. Then we set it to your business: your services, your clients, your words. Each trade has its page, with a demo example.",
+      lienCarte: "The assistant for this trade →",
+      tous: "All trades →",
     },
-    blocs: BLOCS_EN,
-    fil: { accueil: "Home", services: "Services" },
+    controle: {
+      meta: "Control",
+      h2: ["What it never", "does alone."],
+      points: [
+        "It never commits on your behalf: no price, no date, no quote, no real reply without your approval.",
+        "Only one message goes out without you: the acknowledgement, which you read and approved once.",
+        "It has no access to your payments.",
+        "Your assistant's data is hosted in Switzerland, under the nFADP.",
+        "For the demo, it has no access to any of your tools.",
+      ],
+      pasPromisTitre: "What we do not promise: ",
+      pasPromis:
+        "more clients, hours saved, a rate of signed quotes, first place on Google, a “100% automatic” assistant.",
+      etudes:
+        "Published studies measure clear gains when AI helps write and reply to customers. Those are their figures, not a promise to you: what the assistant does for you shows in the Monday report. ",
+      etudesLien: "The figures and their sources →",
+    },
+    parcours: {
+      meta: "The process",
+      h2: ["You see it, you try it,", "you pay after."],
+      demo: {
+        titre: "The demo.",
+        texte:
+          "The assistant on enquiries from your trade. Nothing to prepare, nothing to pay. At the end, we set the subscription tier with you, in writing.",
+      },
+      essai: {
+        titre: "The two-week trial.",
+        texte:
+          "For two weeks, it works on your real enquiries, never committing on your behalf; the report comes every Monday. Nothing to pay during the trial.",
+      },
+      abonnementTitre: "The subscription.",
+      abonnementAvecPrix:
+        "If the report suits you, you pay for the set-up, {montant}, {tva}, once. Then the monthly subscription carries on, based on your tier. No commitment, cancellable every month.",
+      abonnementSansPrix:
+        "If the report suits you, you pay for the set-up, once. Then the monthly subscription carries on, based on your volume. No commitment, cancellable every month.",
+      note: "The subscription, based on your volume: the tier is set in writing at the end of the demo, before the trial.",
+    },
+    cta: "See the demo on my trade ",
+    guides: null,
+    offreNom: "Assistant set-up",
+    serviceNom: "AI assistant for small businesses",
+    fil: { accueil: "Home", services: "The assistant" },
   },
 };
 
 /**
- * LES METADONNEES DES DEUX PAGES, ecrites une seule fois.
- *
- * `alternatesPage` REMPLACE LA CANONIQUE ECRITE A LA MAIN, et c est la seule
- * modification volontaire du `<head>` francais. Une canonique seule ne dit pas
- * qu il existe une jumelle anglaise ; et un `hreflang` declare d un seul cote
- * est IGNORE par Google — l annotation doit etre confirmee par la page cible.
- * La page francaise s auto-declare donc en `fr-CH` et en `x-default` des
- * aujourd hui ; le `en-CH` apparaitra des deux cotes le jour ou `/services`
- * entrera dans `CHEMINS_TRADUITS` (lib/i18n.ts). Sans cette ligne, la page
- * anglaise partirait seule et pourrait prendre la place de la francaise sur
- * une requete francophone.
- *
- * LE BLOC TWITTER EST OBLIGATOIRE ICI, et pour une raison de fond, pas de
- * cosmetique. Next fusionne les metadata champ par champ mais SANS descendre
- * dans les objets : un `twitter` partiel n herite pas des cles manquantes,
- * et une page qui n en declare aucun herite integralement de celui du layout
- * — titre et description de l accueil compris. La carte de partage de ce
- * catalogue annoncerait donc la refonte de site, c est-a-dire un tiers de ce
- * que la page presente. Meme mecanique que `openGraph`, meme parade : on
- * redeclare le bloc EN ENTIER.
- * L image, elle, vient du fichier app/opengraph-image et n a pas a etre
- * redeclaree.
+ * Metadonnees des deux pages. Statiques : la description ne porte pas de
+ * montant (la version chiffree depassait 155 signes), elle n a donc rien a
+ * lire en base. Le bloc `twitter` est redeclare en entier : Next ne fusionne
+ * pas les objets, une page sans le sien heriterait de celui de l accueil.
  */
 export function metadataServices(locale: Locale): Metadata {
   const t = TEXTES[locale];
   const titreComplet = `${t.seoTitre} — ${SITE_NAME}`;
   return {
-    title: t.seoTitre,
+    // `absolute` : le titre de l audit CRO/SEO du 25.10.2026 (§4.4) tient
+    // ses 60 signes sans le suffixe du `template`.
+    title: { absolute: t.seoTitre },
     description: t.seoDescription,
     alternates: alternatesPage(CHEMIN, locale),
     openGraph: openGraphPage(
@@ -422,139 +314,80 @@ export function metadataServices(locale: Locale): Metadata {
 
 export const metadata: Metadata = metadataServices("fr");
 
-/** « Les formules » ouvre la page en (01) ; les familles suivent. */
-const numero = (rang: number) => `(${String(rang).padStart(2, "0")})`;
-
-/**
- * UN BLOC DE FAMILLE, rendu deux fois avec deux poids differents.
- *
- * POURQUOI LE BLOC EST FACTORISE. La page rendait ses cinq familles dans une
- * seule boucle, toutes au meme poids. Elle en rend maintenant DEUX suites — la
- * vitrine, puis le second rang — et deux boucles copiees-collees auraient
- * diverge des la premiere correction editoriale. Le seul parametre qui les
- * separe est `sobre`.
- *
- * CE QUE `sobre` CHANGE, ET CE QU IL NE CHANGE PAS. Il n ote AUCUN contenu :
- * l accroche, les cartes avec leurs descriptions, le lien vers la page, la
- * mention de TVA et le devis restent. Il ne fait qu ajouter la classe
- * `.prest-second`, qui descend le titre d une echelle et resserre le bloc.
- * C est la difference avec l accueil, ou le second rang perd ses descriptions :
- * ici on est dans le catalogue, et un catalogue qui ampute ses lignes ne sert
- * plus a rien.
- */
-function BlocFamille({
-  famille,
-  lignes,
+/** Une section numerotee : meta « (0n) libelle » puis h2 sur deux lignes. */
+function Entete({
   rang,
-  locale,
-  sobre = false,
+  meta,
+  h2,
 }: {
-  famille: FamilleRangee;
-  lignes: ServiceCatalogue[];
-  rang: number;
-  locale: Locale;
-  sobre?: boolean;
+  rang: string;
+  meta: string;
+  h2: readonly [string, string];
 }) {
-  const t = TEXTES[locale];
-  const bloc = t.blocs[famille.slug];
   return (
-    <section id={famille.slug} className={sobre ? "prest-second" : undefined}>
-      <div className="wrap">
-        <div className="sec-head">
-          <span className="meta" data-reveal>
-            <span className="index">{numero(rang)}</span>&nbsp;{" "}
-            {famille.contenu.libelleEn && locale === "en"
-              ? famille.contenu.libelleEn
-              : famille.contenu.libelle}
-          </span>
-          <div data-reveal>
-            <h2 className="t">
-              {bloc.titre[0]}
-              <br />
-              {bloc.titre[1]}
-            </h2>
-          </div>
-        </div>
-        {/* L accroche est celle de la page de la famille, lue telle quelle :
-            l index annonce, la page developpe, et les deux ne peuvent pas se
-            contredire. Le repli sur le francais est celui que prescrit
-            lib/familles.ts — une page lisible en entier vaut mieux qu un trou. */}
-        <p className="lede" data-reveal style={{ marginBottom: 34 }}>
-          {locale === "en"
-            ? (famille.contenu.resoutEn ?? famille.contenu.resout)
-            : famille.contenu.resout}
-        </p>
-        {/* CHAQUE CARTE OUVRE SA PRESTATION, a l ancre de son bloc sur la page
-            de la famille. C est la difference avec l accueil, dont les cartes
-            ouvrent la famille en haut de page, et elle tient a la promesse de
-            celle-ci : on y voit tout ce qui est vendu, et ce qu on y voit
-            s ouvre — sur la ligne, pas sur un sommaire. La famille, elle, a
-            deja son titre deux fois au-dessus et son lien « tout voir » juste
-            en dessous ; la carte le redirait une troisieme fois. */}
-        <div className="cat-grid">
-          {lignes.map((service) => (
-            <CarteService
-              key={service.id}
-              service={service}
-              versSaPage
-              locale={locale}
-            />
-          ))}
-        </div>
-        <div className="cat-tout" data-reveal>
-          <a className="btn btn-line" href={lien(locale, famille.href)}>
-            {bloc.lien} <span className="ar">→</span>
-          </a>
-        </div>
-        <div className="sm-foot">
-          <span>{t.mentionTvaPhrase}</span>
-          <BoutonDevis locale={locale} sujet={famille.contenu.sujet}>
-            {t.devisLabel}
-          </BoutonDevis>
-        </div>
+    <div className="sec-head">
+      {/* L espace insecable et le libelle tiennent dans UNE expression : deux
+          noeuds texte adjacents feraient intercaler un `<!-- -->` par React. */}
+      <span className="meta" data-reveal>
+        <span className="index">({rang})</span>
+        {`  ${meta}`}
+      </span>
+      <div data-reveal>
+        <h2 className="t">
+          {h2[0]}
+          <br />
+          {h2[1]}
+        </h2>
       </div>
-    </section>
+    </div>
   );
 }
 
 /**
- * LE CORPS DU CATALOGUE — appele par `/services` en francais et par
- * `/en/services` en anglais.
- *
- * Voir l en-tete du fichier : c est une FONCTION appelee, pas un composant
- * rendu, precisement pour que l arbre francais reste celui d avant le chantier.
+ * LE CORPS DE LA PAGE — appele par `/services` (fr) et `/en/services` (en).
+ * Une fonction appelee, pas un composant : aucune frontiere de plus dans
+ * l arbre.
  */
 export async function corpsServices(locale: Locale) {
   const t = TEXTES[locale];
+  const [montant, cents, paliers] = await Promise.all([
+    lireMiseEnPlace(),
+    lireCentsMiseEnPlace(),
+    lirePaliers(locale),
+  ]);
+  const abonnement = montant
+    ? avecPrix(t.parcours.abonnementAvecPrix, montant, locale)
+    : t.parcours.abonnementSansPrix;
 
-  // UNE seule lecture pour toute la page (cf. lib/catalogue.ts). Les formules
-  // gardent leur grille de cartes ; tout le reste est range en familles, le
-  // rangement etant partage avec l accueil (lib/catalogue-familles.ts).
-  const catalogue = await chargerCatalogue();
-  const principal = parCategories(catalogue, ["principal"]);
-  // DEUX SUITES, PAS CINQ BLOCS EGAUX. Le classement vient de
-  // lib/catalogue-familles.ts, partage avec l accueil : les imprimes et les
-  // reseaux sociaux passent devant, avec les formules de site juste au-dessus ;
-  // l identite, le suivi et la restauration suivent, dans un traitement plus
-  // sobre. Leur reunion est le catalogue entier — aucune ligne ne se perd
-  // entre les deux appels.
-  const rangeables = parCategories(catalogue, [...CATEGORIES_FAMILLES]);
-  const vitrine = parFamilles(rangeables, FAMILLES_EN_VITRINE);
-  const second = parFamilles(rangeables, FAMILLES_EN_SECOND);
-  // LE PARTAGE ENTRE LES DEUX REGIMES DE PRIX, DERIVE DE LA BASE. Ecrits en
-  // dur, ces deux comptes seraient faux au premier ajout au catalogue ou a la
-  // premiere ligne masquee depuis /admin — et une phrase qui compte faux
-  // discredite celle qui explique. `isQuote` est la condition qui decide deja
-  // du rendu de chaque carte : les deux ne peuvent pas se contredire.
-  const lignesSurDevis = catalogue.filter(isQuote).length;
-  const lignesChiffrees = catalogue.length - lignesSurDevis;
-
-  // Les formules chiffrees prennent la grille de cartes ; celles qui se
-  // traitent sur devis passent en ligne pleine largeur dessous, comme le fait
-  // deja la grille d accueil. Cette separation n existe que parce que la base
-  // distingue FIXED de QUOTE — elle n est ecrite nulle part en dur.
-  const cartes = principal.filter((s) => !isQuote(s));
-  const surDevis = principal.filter((s) => isQuote(s));
+  /**
+   * LE SERVICE EN DONNEE STRUCTUREE, rattache au studio (`/#studio`, emis par
+   * components/SchemaStudio sur l accueil). Chaque `Offer` n existe que si son
+   * montant est lu en base : jamais de prix invente. La mise en place d abord,
+   * puis les trois paliers mensuels (`offresAbonnement`), les memes que la
+   * grille affichee en (04).
+   *
+   * L OFFER VIENT DE `offreMiseEnPlace` (lib/catalogue.ts), la meme que sur
+   * les pages metiers : elle porte la mention de TVA de lib/format.ts dans sa
+   * `description`, et n emet pas `valueAddedTaxIncluded` (`true` dirait
+   * « TVA comprise », `false` « TVA en sus » : les deux sont faux pour une
+   * entreprise non assujettie).
+   */
+  const offres = [
+    offreMiseEnPlace(cents, locale, t.offreNom),
+    ...offresAbonnement(paliers, locale),
+  ].filter((o): o is Record<string, unknown> => o !== null);
+  const service = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${SITE_URL}${lien(locale, CHEMIN)}#service`,
+    name: t.serviceNom,
+    description: t.chapo,
+    inLanguage: LANGUE_HTML[locale],
+    provider: { "@id": `${SITE_URL}/#studio` },
+    areaServed: "Genève",
+    url: `${SITE_URL}${lien(locale, CHEMIN)}`,
+    ...(offres.length ? { offers: offres } : {}),
+  };
 
   return (
     <>
@@ -565,6 +398,12 @@ export async function corpsServices(locale: Locale) {
         ]}
         locale={locale}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLd(service) }}
+      />
+
+      {/* ---------- En-tete : la reponse directe ---------- */}
       <section>
         <div className="wrap">
           <div className="sec-head">
@@ -579,188 +418,146 @@ export async function corpsServices(locale: Locale) {
               </h1>
             </div>
           </div>
-          {/* CE PARAGRAPHE ANNONCE L ORDRE REEL DE LA PAGE, et il doit le
-              suivre : il enumerait quatre offres a plat, dans un ordre qui
-              n etait plus celui des blocs. Un chapo qui decrit une autre page
-              que celle qu on lit est un bug, pas une approximation. */}
           <p className="lede" data-reveal>
             {t.chapo}
           </p>
-          {/* La comparaison « chez les autres » a ete retiree : le
-              positionnement §8 interdit de comparer, nomme ou non. Ce qui la
-              remplace nomme l attente par defaut du lecteur — une croyance,
-              pas la pratique d un concurrent. */}
           <p className="lede" data-reveal style={{ marginTop: "1.2em" }}>
-            {t.delai}
+            {t.rienAPreparer}
           </p>
-          {/* LES DEUX REGIMES DE PRIX, ANNONCES AVANT LA PREMIERE GRILLE.
-              Cinq lignes portent un montant, le reste se chiffre sur devis :
-              tant que la raison n est pas donnee, « sur devis » se lit comme
-              un refus de repondre, et il occupe la majorite du catalogue.
-              Le raisonnement est celui de lib/familles.ts, rendu mot pour mot
-              comme sur les cinq pages de famille. Les deux comptes sont
-              calcules sur la base, jamais ecrits a la main. */}
-          <div className="sm-devis" data-reveal style={{ marginTop: "1.6em" }}>
-            <p className="sm-devis-t">
-              {lignesChiffrees}
-              {t.comptePrixFerme}
-              {lignesSurDevis}
-              {t.compteSurDevis}
-            </p>
-            <p>{t.mentionDevis}</p>
-            <p className="sm-devis-r">{t.mentionReponse}</p>
+          <p className="meta" data-reveal style={{ marginTop: "1.6em" }}>
+            {t.mentionReponse}
+          </p>
+        </div>
+      </section>
+
+      {/* ---------- (01) Ce qu il fait ---------- */}
+      <section>
+        <div className="wrap">
+          <Entete rang="01" meta={t.gestes.meta} h2={t.gestes.h2} />
+          <div className="steps">
+            {t.gestes.items.map((item, i) => (
+              <div className="stp" data-reveal key={item.titre}>
+                <span className="n">{String(i + 1).padStart(2, "0")}</span>
+                <h3>{item.titre}</h3>
+                <p>{item.texte}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ---------- (01) Les formules — en cartes, sur fond pin ---------- */}
-      <section className="offres green" id="les-formules">
+      {/* ---------- (02) Par metier ----------
+          Les cartes sont lues dans lib/metiers.ts, comme le hub /metiers :
+          chacune mene a sa page. */}
+      <section>
         <div className="wrap">
-          <div className="sec-head">
-            <span className="meta" data-reveal>
-              {/* L espace insecable ET le libelle tiennent dans UNE SEULE
-                  expression : deux enfants texte cote a cote font ecrire a
-                  React un `<!-- -->` entre eux pour borner l hydratation, ce
-                  qui changerait le HTML rendu en francais. */}
-              <span className="index">(01)</span>
-              {`  ${t.formules.meta}`}
-            </span>
-            <div data-reveal>
-              <h2 className="t">
-                {t.formules.h2[0]}
-                <br />
-                {t.formules.h2[1]}
-              </h2>
-            </div>
-          </div>
-          <p className="lede" data-reveal style={{ marginBottom: 44 }}>
-            {t.formules.lede}
+          <Entete rang="02" meta={t.metiers.meta} h2={t.metiers.h2} />
+          <p className="lede" data-reveal style={{ marginBottom: 34 }}>
+            {t.metiers.lede}
           </p>
-
-          <div className="price-grid">
-            {cartes.map((service) => (
-              <article className="price" data-reveal key={service.id}>
-                {/* MEME LIGNE DE TETE QUE LA GRILLE D ACCUEIL, et lue a la
-                    meme source (lib/formules.ts) : « N° 01 / 02 / 03 »
-                    numerotait trois cartes qu on voit deja cote a cote.
-                    Le repli anglais est celui que prescrit `POUR_QUI_EN` —
-                    un libelle manquant retombe sur le francais plutot que de
-                    vider la ligne la plus lisible de la carte. */}
-                <div className="lab">
-                  <span>
-                    {estFormule(service.slug)
-                      ? locale === "en"
-                        ? (POUR_QUI_EN[service.slug] ?? POUR_QUI[service.slug])
-                        : POUR_QUI[service.slug]
-                      : ""}
-                  </span>
-                </div>
-                {/* Les NOMS des trois formules ne se traduisent pas — article
-                    compris. `nameEn` vaut null en base pour cette raison
-                    exacte, et `nomService` produit donc « La Vitrine » sur la
-                    page anglaise (voice-guide §10, glossaire §5). */}
-                <h3>{nomService(service, locale)}</h3>
-                <p className="d">{descriptionService(service, locale)}</p>
-                {/* Meme rendu que la grille d accueil, `dès` et `/mois`
-                    compris : ce sont des drapeaux de la base, et un jour ou
-                    une formule les portera, la carte doit suivre sans qu on y
-                    revienne. La mention de TVA suit le montant pour la meme
-                    raison qu a l accueil : la regle vaut par unite de lecture,
-                    et le bas de grille est deja hors du regard. */}
-                <p className="num">
-                  {service.priceFrom ? <small>{prefixeDes(locale)}</small> : null}
-                  {formatChfAmount(service.priceCents as number)}
-                  <small>{t.uniteMontant}</small>
-                  {service.isMonthly ? (
-                    <small className="per">{suffixeMensuel(locale)}</small>
-                  ) : null}
-                </p>
-                <p className="num-tva">{mentionTva(locale)}</p>
-                {/* Le lien n existe que pour les trois formules qui ont une
-                    page. Un `principal` ajoute en base demain apparait donc
-                    dans la grille, mais sans lien mort. */}
-                {estFormule(service.slug) ? (
-                  <a
-                    className="btn btn-line"
-                    href={lien(locale, hrefService(service.slug))}
-                  >
-                    {`${t.formules.voir} `}
-                    <span className="ar">→</span>
-                  </a>
-                ) : null}
+          <div className="cat-grid">
+            {METIERS.map((m) => (
+              <article className="cat-it" data-reveal key={m.slug}>
+                <h3>{m[locale].nom}</h3>
+                <p className="d">{m[locale].carte.peut}</p>
+                <a className="go" href={lien(locale, cheminMetier(m.slug))}>
+                  {t.metiers.lienCarte}
+                </a>
               </article>
             ))}
           </div>
+          <p data-reveal style={{ marginTop: 22 }}>
+            <a className="lnk" href={lien(locale, CHEMIN_METIERS)}>
+              {t.metiers.tous}
+            </a>
+          </p>
+        </div>
+      </section>
 
-          {/* LA LIGNE SUR DEVIS N EST PAS UN LIEN, ET C EST LA CORRECTION.
-              Elle en portait un, vers `/services/site-sur-mesure` — une
-              adresse que personne ne sert : ce `principal` n a ni page de
-              formule ni famille, et la route repondait 404 (constat 10 de la
-              revue du 31 aout). Rien n est perdu au passage : la ligne montre
-              deja son nom, son regime de prix et sa description en entier, et
-              le devis est deux lignes plus bas. Mieux vaut une ligne sans
-              porte de sortie qu une porte sur le vide. */}
-          {surDevis.map((service) => (
-            <div className="p-note" data-reveal key={service.id}>
-              <span>
-                {nomService(service, locale)}
-                {` — ${libelleDevis(locale)}`}
-              </span>
-              <span>{descriptionService(service, locale)}</span>
-            </div>
-          ))}
-
-          <div className="p-note" data-reveal>
-            <span>{t.mentionTvaPhrase}</span>
-            <BoutonDevis locale={locale} sujet="devis-formules">
-              {t.devisLabel}
-            </BoutonDevis>
+      {/* ---------- (03) Le controle ----------
+          Une liste, et non un paragraphe : chaque point se lit seul, y compris
+          par un moteur de reponse. `id="controle"` : chaque page metier y
+          renvoie (« Le contrôle en détail → »). */}
+      <section id="controle">
+        <div className="wrap">
+          <Entete rang="03" meta={t.controle.meta} h2={t.controle.h2} />
+          <div className="sm-devis" data-reveal>
+            <ul style={{ listStyle: "none", display: "grid", gap: 10 }}>
+              {t.controle.points.map((point) => (
+                <li key={point}>
+                  <p>{point}</p>
+                </li>
+              ))}
+            </ul>
+            <p style={{ marginTop: "1.2em" }}>
+              <strong>{t.controle.pasPromisTitre}</strong>
+              {t.controle.pasPromis}
+            </p>
+            {/* Vers (01) Les chiffres de l accueil. <a> classique (B7). */}
+            <p style={{ marginTop: "1.2em" }}>
+              {t.controle.etudes}
+              <a className="lnk" href={lien(locale, "/#chiffres")}>{t.controle.etudesLien}</a>
+            </p>
+            {t.guides && (
+              <p style={{ marginTop: "0.6em" }}>
+                <a className="lnk" href={cheminGuide("ia-et-protection-des-donnees")}>
+                  {t.guides.donnees}
+                </a>
+              </p>
+            )}
           </div>
         </div>
       </section>
 
-      {/* ---------- (02) et (03) — la vitrine : imprimes, reseaux ---------- */}
-      {vitrine.map((groupe, i) => (
-        <BlocFamille
-          key={groupe.famille.slug}
-          {...groupe}
-          rang={i + 2}
-          locale={locale}
-        />
-      ))}
-
-      {/* ---------- la bascule de rang ----------
-          Elle n est pas decorative : sans elle, les trois blocs qui suivent se
-          liraient comme une baisse de qualite ou un reste de page. Ce qu elle
-          dit est exact et verifiable sur cette page meme — ces lignes gardent
-          leur bloc, leur accroche, leurs cartes, leur page et leur devis. */}
-      <section className="prest-second" style={{ paddingBottom: 0 }}>
+      {/* ---------- (04) Le parcours ----------
+          Seul endroit de la page qui porte des montants : la mise en place,
+          puis la grille de l abonnement, lus en base, chacun avec sa mention
+          de TVA. `id="parcours"` : chaque page metier y renvoie. */}
+      <section id="parcours">
         <div className="wrap">
-          <p className="cat-rang" data-reveal>
-            <span>{t.bascule.titre}</span>
-          </p>
-          {/* Comme sur l accueil, cette phrase ne parle que de cette page :
-              decrire une habitude d achat demanderait une source que le studio
-              n a pas (positionnement §9). Ce qu elle affirme se verifie en
-              descendant l ecran. */}
-          <p className="cat-rang-d" data-reveal>
-            {t.bascule.texte}
-          </p>
+          <Entete rang="04" meta={t.parcours.meta} h2={t.parcours.h2} />
+          <div className="steps">
+            <div className="stp" data-reveal>
+              <span className="n">01</span>
+              <h3>{t.parcours.demo.titre}</h3>
+              <p>{t.parcours.demo.texte}</p>
+            </div>
+            <div className="stp" data-reveal>
+              <span className="n">02</span>
+              <h3>{t.parcours.essai.titre}</h3>
+              <p>{t.parcours.essai.texte}</p>
+            </div>
+            <div className="stp" data-reveal>
+              <span className="n">03</span>
+              <h3>{t.parcours.abonnementTitre}</h3>
+              <p>{abonnement}</p>
+            </div>
+          </div>
+          <div className="sm-devis" data-reveal>
+            <p>{t.parcours.note}</p>
+            {t.guides && (
+              <p style={{ marginTop: "0.6em" }}>
+                <a className="lnk" href={cheminGuide("prix-assistant-ia-suisse")}>
+                  {t.guides.prix}
+                </a>
+              </p>
+            )}
+          </div>
+          <div style={{ marginTop: 34 }}>
+            <GrilleAbonnement locale={locale} forme="cat" />
+          </div>
+          {/* Un seul geste sur la page : la demande de demo. <a> classique,
+              jamais next/link (les revelations au scroll ne se rejouent pas). */}
+          <div className="c-row" data-reveal style={{ marginTop: 34 }}>
+            <a className="btn" href={lien(locale, "/demonstrations")}>
+              {t.cta}
+              <span className="ar">→</span>
+            </a>
+          </div>
         </div>
       </section>
 
-      {/* ---------- (04) a (06) — identite, suivi, restauration ---------- */}
-      {second.map((groupe, i) => (
-        <BlocFamille
-          key={groupe.famille.slug}
-          {...groupe}
-          rang={vitrine.length + i + 2}
-          locale={locale}
-          sobre
-        />
-      ))}
-
-      <FooterContact locale={locale} />
+      <FooterContact indexSection="05" locale={locale} />
     </>
   );
 }

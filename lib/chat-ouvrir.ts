@@ -15,11 +15,12 @@
  * rappeler pour savoir de quoi il parlait.
  *
  * LE `libelle` EST RESOLU COTE SERVEUR, ET C'EST TOUT L'INTERET. Le sujet est
- * un identifiant (« devis-le-site ») ; le libelle est le NOM tel qu'il est
- * ecrit en base (« Le Site »). Le widget est un composant client : lui faire
- * deviner le nom d'une prestation l'obligerait a tenir une copie du catalogue,
- * qui divergerait de Postgres au premier renommage. C'est app/(site)/devis qui
- * lit la base et transmet le nom deja resolu.
+ * un identifiant (aujourd'hui le seul connu est « devis-studio », lib/devis.ts) ;
+ * le libelle serait le NOM d'une prestation tel qu'il est ecrit en base. Le
+ * widget est un composant client : lui faire deviner ce nom l'obligerait a
+ * tenir une copie du catalogue, qui divergerait de Postgres au premier
+ * renommage. C'est app/(site)/devis qui le transmet deja resolu ; depuis la
+ * refonte, aucun sujet ne designe une prestation et il vaut `null`.
  */
 export const NAWA_CHAT_OUVRIR = "nawa:chat-ouvrir";
 

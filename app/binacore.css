@@ -147,52 +147,19 @@ section.offres.green{display:flow-root}
 }
 .pill:hover{background:var(--ink);color:var(--bone)}
 
-/* « Services », la seule entree de nav qui s ouvre.
-   Le comportement — clavier, survol, Echap, focus — vit dans
-   components/NavServices.tsx ; ici, le dessin et les deux etats. */
-.nav-drop{position:relative;display:flex;align-items:center}
-/* Le bouton porte aussi .lnk : il herite du souligne au survol des entrees
-   voisines, pour qu on ne voie pas qu il n est pas un lien. Le reste remet a
-   zero ce qu un <button> apporte de son cru — .nav-r a:not(.pill) ne l atteint
-   pas, il n est pas un <a>. */
-.nav-drop-t{
-  display:inline-flex;align-items:center;gap:.45em;
-  background:none;border:0;padding:0;margin:0;cursor:pointer;
-  font:inherit;font-size:.8rem;font-weight:500;color:var(--ink);line-height:1.2;
-}
-.nav-drop-c{flex:none;transition:transform .3s var(--ease)}
-.nav-drop.open .nav-drop-c{transform:rotate(180deg)}
-/* LE PONT, et ce n est pas une decoration. Sans lui, le pointeur qui descend du
-   bouton vers le panneau traverse 12px de vide, y declenche le mouseleave de
-   l enveloppe, et le menu se referme sous le doigt avant d etre atteint. Il
-   n existe QUE menu ouvert, et il ne couvre qu une bande deja occupee par .nav
-   — il n intercepte donc rien que la barre n interceptait pas deja. */
-.nav-drop.open::after{content:"";position:absolute;top:100%;left:0;right:0;height:12px}
-.nav-drop-p{
-  position:absolute;top:calc(100% + 12px);left:50%;translate:-50% 0;
-  min-width:236px;display:flex;flex-direction:column;
-  padding:10px 0;border:1px solid var(--line);border-radius:var(--r);
-  background:rgba(241,238,230,.97);backdrop-filter:blur(14px);
-  box-shadow:0 18px 40px -24px rgba(23,22,19,.5);
-  /* `visibility` ET PAS SEULEMENT `opacity` : a opacity:0 seul, les six liens
-     restent dans l ordre de tabulation et dans l arbre d accessibilite — un
-     menu ferme qui piege le clavier. C est aussi ce qui dispense le panneau
-     d un aria-hidden, lequel serait une faute sur un conteneur focalisable. */
-  opacity:0;visibility:hidden;transform:translateY(-6px);
-  transition:opacity .28s var(--ease),transform .28s var(--ease),visibility .28s;
-}
-.nav-drop.open .nav-drop-p{opacity:1;visibility:visible;transform:none}
-.nav-drop-p a{
-  display:block;padding:9px 20px;line-height:1.35;
-  font-size:.8rem;font-weight:500;text-decoration:none;color:var(--ink);
-  transition:background .25s,color .25s;
-}
-.nav-drop-p a:hover{background:rgba(23,22,19,.05)}
-/* La page generale se detache des cinq familles parce qu elle les contient
-   toutes : c est elle qui tient la promesse « on y voit tout ce qui est
-   vendu », les autres n en ouvrent qu un morceau. */
-.nav-drop-p a.nav-drop-g{font-weight:600;padding-bottom:13px;margin-bottom:6px;border-bottom:1px solid var(--line)}
-@media(max-width:860px){.nav-time{display:none}.nav{grid-template-columns:1fr auto}.nav-r a:not(.pill){display:none}.nav-drop{display:none}}
+@media(max-width:860px){.nav-time{display:none}.nav{grid-template-columns:1fr auto}.nav-r a:not(.pill){display:none}}
+/* CINQ ENTREES DEPUIS LE 25.10.2026 (« Démonstrations » s est ajoutee).
+   Mesure a 1425px de large : la colonne de droite de la grille `1fr auto 1fr`
+   tombait a ~570px, la barre en demande 665 — « Le studio » et la pastille
+   passaient sur deux lignes. Les entrees ne se coupent donc plus jamais ; la
+   colonne de droite prend la largeur de la barre, et l horloge se decale un
+   peu vers la gauche quand la place manque pour la centrer. Elle est
+   decorative : sous 1180px elle s efface, comme deja sous 860px, et sous
+   1000px l ecart entre les entrees se resserre pour que la barre tienne
+   jusqu a 861px (mesure : 752px utiles pour 763 disponibles). */
+.nav-r a{white-space:nowrap}
+@media(max-width:1180px){.nav-time{display:none}.nav{grid-template-columns:1fr auto}}
+@media(max-width:1000px){.nav-r{gap:1.2em}}
 
 /* ---------- hero ---------- */
 .hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:0;position:relative}
@@ -200,7 +167,16 @@ section.offres.green{display:flow-root}
 .hero .kicker{display:flex;gap:2.5em;flex-wrap:wrap;margin-bottom:clamp(26px,3.5vw,44px);opacity:0;animation:fade 1s var(--ease) .15s forwards}
 .hero h1{
   font-weight:550;letter-spacing:-.035em;line-height:.99;
-  font-size:clamp(2.9rem,8.2vw,7.6rem);
+  /* Plafond 5.4rem et non plus 7.6rem : « L'assistant qui » fait 15 signes,
+     et a 7.6rem son « qui » finissait, a 1440 px, sur la boule sombre du noyau
+     (encre sur encre : invisible). Mesure du 25.10.2026 : 784 px de bord droit
+     a 7.6rem, 585 px a 5.4rem, la boule commence vers 590 px.
+     LE TERME CENTRAL EST PASSE DE 8.2vw A 5.4vw pour la meme raison, entre
+     ~800 et ~1300 px : la boule est centree et son rayon suit la hauteur, le
+     titre suivait la largeur. Mesure a 853 px : bord droit 446 px a 8.2vw,
+     sur la boule (qui commence vers 320 px) ; ~305 px a 5.4vw. Sous ~860 px
+     le plancher 2.9rem reprend la main, comme avant. */
+  font-size:clamp(2.9rem,5.4vw,5.4rem);
   max-width:16ch;
 }
 .hero h1 .l{display:block;overflow:hidden}
@@ -209,6 +185,22 @@ section.offres.green{display:flow-root}
 .hero h1 .l:nth-child(2) span{animation-delay:.22s}
 .hero h1 .l:nth-child(3) span{animation-delay:.34s}
 .hero h1 .serif-i{font-size:1.04em;letter-spacing:-.01em}
+/* LA LIGNE QUI TOURNE (components/HeroRotation.tsx). Les phrases partagent la
+   meme cellule de grille : la cellule prend la place de la plus longue, et la
+   hauteur du h1 ne change jamais d une phrase a l autre.
+   `.hero h1 .l span` ci-dessus vise AUSSI ces spans (c est un selecteur
+   descendant) : il leur impose inline-block et la revelation d entree. Les
+   deux regles qui suivent sont donc ecrites en `.hero h1 .l …`, plus
+   specifiques, pour la neutraliser — seule la ligne entiere se revele, puis
+   les phrases tournent a l interieur. Sans ca, .rot repassait en inline-block
+   et les trois phrases s empilaient au lieu de se superposer.
+   Le vert est --pine, celui de la charte : 12:1 sur --bone, bien au-dessus
+   des 4,5:1 demandes. */
+.hero h1 .l .rot{display:inline-grid;justify-items:start;color:var(--pine);animation:none;transform:none}
+.hero h1 .l .rot-w{grid-area:1/1;opacity:0;transform:translateY(60%);animation:none;
+  transition:opacity .5s var(--ease),transform .5s var(--ease)}
+.hero h1 .l .rot-w.is-on{opacity:1;transform:none}
+.hero h1 .l .rot-w.is-off{opacity:0;transform:translateY(-60%)}
 /* LE PLANCHER DU clamp() CI-DESSUS EST TROP HAUT POUR UN TELEPHONE.
    Sous 566px de viewport, `8.2vw` passe sous 2.9rem et la taille se fige a
    46.4px — elle ne suit plus l'ecran alors que .wrap, lui, continue de se
@@ -259,59 +251,6 @@ section.offres.green{display:flow-root}
 .strip span{font-size:.68rem;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);padding:0 2.2em}
 .strip span::after{content:"·";margin-left:4.4em;color:var(--brass)}
 @keyframes mq{to{transform:translateX(-50%)}}
-
-/* ---------- travaux ---------- */
-.work-cap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:18px 2px 0;font-size:.8rem;color:var(--muted)}
-.frame{
-  background:var(--pine);border-radius:var(--r);
-  padding:clamp(18px,4vw,56px);
-  position:relative;
-}
-.frame + .frame-cap{margin-top:16px}
-.ba{
-  position:relative;user-select:none;touch-action:none;overflow:hidden;
-  border-radius:10px;background:var(--bone-2);
-  aspect-ratio:16/10;max-height:660px;
-  box-shadow:0 30px 80px rgba(0,0,0,.35);
-}
-@media(max-width:760px){.ba{aspect-ratio:4/5}}
-.ba-layer{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:clamp(14px,4vw,48px)}
-.ba-before{z-index:2;clip-path:inset(0 calc(100% - var(--x,50%)) 0 0);background:#E9E3D2}
-.ba-after{background:
-  radial-gradient(800px 400px at 80% 0%, rgba(169,138,69,.10), transparent 60%),
-  var(--bone-2)}
-.ba-handle{position:absolute;top:0;bottom:0;left:var(--x,50%);z-index:3;width:0;cursor:ew-resize}
-.ba-handle::before{content:"";position:absolute;top:0;bottom:0;left:-.5px;width:1px;background:var(--ink)}
-.ba-knob{
-  position:absolute;top:50%;left:0;transform:translate(-50%,-50%);
-  width:56px;height:56px;border-radius:50%;
-  background:var(--ink);color:var(--bone);
-  display:flex;align-items:center;justify-content:center;gap:3px;
-  font-size:.7rem;letter-spacing:.05em;
-  box-shadow:0 10px 30px rgba(0,0,0,.35);
-  transition:transform .25s var(--ease);
-}
-.ba:hover .ba-knob{transform:translate(-50%,-50%) scale(1.07)}
-.ba-tag{
-  position:absolute;top:16px;z-index:4;
-  font-size:.62rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;
-  padding:.55em 1em;border-radius:999px;
-}
-.tag-a{left:16px;background:rgba(23,22,19,.08);color:#6C6250;border:1px solid rgba(23,22,19,.15)}
-.tag-b{right:16px;background:var(--ink);color:var(--bone)}
-
-/* LES MAQUETTES DESSINEES DU CARROUSEL ONT ETE RETIREES LE 2 SEPTEMBRE 2026.
-   Les cinq pieces de components/ui/feature-carousel.tsx sont desormais des
-   photographies : plus une seule scene n est construite en CSS. Sont partis
-   d ici, avec elles, 118 regles et 169 lignes — .m-old, .m-new, .browser,
-   .bsite (et .bhero, .brow), .phone, .duo, .bc et ses deux faces, .bc-mini,
-   .poster, .sticker, .fid, puis les maquettes « avant » .osite, .obc,
-   .oflyer, .ofid, ainsi que les surcharges .pcard qui les redimensionnaient.
-   La mesure des trois colonnes de .bsite .brow est partie avec la seule regle
-   qu elle justifiait : elle ne decrivait plus rien.
-   Ce qui reste du carrousel : .car2, .chip, .stack, .pcard, .ba et .ba-photo.
-   Si une piece dessinee revient un jour, elle se reecrit — l historique git
-   garde le detail, ce fichier n a pas a porter du code que rien n appelle. */
 
 /* ---------- services ---------- */
 .rows{border-top:1px solid var(--line)}
@@ -364,7 +303,7 @@ section.offres.green{display:flow-root}
 @media(max-width:900px){.price-grid{grid-template-columns:1fr;max-width:520px}}
 .price{border-top:1px solid var(--line-g);padding-top:26px;display:flex;flex-direction:column}
 .price .lab{display:flex;justify-content:space-between;align-items:center;font-size:.66rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--muted-g)}
-.price .lab .rec{color:var(--brass-l);border:1px solid var(--brass);border-radius:999px;padding:.4em .9em;letter-spacing:.14em}
+
 .price h3{font-weight:550;font-size:1.6rem;letter-spacing:-.02em;margin:18px 0 4px}
 .price .d{color:var(--muted-g);font-size:.92rem;min-height:3em}
 .price .num{margin:26px 0 4px;font-family:var(--serif);font-weight:400;font-size:clamp(2.8rem,4.5vw,3.8rem);line-height:1}
@@ -393,7 +332,7 @@ section.offres.green{display:flow-root}
    prend 177 et la pastille 109 — elle tient donc, mais la reserve est ecrite
    plutot que supposee. */
 .price .lab{gap:12px;flex-wrap:wrap}
-.price .lab .rec{flex:none}
+
 /* LE LIBELLE PREND LA MEME BOITE QUE LA PASTILLE, bordure transparente
    comprise. Sans cela, la carte « Recommandé » etait la seule a porter une
    ligne de tete haute de 27px la ou les deux autres en faisaient 17 : son
@@ -406,7 +345,9 @@ section.offres.green{display:flow-root}
 .price li{font-size:.88rem;color:#DCE4DC;display:flex;gap:.8em}
 .price li::before{content:"—";color:var(--brass-l);flex:none}
 .price .btn{margin-top:auto;justify-content:center}
-.p-note{margin-top:clamp(40px,5vw,64px);padding-top:22px;border-top:1px solid var(--line-g);display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-size:.78rem;color:var(--muted-g)}
+/* .9rem et non plus .78rem (audit CRO du 25.10.2026, §3) : c est la phrase
+   qui dit tout le modele de prix, elle etait la plus petite du site. */
+.p-note{margin-top:clamp(40px,5vw,64px);padding-top:22px;border-top:1px solid var(--line-g);display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-size:.9rem;color:var(--muted-g)}
 
 /* ---------- méthode ---------- */
 .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(24px,3vw,44px);counter-reset:st}
@@ -417,6 +358,15 @@ section.offres.green{display:flow-root}
 .stp h3{font-weight:550;font-size:1.25rem;letter-spacing:-.01em;margin:14px 0 8px}
 .stp p{font-size:.9rem;color:var(--muted)}
 .stp .t{float:right;font-size:.66rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+/* (01) Les chiffres de l accueil (components/Chiffres.tsx) : la carte `.stp`
+   de la methode, plus un grand chiffre au serif de `.price .num` et une ligne
+   de source. Le contexte `.t` n y flotte pas : a cote d un chiffre de 3,8rem
+   il serait repousse sur deux lignes. `overflow-wrap` garde les noms longs
+   (« Bürokratiemonitor ») dans la colonne a 375 px. */
+.chiffre .t{float:none;display:block}
+.chiffre .v{margin:14px 0 10px;font-family:var(--serif);font-weight:400;font-size:clamp(2.8rem,4.5vw,3.8rem);line-height:1;letter-spacing:-.02em;color:var(--ink)}
+.chiffre .src{margin-top:12px;font-size:.78rem;overflow-wrap:anywhere}
+.chiffre .src a{color:var(--ink)}
 
 /* ---------- studio ---------- */
 .studio-grid{display:grid;grid-template-columns:1fr 1.3fr;gap:clamp(30px,6vw,90px)}
@@ -456,10 +406,51 @@ section.offres.green{display:flow-root}
   transform:translateY(.14em);
 }
 .legal{display:flex;justify-content:space-between;gap:1.5em;flex-wrap:wrap;padding:18px var(--pad);border-top:1px solid var(--line-g);font-size:.64rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(241,238,230,.4)}
+/* La bande des liens legaux des pages SANS pied complet (components/
+   LiensLegaux.tsx, posee par le layout public apres <main>). Meme typographie
+   que .legal, couleurs du fond clair. Le layout ne la rend plus la ou le pied
+   complet porte deja les memes liens (lib/i18n.ts, CHEMINS_AVEC_PIED) ; la
+   regle `:has` ci-dessous n est plus qu un filet. Le fond de 96px degage la bulle
+   du chat (position:fixed en bas d ecran), qui sinon couvrait les liens. */
+.liens-legaux{padding:18px 0 96px;border-top:1px solid var(--line);font-size:.64rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.liens-legaux .wrap{display:flex;gap:1.5em 2.5em;flex-wrap:wrap}
+main:has(footer.contact) + .liens-legaux{display:none}
+/* LE BANDEAU COOKIES (components/BandeauCookies.tsx), position:fixed, monte
+   hors de #smoothWrap. Grand ecran : en bas a DROITE, au meme retrait que la
+   bulle du chat (bottom:22px) — le coin gauche est a elle. Sous 760px la
+   bulle s elargit sur toute la ligne : le bandeau passe AU-DESSUS, 80px du
+   bas = 22px de retrait + 45px de bulle + 13px d air. z-index 94 : sous le
+   chat (95) qui le couvre en s ouvrant, sous le loader (130). Fond pin plein,
+   filet os : ni degrade ni verre. .green donne a .btn et .lnk leurs couleurs
+   sur fond pin, sans regle de plus. */
+.bandeau-cookies{
+  position:fixed;right:var(--pad);bottom:22px;z-index:94;
+  display:flex;align-items:center;gap:14px 18px;
+  width:min(420px,calc(100vw - 2 * var(--pad)));
+  padding:14px 16px 14px 18px;border:1px solid var(--line-g);border-radius:var(--r);
+  font-size:.76rem;line-height:1.5;
+  box-shadow:0 10px 30px rgba(23,22,19,.18);
+}
+.bandeau-cookies p{margin:0;color:var(--bone)}
+/* Souligne a demeure : sur telephone il n y a pas de survol pour reveler le
+   filet anime de .lnk, et « En savoir plus » doit se lire comme un lien. */
+.bandeau-cookies .lnk{text-decoration:underline;text-underline-offset:3px}
+.bandeau-cookies .btn{flex:none;padding:.75em 1.3em;font-size:.74rem}
+@media(max-width:760px){
+  .bandeau-cookies{left:var(--pad);right:var(--pad);bottom:80px;width:auto}
+}
+@media(max-width:420px){
+  .bandeau-cookies{flex-direction:column;align-items:flex-start}
+}
+/* La cible des liens « Cookies » (pied, bandeau) : sans retrait, l intitule
+   de la rubrique arrivait SOUS la nav fixe. 96px = la nav et un peu d air,
+   comme le 84px de demonstrations.css. */
+#cookies{scroll-margin-top:96px}
 
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   .hero h1 .l span{animation:none;transform:none}
+  .hero h1 .l .rot-w{transition:none}
   .hero .kicker,.hero-foot{animation:none;opacity:1}
   .strip .tk{animation:none}
   .hero-scroll i{animation:none}
@@ -510,9 +501,9 @@ html.smooth #smooth{will-change:transform}
   display:flex;align-items:center;justify-content:center;opacity:0}
 html.cursor-on .cursor{opacity:1}
 .cursor.grow{width:56px;height:56px}
-.cursor.drag{width:64px;height:64px}
+
 .cursor .cl{font-size:.6rem;font-weight:600;letter-spacing:.14em;opacity:0;transition:opacity .2s;color:#fff}
-.cursor.drag .cl{opacity:1}
+
 html.cursor-on a,html.cursor-on button,html.cursor-on .row-h,html.cursor-on summary{cursor:none}
 html.cursor-on body{cursor:none}
 
@@ -535,37 +526,17 @@ html.menu-open{overflow:hidden}
   padding:.32em 0;border-bottom:1px solid var(--line-g);
   opacity:0;transform:translateY(28px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
 /* L ECHELONNEMENT SE COMPTE EN `--i`, PLUS EN `nth-child`.
-   Il y avait six regles, une par rang DOM, et il a suffi d intercaler la
-   sous-liste des familles sous « Services » pour que la cascade saute un cran :
-   `nth-child` compte TOUS les freres, y compris le <div> qui n a pas de delai a
-   recevoir. Le rang est donc pose par components/MenuOverlay.tsx, sur l entree
-   elle-meme, et il survit a toute insertion. `--i` etant une propriete
-   personnalisee, elle est HERITEE : la posee sur .m-grp sert aussi bien le
-   .m-lnk qu il enveloppe que la sous-liste qui le suit. */
+   Il y avait six regles, une par rang DOM, et il a suffi d intercaler un
+   frere sans delai a recevoir pour que la cascade saute un cran : `nth-child`
+   compte TOUS les freres. Le rang est donc pose par components/MenuOverlay.tsx,
+   sur l entree elle-meme, et il survit a toute insertion. */
 html.menu-open .menu .m-lnk{opacity:1;transform:none;transition-delay:calc(.22s + var(--i,0) * .08s)}
 .menu .mi{font-size:.7rem;font-weight:600;letter-spacing:.18em;color:var(--brass-l)}
 .menu .mt{font-weight:550;font-size:clamp(2rem,7.5vw,4.2rem);letter-spacing:-.03em;line-height:1.15;transition:color .3s}
 .menu .m-lnk:hover .mt{color:var(--brass-l)}
-/* La sous-liste des familles. Elle ne se replie pas : sur un menu plein ecran,
-   cacher cinq liens derriere un pli coute un geste et ne gagne aucune place.
-   C est l echelle qui dit qu elles dependent de « Services », pas un bouton.
-   Le groupe n a pas de bordure a lui — celle du .m-lnk qu il contient separe
-   deja l entree de la suivante, et la sous-liste vit du bon cote du filet. */
-.menu .m-grp .m-lnk{border-bottom:0}
-.menu .m-sub{display:flex;flex-direction:column;
-  padding:2px 0 14px;border-bottom:1px solid var(--line-g);
-  opacity:0;transform:translateY(20px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
-html.menu-open .menu .m-sub{opacity:1;transform:none;transition-delay:calc(.28s + var(--i,0) * .08s)}
-/* 38px de hauteur reelle, et non une surface sensible ajoutee en ::before : la
-   liste est verticale et serree, deux calques de 44px se recouvriraient l un
-   l autre — c est precisement ce que le bloc « cibles tactiles » plus bas
-   s interdit. La hauteur est donc dans la boite, pas au-dessus. */
-.menu .m-sub a{display:flex;align-items:center;min-height:38px;
-  font-size:.82rem;font-weight:500;letter-spacing:.01em;
-  text-decoration:none;color:var(--muted-g);transition:color .3s}
-.menu .m-sub a:hover{color:var(--brass-l)}
+
 /* Filet de securite, jamais visible tant que le menu tient dans l ecran :
-   quatre entrees, cinq familles et le pied depassent sur un telephone couche,
+   les entrees et le pied peuvent depasser sur un telephone couche,
    et un menu coupe est pire qu un menu qui defile. `contain` empeche le geste
    de se propager au document, que html.menu-open a deja verrouille.
    LES 28px DE PADDING NE SONT PAS DECORATIFS : les entrees partent a
@@ -579,16 +550,12 @@ html.menu-open .menu .m-sub{opacity:1;transform:none;transition-delay:calc(.28s 
 .menu .m-foot a{color:var(--bone);text-decoration:none}
 
 /* nav au-dessus du menu ouvert */
-/* `.nav-drop-t` rejoint la liste : « Services » est un <button>, pas un <a>, et
-   il serait reste seul et lisible par-dessus le menu plein ecran pendant que
-   ses voisins s effacent. */
-.nav-time,.nav-r a,.nav-drop-t{transition:opacity .3s}
+.nav-time,.nav-r a{transition:opacity .3s}
 html.menu-open .nav{background:transparent;box-shadow:none;backdrop-filter:none}
 html.menu-open .wordmark{color:var(--bone)}
-html.menu-open .nav-time,html.menu-open .nav-r a,html.menu-open .nav-drop-t{opacity:0;pointer-events:none}
+html.menu-open .nav-time,html.menu-open .nav-r a{opacity:0;pointer-events:none}
 
 /* media qui s'echelonnent */
-.frame{transform:translateY(0) scale(1);transition:box-shadow .4s}
 [data-scale]{transform:scale(.94);transition:transform 1.2s var(--ease)}
 [data-scale].in-view{transform:scale(1)}
 
@@ -598,43 +565,11 @@ html.menu-open .nav-time,html.menu-open .nav-r a,html.menu-open .nav-drop-t{opac
   [data-scale]{transform:none;transition:none}
   .cursor{display:none}
 }
-/* ========== carte du studio ========== */
-/* CE QUI RESTE EN SERVICE ICI, ET CE QUI N Y EST PLUS. La carte du studio
-   affichait le catalogue en LIGNES, dans un encart clair a deux colonnes :
-   .sm-card, .sm-cols, .sm-col et .sm-it dessinaient ce menu de restaurant.
-   Le catalogue est passe en cartes (voir « le catalogue en cartes » plus bas)
-   et l accueil n emploie plus aucune de ces quatre classes.
-   Elles NE SONT PAS SUPPRIMEES : .sm-grp, .sm-it et .sm-foot sont reutilisees
-   par les pages /services, qui sont ecrites en parallele. Les retirer
-   casserait des pages qui ne sont pas encore toutes dans l arbre. */
-.studio-menu{margin-top:clamp(60px,8vw,110px)}
-/* Le selecteur vise le h2, pas un h3 : c est un h2 que .sm-head contient
-   depuis le portage, et la regle ne trouvait donc AUCUNE cible — le preflight
-   de Tailwind pose `h2{font-size:inherit;font-weight:inherit}` et « La carte
-   du studio » sortait a la taille du corps de texte. La taille est celle de la
-   maquette, entre les titres de section (.t) et les titres de carte. */
-.sm-head h2{font-weight:550;font-size:clamp(1.7rem,3.4vw,2.6rem);letter-spacing:-.02em}
-.sm-head .serif-i{color:var(--brass-l);font-size:1.05em}
-.sm-card{background:var(--bone);color:var(--ink);border-radius:var(--r);
-  padding:clamp(26px,4.5vw,56px);box-shadow:0 30px 80px rgba(0,0,0,.28)}
-.sm-cols{display:grid;grid-template-columns:1fr 1fr;gap:clamp(26px,4.5vw,68px)}
-@media(max-width:820px){.sm-cols{grid-template-columns:1fr}}
+
+/* L intitule de groupe (laiton, filet a droite) : les <h3> de /contact. */
 .sm-grp{font-size:.62rem;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:var(--brass);
   margin:26px 0 10px;display:flex;align-items:center;gap:1em}
 .sm-grp::after{content:"";flex:1;height:1px;background:var(--line)}
-.sm-col > .sm-grp:first-child{margin-top:0}
-.sm-it{display:flex;align-items:baseline;gap:.9em;font-size:.93rem;padding:7px 0}
-.sm-it i{flex:1;min-width:18px;border-bottom:1px dotted rgba(23,22,19,.35);transform:translateY(-4px)}
-.sm-it .px{font-family:var(--serif);font-size:1.08rem;white-space:nowrap}
-.sm-it .px small{font-family:var(--sans);font-size:.64rem;font-weight:600;color:var(--muted);
-  letter-spacing:.06em;margin-right:.4em;text-transform:uppercase}
-.sm-it .px small.per{margin-right:0;margin-left:.15em;text-transform:none;letter-spacing:0}
-.sm-note{font-size:.8rem;color:var(--muted);margin-top:14px;max-width:42ch}
-.sm-foot{margin-top:30px;padding-top:20px;border-top:1px solid var(--line);
-  display:flex;justify-content:space-between;align-items:baseline;gap:1.2em;flex-wrap:wrap;
-  font-size:.8rem;color:var(--muted)}
-.sm-foot .lnk{color:var(--ink);font-size:.85rem}
-@media(max-width:560px){.sm-it{flex-wrap:wrap;row-gap:2px}.sm-it i{display:none}.sm-it .px{margin-left:auto}}
 
 /* ========== le catalogue en cartes ========== */
 /* POURQUOI CES CLASSES EXISTENT, ET POURQUOI .price N EST PAS REUTILISEE.
@@ -649,7 +584,7 @@ html.menu-open .nav-time,html.menu-open .nav-r a,html.menu-open .nav-drop-t{opac
    avec un prix en serif de 3.8rem, une liste de puces et un bouton en pied.
    Ici il y a quatorze lignes dont douze sur devis. Meme grammaire, une echelle
    en dessous — et le meme systeme par ailleurs : .wrap, .sec-head, .meta,
-   .lede, .btn, .lnk, .p-note et .sm-foot sont repris tels quels.
+   .lede, .btn, .lnk et .p-note sont repris tels quels.
    DEUX FONDS, UN SEUL DESSIN. La grille vit sur l accueil (fond pin, dans
    .green) et sur /services (fond os). Comme .meta, .lede et .btn avant
    elle, la carte declare sa palette claire puis ne redefinit sous .green que
@@ -688,22 +623,7 @@ a.cat-it:hover{border-color:var(--ink);background:var(--bone-2);transform:transl
   letter-spacing:.06em;margin-right:.4em;text-transform:uppercase}
 .green .cat-it .px small{color:var(--muted-g)}
 .cat-it .px small.per{margin-right:0;margin-left:.15em;text-transform:none;letter-spacing:0}
-/* LA LIGNE SOUS LE MONTANT — « TVA comprise » sous un prix, « chiffré après
-   deux questions » sous un « sur devis ».
-   Elle passe en BLOC : les `small` de `.px` sont dessines pour le prefixe
-   « dès », qui vit sur la meme ligne que le chiffre et porte a ce titre un
-   `margin-right`. Celle-ci se lit dessous, en bas de casse — c est une phrase,
-   pas une etiquette —, et elle reprend une interligne propre parce que `.px`
-   est a `line-height:1` pour serrer le chiffre. */
-.cat-it .px small.px-note{display:block;margin:7px 0 0;font-size:.68rem;font-weight:500;
-  line-height:1.35;letter-spacing:.01em;text-transform:none}
-/* « sur devis » ne doit pas se lire comme la case vide de la colonne des prix.
-   Il garde le corps et la serif du montant — c est une reponse, pas une
-   absence — et prend l accent laiton, qui est la couleur de ce que le site
-   affirme. Le montant, lui, reste a la couleur du texte : c est le chiffre qui
-   doit primer quand il existe. */
-.cat-it .px-devis{color:var(--brass)}
-.green .cat-it .px-devis{color:var(--brass-l)}
+
 /* LA FAMILLE EST NOMMEE AU PIED DE LA CARTE, et ce n est pas decoratif : la
    carte entiere est un lien, et un lien doit dire ou il mene. Sans ce libelle,
    cliquer « Cartes de visite » ouvrait « Imprimés » sans
@@ -713,82 +633,6 @@ a.cat-it:hover{border-color:var(--ink);background:var(--bone-2);transform:transl
 .green .cat-it .go{color:var(--brass-l)}
 .cat-it .go .ar{display:inline-block;transition:transform .3s var(--ease)}
 a.cat-it:hover .go .ar{transform:translateX(4px)}
-/* Le « tout voir » de chaque famille sur /services. Un .btn plutot qu un
-   .lnk : c est la porte du bloc, et sa hauteur dessinee (1.05em de padding
-   vertical, soit ~46px) depasse deja les 44px des cibles tactiles — il n a
-   donc rien a demander au bloc de fin de fichier. */
-.cat-tout{margin-top:clamp(28px,3.5vw,40px)}
-
-/* ========== la hierarchie de vitrine ==========
-   POURQUOI CES CLASSES EXISTENT. Le catalogue traitait ses cinq familles a
-   EGALITE : quatorze cartes de meme dessin sur l accueil, cinq blocs de meme
-   poids sur /services. Ce n est pas ce que le studio vend. Trois lignes
-   portent l activite — les sites, les cartes et imprimes, les reseaux sociaux
-   — et le reste (identite et photographie, suivi et hebergement, ligne
-   restauration) reste accessible, garde ses pages et ses prix, mais ne se
-   dispute plus la vitrine.
-
-   TROIS LEVIERS, ET AUCUN NE CACHE RIEN. L ordre de lecture, l echelle de la
-   carte, et la densite du texte. Les dix-huit lignes visibles en base restent
-   rendues, toutes, sur les deux pages : une hierarchie qui supprime n est plus
-   une hierarchie, c est une coupe.
-
-   PIEGE DE SPECIFICITE — a lire avant de deplacer une ligne. `.cat-grid-avant`
-   et `.cat-grid-sobre` pesent (0,1,0), exactement comme `.cat-grid` et comme
-   ses deux media queries : c est donc l ORDRE DANS LE FICHIER qui tranche, et
-   rien d autre. Ce bloc doit rester APRES les regles de `.cat-grid`, et chaque
-   variante doit redeclarer ses propres seuils. Remonter ce bloc au-dessus, ou
-   omettre une media query ici, rend la variante inoperante sous 760px sans
-   qu aucune erreur ne le signale. */
-
-/* LE RANG DE VITRINE — deux colonnes au lieu de trois.
-   La carte gagne ~50 % de largeur, sa description tient sur moins de lignes et
-   son prix se lit de plus loin. C est le meme dessin que `.cat-it`, monte d un
-   cran : on ne redessine pas une carte pour la promouvoir, on l agrandit. */
-.cat-grid-avant{grid-template-columns:repeat(2,1fr)}
-@media(max-width:760px){.cat-grid-avant{grid-template-columns:1fr}}
-.cat-grid-avant .cat-it{padding:clamp(22px,2.8vw,34px)}
-.cat-grid-avant .cat-it h3{font-size:1.3rem;line-height:1.24}
-.cat-grid-avant .cat-it .d{font-size:.9rem;margin-top:10px;max-width:48ch}
-
-/* LE SECOND PLAN — quatre colonnes, et pas de description.
-   La carte tombe d un cran sous `.cat-it` de la meme facon que `.cat-it` tombe
-   d un cran sous `.price` : meme grammaire, moins de place. La description
-   part parce que c est ELLE qui fait le poids visuel d une carte, pas son
-   titre ; la ligne garde son nom, son prix et la porte vers sa famille, ou la
-   description l attend en entier. C est le partage assume entre les deux
-   pages : l accueil est une vitrine et ne developpe pas, /services est le
-   catalogue et garde ses descriptions partout. */
-.cat-grid-sobre{grid-template-columns:repeat(4,1fr);gap:clamp(12px,1.4vw,18px)}
-@media(max-width:900px){.cat-grid-sobre{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:640px){.cat-grid-sobre{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:420px){.cat-grid-sobre{grid-template-columns:1fr}}
-.cat-grid-sobre .cat-it{padding:clamp(14px,1.7vw,20px)}
-.cat-grid-sobre .cat-it h3{font-size:.92rem;font-weight:500;line-height:1.35}
-.cat-grid-sobre .cat-it .px{font-size:1.05rem;padding-top:16px}
-.cat-grid-sobre .cat-it .go{margin-top:10px;font-size:.6rem;letter-spacing:.12em}
-
-/* LA BANDE QUI SEPARE LES DEUX RANGS.
-   Sans elle, la grille de quatre colonnes se lirait comme une suite de la
-   grille de deux — un changement d echelle sans motif. La bande dit en un mot
-   ce que le changement signifie, et le filet qui la prolonge marque la rupture
-   sans poser de titre concurrent au h2 de la section.
-   Le libelle porte les memes .62rem/.26em que `.sm-grp`, qui fait deja ce
-   travail sur les pages de prestations : deux graphies pour une meme fonction
-   se remarqueraient. */
-.cat-rang{margin:clamp(40px,5vw,64px) 0 clamp(16px,2vw,22px);
-  display:flex;align-items:center;gap:1.2em;
-  font-size:.62rem;font-weight:600;letter-spacing:.26em;text-transform:uppercase;
-  color:var(--brass)}
-.green .cat-rang{color:var(--brass-l)}
-.cat-rang::after{content:"";flex:1;height:1px;background:var(--line)}
-.green .cat-rang::after{background:var(--line-g)}
-/* L accroche du second rang : elle repond a la seule question que la bande
-   pose — pourquoi ces lignes-la sont plus bas. Bornee a 62ch pour ne pas
-   traverser les quatre colonnes qu elle annonce. */
-.cat-rang-d{max-width:62ch;font-size:.86rem;line-height:1.6;color:var(--muted);
-  margin-bottom:clamp(20px,2.4vw,28px)}
-.green .cat-rang-d{color:var(--muted-g)}
 
 /* ========== « sur devis », ecrit comme une decision ==========
    TREIZE DES DIX-HUIT LIGNES DU CATALOGUE SONT SUR DEVIS, dont deux des trois
@@ -805,197 +649,6 @@ a.cat-it:hover .go .ar{transform:translateX(4px)}
 .green .sm-devis{border-left-color:var(--brass-l)}
 .sm-devis p{font-size:.92rem;line-height:1.65;color:var(--muted)}
 .green .sm-devis p{color:var(--muted-g)}
-/* Le compte ouvre le bloc et donne l ordre de grandeur avant l explication :
-   un lecteur qui sait combien de lignes sont concernees lit la suite comme une
-   regle, pas comme une excuse pour la ligne qu il regardait. */
-.sm-devis .sm-devis-t{font-family:var(--serif);font-size:1.14rem;line-height:1.4;
-  color:inherit;margin-bottom:.6em}
-/* L engagement de reponse est le seul du site : il se detache du paragraphe
-   qui le precede, sinon il se lit comme sa derniere subordonnee. */
-.sm-devis .sm-devis-r{margin-top:.75em;font-weight:600;font-size:.86rem;
-  letter-spacing:.01em;color:var(--brass)}
-.green .sm-devis .sm-devis-r{color:var(--brass-l)}
-
-/* LE SECOND RANG SUR /services, qui n a pas le meme travail a faire.
-   L accueil est une vitrine : le second rang y perd ses descriptions. Cette
-   page-ci est LE CATALOGUE — on y vient pour savoir ce qu une ligne recouvre,
-   et l amputer serait la rendre inutile. La demotion s y joue donc autrement :
-   le titre de bloc descend d une echelle (celle de « La carte du studio »,
-   .sm-head h2, plutot que celle des titres de section) et le bloc respire
-   moins. Les cartes, elles, restent entieres.
-   `h2.t` est qualifie par la balise, comme la regle d origine : `.t` seul
-   designe deux autres objets dans ce fichier. */
-.prest-second{padding-top:clamp(52px,6vw,86px);padding-bottom:clamp(52px,6vw,86px)}
-.prest-second h2.t{font-size:clamp(1.7rem,3.4vw,2.6rem);letter-spacing:-.02em;line-height:1.1}
-
-/* ========== carrousel travaux ========== */
-.car-top{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:28px}
-.car-top .lede{max-width:44ch}
-.car-ctrl{display:flex;align-items:center;gap:12px}
-.car-btn{width:52px;height:52px;border-radius:50%;border:1px solid var(--line);background:transparent;
-  color:var(--ink);font-size:1.05rem;cursor:pointer;
-  transition:background .3s var(--ease),color .3s var(--ease),opacity .3s}
-.car-btn:hover{background:var(--ink);color:var(--bone)}
-.car-btn:disabled{opacity:.25;pointer-events:none}
-.car-count{font-size:.7rem;font-weight:600;letter-spacing:.22em;color:var(--muted);min-width:70px;text-align:center}
-.car{overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;
-  margin:0 calc(-1 * var(--pad));padding:0 var(--pad);cursor:grab}
-.car::-webkit-scrollbar{display:none}
-.car.dragging{cursor:grabbing;scroll-snap-type:none}
-.car-track{display:flex;gap:clamp(16px,2.5vw,32px)}
-.slide{flex:0 0 min(88%,980px);scroll-snap-align:start;min-width:0}
-@media(max-width:760px){.slide{flex-basis:92%}}
-.car-progress{height:1px;background:var(--line);margin-top:28px;position:relative;overflow:hidden}
-.car-progress i{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--ink);transition:width .25s var(--ease)}
-.stage{display:flex;align-items:center;justify-content:center;position:relative;
-  min-height:clamp(340px,46vw,540px)}
-
-/* --- slide carte de visite --- */
-
-/* --- slide affiche --- */
-
-/* --- slide print & fidelite --- */
-.print-duo{display:flex;align-items:center;justify-content:center;gap:6%}
-
-@media(max-width:640px){.print-duo{flex-direction:column;gap:22px;padding:6% 0}}
-/* ========== carrousel v6 : chips + pile de cartes avant/apres ========== */
-.car2{display:flex;border:1px solid var(--line);border-radius:28px;overflow:hidden;
-  background:var(--bone-2);min-height:clamp(560px,58vw,720px)}
-.car2-left{position:relative;width:min(320px,32%);background:var(--pine);flex:none;
-  transition:width .6s var(--ease);overflow:hidden}
-.car2.collapsed .car2-left{width:92px}
-.car2-left::before,.car2-left::after{content:"";position:absolute;left:0;right:0;height:70px;z-index:5;pointer-events:none}
-.car2-left::before{top:0;background:linear-gradient(var(--pine),transparent)}
-.car2-left::after{bottom:0;background:linear-gradient(transparent,var(--pine))}
-.car2-list{position:absolute;inset:0}
-.chip{position:absolute;left:26px;top:50%;margin-top:-26px;height:52px;
-  display:flex;align-items:center;gap:14px;padding:0 22px;border-radius:999px;
-  border:1px solid var(--line-g);background:transparent;color:var(--muted-g);
-  font-family:var(--sans);font-size:.78rem;font-weight:600;letter-spacing:.06em;
-  cursor:pointer;white-space:nowrap;max-width:calc(100% - 52px);
-  transition:transform .75s cubic-bezier(.3,1.3,.45,1),opacity .5s,background .4s,color .4s,border-color .4s,padding .5s var(--ease)}
-.chip .num{font-size:.62rem;font-weight:600;letter-spacing:.2em;color:var(--brass-l);transition:color .4s}
-.chip .lbl{overflow:hidden;max-width:200px;transition:max-width .45s var(--ease),opacity .3s}
-.chip:hover{border-color:rgba(241,238,230,.5);color:var(--bone)}
-.chip.on{background:var(--bone);color:var(--pine);border-color:var(--bone)}
-.chip.on .num{color:var(--brass)}
-.car2.collapsed .chip{padding:0 0;width:52px;justify-content:center;gap:0}
-.car2.collapsed .chip .lbl{max-width:0;opacity:0}
-.car2-toggle{position:absolute;left:26px;bottom:20px;z-index:6;width:40px;height:40px;border-radius:50%;
-  border:1px solid var(--line-g);background:transparent;color:var(--bone);cursor:pointer;
-  font-size:.9rem;transition:background .3s,color .3s,transform .6s var(--ease)}
-.car2-toggle:hover{background:var(--bone);color:var(--pine)}
-.car2.collapsed .car2-toggle{transform:rotate(180deg)}
-.car2-right{flex:1;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  --pad:clamp(22px,4vw,54px);padding:var(--pad);
-  background:radial-gradient(700px 420px at 80% 0%, rgba(169,138,69,.08), transparent 60%),var(--bone-2)}
-/* La scene : elle porte la pile ET les fleches, pour que celles-ci se centrent
-   sur la CARTE et non sur le panneau entier (qui inclut .car2-meta dessous,
-   ce qui les descendrait sous le vrai milieu). */
-.car2-scene{position:relative;width:100%;display:flex;align-items:center;justify-content:center}
-/* LE RACCORD DES DEUX VERTS.
-   Le panneau de gauche est vert, et l'« apres » de quatre pieces sur cinq
-   l'est aussi : sans ce voile, deux blocs verts flottent a 117px l'un de
-   l'autre, separes par du beige. Il croit depuis la gauche a mesure que
-   --ba-x diminue, c'est-a-dire exactement quand l'« apres » se devoile.
-   Il deborde du padding (-var(--pad)) pour aller toucher le panneau.
-   Pose sur .car2-scene et non sur .car2-right : .car2-meta, juste dessous,
-   porte du texte sombre qui deviendrait illisible sur du pin. */
-.car2-scene::before{
-  content:"";position:absolute;top:0;bottom:0;
-  left:calc(-1 * var(--pad));right:calc(-1 * var(--pad));
-  background:var(--pine);
-  clip-path:inset(0 var(--ba-x,50%) 0 0);
-  z-index:0;pointer-events:none}
-.car2-scene>*{position:relative;z-index:1}
-/* Retrecie volontairement : c'est ce retrait qui degage la place ou les cartes
-   precedente et suivante viennent depasser. A 100%, elles etaient rognees par
-   l'overflow:hidden de .car2. */
-/* 66% et pas davantage. Condition de non-rognage, pour un decalage d et une
-   echelle s : largeurCarte / largeurPanneau <= 0.5 / (d + s/2).
-   Ici 0.5 / (0.34 + 0.41) = 0.667. Au-dela, la carte laterale sort du cadre et
-   l'overflow:hidden de .car2 la tranche net. */
-.stack{position:relative;width:min(440px,66%);aspect-ratio:4/5;max-height:560px}
-.pcard{position:absolute;inset:0;border-radius:22px;overflow:hidden;
-  border:1px solid var(--line);background:var(--bone-2);
-  box-shadow:0 30px 70px rgba(18,26,18,.18);will-change:transform;
-  transition:transform .7s cubic-bezier(.3,1.22,.5,1),opacity .5s,filter .5s}
-.pcard[data-status="active"]{transform:none;opacity:1;z-index:20}
-/* 34% de decalage pour 82% d'echelle : le bord de la carte laterale ressort
-   alors de ~25% de sa largeur au-dela de la carte active. A 11%/86%, le
-   depassement n'etait que de ~4% — les deux voisines existaient bien, mais
-   restaient cachees DERRIERE l'active. Opacite et flou relaches d'autant :
-   il faut qu'on lise l'image, pas seulement qu'on devine une forme. */
-.pcard[data-status="prev"]{transform:translateX(-34%) scale(.82) rotate(-2.5deg);opacity:.5;z-index:10;filter:blur(1.4px) saturate(.75);pointer-events:none}
-.pcard[data-status="next"]{transform:translateX(34%) scale(.82) rotate(2.5deg);opacity:.5;z-index:10;filter:blur(1.4px) saturate(.75);pointer-events:none}
-.pcard[data-status="hidden"]{transform:scale(.72);opacity:0;z-index:0;pointer-events:none}
-.ba.fill{position:absolute;inset:0;aspect-ratio:auto;max-height:none;border-radius:0;box-shadow:none}
-.ba.fill .ba-layer{padding:clamp(12px,3vw,30px)}
-/* Pieces photographiees (« Le site », « La carte »). L image doit remplir la
-   couche : le padding qui aere les scenes dessinees laisserait ici une bande
-   vide autour de la photo, et le comparateur decouperait du blanc. Le
-   position:absolute se cale sur la padding box de .ba-layer, donc inset:0
-   deborde ce padding sans avoir a l annuler pour les autres pieces.
-   `cover` NE RECADRE PLUS RIEN : depuis le 2 septembre 2026 les quatre
-   fichiers sont livres en 720x900, soit le 4:5 exact de .stack ci-dessus. Il
-   reste comme garde-fou, pour le jour ou .stack changera de format ou ou une
-   photo arrivera dans un autre rapport. Le vrai cadrage est fait en amont,
-   dans les fichiers — feature-carousel.tsx dit ou et pourquoi. */
-.ba-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-
-.car2-meta{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:24px;width:min(460px,100%)}
-.idx-chip{font-size:.62rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;
-  border:1px solid var(--line);border-radius:999px;padding:.6em 1.1em;color:var(--ink);background:var(--bone);white-space:nowrap}
-.car2-desc{flex:1;min-width:200px;font-size:.9rem;color:var(--muted);line-height:1.5;transition:opacity .25s}
-/* Fleches : une de chaque cote, a mi-hauteur de la carte.
-   Le conteneur couvre toute la scene mais laisse passer le pointeur — sinon il
-   masquerait la poignee du comparateur avant/apres, qui se glisse justement au
-   milieu de la carte. Seuls les deux boutons captent le clic. */
-.car2-nav{position:absolute;inset:0;z-index:30;pointer-events:none;margin:0}
-.car2-nav .car-btn{
-  position:absolute;top:50%;
-  /* `translate` est une propriete distincte de `transform` : le centrage
-     survit donc au :hover et a toute transformation ulterieure. */
-  translate:0 -50%;
-  pointer-events:auto;
-  width:52px;height:52px;font-size:1.02rem;
-  background:rgba(250,248,242,.86);
-  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
-  box-shadow:0 6px 22px rgba(18,26,18,.12);
-}
-.car2-nav .car-btn.prev{left:0}
-.car2-nav .car-btn.next{right:0}
-.car2-nav .car-btn:hover{background:var(--ink);color:var(--bone)}
-@media(max-width:900px){
-  .car2{flex-direction:column;min-height:0}
-  .car2-left{width:100%;height:190px}
-  .car2.collapsed .car2-left{width:100%;height:190px}
-  /* `translate` ET NON `transform`, sinon la pile de pastilles s'effondre.
-     feature-carousel.tsx ecrit la position verticale de chaque pastille en
-     style INLINE (`transform:translateY(w * 62px)`). Un `transform` d'auteur
-     en !important appartient a une couche de cascade superieure a l'attribut
-     style : il ne se compose pas avec lui, il le REMPLACE. Le translateY
-     disparaissait donc, et les cinq pastilles se superposaient au meme pixel —
-     mesure sur le composant reel : les cinq a y=3774, contre 3832 / 3894 /
-     3956 / 4018 / 4080 sur grand ecran. Seule la derniere du DOM etait
-     visible, et la pastille active pouvait rester dessous.
-     `translate` est une propriete distincte, appliquee AVANT `transform` : le
-     centrage horizontal et le decalage vertical du JS coexistent, sans
-     !important et sans toucher une ligne de TypeScript. Meme idiome que
-     .car2-nav .car-btn plus haut et .noyau-obj dans noyau.css. */
-  .chip{left:50%;translate:-50% 0;position:absolute}
-  .car2-list .chip{margin-top:-24px;height:48px}
-  .car2-toggle{display:none}
-  .car2-right{padding:22px 16px 26px}
-  /* Sur telephone on relache le decalage plutot que de retrecir la carte :
-     a 66% d'un panneau deja etroit, l'active deviendrait illisible. Avec
-     d=0.26 et s=0.84, la limite remonte a 0.5/(0.26+0.42) = 0.735, donc 70%
-     passe sans rognage — et la carte gagne en surface. */
-  .stack{width:min(440px,70%);max-height:none}
-  .pcard[data-status="prev"]{transform:translateX(-26%) scale(.84) rotate(-2deg)}
-  .pcard[data-status="next"]{transform:translateX(26%) scale(.84) rotate(2deg)}
-  .car2-nav .car-btn{width:44px;height:44px;font-size:.92rem}
-}
 
 /* ═══════════════════════════════════════════════════════════════════════════
    BR — REBRANDING NAWA CORPS
@@ -1065,46 +718,7 @@ html.menu-open .wordmark img { filter: brightness(0) invert(1); }
    a 5,867). Ecart avec l origine : 0,7 point. */
 .giant { font-size: clamp(18vw, 19vw, 20vw); white-space: nowrap; }
 
-/* --- Slogan de marque ---------------------------------------------------- */
-/* UN SEUL endroit dans tout le site, en pied de page, juste avant la bande
-   legale. Il signe la marque sans se disputer l attention avec le hero, qui
-   porte deja sa propre promesse. Reprend la graisse et l espacement de .legal
-   pour se poser dans la meme famille typographique, en un cran plus clair. */
-.br-slogan {
-  padding: 0 var(--pad) 4px;
-  font-size: .72rem;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: rgba(241, 238, 230, .55);
-  text-align: center;
-}
-
-/* ========== pages services ========== */
-/* Les seules classes nouvelles de /services et /services/<slug>. Tout le
-   reste de ces pages reutilise le design system tel quel : .wrap, .sec-head,
-   .meta, .lede, .price-grid, .price, .p-note, .cat-grid, .cat-it, .cat-tout,
-   .sm-it, .sm-grp, .sm-foot, .sm-note, .facts, .faq, .c-row, .btn, .lnk.
-   L INDEX /services N EMPLOIE PLUS .prest-liste NI .sm-it : son catalogue
-   est passe en cartes (.cat-grid, plus haut). Les deux regles qui suivent ne
-   servent donc plus que les pages de detail, qui listent encore des lignes. */
-
-/* La carte du studio bornait ses lignes a une colonne de sa grille ; ici elles
-   vivent en pleine page. Sans limite, le trait pointille de .sm-it traverse les
-   1360 px de .wrap et le prix se retrouve a l'autre bout de l'ecran : on ne lit
-   plus une ligne, on la suit du doigt. 720 px gardent l'intitule et le prix
-   dans le meme regard. */
-.prest-liste{max-width:720px}
-/* La description passe SOUS l'intitule, sur une seconde ligne. C'est ce qui
-   distingue cette page de la carte du studio : la carte liste des noms, le
-   catalogue doit dire ce que recouvre « Sticker vitrine » sans qu'on ait a le
-   demander. row-gap:2px, sinon le gap:.9em de .sm-it s'appliquerait aussi
-   entre les deux lignes et disloquerait la ligne de prix. */
-.prest-liste .sm-it{flex-wrap:wrap;row-gap:2px}
-.prest-liste .sm-it .d{flex:0 0 100%;order:3;font-size:.82rem;line-height:1.5;color:var(--muted);max-width:60ch}
-/* Le trait pointille et le prix perdent leur sens quand ils sont seuls sur leur
-   ligne : sous 560px binacore.css fait deja disparaitre le trait et pousse le
-   prix a droite (regle de .sm-it), on n'ajoute rien. */
-
+/* ========== listes a tiret ========== */
 /* Les listes « ce qui est inclus » / « ce qui ne l'est pas ». .price ul/li
    porte deja ce tiret en tete, mais il est peint pour le fond pin de la grille
    d'accueil (#DCE4DC sur .price li) ; ces pages-ci sont sur fond os. Meme
@@ -1112,13 +726,6 @@ html.menu-open .wordmark img { filter: brightness(0) invert(1); }
 .prest-inc{list-style:none;display:grid;gap:10px;max-width:62ch}
 .prest-inc li{font-size:.95rem;display:flex;gap:.8em}
 .prest-inc li::before{content:"—";color:var(--brass);flex:none}
-/* Deux blocs « il faut monter a … » s'enchainent sur la page de La Vitrine :
-   sans cet ecart, la seconde etiquette .sm-grp collait a la derniere puce du
-   bloc precedent et les deux paliers se lisaient comme un seul.
-   Classe propre plutot qu'un selecteur d'adjacence sur `div` : dans l'autre
-   .prest-liste du site — le catalogue — les enfants directs sont les lignes
-   .sm-it, qui se seraient toutes ecartees de 50px. */
-.prest-palier + .prest-palier{margin-top:clamp(34px,4vw,52px)}
 
 /* ========== cibles tactiles ==========
    BLOC MOBILE UNIQUEMENT (<=860px, le seuil qui fait deja basculer la nav en
@@ -1133,14 +740,13 @@ html.menu-open .wordmark img { filter: brightness(0) invert(1); }
      .c-cols .lnk (le telephone)       99 x 21
      .m-foot a (WhatsApp, e-mail)      73 x 18  et  164 x 18
      .p-note .lnk (demander un devis) 124 x 21
-     .sm-foot .lnk (demander un devis)135 x 22
-   Sept des huit passent sous les 24px que reclame le WCAG 2.2 AA (2.5.8), et
-   les huit sous les 44px recommandes par Apple. Deux d'entre elles sont des
-   CTA de devis : ce sont les liens les plus rentables de la page.
+   (Mesure d origine sur huit liens ; le .sm-foot .lnk de l ancienne carte du
+   studio est parti avec elle.) Tous passent sous les 44px recommandes par
+   Apple, et la plupart sous les 24px que reclame le WCAG 2.2 AA (2.5.8).
 
    La hauteur de 44px a ete verifiee compatible avec l'ecartement vertical
    reel de chaque bande a 390px (.c-cols : 66px entre deux rangees ; .legal :
-   33px ; .p-note : 35px ; .sm-foot : 57px). Aucune de ces surfaces n'en
+   33px ; .p-note : 35px). Aucune de ces surfaces n'en
    recouvre une AUTRE cliquable — au pire elle passe au-dessus d'un <span> de
    texte, qui ne capte aucun clic. */
 @media(max-width:860px){
@@ -1157,8 +763,7 @@ html.menu-open .wordmark img { filter: brightness(0) invert(1); }
   .legal .lnk::before,
   .c-cols .lnk::before,
   .menu .m-foot a::before,
-  .p-note .lnk::before,
-  .sm-foot .lnk::before{
+  .p-note .lnk::before{
     content:"";position:absolute;left:0;right:0;top:50%;
     /* `translate` et non `transform` : coherent avec le reste du fichier, et
        insensible a toute transformation qui viendrait s'ajouter. */

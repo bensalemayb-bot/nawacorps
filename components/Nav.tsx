@@ -1,7 +1,5 @@
 import Image from "next/image";
-import NavServices from "@/components/NavServices";
 import SelecteurLangue from "@/components/SelecteurLangue";
-import { ENTREES_FAMILLES, HREF_SERVICES } from "@/lib/catalogue-familles";
 import { dictionnaire } from "@/lib/dictionnaires";
 import { lien, type Locale } from "@/lib/i18n";
 
@@ -38,28 +36,19 @@ import { lien, type Locale } from "@/lib/i18n";
 // lecteur d ecran annoncerait deux fois la meme marque. C est le nom qui porte
 // le texte alternatif.
 //
-// CINQ ENTREES SONT DEVENUES QUATRE, ET C EST LE CONSTAT DU PROPRIETAIRE :
-// « service, offre et prestation veulent dire la meme chose ». La barre portait
-// les trois — « Services » vers une ancre de l accueil, « Offres » vers une
-// autre ancre du meme accueil, « Prestations » vers une page. Le visiteur
-// devait deviner laquelle contenait quoi, et il ne devine pas : il part.
-// « Offres » et « Prestations » quittent donc la nav. Les sections de l accueil
-// ne bougent pas d un pixel et gardent leurs ancres — c est la nav qui cesse de
-// les dedoubler, pas la page qui perd du contenu.
+// CINQ ENTREES ET UNE PASTILLE. Depuis le 24 octobre 2026, le site ne vend
+// plus qu une chose, l assistant : « L offre » mene a la section (05) de
+// l accueil, ou se lisent le parcours et le prix ; le deroulant des anciennes
+// familles est parti avec elles. « Métiers » (le hub /metiers) s est ajoute
+// le 25 octobre 2026, quand le site s est ouvert a tous les metiers, puis
+// « Démonstrations » le meme jour : la page des exemples d automatisation par
+// metier (/demonstrations), qui avait quitte la nav avec l ancienne offre et y
+// revient avec la nouvelle. Elle suit « Métiers » : on lit son metier, puis
+// on voit comment l assistant le traite.
 //
-// LA SEULE ENTREE QUI S OUVRE EST « Services », et son deroulant vit dans
-// components/NavServices.tsx : il a un etat, donc il est client, et il est le
-// seul de ce fichier a l etre. La liste des familles n est pas ecrite ici — elle
-// est derivee de lib/familles.ts par lib/catalogue-familles.ts, la meme source
-// que le menu plein ecran. Deux listes ecrites a deux endroits divergent.
-//
-// LA BARRE EST BILINGUE DEPUIS LE CHANTIER ANGLAIS, ET ELLE NE CHANGE RIEN AU
-// FRANCAIS. `locale` vaut « fr » par defaut : un appelant qui ne la passe pas
-// — il n en reste aucun, mais la garantie compte — rend exactement le HTML
-// d avant, a l octet pres. Les libelles viennent du dictionnaire
-// (lib/dictionnaires/), les chemins passent tous par `lien` : en francais
-// celle-ci rend le chemin TEL QUEL, si bien que les huit href de cette barre
-// sont inchanges.
+// LA BARRE EST BILINGUE : les libelles viennent du dictionnaire
+// (lib/dictionnaires/), les chemins passent tous par `lien`, qui rend le chemin
+// francais tel quel et prefixe `/en` en anglais.
 export default function Nav({ locale = "fr" }: { locale?: Locale }) {
   // volontaire — next/link casserait les reveals (Interactions ne tourne qu'une fois), voir décision B7
 
@@ -116,38 +105,22 @@ export default function Nav({ locale = "fr" }: { locale?: Locale }) {
           le composant un client component pour une seule horloge. */}
       <span className="nav-time" id="clock" suppressHydrationWarning>{`${t.nav.horlogeVille} — ${heureGeneve}`}</span>
       <div className="nav-r">
-        {/* « Travaux » DEVIENT « Démonstrations », ET CHANGE DE DESTINATION.
-            Le mot promettait des references clients ; le studio a un client et
-            zero reference de site (.agents/product-marketing.md §9), et ce que
-            la section montre sont des DEMONSTRATIONS — c est le mot qui les
-            etiquette deja a l ecran (components/VignettePrestation.tsx). Le lien
-            quitte en meme temps l ancre de l accueil pour la page dediee : une
-            ancre oblige a recharger l accueil entier depuis n importe quelle
-            autre page, et depose le visiteur au milieu d un ecran qu il n a pas
-            demande. */}
+        <a className="lnk" href={lien(locale, "/#offres")}>{t.nav.services}</a>
+        <a className="lnk" href={lien(locale, "/metiers")}>{t.nav.metiers}</a>
         <a className="lnk" href={lien(locale, "/demonstrations")}>{t.nav.demonstrations}</a>
-        <NavServices
-          general={{ href: HREF_SERVICES, libelle: t.nav.tousLesServices }}
-          familles={ENTREES_FAMILLES}
-          locale={locale}
-        />
         <a className="lnk" href={lien(locale, "/studio")}>{t.nav.studio}</a>
         <a className="lnk" href={lien(locale, "/contact")}>{t.nav.contact}</a>
         {/* LE SELECTEUR DE LANGUE, entre la derniere entree et la pastille.
             Il ne rend RIEN tant que la page courante n existe pas dans l autre
-            langue — aujourd hui, tout sauf l accueil. Il ne rend pas non plus
+            langue. Il ne rend pas non plus
             d enveloppe : ses deux ancres sont des enfants directs de `.nav-r`,
             ce qui leur donne le dessin des entrees voisines et, surtout, les
             fait disparaitre proprement sous 860px. Le detail est explique dans
             components/SelecteurLangue.tsx — un `<span>` autour aurait pousse le
             burger de 32px sur telephone. */}
         <SelecteurLangue locale={locale} contexte="barre" />
-        {/* LA PASTILLE MENE AU DEVIS, PLUS A UNE ANCRE. Elle pointait sur
-            `/#contact`, c est-a-dire sur le pied de page de l ACCUEIL : depuis
-            /services, /studio ou une page de formule, le seul bouton visible en
-            permanence rechargeait la page d entree et faisait recommencer le
-            visiteur au debut. /devis est une page a elle seule — elle ouvre
-            l assistant et rend le formulaire, sans rien faire perdre. */}
+        {/* LA PASTILLE MENE A LA DEMANDE DE DEMO (/devis), visible en
+            permanence depuis toutes les pages, sans recharger l accueil. */}
         <a className="pill" href={lien(locale, "/devis")}>{t.nav.devis}</a>
         <button className="burger" id="burger" aria-label={t.nav.ouvrirMenu} aria-expanded="false"><i></i><i></i></button>
       </div>

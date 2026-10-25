@@ -33,8 +33,7 @@ import {
  *
  * Reste `usePathname()`, qui est l API PUBLIQUE prevue pour ca. Elle impose un
  * composant client, et le cout est reel mais minuscule : deux ancres, aucun
- * etat, aucun effet, aucun ecouteur. La nav embarque deja un composant client
- * autrement plus lourd (`NavServices` et son deroulant).
+ * etat, aucun effet, aucun ecouteur.
  *
  * ELLE NE CASSE RIEN DU MODELE DE NAVIGATION DU SITE. Ce sont des `<a>` nus,
  * pas des `next/link` — decision B7 : une navigation client-side ne rejouerait

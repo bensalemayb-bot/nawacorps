@@ -1,13 +1,22 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
+import AncresPage from "@/components/AncresPage";
+import BandeauCookies from "@/components/BandeauCookies";
 import ChatWidget from "@/components/ChatWidget";
 import Cursor from "@/components/Cursor";
 import Interactions from "@/components/Interactions";
+import LiensLegaux from "@/components/LiensLegaux";
 import Loader from "@/components/Loader";
 import MenuOverlay from "@/components/MenuOverlay";
 import Nav from "@/components/Nav";
 import NoyauStage from "@/components/NoyauStage";
-import { EN_TETE_LOCALE, LOCALE_DEFAUT, estLocale } from "@/lib/i18n";
+import {
+  EN_TETE_CHEMIN,
+  EN_TETE_LOCALE,
+  LOCALE_DEFAUT,
+  aPiedComplet,
+  estLocale,
+} from "@/lib/i18n";
 import { SITE_NAME, SITE_URL, alternatesPage } from "@/lib/site";
 
 /**
@@ -41,28 +50,12 @@ import { SITE_NAME, SITE_URL, alternatesPage } from "@/lib/site";
  * mentions-legales/page.tsx ressort « Mentions légales — Nawa Corps ». Les
  * deux pages legales repetaient ce suffixe a la main ; elles ne le font plus.
  *
- * L ORDRE DES MOTS DU TITRE A CHANGE, et c est deliberé. « Nawa Corps —
- * Studio de création digitale, Genève » mettait la marque en premier :
- * personne ne cherche
- * encore « Nawa Corps ». Ce qui se cherche, c est un studio a Geneve. La
- * marque passe donc en fin de titre, la ou elle signe sans occuper la place
- * que les moteurs lisent en premier.
- *
- * LE TITRE RESTE CENTRE SUR LA REFONTE, LA DESCRIPTION NON. « Refonte de site
- * pour PME a Geneve » est la requete qui se cherche : c est le produit d
- * entree, il garde le titre. La description, elle, ne peut plus s y limiter —
- * le studio vend aussi de l identite, des imprimes, des photos, la fiche Google
- * et la production des reseaux sociaux, et un extrait de resultat qui n en dit
- * rien fait perdre les visiteurs venus pour ca. Les montants ont quitte ces
- * chaines au passage : les prix vivent en base (lib/catalogue.ts), et une
- * metadonnee statique ne sait pas les relire.
- *
- * L ORDRE DES DEUX MOITIES A ETE INVERSE. Les trois descriptions ouvraient sur
- * la refonte puis rattrapaient le reste du catalogue par « Autour du site : »
- * ou « Et le site n est pas tout — » : la moitie du metier arrivait en
- * appendice, exactement le defaut que le h1 du hero portait aussi. Le metier
- * passe donc devant, la refonte suit avec son delai. Le titre, lui, ne bouge
- * pas : c est la requete, pas la definition.
+ * LE TITRE PORTE LA REQUETE, la marque signe a la fin (sur l accueil, le
+ * `default` ne passe pas par le `template` : il l ecrit lui-meme). Depuis le 24 octobre 2026, la requete
+ * est « assistant IA » + « PME » + « Genève » (docs/agents/copy/meta.md §1,
+ * arbitrage n°1 : « IA » est dans le titre). La description, elle, met le
+ * resultat avant l IA (guide de voix §4) et ne porte aucun montant : une
+ * metadonnee statique ne sait pas relire la base.
  *
  * `canonical` est declaree ICI, au layout, et vaut donc « / » pour l accueil.
  * Chaque page fille redeclare la sienne — une canonique heritee ferait pointer
@@ -82,29 +75,34 @@ import { SITE_NAME, SITE_URL, alternatesPage } from "@/lib/site";
  * pas de version anglaise. Le jour ou l une est traduite, elle passera a son
  * tour par `alternatesPage`.
  */
+/*
+ * Titre et description de l audit CRO/SEO du 25.10.2026 (§4.4) : la marque
+ * signe le titre, puisque le `default` ne passe pas par le `template`.
+ */
+const TITRE_ACCUEIL = "Assistant IA pour artisans et PME à Genève · Nawa Corps";
+const DESCRIPTION_ACCUEIL =
+  "Il prépare vos devis, relance et prend les demandes, sans jamais s'engager à votre place. Vous le voyez, vous l'essayez deux semaines, vous payez après.";
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Refonte de site pour PME à Genève — en une semaine",
+    default: TITRE_ACCUEIL,
     template: `%s — ${SITE_NAME}`,
   },
-  description:
-    "Studio de création digitale à Genève : sites, identité, imprimés, photos, réseaux sociaux. Le site des PME refait en une semaine, vous n'avez rien à préparer.",
+  description: DESCRIPTION_ACCUEIL,
   alternates: alternatesPage("/"),
   openGraph: {
     type: "website",
     locale: "fr_CH",
     siteName: SITE_NAME,
     url: "/",
-    title: "Refonte de site pour PME à Genève — en une semaine",
-    description:
-      "Site, identité, imprimés, photos, réseaux sociaux : le tout au même endroit, à Genève. Le site est refait en une semaine et vous n'avez rien à préparer — nous reprenons les textes de votre site actuel.",
+    title: TITRE_ACCUEIL,
+    description: DESCRIPTION_ACCUEIL,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Refonte de site pour PME à Genève — en une semaine",
-    description:
-      "Site, identité, imprimés, photos, réseaux sociaux : le tout au même endroit, à Genève. Le site est refait en une semaine et vous n'avez rien à préparer — nous reprenons les textes de votre site actuel.",
+    title: TITRE_ACCUEIL,
+    description: DESCRIPTION_ACCUEIL,
   },
 };
 
@@ -129,8 +127,8 @@ export const metadata: Metadata = {
  * ne tourne ni sur /admin, ni sur /api, ni sur les fichiers statiques) ou valeur
  * inconnue fabriquee a la main, et `estLocale` rend `false`.
  *
- * TROIS ELEMENTS DE CHROME RECOIVENT LA LANGUE ICI : `Nav`, `MenuOverlay` et
- * `ChatWidget`. `FooterContact` et `ContactForm` sont rendus par les PAGES,
+ * CINQ ELEMENTS DE CHROME RECOIVENT LA LANGUE ICI : `Nav`, `MenuOverlay`,
+ * `ChatWidget`, `LiensLegaux` et `BandeauCookies` (depuis le 25 octobre 2026). `FooterContact` et `ContactForm` sont rendus par les PAGES,
  * chacune passe la sienne. `Loader`, `Cursor`, `Interactions` et `NoyauStage`
  * n affichent aucun mot.
  *
@@ -140,8 +138,15 @@ export const metadata: Metadata = {
  * qui lui repondait en francais. Une seule prop corrige les deux moities.
  */
 export default async function SiteLayout({ children }: LayoutProps<"/">) {
-  const entete = (await headers()).get(EN_TETE_LOCALE);
+  const enTetes = await headers();
+  const entete = enTetes.get(EN_TETE_LOCALE);
   const locale = estLocale(entete) ? entete : LOCALE_DEFAUT;
+  // LA BANDE DES LIENS LEGAUX N EST RENDUE QUE SUR LES PAGES SANS PIED
+  // COMPLET (lib/i18n.ts, `CHEMINS_AVEC_PIED`). Sans en-tete — chemin que le
+  // proxy ne voit pas —, elle est rendue : mieux vaut un doublon masque en CSS
+  // qu une page sans mentions legales.
+  const chemin = enTetes.get(EN_TETE_CHEMIN);
+  const bandeLegale = !(chemin && aPiedComplet(chemin));
 
   return (
     <>
@@ -172,12 +177,32 @@ export default async function SiteLayout({ children }: LayoutProps<"/">) {
       {/* ChatWidget est en position:fixed — il reste HORS du wrapper,
           pour la meme raison que nav/loader/cursor ci-dessus. */}
       <ChatWidget locale={locale} />
+      {/* BandeauCookies est en position:fixed lui aussi : hors du wrapper.
+          Il ne rend rien cote serveur, et rien du tout une fois ferme
+          (components/BandeauCookies.tsx). */}
+      <BandeauCookies locale={locale} />
+      {/* Les liens `#ancre` sous le scroll inertiel : components/AncresPage.tsx. */}
+      <AncresPage />
       {/* NoyauStage est en position:fixed : meme raison encore. Il precede
           volontairement #smoothWrap — a z-index egal l ordre du DOM tranche, et
           le noyau doit rester DERRIERE le contenu qui lui passe dessus.
           Il ne s active que sur l accueil, seule page a poser #noyau-track. */}
       <NoyauStage />
-      <div id="smoothWrap"><div id="smooth">{children}</div></div>
+      {/* <main> ENVELOPPE LE CONTENU DE CHAQUE PAGE (25 octobre 2026). Le site
+          n en avait aucun : lecteurs d ecran et agents d IA n avaient pas de
+          repere pour sauter la navigation. Il vit DANS #smooth, jamais
+          autour de #smoothWrap : il ne porte ni transform ni position, il ne
+          change donc rien au scroll inertiel ni aux elements fixes.
+          LiensLegaux suit <main> : Mentions legales · Confidentialite · CGV
+          sur les pages qui n ont pas le pied complet. La ou le pied les porte
+          deja, elle n est plus rendue du tout (audit CRO/SEO du 25.10.2026 :
+          le HTML de l accueil portait deux fois les trois liens). */}
+      <div id="smoothWrap">
+        <div id="smooth">
+          <main id="contenu">{children}</main>
+          {bandeLegale && <LiensLegaux locale={locale} />}
+        </div>
+      </div>
     </>
   );
 }

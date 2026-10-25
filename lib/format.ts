@@ -16,9 +16,10 @@ import type { Locale } from "@/lib/i18n";
  * CE FICHIER EST BILINGUE DEPUIS LE CHANTIER ANGLAIS, ET IL L EST D UNE SEULE
  * FACON : les MOTS changent de langue, les CHIFFRES jamais.
  *
- *  - « TVA comprise » devient « VAT included », « sur devis » devient « on
- *    request » — termes IMPOSES par docs/agents/brand/glossaire-anglais.md §3,
- *    qui interdit explicitement « incl. VAT », « TTC » et « plus VAT ».
+ *  - « pas de TVA (entreprise non assujettie) » devient « no VAT (business
+ *    not VAT-registered) », « sur devis » devient « on request ». Le
+ *    glossaire (docs/agents/brand/glossaire-anglais.md §3) interdit toujours
+ *    « incl. VAT », « TTC » et « plus VAT ».
  *  - `699.–` et `1'499.–` s ecrivent PAREIL en anglais : meme apostrophe de
  *    milliers, meme suffixe `.–`. Ni `CHF 699`, ni `699 CHF`, ni `€`. C est
  *    une regle du glossaire (§5) et non une commodite : le montant est un
@@ -63,9 +64,8 @@ export const CHF_UNIT = ".–";
  *
  * Les quatre constantes historiques (`QUOTE_LABEL`, `FROM_PREFIX`,
  * `MONTHLY_SUFFIX`, `TVA_LABEL`) SURVIVENT et sont derivees de ces tables :
- * six fichiers les importent, dont `lib/familles.ts`. Les garder evite de
- * toucher a six fichiers ; les DERIVER evite qu une valeur francaise existe a
- * deux endroits et diverge.
+ * des appelants historiques les importent encore (dont /admin). Les DERIVER
+ * evite qu une valeur francaise existe a deux endroits et diverge.
  */
 const LIBELLES_DEVIS: Record<Locale, string> = {
   fr: "sur devis",
@@ -93,16 +93,29 @@ const SUFFIXES_MENSUELS: Record<Locale, string> = {
  * montant, et non dans une phrase de bas de grille : ce qui affiche un prix
  * doit avoir la mention sous la main.
  *
- * lib/familles.ts la reprend telle quelle dans sa phrase longue. Deux copies
- * du meme mot divergent toujours, et celle-ci a valeur legale.
+ * Les gabarits de prix du dictionnaire la recoivent par `avecPrix()`
+ * (lib/catalogue.ts), jamais recopiee. Deux copies du meme mot divergent
+ * toujours, et celle-ci a valeur legale.
  *
- * EN ANGLAIS C EST « VAT included », ET RIEN D AUTRE. Le glossaire §3 proscrit
- * nommement « incl. VAT », « TTC » et « plus VAT ». « plus VAT » dirait meme
- * l inverse du francais : hors taxe au lieu de toutes taxes comprises.
+ * POURQUOI « PAS DE TVA » ET PLUS « TVA COMPRISE » (25 octobre 2026). Nawa
+ * Corps est une raison individuelle NON ASSUJETTIE a la TVA : chiffre
+ * d affaires sous le seuil de 100'000.– (LTVA art. 10 al. 2 let. a). Ecrire
+ * « TVA comprise » laissait croire qu une TVA etait facturee et reversee, ce
+ * qui est faux — et la LCD (art. 3 al. 1 let. b) vise les indications
+ * inexactes sur les prix. Le montant affiche est le montant paye, sans
+ * aucune taxe a ajouter.
+ *
+ * LE JOUR OU LE SEUIL EST FRANCHI, l assujettissement devient obligatoire :
+ * cette table se corrige alors, avec les CGV (/cgv) et le JSON-LD de
+ * /services, qui declare l absence de TVA en omettant `valueAddedTaxIncluded`.
+ *
+ * EN ANGLAIS : « no VAT (business not VAT-registered) ». Le glossaire §3
+ * proscrit toujours « incl. VAT », « TTC » et « plus VAT » — « plus VAT »
+ * dirait meme qu une taxe s ajoute, l inverse de la verite.
  */
 const MENTIONS_TVA: Record<Locale, string> = {
-  fr: "TVA comprise",
-  en: "VAT included",
+  fr: "pas de TVA (entreprise non assujettie)",
+  en: "no VAT (business not VAT-registered)",
 };
 
 /** Le libelle du prix libre, dans la langue demandee. */
@@ -131,7 +144,7 @@ export function mentionTva(locale: Locale = "fr"): string {
  * Elles ne sont PAS depreciees : dans un composant qui ne connait pas encore
  * sa langue, elles disent au moins la verite du site francais. Un composant
  * qui recoit une `locale` doit en revanche appeler la fonction — sinon la page
- * anglaise affiche « TVA comprise » sous un prix, ce qui est exactement le
+ * anglaise affiche la mention francaise sous un prix, ce qui est exactement le
  * genre de detail que personne ne relit.
  */
 export const QUOTE_LABEL = LIBELLES_DEVIS.fr;

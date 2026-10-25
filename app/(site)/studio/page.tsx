@@ -1,10 +1,10 @@
-import Image from "next/image";
 import type { Metadata } from "next";
 import SchemaPage from "@/components/SchemaPage";
-import BoutonDevis from "@/components/BoutonDevis";
 import FooterContact from "@/components/FooterContact";
+import { METIERS } from "@/lib/metiers";
 import {
   LANGUES,
+  SAME_AS,
   SITE_NAME,
   SITE_URL,
   alternatesPage,
@@ -13,97 +13,40 @@ import {
 } from "@/lib/site";
 
 /**
- * /studio — QUI EST LE STUDIO.
+ * /studio — QUI FAIT LE TRAVAIL.
  *
- * POURQUOI CETTE PAGE EXISTE. Tout ce que le site disait du studio tenait dans
- * la section (04) de l accueil (components/Studio.tsx) : trois paragraphes et
- * trois chiffres. C est court pour une decision d achat prise par un dirigeant
- * qui ne connait ni le nom ni le visage d en face. Cette page repond aux cinq
- * questions qu il se pose avant d engager : qui fait le travail, comment ca se
- * passe, ce que le studio sait faire, ce qu il refuse, et ce qu il peut
- * prouver.
+ * Cette page repond aux cinq questions d un patron avant d appeler : qui, comment
+ * se passent la demo et l essai, une base par metier (/metiers), ce que nous ne
+ * prenons pas, et ce qu il peut verifier lui-meme (Leo, en bas de l ecran).
+ * Textes : docs/agents/copy/studio.md.
  *
- * ELLE NE REPETE PAS LA SECTION DE L ACCUEIL. Studio.tsx dit QUI, en trois
- * phrases ; cette page dit COMMENT, en six moments, et surtout CE QUE LE
- * STUDIO NE FAIT PAS — l anti-ICP du positionnement §2, qu aucune page ne
- * portait encore.
+ * AUCUNE PREUVE INVENTEE, ET AUCUN AVEU DE DEBUTANT (decision d Ayoub du
+ * 25.10.2026). La page parle de methode et de controle, verifiables par le
+ * patron lui-meme (la demo sur son metier, l essai sur ses demandes) ; elle
+ * n affirme aucun client, aucun nombre de clients, d annees ou de projets, et
+ * ne dit pas non plus qu il n y en a pas. Aucune reference, aucun avis, aucun
+ * effectif, aucun bureau (LCD art. 3).
+ * Aucune mention du developpeur (arbitrage B2 du 24.10.2026).
  *
- * LA PREUVE, ET SON ABSENCE. Le studio a un client et aucune reference de
- * site : rien n est donc affirme ici qui ne soit verifiable, et AUCUNE
- * reference, AUCUN avis, AUCUN compteur d usage n est invente — LCD art. 3,
- * et le depot s est deja fait rattraper une fois sur ce point precis. Ce qui
- * remplace la preuve sociale est la section (05) : l assistant vendu au
- * troisieme palier tourne sur ce site meme, en bas de l ecran, et le visiteur
- * peut le mettre en defaut sans croire personne. C est la seule preuve qu il
- * manipule au lieu de la lire.
+ * AUCUN MONTANT ICI. Le seul montant affiche du site, la mise en place, est lu
+ * en base et vit sur l accueil et /services. La page ne lit donc pas Postgres
+ * et reste statique.
  *
- * ET LA PAGE NE S AUTO-DENIGRE PAS. Ne revendiquer aucune reference est une
- * obligation ; ecrire qu on n en a pas est un choix, et il coute la vente
- * (guide de voix §4). Le silence sur un negatif n est pas une affirmation
- * fausse.
+ * PAS D IMAGE. La photographie d atelier montrait l ancien metier (papiers,
+ * specimen typographique) ; elle reviendra avec une image d un geste de metier,
+ * et son alt avec elle — jamais un alt sans image reelle.
  *
- * DECISION DU 31 AOUT 2026 — « NOUS » REMPLACE « JE », ET LA REVENDICATION
- * D ETRE SEUL DISPARAIT. C etait LA page qui la vendait : son h1, sa section
- * (01) « une seule personne, et vous lui parlez » et le titre « une seule
- * main » de la section (03) reposaient tous dessus. Elle a donc ete REECRITE,
- * pas conjuguee — mettre « nous » partout aurait donne les memes phrases au
- * pluriel. Ce qui est garde : ce que le studio fait, ce qu il ne fait pas,
- * l absence de bureau, et le fait que le lecteur parle a qui fait le travail.
- * Ce qui n est PAS ajoute pour combler : aucun effectif, aucune equipe, aucun
- * bureau, aucune anciennete — le pluriel grammatical n autorise rien de plus
- * que le singulier (guide de voix §4 ; LCD art. 3 sur les indications
- * trompeuses).
- *
- * ET « GOOGLE » NE DESIGNE PLUS UNE PRESTATION, meme decision du meme jour.
- * La sixieme ligne de travail — « Fiche Google » — est retiree de la section
- * (03), qui en compte donc cinq. Le mot peut encore decrire un fait ; il ne
- * nomme plus une chose vendue.
- *
- * LE TROISIEME PARAGRAPHE DE LA SECTION (01) N EST PAS DECORATIF.
- * « Aucune sous-traitance » est faux — la production des reseaux sociaux se
- * fait avec un partenaire, et lib/familles.ts comme ServicesRows l ecrivent en
- * toutes lettres. Une page qui affirmerait le contraire se contredirait a un
- * clic d ici. Le partenaire n est PAS nomme : c est une decision fermee du
- * projet.
- *
- * AUCUN MONTANT N EST ECRIT ICI, ni a l ecran ni en donnee structuree. Les
- * prix vivent en base (table Service) et se lisent sur /services ; un montant
- * fige dans un fichier de page finit toujours par contredire la grille. La
- * page ne lit donc PAS Postgres et reste statique : pas de force-dynamic, et
- * `next build` passe base eteinte.
- *
- * ZERO CLASSE NOUVELLE. La page se monte sur le design system existant —
- * .wrap, .sec-head, .meta, .index, h1.t / h2.t, .lede, .studio-txt, .facts,
- * .prest-inc, .sm-grp, .c-row, .btn, .lnk. Aucune regle n est ajoutee a
- * app/binacore.css ni ailleurs.
- *
- * PAS DE next/link : Interactions.tsx ne s initialise qu une fois, une
- * navigation client-side laisserait les [data-reveal] de la page d arrivee a
- * opacity:0. Des <a> classiques, comme partout sur le site public.
+ * PAS DE next/link : Interactions.tsx ne s initialise qu une fois (decision
+ * B7). Des <a> classiques, comme partout sur le site public.
  */
 
 /**
- * Le suffixe « — Nawa Corps » vient du `template` du layout (site) : l ecrire
- * ici le doublerait.
- *
- * LE BLOC `twitter` EST REDECLARE EN ENTIER, et ce n est pas une redondance :
- * la fusion des metadata de Next ne descend pas dans les objets. Sans lui,
- * cette page heriterait du `twitter` de l accueil — titre et description de
- * l accueil sur la carte de partage de /studio.
- *
- * `alternates` PASSE PAR `alternatesPage` DEPUIS QUE /en/studio EXISTE. La
- * canonique ne bouge pas — « /studio », comme avant —, mais la fonction AJOUTE
- * les `hreflang` : `fr-CH` et `x-default` sur cette page, `en-CH` sur sa
- * jumelle. LES DEUX SENS SONT OBLIGATOIRES : une page anglaise qui declare sa
- * jumelle francaise sans que celle-ci lui rende la pareille voit son groupe
- * ignore par Google, et les deux versions se remettent a se concurrencer.
- * `en-CH` n est emis que si « /studio » figure dans `CHEMINS_TRADUITS`
- * (lib/i18n.ts) — annoncer une jumelle qui repond 404 est pire que de ne rien
- * annoncer.
+ * Le suffixe « — Nawa Corps » vient du `template` du layout (site). Titre et
+ * description de l audit CRO/SEO du 25.10.2026 (§4.4).
  */
-const TITRE = "Ayoub Bensalem, studio de création digitale à Genève";
+const TITRE = "Ayoub Bensalem, assistants IA pour PME à Genève";
 const DESCRIPTION =
-  "Qui fait le travail, à Genève. Ce que le studio sait faire, ce qu'il ne prend pas, et comment se passe une refonte, du premier message à la mise en ligne.";
+  "Qui fait le premier appel, la démo et le suivi. Une base par métier. Il ne s'engage jamais à votre place. Ce que nous ne prenons pas.";
 
 export const metadata: Metadata = {
   title: TITRE,
@@ -114,6 +57,8 @@ export const metadata: Metadata = {
     description: DESCRIPTION,
     chemin: "/studio",
   }),
+  // Redeclare en entier : la fusion des metadata ne descend pas dans les
+  // objets, sans lui la carte de partage reprendrait celle de l accueil.
   twitter: {
     card: "summary_large_image",
     title: `${TITRE} — ${SITE_NAME}`,
@@ -124,28 +69,10 @@ export const metadata: Metadata = {
 /**
  * AboutPage + Person, rattachees au studio par @id.
  *
- * Le studio lui-meme n est PAS redeclare ici : components/SchemaStudio.tsx
- * emet le ProfessionalService sur l accueil sous l @id `/#studio`, et deux
- * fiches du meme prestataire qui divergeraient d un mot valent moins qu une
- * seule, referencee. C est deja la regle des pages de formule — et c est
- * pourquoi la `Person` ci-dessous se rattache au studio par `worksFor`
- * plutot que de recopier ses coordonnees.
- *
- * LA PAGE QUI NOMME L EXPLOITANT NE DECLARAIT AUCUNE `Person`.
- *
- * Elle n emettait qu une `AboutPage` renvoyant au n ud du studio
- * (`/#studio`). Or le nom de l exploitant est public et il s ecrit ici comme
- * dans les mentions legales (guide de voix §10) : un moteur n avait aucun
- * moyen de relier ce nom au studio. Le n ud dit QUI exploite le studio — pas
- * combien de personnes y travaillent, ce qui ne s ecrit nulle part.
- *
- * Le n ud porte le meme `@id` que le `founder` declare sur l accueil
- * (components/SchemaStudio.tsx) : les deux descriptions se fondent en une
- * seule entite au lieu de creer deux Ayoub Bensalem sans lien.
- *
- * PAS D `image` TANT QU IL N Y A PAS DE PHOTOGRAPHIE. Pointer une image
- * inexistante vaut moins que ne rien declarer — c est la ligne « portrait »
- * de l inventaire des visuels a fournir.
+ * Le studio n est pas redeclare : components/SchemaStudio.tsx emet le
+ * ProfessionalService sous `/#studio`. La Person porte le meme `@id` que le
+ * `founder` de l accueil, pour qu un moteur n y voie qu une entite. Pas
+ * d `image` tant qu il n y a pas de portrait.
  */
 const SCHEMA = {
   "@context": "https://schema.org",
@@ -163,10 +90,12 @@ const SCHEMA = {
       "@type": "Person",
       "@id": `${SITE_URL}/#ayoub`,
       name: "Ayoub Bensalem",
-      jobTitle: "Designer et développeur",
+      jobTitle: "Fondateur",
       url: `${SITE_URL}/studio`,
       worksFor: { "@id": `${SITE_URL}/#studio` },
       knowsLanguage: [...LANGUES],
+      // Vide tant que le profil LinkedIn n est pas donne (lib/site.ts).
+      ...(SAME_AS.ayoub.length ? { sameAs: [...SAME_AS.ayoub] } : {}),
     },
   ],
 };
@@ -186,7 +115,7 @@ export default function StudioPage() {
         ]}
       />
 
-      {/* ---------- Qui, où, et en combien de temps ---------- */}
+      {/* ---------- En-tête ---------- */}
       <section>
         <div className="wrap">
           <div className="sec-head">
@@ -203,37 +132,35 @@ export default function StudioPage() {
           </div>
 
           <p className="lede" data-reveal>
-            Nawa Corps est le studio de création digitale d&apos;Ayoub
-            Bensalem, à Genève. Cette page dit comment se passe une refonte,
-            ce que nous savons faire, et ce que nous ne prenons pas.
+            Nawa Corps est un studio genevois qui installe des assistants IA
+            dans les PME. Cette page dit qui le fait, comment se passe
+            l&apos;essai, et ce que nous ne prenons pas.
           </p>
 
-          {/* .facts : le meme bandeau que la section « Le studio » de l accueil
-              et que les pages de formule. « Une semaine » ne voyage jamais
-              seule (guide de voix §5) — la colonne suivante porte son point de
-              depart, dans la meme unite de lecture. */}
           <div className="facts" data-reveal>
             <div>
               <b>Ayoub Bensalem</b>
-              <span>Designer et développeur</span>
+              <span>Premier appel et suivi</span>
             </div>
             <div>
               <b>Genève</b>
               <span>Et sa région</span>
             </div>
             <div>
-              <b>Une semaine</b>
-              <span>Refonte livrée</span>
+              {/* Un fait verifiable (lib/metiers.ts), dit sans effet de
+                  compteur : le chiffre est dans la phrase, pas en gros. */}
+              <b>Par métier</b>
+              <span>{`${METIERS.length} métiers, une base pour chacun`}</span>
             </div>
             <div>
-              <b>Dès votre feu vert</b>
-              <span>Départ du délai</span>
+              <b>En Suisse</b>
+              <span>Données de l&apos;assistant</span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ---------- Qui fait le travail ---------- */}
+      {/* ---------- (01) Qui vous parle ---------- */}
       <section style={{ paddingTop: 0 }}>
         <div className="wrap">
           <div className="sec-head">
@@ -251,75 +178,19 @@ export default function StudioPage() {
 
           <div className="studio-txt" data-reveal>
             <p>
-              Ayoub Bensalem, designer et développeur, à Genève. Le studio
-              n&apos;a ni commercial ni chargé de compte : personne ne vous vend
-              le travail pour passer ensuite le dossier à quelqu&apos;un
-              d&apos;autre. Vous parlez à qui fait le travail, du premier
-              message à la mise en ligne.
+              Ayoub Bensalem a fondé le studio. Il fait le premier appel, la
+              démo et le suivi de chaque semaine. Vous n&apos;êtes pas passé
+              d&apos;un commercial à un chef de projet.
             </p>
             <p>
-              Pas de bureaux non plus, et c&apos;est assumé. On se voit chez
-              vous — c&apos;est là que se trouve le métier dont il faut parler,
-              et souvent les photos qu&apos;il faudra faire — ou par téléphone
-              si c&apos;est plus simple pour vous.
+              Pas de bureau, et c&apos;est assumé. Le premier appel se fait au
+              téléphone. C&apos;est chez vous que sont les demandes.
             </p>
-            <p>
-              Une exception, et elle est écrite : la production des réseaux
-              sociaux se fait avec un partenaire de production du studio. Le
-              calendrier, les réponses et le rendu du travail restent de notre
-              côté — vous n&apos;avez qu&apos;une conversation à suivre.
-            </p>
-            <p>
-              Un an après la mise en ligne, l&apos;adresse à qui écrire n&apos;a
-              pas changé, et le studio qui a fait le site est toujours celui qui
-              répond. Un tarif qui bouge, une affiche pour la rentrée, une
-              question de plus dans le formulaire : c&apos;est le même fil de
-              discussion.
-            </p>
-          </div>
-
-          {/* CE QUE CETTE IMAGE MONTRE, ET CE QU ELLE NE MONTRE PAS.
-
-              Elle montre les MATIERES du metier : des papiers, un specimen
-              typographique, une regle, un compte-fils. Elle ne montre ni
-              local, ni bureau, ni personne, ni piece cliente finie — et
-              aucun de ces trois manques n est un hasard.
-
-              PAS DE LOCAL : le studio n en a pas, le paragraphe juste
-              au-dessus le dit en toutes lettres (« Pas de bureaux non plus »),
-              lib/site.ts:69 le redit, et une photo de bureau les aurait
-              contredits dans le meme ecran. Affirmer des locaux inexistants
-              releve de la LCD art. 3 au meme titre qu une reference inventee.
-
-              PAS DE PIECE CLIENTE : le specimen ne porte QUE des lettres, les
-              cartes sont vierges. Une realisation fictive presentee ici, hors
-              de la section « demonstrations » et de son avertissement, serait
-              exactement ce que /demonstrations passe trois paragraphes a
-              desamorcer.
-
-              ELLE N EST PAS LE PORTRAIT. Le n ud Person n a toujours pas d
-              `image`, et ce fichier ne doit pas y etre accroche : ce serait
-              declarer a Google que cette photo represente Ayoub Bensalem.
-              La ligne « portrait » de l inventaire des visuels reste ouverte.
-
-              next/image ICI, contrairement a NoyauStage et au carrousel : rien
-              ne decoupe cette image au pixel, donc le wrapper qu il insere ne
-              casse aucun calage — et on gagne le format moderne et le
-              chargement differe sans ecrire de srcSet a la main. */}
-          <div data-reveal style={{ marginTop: 46 }}>
-            <Image
-              src="/brand/atelier.webp"
-              alt="Papiers de couleur, cartes vierges, spécimen typographique, règle et compte-fils posés sur une table."
-              width={1600}
-              height={1073}
-              sizes="(max-width: 900px) 100vw, 900px"
-              style={{ width: "100%", height: "auto", borderRadius: 14 }}
-            />
           </div>
         </div>
       </section>
 
-      {/* ---------- Comment ça se passe, du premier message à la mise en ligne ---------- */}
+      {/* ---------- (02) Le déroulé ---------- */}
       <section style={{ paddingTop: 0 }}>
         <div className="wrap">
           <div className="sec-head">
@@ -328,146 +199,105 @@ export default function StudioPage() {
             </span>
             <div data-reveal>
               <h2 className="t">
-                Du premier message
-                <br />à la mise en ligne.
+                Du premier appel
+                <br />
+                au relevé du lundi.
               </h2>
             </div>
           </div>
 
           <p className="lede" data-reveal>
-            Six moments, et un seul vous demande quelque chose — le deuxième, et
-            c&apos;est une conversation, pas des fichiers.
+            Quatre moments. Aucun ne vous demande de préparer quoi que ce soit.
           </p>
 
-          {/* Les intitules sont des <h3> PORTANT .sm-grp, jamais des <h3> nus :
-              sans regle propre, un h3 prend `font-size:inherit` du preflight
-              Tailwind en production et la taille par defaut du navigateur en
-              developpement — deux rendus differents pour le meme titre. */}
+          {/* Les intitules sont des <h3> PORTANT .sm-grp : un h3 nu change de
+              taille entre le developpement et la production (preflight). */}
           <div className="studio-txt" data-reveal style={{ marginTop: 34 }}>
-            <h3 className="sm-grp">Le premier message</h3>
+            <h3 className="sm-grp">L&apos;appel</h3>
             <p>
-              WhatsApp, téléphone, formulaire, ou l&apos;assistant en bas de
-              l&apos;écran. Vous dites ce que vous avez et ce qui ne va pas ; le
-              message arrive sur notre téléphone.
+              Un appel court. Vous nous dites ce qui vous prend vos soirées.
+              Nous ne vous vendons rien ce jour-là.
             </p>
 
-            <h3 className="sm-grp">L&apos;état des lieux</h3>
+            <h3 className="sm-grp">La démo</h3>
             <p>
-              On regarde ensemble ce qui est en ligne aujourd&apos;hui : le
-              site, et ce qu&apos;un client trouve quand il cherche votre
-              métier à Genève. Vous dites ce que vous voulez recevoir — des
-              devis, des rendez-vous, des appels. C&apos;est le seul moment où
-              vous avez quelque chose à donner, et ça se donne en parlant.
+              Nous vous montrons l&apos;assistant à l&apos;œuvre sur des
+              demandes de votre métier : ce qu&apos;il prépare, ce que vous
+              validez, ce que vous corrigez. Vous n&apos;avez rien à préparer,
+              nous n&apos;avons accès à aucun de vos outils. À la fin, nous fixons
+              avec vous, par écrit, le palier de l&apos;abonnement.
             </p>
 
-            <h3 className="sm-grp">Votre feu vert</h3>
+            <h3 className="sm-grp">L&apos;essai, deux semaines</h3>
             <p>
-              Le délai part de là, et de nulle part ailleurs : une semaine, du
-              feu vert à la mise en ligne. Vous n&apos;avez rien à préparer —
-              nous reprenons les textes de votre site actuel, et nous rédigeons
-              la maquette si vous partez de zéro.
+              Pendant deux semaines, l&apos;assistant travaille sur vos vraies demandes. Il ne
+              s&apos;engage jamais à votre place. Vous ne payez rien pendant
+              l&apos;essai.
             </p>
 
-            <h3 className="sm-grp">La maquette, en début de semaine</h3>
+            <h3 className="sm-grp">Chaque lundi</h3>
             <p>
-              Vous voyez l&apos;avant / après. Vous validez, ou vous demandez
-              des changements : deux allers-retours sont compris, facturés
-              au-delà. La limite est écrite avant de commencer plutôt que
-              découverte sur la facture.
-            </p>
-
-            <h3 className="sm-grp">La validation, puis la mise en ligne</h3>
-            <p>
-              Le site fini vous est présenté et validé. Le paiement intervient à
-              la livraison, et la mise en ligne suit. Domaine, hébergement,
-              formulaire, prise de rendez-vous : tout est branché — vous
-              n&apos;installez rien et vous ne configurez rien.
-            </p>
-
-            <h3 className="sm-grp">L&apos;année d&apos;après</h3>
-            <p>
-              La première année d&apos;hébergement et de nom de domaine est
-              comprise dans le prix du site. À partir de la deuxième, le suivi
-              prend le relais : il ne se choisit pas dans un menu, il découle de
-              la formule achetée. Avec L&apos;Assistant il est obligatoire —
-              l&apos;assistant consomme des appels d&apos;API tous les mois, et
-              sans le suivi il s&apos;arrête.
+              Un relevé court : ce qui a été traité, relancé, préparé, et ce qui
+              vous attend. Si le relevé vous convient, vous payez la mise en
+              place et l&apos;abonnement continue.
             </p>
 
             <p style={{ marginTop: 30 }}>
               <a className="lnk" href="/services">
-                Voir les formules et les prix →
+                Voir l&apos;assistant en détail →
               </a>
             </p>
           </div>
         </div>
       </section>
 
-      {/* ---------- Ce que le studio sait faire ---------- */}
+      {/* ---------- (03) Les métiers ---------- */}
       <section style={{ paddingTop: 0 }}>
         <div className="wrap">
           <div className="sec-head">
             <span className="meta" data-reveal>
-              <span className="index">(03)</span>&nbsp; Le métier
+              <span className="index">(03)</span>&nbsp; Les métiers
             </span>
             <div data-reveal>
               <h2 className="t">
-                Cinq lignes de travail,
+                Une base
                 <br />
-                un seul endroit.
+                pour chaque métier.
               </h2>
             </div>
           </div>
 
-          <p className="lede" data-reveal>
-            Le site est le produit d&apos;entrée, pas le catalogue. Voici le
-            reste — et c&apos;est le fait que tout sorte du même endroit qui
-            fait l&apos;argument.
-          </p>
-
-          <ul className="prest-inc" data-reveal style={{ marginTop: 34 }}>
-            <li>
-              Sites — refonte ou départ de zéro, formulaire de demande, prise de
-              rendez-vous, devis chiffré, assistant.
-            </li>
-            <li>
-              Identité — logotype, couleurs, typographies, et les fichiers pour
-              s&apos;en servir.
-            </li>
-            <li>
-              Imprimés — cartes de visite, affiches, stickers vitrine, cartes de
-              restaurant, prêts pour l&apos;impression.
-            </li>
-            <li>
-              Photographie — vos locaux, votre équipe, vos produits : pour le
-              site comme pour vos imprimés.
-            </li>
-            <li>
-              Réseaux sociaux — calendrier du mois, visuels, textes,
-              publication. Produits avec un partenaire de production du studio,
-              et rendus par nous.
-            </li>
-          </ul>
-
+          {/* Chiffres sources (PM §2, recherche founder/) : chacun porte sa
+              source et son pays, aucun n est prete aux patrons genevois. */}
           <div className="studio-txt" data-reveal style={{ marginTop: 34 }}>
             <p>
-              Ce n&apos;est pas une liste de compétences, c&apos;est ce qui rend
-              l&apos;ensemble cohérent. Une carte de visite qui ne ressemble pas
-              au site, une affiche dont la typographie n&apos;est celle de
-              rien : c&apos;est ce qui arrive quand chaque pièce est commandée à
-              un endroit différent. Ici elles se ressemblent parce
-              qu&apos;elles sortent du même endroit.
+              Genève compte 441 établissements de sanitaire et de
+              chauffage-ventilation (OCSTAT 2024). Le bâtiment est le premier
+              secteur touché par la pénurie de personnel dans le canton (CCIG
+              2026).
             </p>
             <p>
-              <a className="lnk" href="/services">
-                Voir le catalogue en entier →
+              Dans les métiers du bâtiment, les devis se font souvent le soir.
+              En France, 42 % des patrons jugent leur charge administrative
+              stressante (CAPEB 2023). À Genève, nous le vérifions patron par
+              patron.
+            </p>
+            <p>
+              Chaque métier a sa base : ses demandes types, son vocabulaire,
+              ses documents. Les artisans du bâtiment, les régies, les
+              fiduciaires, les garages et les autres PME de services ont
+              chacun leur page, avec un exemple de démonstration.
+            </p>
+            <p>
+              <a className="lnk" href="/metiers">
+                Voir les métiers →
               </a>
             </p>
           </div>
         </div>
       </section>
 
-      {/* ---------- Ce que le studio ne fait pas ---------- */}
+      {/* ---------- (04) Ce que nous ne prenons pas ---------- */}
       <section style={{ paddingTop: 0 }}>
         <div className="wrap">
           <div className="sec-head">
@@ -484,43 +314,30 @@ export default function StudioPage() {
           </div>
 
           <p className="lede" data-reveal>
-            Une page qui ne sait rien refuser ne dit rien. Ces quatre-là partent
-            ailleurs, et nous le disons au premier message plutôt qu&apos;au
-            troisième rendez-vous.
+            Nous le disons au premier appel, pas après la démo.
           </p>
 
+          {/* L anti-ICP du positionnement (PM §2), mot pour mot. */}
           <ul className="prest-inc" data-reveal style={{ marginTop: 34 }}>
             <li>
-              Les boutiques en ligne. Stock, paiements, retours, litiges : un
-              autre métier, une autre maintenance.
+              Les cabinets médicaux, la physiothérapie et le dentaire. Le secret
+              médical l&apos;exclut, et leurs rendez-vous ont déjà leurs outils.
+            </li>
+            <li>Les avocats. Le secret professionnel l&apos;exclut.</li>
+            <li>
+              Les grands comptes et les administrations. Appels d&apos;offres et
+              cycles longs.
             </li>
             <li>
-              Les appels d&apos;offres, les grands comptes et les
-              administrations. Les procédures et les délais de paiement ne vont
-              pas avec une structure aussi légère.
+              Les entreprises qui veulent une IA qui fait tout seule. Chez nous,
+              l&apos;assistant ne s&apos;engage jamais à votre place.
             </li>
-            <li>
-              Les sociétés qui ont déjà des développeurs. Elles font leur site
-              elles-mêmes, mieux et pour moins cher.
-            </li>
-            <li>
-              Les urgences à la demi-journée. Le délai est d&apos;une semaine du
-              feu vert à la mise en ligne, et il tient parce qu&apos;il
-              n&apos;est pas plus court.
-            </li>
+            <li>Les sociétés tech. Elles le font elles-mêmes.</li>
           </ul>
-
-          <div className="studio-txt" data-reveal style={{ marginTop: 34 }}>
-            <p>
-              Le refus n&apos;est pas une posture. Un studio qui accepte tout ne
-              tient plus aucune de ses dates, et c&apos;est le client
-              d&apos;après qui paie le retard.
-            </p>
-          </div>
         </div>
       </section>
 
-      {/* ---------- La seule preuve que le visiteur peut vérifier lui-même ---------- */}
+      {/* ---------- (05) La démonstration ---------- */}
       <section style={{ paddingTop: 0 }}>
         <div className="wrap">
           <div className="sec-head">
@@ -529,56 +346,45 @@ export default function StudioPage() {
             </span>
             <div data-reveal>
               <h2 className="t">
-                Le produit tourne
+                Leo, en bas
                 <br />
-                sur cet écran.
+                de l&apos;écran.
               </h2>
             </div>
           </div>
 
+          {/* Leo se presente comme une demonstration, jamais comme une
+              reference client (PM §6). */}
           <div className="studio-txt" data-reveal>
             <p>
-              Le troisième palier s&apos;appelle L&apos;Assistant, et il
-              n&apos;est pas décrit ici : il tourne sur ce site. Le bouton en
-              bas de l&apos;écran l&apos;ouvre. Posez-lui une question sur une
-              prestation ou sur un prix — il répond avec le catalogue et les
-              tarifs lus dans la base de ce site, pas avec des généralités.
+              Leo est l&apos;assistant de ce site. C&apos;est une démonstration
+              de ce que nous savons faire, pas un client.
             </p>
             <p>
-              Le reste du produit est derrière : quand la conversation se
-              termine, la demande part sur notre téléphone, et nous la
-              retrouvons dans un tableau de bord avec ce qui a été dit et le
-              numéro laissé. C&apos;est exactement ce qui serait installé chez
-              vous, avec vos prestations et vos tarifs à la place des nôtres.
+              Posez-lui une question sur votre bureau. Il répond, puis il vous
+              propose la démo. Quand la conversation se termine, elle arrive sur
+              notre téléphone.
             </p>
             <p>
-              Pour celui-là, vous n&apos;avez donc personne à croire sur parole.
-              Il est en bas de l&apos;écran, et vous pouvez le mettre en défaut
-              vous-même.
+              Votre assistant, lui, se montre sur des demandes de votre
+              métier. C&apos;est le rôle de la démo.
             </p>
           </div>
 
-          {/* BoutonDevis est un VRAI LIEN vers /devis : il fonctionne sans
-              JavaScript, et la page d arrivee ouvre l assistant — c est-a-dire,
-              ici, la piece dont la section vient de parler. L amorce WhatsApp
-              qui vivait dans ce bouton a suivi le visiteur : elle est le repli
-              de /devis pour ce sujet (lib/devis.ts). */}
+          {/* « Voir la démo » montre les exemples (/demonstrations) ; seul
+              « Demander ma démo » ouvre Leo (decision d Ayoub du 25.10.2026). */}
           <div className="c-row" data-reveal>
-            <BoutonDevis sujet="devis-studio" className="btn">
-              Demander un devis <span className="ar">→</span>
-            </BoutonDevis>
+            <a className="btn" href="/demonstrations">
+              Voir la démo sur mon métier <span className="ar">→</span>
+            </a>
             <a className="btn btn-line" href="/services">
-              Voir les formules
+              Voir l&apos;assistant en détail
             </a>
           </div>
         </div>
       </section>
 
-      {/* L index du pied de page suit la derniere section de CETTE page :
-          cinq sections (01) a (05) sur cette page, donc le contact porte (06).
-          Le defaut "07" du composant est celui de l accueil, qui compte
-          sept sections ; le laisser ici faisait sauter la numerotation
-          sous les yeux du lecteur. */}
+      {/* Cinq sections (01) a (05) : le contact porte (06). */}
       <FooterContact indexSection="06" />
     </>
   );

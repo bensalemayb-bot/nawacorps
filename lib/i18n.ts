@@ -103,40 +103,96 @@ export const CHEMINS_TRADUITS: readonly string[] = [
   // L'accueil.
   "/",
 
-  // Le catalogue et les trois formules. `estTraduit` compare des chaînes
-  // EXACTES : les formules se listent une par une, « /services/[slug] »
-  // ne correspondrait à rien.
+  // La page de détail de l'assistant. `estTraduit` compare des chaînes
+  // EXACTES. Les anciennes `/services/<slug>` ne sont plus des pages : elles
+  // redirigent vers l'accueil (next.config.ts).
   "/services",
-  "/services/la-vitrine",
-  "/services/le-site",
-  "/services/l-assistant",
 
-  // Les trois familles de prestations. Elles etaient cinq jusqu au
-  // 2 septembre 2026 : « restauration » a rejoint les imprimes,
-  // « reseaux-sociaux » l identite, et « suivi » s appelle « site-web ». Les
-  // trois adresses disparues sont servies par une redirection permanente
-  // (next.config.ts) et n ont donc PAS a figurer ici : cette liste sert aux
-  // alternates hreflang, et declarer une paire de langues pour une URL qui
-  // redirige ferait annoncer a Google une page qui n existe plus.
-  "/services/site-web",
-  "/services/imprimes",
-  "/services/identite",
+  // Les exemples d'automatisation par métier, avec leur schéma (recréée le
+  // 25 octobre 2026 ; elle redirigeait vers l'accueil depuis le 24).
+  "/demonstrations",
+
+  // Le hub des métiers (25 octobre 2026). Les pages métiers elles-mêmes,
+  // `/metiers/<slug>`, sont reconnues par `FAMILLES_TRADUITES` plus bas.
+  "/metiers",
 
   // Les pages de confiance et de conversion.
   "/studio",
   "/contact",
-  "/demonstrations",
   "/devis",
 
   // Les pages légales. Elles comptent : un site qui vend sans mentions
   // légales lisibles par son lecteur n'est pas complet.
   "/mentions-legales",
   "/confidentialite",
+  // Les conditions generales de vente (B2B), depuis le 25 octobre 2026.
+  "/cgv",
 ];
+
+/**
+ * L'en-tête où `proxy.ts` recopie le chemin demandé, pour le layout public.
+ * Même raison d'être que `EN_TETE_LOCALE` : un layout ne reçoit pas le chemin
+ * de la page qu'il enveloppe.
+ */
+export const EN_TETE_CHEMIN = "x-nawa-chemin";
+
+/**
+ * LES PAGES QUI RENDENT LE PIED COMPLET (components/FooterContact.tsx), forme
+ * française, sans préfixe. Leur pied porte déjà Mentions légales ·
+ * Confidentialité · CGV : le layout public n'y rend donc PAS la bande
+ * components/LiensLegaux.tsx. Avant le 25 octobre 2026, la bande était rendue
+ * partout et masquée en CSS : le HTML de l'accueil portait deux fois les trois
+ * liens (audit CRO/SEO §2.12).
+ *
+ * UNE PAGE QUI AJOUTE OU RETIRE <FooterContact /> S'AJOUTE OU SE RETIRE ICI.
+ * Un oubli ne casse rien de grave : la règle CSS
+ * `main:has(footer.contact) + .liens-legaux` (app/binacore.css) reste en filet
+ * et masque la bande en double à l'écran.
+ */
+export const CHEMINS_AVEC_PIED: readonly string[] = [
+  "/",
+  "/services",
+  "/demonstrations",
+  "/studio",
+  "/metiers",
+  // Les guides (25 octobre 2026), francais seulement : le hub et ses pages.
+  "/guides",
+  "/guides/automatisation-ia-pme-geneve",
+  "/guides/assistant-ia-ou-secretaire",
+  "/guides/prix-assistant-ia-suisse",
+  "/guides/ia-et-protection-des-donnees",
+];
+
+/**
+ * LES FAMILLES DE PAGES GÉNÉRÉES DANS LES DEUX LANGUES À LA FOIS — un préfixe
+ * de chemin, barre finale comprise.
+ *
+ * `/metiers/<slug>` : chaque page métier est rendue depuis lib/metiers.ts, qui
+ * porte le français ET l'anglais de chaque métier dans le même objet. Une page
+ * métier ne peut donc pas exister dans une langue sans l'autre ; les lister une
+ * à une ici aurait fait une seconde liste des slugs, à tenir à la main. Ce
+ * module ne les importe pas : `proxy.ts` le charge à chaque requête (voir
+ * l'en-tête), et il doit rester sans dépendance.
+ *
+ * Toutes ces pages rendent aussi le pied complet. Un slug inconnu répond 404
+ * dans les deux langues, et rien n'annonce son URL : le sitemap ne lit que
+ * lib/metiers.ts.
+ */
+export const FAMILLES_TRADUITES: readonly string[] = ["/metiers/"];
+
+function dansUneFamille(chemin: string): boolean {
+  return FAMILLES_TRADUITES.some((prefixe) => chemin.startsWith(prefixe));
+}
+
+/** Vrai si la page de ce chemin (avec ou sans préfixe) rend le pied complet. */
+export function aPiedComplet(pathname: string): boolean {
+  const chemin = cheminSansLocale(pathname);
+  return CHEMINS_AVEC_PIED.includes(chemin) || dansUneFamille(chemin);
+}
 
 /** Vrai si ce chemin (forme française, sans préfixe) a une jumelle anglaise. */
 export function estTraduit(chemin: string): boolean {
-  return CHEMINS_TRADUITS.includes(chemin);
+  return CHEMINS_TRADUITS.includes(chemin) || dansUneFamille(chemin);
 }
 
 /** Garde de type — sert à valider l'en-tête reçu du proxy, qui est `string | null`. */

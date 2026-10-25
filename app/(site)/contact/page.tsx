@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import SchemaPage from "@/components/SchemaPage";
 import ContactForm from "@/components/ContactForm";
-import { MENTION_REPONSE } from "@/lib/familles";
+import { MENTION_REPONSE } from "@/lib/mentions";
 import {
   CONTACT,
   HORAIRES,
@@ -12,7 +12,7 @@ import {
   alternatesPage,
   jsonLd,
   openGraphPage,
-  whatsapp,
+  whatsappHref,
 } from "@/lib/site";
 
 /**
@@ -31,17 +31,17 @@ import {
  * valeur recopiee ici serait exactement la divergence que ce fichier existe
  * pour empecher.
  *
- * UNE SEULE ADRESSE EST MISE EN AVANT, ET C EST `CONTACT.email` (ayoub@).
+ * UNE SEULE ADRESSE EST MISE EN AVANT, ET C EST `CONTACT.email` — depuis le
+ * 25 octobre 2026 la seule du site, contact@ (voir lib/site.ts).
  * La page en ouvrait DEUX et expliquait comment choisir — « si vous hesitez
  * entre les deux adresses, c est celle-ci ». On demandait donc un arbitrage au
  * visiteur a l instant precis ou il voulait ecrire, et cet arbitrage ne servait
  * que le studio : la boite generale existe pour que le tout-venant ne noie pas
- * les demandes de projet, ce qui est un probleme de tri interne, pas une
- * question que le lecteur ait a trancher. Un message de projet arrive au bon
+ * les demandes de demo, ce qui est un probleme de tri interne, pas une
+ * question que le lecteur ait a trancher. Une demande de demo arrive au bon
  * endroit du premier coup ; les autres sont rares.
- * `CONTACT.emailGeneral` (contact@) N EST PAS SUPPRIMEE DU SITE : elle reste
- * ou elle sert vraiment, dans /mentions-legales et /confidentialite, ou la loi
- * demande une adresse pour les droits nLPD et l editeur.
+ * La seconde boite (ayoub@) a ete retiree du site le 25 octobre 2026 : les
+ * pages legales, le pied de page et cette page ecrivent la meme adresse.
  *
  * LE FORMULAIRE EST components/ContactForm.tsx, IMPORTE TEL QUEL. Il n est pas
  * reecrit : il porte deja son leurre anti-robot, sa gestion d erreur et son
@@ -56,13 +56,13 @@ import {
  *
  * L ENGAGEMENT DE REACTIVITE EST ECRIT UNE FOIS, ET AU BON ENDROIT : juste
  * au-dessus du formulaire, la ou nait la question « quand est-ce qu on me
- * repond ? ». Il est IMPORTE de lib/familles.ts (`MENTION_REPONSE`) et non
+ * repond ? ». Il est IMPORTE de lib/mentions.ts (`MENTION_REPONSE`) et non
  * recopie — le guide de voix impose une seule formulation, au caractere pres,
  * et une chaine recopiee finit toujours par deriver d un mot.
  *
- * AUCUN MONTANT ICI, donc aucune mention de TVA a porter : les prix vivent en
- * base et se lisent sur /services. La page ne lit pas Postgres et reste
- * statique — `next build` passe base eteinte.
+ * AUCUN MONTANT ICI, donc aucune mention de TVA a porter : le seul prix du
+ * site (la mise en place) vit en base, lu par lib/catalogue.ts. La page ne lit
+ * pas Postgres — `next build` passe base eteinte.
  *
  * ZERO CLASSE NOUVELLE : .wrap, .sec-head, .meta, .index, h1.t / h2.t, .lede,
  * .studio-txt, .facts, .prest-inc, .sm-grp, .c-row, .c-cols, .btn, .lnk.
@@ -115,22 +115,29 @@ const PLAGE = `${enHeure(HORAIRES.ouverture)}–${enHeure(HORAIRES.fermeture)}`;
  * emis que si ce chemin figure dans `CHEMINS_TRADUITS` (lib/i18n.ts) :
  * annoncer une jumelle qui repond 404 est pire que de ne rien annoncer.
  */
-const TITRE = "Contacter le studio à Genève";
+/**
+ * TITRE ET DESCRIPTION DE L AUDIT CRO/SEO DU 25.10.2026 (§4.4,
+ * docs/agents/reviews/audit-cro-seo-2026-10-25.md). Le titre est
+ * `absolute` : il tient ses 60 signes sans le suffixe « — Nawa Corps » du
+ * `template`, qui l aurait fait deborder (ou, pour /contact, aurait ecrit la
+ * marque deux fois).
+ */
+const TITRE = "Contacter Nawa Corps à Genève : téléphone, WhatsApp";
 const DESCRIPTION =
-  "WhatsApp, téléphone, e-mail ou le formulaire : les quatre chemins pour joindre le studio à Genève, et ce qu'il est utile d'écrire dans votre message.";
+  "Téléphone, WhatsApp, e-mail ou formulaire. Dites-nous votre métier et ce qui vous prend vos soirées. Réponse le jour ouvrable suivant.";
 
 export const metadata: Metadata = {
-  title: TITRE,
+  title: { absolute: TITRE },
   description: DESCRIPTION,
   alternates: alternatesPage("/contact"),
   openGraph: openGraphPage({
-    titre: `${TITRE} — ${SITE_NAME}`,
+    titre: TITRE,
     description: DESCRIPTION,
     chemin: "/contact",
   }),
   twitter: {
     card: "summary_large_image",
-    title: `${TITRE} — ${SITE_NAME}`,
+    title: TITRE,
     description: DESCRIPTION,
   },
 };
@@ -145,10 +152,10 @@ export const metadata: Metadata = {
  *
  * LE ContactPoint DIT LA MEME CHOSE QUE LA PAGE, et c est la regle : une
  * donnee structuree qui promet ce que l ecran ne montre pas finit ignoree.
- * Il y en avait deux — `sales` pour la boite d Ayoub, `customer service` pour
- * la boite generale. Le second a ete retire EN MEME TEMPS que le bloc contact@
- * de l ecran : le declarer encore reviendrait a publier un canal que la page
- * ne presente plus.
+ * Il y en avait deux — `sales` et `customer service`, une boite chacun. Le
+ * second a ete retire EN MEME TEMPS que le second bloc d adresse de l ecran :
+ * le declarer encore reviendrait a publier un canal que la page ne presente
+ * plus. Depuis le 25.10.2026 le site n a plus qu une adresse (lib/site.ts).
  *
  * NAP_CONFIRME RESTE LE VERROU. Il vaut true, donc les coordonnees partent ;
  * le jour ou l une d elles redevient incertaine, on cesse d emettre le bloc
@@ -169,7 +176,7 @@ const SCHEMA = {
             {
               "@type": "ContactPoint",
               contactType: "sales",
-              name: "Demandes de projet",
+              name: "Demandes de démo",
               telephone: CONTACT.telephone,
               email: CONTACT.email,
               areaServed: CONTACT.ville,
@@ -188,16 +195,11 @@ const SCHEMA = {
 };
 
 /**
- * Amorce propre a cette page : elle dit d ou vient le message.
- *
- * ELLE RESTE AU SINGULIER, et ce n est pas un oubli du passage a « nous » le
- * 31 aout 2026 : c est le VISITEUR qui parle dans cette phrase, pas le studio.
- * La mettre au pluriel lui ferait dire « nous aimerions », ce qu il n a pas
- * demande.
+ * L amorce de la page : celle de tout le site, `whatsappHref` (lib/site.ts),
+ * qui demande la demo. Elle etait recopiee ici mot pour mot ; une seule
+ * source suffit.
  */
-const AMORCE_WHATSAPP = whatsapp(
-  "Bonjour, j'aimerais parler d'un projet pour mon entreprise.",
-);
+const AMORCE_WHATSAPP = whatsappHref("fr");
 
 export default function ContactPage() {
   // volontaire — next/link casserait les reveals (Interactions ne tourne qu'une fois), voir décision B7
@@ -238,7 +240,10 @@ export default function ContactPage() {
 
           <div className="facts" data-reveal>
             <div>
-              <b>{CONTACT.telephoneAffiche}</b>
+              {/* Cliquable : un numero affiche se compose d un pouce. */}
+              <b>
+                <a href={`tel:${CONTACT.telephone}`}>{CONTACT.telephoneAffiche}</a>
+              </b>
               <span>Téléphone et WhatsApp</span>
             </div>
             <div>
@@ -278,10 +283,8 @@ export default function ContactPage() {
           <div className="studio-txt" data-reveal>
             <h3 className="sm-grp">WhatsApp</h3>
             <p>
-              Le plus direct, et celui qui demande le moins de mise en forme.
-              Une photo de votre carte de visite, l&apos;adresse de votre site,
-              deux lignes sur ce qui ne va pas : c&apos;est souvent tout ce
-              qu&apos;il faut pour commencer.{" "}
+              Le plus direct. Deux lignes sur votre métier et sur ce qui vous
+              prend vos soirées suffisent pour commencer.{" "}
               <a
                 className="lnk"
                 href={AMORCE_WHATSAPP}
@@ -294,8 +297,8 @@ export default function ContactPage() {
 
             <h3 className="sm-grp">Téléphone</h3>
             <p>
-              Si c&apos;est plus simple à dire qu&apos;à écrire — et pour un
-              état des lieux, ça l&apos;est presque toujours.{" "}
+              Si c&apos;est plus simple à dire qu&apos;à écrire. Le premier
+              appel est court.{" "}
               <a className="lnk" href={`tel:${CONTACT.telephone}`}>
                 {CONTACT.telephoneAffiche}
               </a>
@@ -303,16 +306,14 @@ export default function ContactPage() {
             </p>
 
             {/* UNE SEULE ADRESSE, ET AUCUN ARBITRAGE DEMANDE. Un second bloc
-                ouvrait contact@ et une phrase expliquait laquelle choisir :
-                c etait une question de tri interne posee au visiteur au moment
-                exact ou il voulait ecrire. L adresse generale n a pas disparu
-                du site — elle vit dans /mentions-legales et /confidentialite,
-                ou la loi la demande. */}
-            <h3 className="sm-grp">{CONTACT.email}</h3>
+                ouvrait une autre boite et une phrase expliquait laquelle
+                choisir : c etait une question de tri interne posee au visiteur
+                au moment exact ou il voulait ecrire. Depuis le 25.10.2026 il
+                n existe plus qu une adresse sur tout le site (lib/site.ts). */}
+            <h3 className="sm-grp">E-mail</h3>
             <p>
-              Notre boîte, et c&apos;est la seule à écrire : refonte de site,
-              identité, imprimés, photographie, réseaux sociaux, devis. Elle
-              arrive sur notre téléphone comme le reste.{" "}
+              Pour joindre une photo ou un document. Nous lisons vos e-mails
+              aussi vite que WhatsApp.{" "}
               <a className="lnk" href={`mailto:${CONTACT.email}`}>
                 Écrire à {CONTACT.email} →
               </a>
@@ -351,38 +352,26 @@ export default function ContactPage() {
             </span>
             <div data-reveal>
               <h2 className="t">
-                Cinq lignes, et nous
+                Quatre lignes, et nous
                 <br />
-                chiffrons déjà.
+                préparons la démo.
               </h2>
             </div>
           </div>
 
           <p className="lede" data-reveal>
-            Vous n&apos;avez rien à préparer pour la suite — mais ces cinq
-            éléments-là, donnés tout de suite, évitent que la première réponse
-            soit une question de plus.
+            Vous n&apos;avez rien à préparer. Ces quatre réponses nous évitent
+            seulement une question de plus.
           </p>
 
           <ul className="prest-inc" data-reveal style={{ marginTop: 34 }}>
+            <li>Votre métier.</li>
             <li>
-              L&apos;adresse de votre site actuel, s&apos;il y en a un.
-              C&apos;est de là que nous reprenons vos textes.
+              Comment arrivent vos demandes : téléphone, WhatsApp, e-mail,
+              régies.
             </li>
-            <li>
-              Votre métier et la zone que vous couvrez : un garage et une
-              fiduciaire n&apos;ont pas les mêmes pages.
-            </li>
-            <li>
-              Ce que vous voulez recevoir : des devis, des rendez-vous, des
-              appels.
-            </li>
-            <li>
-              Ce qui vous gêne aujourd&apos;hui, même en une phrase — le site
-              illisible sur téléphone, le formulaire qui ne fonctionne plus, les
-              photos qui datent.
-            </li>
-            <li>Votre échéance, si vous en avez une.</li>
+            <li>Ce qui vous prend vos soirées, même en une phrase.</li>
+            <li>Le meilleur moment pour vous rappeler.</li>
           </ul>
 
           <div data-reveal>
@@ -403,7 +392,7 @@ export default function ContactPage() {
       <section className="green">
         <div className="wrap">
           <span className="meta" data-reveal>
-            Nawa Corps · Studio de création digitale
+            Nawa Corps · Studio genevois
           </span>
           <div className="c-cols" data-reveal>
             <span>{CONTACT.ville}, Suisse</span>
