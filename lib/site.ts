@@ -211,7 +211,7 @@ export const HORAIRES = {
 } as const;
 
 /**
- * PROFILS PUBLICS (`sameAs` du JSON-LD) — VIDES, ET C EST VOULU.
+ * PROFILS PUBLICS (`sameAs` du JSON-LD).
  *
  * `sameAs` dit au moteur « cette entite est aussi celle-la » : c est ce qui
  * relie le site a la fiche Google et a un profil LinkedIn, et ce qui aide le
@@ -219,15 +219,15 @@ export const HORAIRES = {
  * fiche qui n existe pas encore est une donnee fausse, et un moteur qui suit un
  * 404 ne fait plus confiance au reste du bloc.
  *
- * Le jour ou la fiche Google Business Profile, la page LinkedIn du studio ou
- * le profil LinkedIn d Ayoub existent, on colle ici leur URL publique exacte,
- * et rien d autre a changer : `studio` sort dans le ProfessionalService
- * (components/SchemaStudio.tsx), `ayoub` dans le Person de /studio. Tant
- * qu une liste est vide, la propriete n est pas emise du tout.
+ * On ne colle donc ici qu une URL publique qui existe : `studio` sort dans le
+ * ProfessionalService (components/SchemaStudio.tsx), `ayoub` dans le Person de
+ * /studio. Tant qu une liste est vide, la propriete n est pas emise du tout.
+ * Les deux pages LinkedIn existent depuis le 26.10.2026 ; la fiche Google
+ * s y ajoutera une fois validee par Google (avant, elle n est pas publique).
  */
 export const SAME_AS: { studio: readonly string[]; ayoub: readonly string[] } = {
-  studio: [],
-  ayoub: [],
+  studio: ["https://www.linkedin.com/company/nawacorps/"],
+  ayoub: ["https://www.linkedin.com/in/ayoub-bensalem-4a8032292/"],
 };
 
 /** Langues de travail, annoncees dans la section « Le studio ». */
