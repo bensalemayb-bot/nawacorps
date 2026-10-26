@@ -23,4 +23,4 @@ La base commune du métier, que nous utilisons pour tous nos clients, reste prop
 ## 4. Pour vérifier que ce n'est pas qu'une promesse
 Vous pouvez demander à tout moment, gratuitement, une copie de votre « dossier assistant ». Nous vous l'envoyons sous 10 jours ouvrables.
 
-Une question : contact@nawacorps.ch
+Une question : info@nawacorps.ch

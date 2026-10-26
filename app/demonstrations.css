@@ -36,6 +36,12 @@
 
 /* Les ancres vers les metiers : la pastille de la nav (.pill), une taille en
    dessous. Elles passent a la ligne ; aucun defilement horizontal. */
+/* La demonstration filmee : cadre sobre, coins et bordure comme les schemas. */
+.dm-video{margin:clamp(28px,4vw,44px) 0 0;max-width:1100px}
+.dm-video video{display:block;width:100%;height:auto;border-radius:14px;
+  border:1px solid var(--line, rgba(23,22,19,.12));background:#fff;
+  box-shadow:0 18px 50px -28px rgba(23,22,19,.35)}
+.dm-video figcaption{margin-top:12px;font-size:.82rem;line-height:1.5;color:var(--ink-2, #5d594f);max-width:70ch}
 .dm-ancres{margin-top:clamp(30px,4vw,48px)}
 .dm-ancres ul{list-style:none;display:flex;flex-wrap:wrap;gap:10px}
 .dm-ancres a{display:inline-block;font-size:.78rem;font-weight:500;text-decoration:none;

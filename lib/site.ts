@@ -85,11 +85,12 @@ export const CONTACT = {
    * contact@ (mentions legales, confidentialite, exercice des droits). Deux
    * adresses pour un exploitant seul obligeaient le visiteur a choisir, et la
    * LCD (art. 3 al. 1 let. s) demande UNE adresse de contact directe et
-   * fiable. contact@ est retenue parce qu elle etait deja la reference des
-   * pages legales ; ayoub@ reste a confirmer (redirection vers celle-ci) —
-   * voir docs/legal/CONFORMITE-2026-10-25.md.
+   * fiable. Depuis le 26.10.2026, c est info@ (decision d Ayoub) : les
+   * anciennes adresses contact@ et ayoub@ doivent rediriger vers elle chez
+   * l hebergeur de la messagerie, sinon un e-mail ecrit sur une ancienne page
+   * en cache se perd.
    */
-  email: "contact@nawacorps.ch",
+  email: "info@nawacorps.ch",
   /**
    * LA LOCALITE DU NAP. Elle s ecrit « Genève », et cette graphie-la est la
    * seule que voient les donnees structurees — voir `villeEn` juste dessous.

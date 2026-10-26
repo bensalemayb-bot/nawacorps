@@ -8,6 +8,7 @@ import {
   exemplesDe,
   type Exemple,
 } from "@/lib/automatisations";
+import VideoDemo from "@/components/VideoDemo";
 import { dictionnaire } from "@/lib/dictionnaires";
 import { LANGUE_HTML, type Locale, lien } from "@/lib/i18n";
 import { METIERS, TEXTES_METIERS, cheminMetier } from "@/lib/metiers";
@@ -191,6 +192,9 @@ export function corpsDemonstrations(locale: Locale) {
           <p className="dm-mention" data-reveal>
             {t.mention}
           </p>
+          {/* LA DEMONSTRATION FILMEE (26.10.2026) : le geste en vrai, avant les
+              schemas. Floutage et lecture a l ecran : components/VideoDemo.tsx. */}
+          <VideoDemo legende={t.videoLegende} libelle={t.videoLibelle} />
           {/* Les ancres vers les onze metiers : `#slug`, l id de chaque section.
               components/AncresPage.tsx (layout) les fait marcher sous le
               scroll inertiel. */}

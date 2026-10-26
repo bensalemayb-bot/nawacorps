@@ -75,7 +75,7 @@ Fond crème du site, le noyau doré à droite, à gauche en grand :
 > Ma façon de travailler : vous voyez l'assistant sur votre métier, vous l'essayez deux semaines sur vos vraies demandes, et vous payez la mise en place seulement si le relevé vous convient.
 >
 > 👉 Les exemples par métier : nawacorps.ch/demonstrations
-> 📩 contact@nawacorps.ch · WhatsApp +41 78 912 40 35
+> 📩 info@nawacorps.ch · WhatsApp +41 78 912 40 35
 
 ### Sélection (« Featured », 3 éléments)
 1. Lien : nawacorps.ch/demonstrations — « Ce que l'assistant fait, métier par métier »

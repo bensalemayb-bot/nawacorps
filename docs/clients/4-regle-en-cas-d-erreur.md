@@ -32,4 +32,4 @@ Vous le corrigez, ou vous nous le signalez d'un message. **Nous corrigeons le r�
 ## 7. La trace
 Chaque erreur signalée est notée : date, ce qui s'est passé, ce que nous avons corrigé. Vous recevez ce journal sur simple demande, et il figure dans le relevé du lundi.
 
-Une question : contact@nawacorps.ch
+Une question : info@nawacorps.ch

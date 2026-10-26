@@ -7,7 +7,7 @@
 ---
 
 ## Étape 1 — Créer la fiche
-1. Va sur **business.google.com** et connecte-toi avec le compte Google que tu veux garder pour l'entreprise (idéalement celui de contact@nawacorps.ch).
+1. Va sur **business.google.com** et connecte-toi avec le compte Google que tu veux garder pour l'entreprise (idéalement celui de info@nawacorps.ch).
 2. « Ajouter votre entreprise ».
 
 | Champ | Ce que tu mets |

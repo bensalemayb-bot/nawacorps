@@ -29,4 +29,4 @@ En cas de fuite ou d'accès non autorisé, nous vous prévenons **sous 24 heures
 ## La loi
 Nous agissons comme votre **sous-traitant** au sens de l'article 9 de la loi suisse sur la protection des données (nLPD). Vous restez responsable de vos données. Le détail est dans le **contrat de sous-traitance**, signé avant l'essai.
 
-Une question : contact@nawacorps.ch
+Une question : info@nawacorps.ch
