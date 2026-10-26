@@ -144,7 +144,7 @@ export const METIERS: readonly Metier[] = [
       meta: "Sanitaire et chauffage · Genève",
       h1: ["Assistant IA pour sanitaires", "et chauffagistes à Genève."],
       chapo:
-        "Nawa Corps, studio genevois, installe chez les sanitaires et chauffagistes de Genève un assistant IA qui connaît déjà leur métier. Il peut prendre les demandes et les appels pendant le chantier, lire vos bons de régie et préparer le rendez-vous, les devis et les relances. Le téléphone fait partie du palier Complet : trois tâches dont le téléphone. Il ne s'engage jamais à votre place : vous validez.",
+        "Nawa Corps, studio genevois, installe chez les sanitaires et chauffagistes de Genève un assistant IA qui connaît déjà leur métier. Pendant que vous êtes sur le chantier, il peut prendre les demandes, lire vos bons de régie et préparer le rendez-vous, le devis et sa relance. Pour les appels, il faut le palier Complet : trois tâches dont le téléphone. Il ne s'engage jamais à votre place : la date et le prix restent les vôtres.",
       carte: {
         soirees: "Les demandes reçues pendant le chantier, les devis à écrire, les bons de régie à traiter.",
         peut: "Prendre la demande ou l'appel, lire le bon de régie et préparer le rendez-vous, le devis et sa relance.",
@@ -159,7 +159,7 @@ export const METIERS: readonly Metier[] = [
           },
           {
             titre: "Les devis qui dorment.",
-            texte: "Ils sont partis, personne n'a répondu, personne n'a relancé.",
+            texte: "Partis depuis une ou deux semaines. Pas de réponse, et personne n'a eu le temps de relancer.",
           },
           {
             titre: "Les bons de régie.",
@@ -168,7 +168,7 @@ export const METIERS: readonly Metier[] = [
           },
           {
             titre: "La paperasse du soir.",
-            texte: "Les demandes de la journée, les devis, les relances : à la maison, après le chantier.",
+            texte: "Ce qui n'a pas pu se faire sur le chantier attend à la maison : les demandes, les devis, les relances.",
           },
         ],
         sources:
@@ -244,7 +244,7 @@ export const METIERS: readonly Metier[] = [
       meta: "Plumbing and heating · Geneva",
       h1: ["AI assistant for plumbers", "and heating firms in Geneva."],
       chapo:
-        "Nawa Corps, a Geneva studio, sets up for Geneva plumbing and heating firms an AI assistant that already knows their trade. It can take enquiries and calls while you are on site, read your property managers' work orders, and prepare the appointment, quotes and follow-ups. The phone is part of the Complete tier: three tasks including the phone. It never commits on your behalf: you approve.",
+        "Nawa Corps, a Geneva studio, sets up for Geneva plumbing and heating firms an AI assistant that already knows their trade. While you are on site, it can take enquiries, read your property managers' work orders, and prepare the appointment, the quote and its follow-up. Calls need the Complete tier: three tasks including the phone. It never commits on your behalf: the date and the price stay yours.",
       carte: {
         soirees: "Enquiries received while on site, quotes to write, work orders to handle.",
         peut: "Take the enquiry or the call, read the work order, prepare the appointment, the quote and its follow-up.",
@@ -259,7 +259,7 @@ export const METIERS: readonly Metier[] = [
           },
           {
             titre: "Quotes left sleeping.",
-            texte: "They went out, nobody answered, nobody followed up.",
+            texte: "Sent a week or two ago. No answer, and nobody had time to follow up.",
           },
           {
             titre: "Work orders.",
@@ -268,7 +268,7 @@ export const METIERS: readonly Metier[] = [
           },
           {
             titre: "The evening paperwork.",
-            texte: "The day's enquiries, the quotes, the follow-ups: at home, after the site.",
+            texte: "Whatever couldn't be done on site waits at home: enquiries, quotes, follow-ups.",
           },
         ],
         sources:
@@ -348,7 +348,7 @@ export const METIERS: readonly Metier[] = [
       meta: "Électricité · Genève",
       h1: ["Assistant IA pour électriciens", "à Genève."],
       chapo:
-        "Nawa Corps, studio genevois, installe chez les électriciens de Genève un assistant IA qui connaît déjà leur métier. Il peut prendre l'appel quand vous êtes sur l'échelle, trier les pannes et les devis, préparer les devis et les relancer. Le téléphone fait partie du palier Complet : trois tâches dont le téléphone. Il ne s'engage jamais à votre place : vous validez.",
+        "Pour les électriciens de Genève, Nawa Corps, studio genevois, installe un assistant IA qui connaît déjà le métier, du disjoncteur qui saute à la borne de recharge. Quand vous êtes sur l'échelle, il peut prendre l'appel (c'est le palier Complet : trois tâches dont le téléphone), séparer la panne du devis, préparer le devis et sa relance. Le prix et l'heure de passage, c'est vous qui les donnez.",
       carte: {
         soirees: "Les appels manqués sur le chantier, les devis à chiffrer, les relances.",
         peut: "Prendre l'appel, trier panne et devis, préparer le devis et sa relance.",
@@ -372,19 +372,19 @@ export const METIERS: readonly Metier[] = [
           },
           {
             titre: "Les devis sans réponse.",
-            texte: "Personne n'a rappelé, personne n'a relancé.",
+            texte: "Le client n'a pas rappelé. Vous non plus : pas eu le temps.",
           },
         ],
         sources:
           "Genève compte 291 établissements d'installation électrique (OCSTAT 2024). Le bâtiment est le premier secteur touché par la pénurie de personnel dans le canton (CCIG 2026).",
       },
       taches: {
-        h2: ["Il prépare,", "vous validez."],
+        h2: ["Il trie et prépare,", "vous décidez."],
         items: [
           {
             titre: "Répondre au téléphone.",
             texte:
-              "Quand vous ne pouvez pas décrocher, l'assistant peut prendre l'appel : le nom, l'adresse, ce qui ne marche plus, depuis quand. Il ne promet ni date ni prix. Le téléphone fait partie du palier Complet : trois tâches dont le téléphone.",
+              "Les mains dans un tableau, vous ne décrochez pas. L'assistant peut prendre l'appel et noter le nom, l'adresse, ce qui ne marche plus et depuis quand. Ni date ni prix au téléphone. Cette tâche demande le palier Complet : trois tâches dont le téléphone.",
           },
           {
             titre: "Trier les demandes.",
@@ -394,11 +394,11 @@ export const METIERS: readonly Metier[] = [
           {
             titre: "Préparer le devis.",
             texte:
-              "À partir de la demande et des photos, un brouillon de devis dans vos mots. Vous corrigez, vous envoyez.",
+              "Avec la demande et la photo du tableau, il prépare un brouillon de devis. Vous corrigez les montants, puis vous l'envoyez.",
           },
           {
             titre: "Relancer.",
-            texte: "Le devis reste sans réponse ? Il prépare la relance. Vous la relisez, vous l'envoyez.",
+            texte: "Passé le nombre de jours que vous avez fixé, la relance du devis est prête. Vous la relisez avant qu'elle parte.",
           },
           {
             titre: "Prendre rendez-vous.",
@@ -420,11 +420,11 @@ export const METIERS: readonly Metier[] = [
       faq: [
         {
           q: "Il connaît le métier d'électricien ?",
-          r: "Nous construisons une base pour votre métier : les pannes types, le vocabulaire, les devis courants. Puis nous la réglons sur votre entreprise. La démo se fait sur des demandes d'électricité : vous jugez sur pièces.",
+          r: "Nous partons d'une base faite pour l'électricité : les pannes courantes, les mots du métier, les devis qui reviennent. Puis nous l'ajustons à votre entreprise. La démo se fait sur des demandes d'électricité, vous verrez vite s'il suit.",
         },
         {
           q: "Il peut décrocher quand je suis sur un chantier ?",
-          r: "Oui, nous pouvons l'installer pour ça : le palier Complet comprend trois tâches dont le téléphone. Il prend le nom, l'adresse et ce qui ne marche plus, puis vous laisse une fiche écrite. Il ne fixe aucune date et ne donne aucun prix.",
+          r: "Oui, avec le palier Complet, qui compte trois tâches dont le téléphone. Il note le nom, l'adresse et ce qui ne marche plus, puis vous laisse une fiche écrite. Il ne fixe aucune date et ne donne aucun prix.",
         },
         {
           q: "Il fait les devis tout seul ?",
@@ -447,7 +447,7 @@ export const METIERS: readonly Metier[] = [
       meta: "Electrical work · Geneva",
       h1: ["AI assistant for electricians", "in Geneva."],
       chapo:
-        "Nawa Corps, a Geneva studio, sets up for Geneva electricians an AI assistant that already knows their trade. It can take the call while you are up the ladder, sort faults from quotes, draft quotes and follow them up. The phone is part of the Complete tier: three tasks including the phone. It never commits on your behalf: you approve.",
+        "For Geneva electricians, Nawa Corps, a Geneva studio, sets up an AI assistant that already knows the trade, from the tripping breaker to the charging point. When you are up the ladder, it can take the call (that is the Complete tier: three tasks including the phone), tell a fault from a quote, and draft the quote and its follow-up. The price and the call-out time are yours to give.",
       carte: {
         soirees: "Calls missed on site, quotes to price, follow-ups.",
         peut: "Take the call, sort faults from quotes, draft the quote and its follow-up.",
@@ -470,19 +470,19 @@ export const METIERS: readonly Metier[] = [
           },
           {
             titre: "Quotes with no answer.",
-            texte: "Nobody called back, nobody followed up.",
+            texte: "The client didn't call back. Neither did you: no time.",
           },
         ],
         sources:
           "Geneva has 291 electrical installation establishments (OCSTAT 2024). Construction is the sector hit hardest by staff shortages in the canton (CCIG 2026).",
       },
       taches: {
-        h2: ["It prepares,", "you approve."],
+        h2: ["It sorts and drafts,", "you decide."],
         items: [
           {
             titre: "Answering the phone.",
             texte:
-              "When you can't pick up, the assistant can take the call: the name, the address, what stopped working, since when. It promises no date and no price. The phone is part of the Complete tier: three tasks including the phone.",
+              "Hands in a consumer unit, you can't pick up. The assistant can take the call and note the name, the address, what stopped working and since when. No date and no price on the phone. This task needs the Complete tier: three tasks including the phone.",
           },
           {
             titre: "Sorting enquiries.",
@@ -492,11 +492,11 @@ export const METIERS: readonly Metier[] = [
           {
             titre: "Drafting the quote.",
             texte:
-              "From the enquiry and the photos, a draft quote in your words. You correct it, you send it.",
+              "With the enquiry and a photo of the board, it drafts the quote. You correct the amounts, then send it.",
           },
           {
             titre: "Following up.",
-            texte: "A quote with no answer? It drafts the follow-up. You read it, you send it.",
+            texte: "Once the number of days you set has passed, the follow-up is ready. You read it before it goes.",
           },
           {
             titre: "Booking appointments.",
@@ -518,11 +518,11 @@ export const METIERS: readonly Metier[] = [
       faq: [
         {
           q: "Does it know the electrician's trade?",
-          r: "We build a base for your trade: the usual faults, the vocabulary, the common quotes. Then we set it to your business. The demo runs on electrical enquiries: you judge on evidence.",
+          r: "We start from a base built for electrical work: the usual faults, the trade's words, the quotes that keep coming back. Then we adjust it to your business. The demo runs on electrical enquiries; you'll soon see whether it keeps up.",
         },
         {
           q: "Can it pick up while I'm on a job?",
-          r: "Yes, we can set it up for that: the Complete tier covers three tasks including the phone. It takes the name, the address and what stopped working, then leaves you a written note. It sets no date and gives no price.",
+          r: "Yes, with the Complete tier, which covers three tasks including the phone. It notes the name, the address and what stopped working, then leaves you a written note. It sets no date and gives no price.",
         },
         {
           q: "Does it write quotes on its own?",
@@ -549,7 +549,7 @@ export const METIERS: readonly Metier[] = [
       meta: "Menuiserie, peinture, carrelage · Genève",
       h1: ["Assistant IA pour artisans", "du bâtiment à Genève."],
       chapo:
-        "Nawa Corps, studio genevois, installe chez les menuisiers, peintres, carreleurs et autres artisans du bâtiment de Genève un assistant IA qui connaît déjà leur métier. Il peut qualifier la demande avant le déplacement, prendre les appels, préparer le devis et le relancer. Le téléphone fait partie du palier Complet : trois tâches dont le téléphone. Il ne s'engage jamais à votre place : vous validez.",
+        "Menuisiers, peintres, carreleurs de Genève : Nawa Corps, studio genevois, installe chez vous un assistant IA qui connaît déjà votre métier. Avant que vous vous déplaciez, il peut demander les photos et les mesures, puis préparer le devis et le relancer. Il prend aussi les appels avec le palier Complet, qui compte trois tâches dont le téléphone. Le déplacement et le prix, c'est vous qui en décidez.",
       carte: {
         soirees: "Les demandes de devis à comprendre, les visites pour rien, les devis sans réponse.",
         peut: "Demander photos et mesures avant la visite, préparer le devis, le relancer.",
@@ -578,7 +578,7 @@ export const METIERS: readonly Metier[] = [
           "Genève compte 626 établissements de peinture et de plâtrerie (OCSTAT 2024). Le bâtiment est le premier secteur touché par la pénurie de personnel dans le canton (CCIG 2026).",
       },
       taches: {
-        h2: ["Il prépare,", "vous validez."],
+        h2: ["Les photos d'abord,", "la visite ensuite."],
         items: [
           {
             titre: "Qualifier la demande.",
@@ -588,17 +588,17 @@ export const METIERS: readonly Metier[] = [
           {
             titre: "Répondre au téléphone.",
             texte:
-              "Quand vous ne pouvez pas décrocher, l'assistant peut prendre l'appel et vous laisser une fiche écrite. Il ne promet ni date ni prix. Le téléphone fait partie du palier Complet : trois tâches dont le téléphone.",
+              "Sur un échafaudage, on ne décroche pas. L'assistant peut prendre l'appel et vous laisser une fiche : qui, où, quels travaux. Il ne promet ni date ni prix. Cette tâche fait partie du palier Complet : trois tâches dont le téléphone.",
           },
           {
             titre: "Préparer le devis.",
             texte:
-              "À partir de la demande, des photos et des mesures, un brouillon de devis dans vos mots. Vous corrigez, vous envoyez.",
+              "Vos mesures et les photos du client deviennent un brouillon, poste par poste : ponçage, sous-couche, deux couches. Vous ajustez les montants avant l'envoi.",
           },
           {
             titre: "Relancer le devis.",
             texte:
-              "Le devis reste sans réponse ? Il prépare la relance. Elle attend votre accord : rien ne part chez un client qui a déjà signé.",
+              "Sans réponse au devis, il prépare la relance. Elle attend votre accord, ce qui évite de relancer un client qui a déjà signé.",
           },
           {
             titre: "Prendre rendez-vous.",
@@ -620,7 +620,7 @@ export const METIERS: readonly Metier[] = [
       faq: [
         {
           q: "Mon métier est un peu différent, ça marche aussi ?",
-          r: "Menuiserie, peinture, carrelage, maçonnerie : la base change, la logique reste la même. Nous la réglons sur votre métier et vos prestations, et la démo se fait sur des demandes de votre métier.",
+          r: "Menuiserie, peinture, carrelage, maçonnerie : chaque métier a sa base, avec ses mots et ses postes de devis. Nous la réglons ensuite sur vos prestations, et la démo se fait sur des demandes de votre métier.",
         },
         {
           q: "Il peut m'éviter les déplacements pour rien ?",
@@ -632,7 +632,7 @@ export const METIERS: readonly Metier[] = [
         },
         {
           q: "Il peut prendre les appels ?",
-          r: "Oui, nous pouvons l'installer pour ça : le palier Complet comprend trois tâches dont le téléphone. Il prend le nom, l'adresse et le travail demandé, puis vous laisse une fiche écrite. Il ne donne aucun prix.",
+          r: "Oui, si vous prenez le palier Complet : trois tâches dont le téléphone. Vous retrouvez une fiche écrite avec le nom, l'adresse et le travail demandé. Au téléphone, il ne donne aucun prix.",
         },
       ],
       controle:
@@ -647,7 +647,7 @@ export const METIERS: readonly Metier[] = [
       meta: "Joinery, painting, tiling · Geneva",
       h1: ["AI assistant for building", "tradespeople in Geneva."],
       chapo:
-        "Nawa Corps, a Geneva studio, sets up for Geneva joiners, painters, tilers and other building tradespeople an AI assistant that already knows their trade. It can qualify the enquiry before you travel, take calls, draft the quote and follow it up. The phone is part of the Complete tier: three tasks including the phone. It never commits on your behalf: you approve.",
+        "Joiners, painters, tilers in Geneva: Nawa Corps, a Geneva studio, sets up an AI assistant for you that already knows your trade. Before you travel, it can ask for photos and measurements, then draft the quote and follow it up. It also takes calls with the Complete tier, which covers three tasks including the phone. Whether to travel, and the price, are your call.",
       carte: {
         soirees: "Quote requests to make sense of, wasted site visits, quotes with no answer.",
         peut: "Ask for photos and measurements before the visit, draft the quote, follow it up.",
@@ -676,7 +676,7 @@ export const METIERS: readonly Metier[] = [
           "Geneva has 626 painting and plastering establishments (OCSTAT 2024). Construction is the sector hit hardest by staff shortages in the canton (CCIG 2026).",
       },
       taches: {
-        h2: ["It prepares,", "you approve."],
+        h2: ["Photos first,", "the visit after."],
         items: [
           {
             titre: "Qualifying the enquiry.",
@@ -686,17 +686,17 @@ export const METIERS: readonly Metier[] = [
           {
             titre: "Answering the phone.",
             texte:
-              "When you can't pick up, the assistant can take the call and leave you a written note. It promises no date and no price. The phone is part of the Complete tier: three tasks including the phone.",
+              "Up on scaffolding, you don't pick up. The assistant can take the call and leave you a note: who, where, what work. It promises no date and no price. This task is part of the Complete tier: three tasks including the phone.",
           },
           {
             titre: "Drafting the quote.",
             texte:
-              "From the enquiry, the photos and the measurements, a draft quote in your words. You correct it, you send it.",
+              "Your measurements and the client's photos become a draft, line by line: sanding, undercoat, two coats. You adjust the amounts before it goes.",
           },
           {
             titre: "Following up the quote.",
             texte:
-              "A quote with no answer? It drafts the follow-up. It waits for your approval: nothing goes to a client who has already signed.",
+              "No answer to the quote, so it drafts the follow-up. It waits for your approval, which saves you chasing a client who has already signed.",
           },
           {
             titre: "Booking the visit.",
@@ -717,7 +717,7 @@ export const METIERS: readonly Metier[] = [
       faq: [
         {
           q: "My trade is a bit different. Does it still work?",
-          r: "Joinery, painting, tiling, masonry: the base changes, the logic stays the same. We set it to your trade and your services, and the demo runs on enquiries from your trade.",
+          r: "Joinery, painting, tiling, masonry: each trade has its own base, with its words and its quote lines. We then set it to your services, and the demo runs on enquiries from your trade.",
         },
         {
           q: "Can it save me wasted trips?",
@@ -729,7 +729,7 @@ export const METIERS: readonly Metier[] = [
         },
         {
           q: "Can it take calls?",
-          r: "Yes, we can set it up for that: the Complete tier covers three tasks including the phone. It takes the name, the address and the work requested, then leaves you a written note. It gives no price.",
+          r: "Yes, if you take the Complete tier: three tasks including the phone. You get a written note with the name, the address and the work requested. On the phone, it gives no price.",
         },
       ],
       controle:
@@ -748,7 +748,7 @@ export const METIERS: readonly Metier[] = [
       meta: "Régies et gérances · Genève",
       h1: ["Assistant IA pour régies", "immobilières à Genève."],
       chapo:
-        "Nawa Corps, studio genevois, installe dans les régies de Genève un assistant IA qui connaît déjà leur métier. Il peut trier les demandes des locataires, demander les photos, préparer le bon d'intervention et prendre les appels. Le téléphone fait partie du palier Complet : trois tâches dont le téléphone. Il aide le gérant, il ne le remplace pas, et il ne s'engage jamais à sa place.",
+        "Nawa Corps, studio genevois, installe dans les régies de Genève un assistant IA qui connaît déjà la gérance, du bon d'intervention au dégât d'eau en cave. Il peut trier les demandes des locataires, réclamer les photos, préparer le bon d'intervention et prendre les appels, ces derniers avec le palier Complet (trois tâches dont le téléphone). Il aide le gérant sans le remplacer, et ne s'engage jamais à sa place.",
       carte: {
         soirees: "Les demandes des locataires, par téléphone, e-mail et courrier, et les bons d'intervention.",
         peut: "Trier chaque demande, demander les photos, préparer le bon d'intervention, prendre l'appel.",
@@ -757,7 +757,7 @@ export const METIERS: readonly Metier[] = [
         h2: ["Trop d'immeubles,", "trop de messages."],
         items: [
           {
-            titre: "Le flux des locataires.",
+            titre: "Les locataires, tous les jours.",
             texte: "Une panne, une fuite, une plainte : par téléphone, par e-mail, par courrier, sans ordre.",
           },
           {
@@ -797,7 +797,7 @@ export const METIERS: readonly Metier[] = [
           {
             titre: "Répondre au téléphone.",
             texte:
-              "Quand la ligne est occupée, l'assistant peut prendre l'appel et en faire une fiche écrite. Il ne promet ni date ni prise en charge. Le téléphone fait partie du palier Complet : trois tâches dont le téléphone.",
+              "Quand la ligne sonne occupé, l'assistant peut prendre l'appel du locataire et en faire une fiche écrite. Il ne promet ni date ni prise en charge. C'est le palier Complet : trois tâches dont le téléphone.",
           },
           {
             titre: "Relancer après l'intervention.",
@@ -831,7 +831,7 @@ export const METIERS: readonly Metier[] = [
         },
         {
           q: "Il peut prendre les appels des locataires ?",
-          r: "Oui, nous pouvons l'installer pour ça : le palier Complet comprend trois tâches dont le téléphone. Il prend le nom, l'adresse, le problème et l'urgence, et en fait une fiche écrite pour le gérant. Il ne promet ni date ni prise en charge.",
+          r: "Oui, avec le palier Complet, qui compte trois tâches dont le téléphone. Le gérant reçoit une fiche écrite : nom, adresse, problème, urgence. Au téléphone, il ne promet ni date ni prise en charge.",
         },
       ],
       controle:
@@ -846,7 +846,7 @@ export const METIERS: readonly Metier[] = [
       meta: "Property management · Geneva",
       h1: ["AI assistant for property", "managers in Geneva."],
       chapo:
-        "Nawa Corps, a Geneva studio, sets up for Geneva property managers an AI assistant that already knows their trade. It can sort tenants' requests, ask for photos, draft the work order and take calls. The phone is part of the Complete tier: three tasks including the phone. It helps the manager, it does not replace them, and it never commits on their behalf.",
+        "Nawa Corps, a Geneva studio, sets up for Geneva property managers an AI assistant that already knows property management, from the work order to the flooded cellar. It can sort tenants' requests, ask for photos, draft the work order and take calls, the last with the Complete tier (three tasks including the phone). It helps the manager without replacing them, and never commits on their behalf.",
       carte: {
         soirees: "Tenants' requests by phone, email and post, and the work orders.",
         peut: "Sort each request, ask for photos, draft the work order, take the call.",
@@ -855,7 +855,7 @@ export const METIERS: readonly Metier[] = [
         h2: ["Too many buildings,", "too many messages."],
         items: [
           {
-            titre: "The flow of tenants.",
+            titre: "Tenants, every day.",
             texte: "A breakdown, a leak, a complaint: by phone, by email, by post, in no order.",
           },
           {
@@ -895,7 +895,7 @@ export const METIERS: readonly Metier[] = [
           {
             titre: "Answering the phone.",
             texte:
-              "When the line is busy, the assistant can take the call and turn it into a written note. It promises no date and no commitment. The phone is part of the Complete tier: three tasks including the phone.",
+              "When the line is busy, the assistant can take the tenant's call and turn it into a written note. It promises no date and no commitment. That is the Complete tier: three tasks including the phone.",
           },
           {
             titre: "Following up after the job.",
@@ -929,7 +929,7 @@ export const METIERS: readonly Metier[] = [
         },
         {
           q: "Can it take tenants' calls?",
-          r: "Yes, we can set it up for that: the Complete tier covers three tasks including the phone. It takes the name, the address, the problem and the urgency, and turns it into a written note for the manager. It promises no date and no commitment.",
+          r: "Yes, with the Complete tier, which covers three tasks including the phone. The manager gets a written note: name, address, problem, urgency. On the phone, it promises no date and no commitment.",
         },
       ],
       controle:
@@ -948,7 +948,7 @@ export const METIERS: readonly Metier[] = [
       meta: "Courtage · Genève",
       h1: ["Assistant IA pour agences", "immobilières à Genève."],
       chapo:
-        "Nawa Corps, studio genevois, installe dans les agences immobilières de Genève un assistant IA qui connaît déjà leur métier. Il peut répondre aux demandes venues des portails, préparer les visites et relancer les anciens contacts propriétaires. Il ne s'engage jamais à votre place : vous validez.",
+        "Nawa Corps, studio genevois, installe dans les agences immobilières de Genève un assistant IA qui connaît déjà le courtage, des portails aux visites. Il peut accuser réception d'une demande de portail le dimanche soir, préparer les visites et les messages aux anciens contacts propriétaires. Les créneaux et les prix, c'est vous qui les validez.",
       carte: {
         soirees: "Les demandes des portails le soir et le week-end, les anciens propriétaires jamais rappelés.",
         peut: "Accuser réception, préparer les visites, relancer les anciens contacts propriétaires.",
@@ -966,7 +966,7 @@ export const METIERS: readonly Metier[] = [
           },
           {
             titre: "Les visites à caler.",
-            texte: "Les créneaux, les confirmations, les annulations.",
+            texte: "Trouver l'heure qui convient à tout le monde, puis gérer l'annulation de la veille.",
           },
           {
             titre: "Les anciens propriétaires.",
@@ -977,7 +977,7 @@ export const METIERS: readonly Metier[] = [
           "Genève compte 439 établissements classés « agences immobilières », dont une part de régies (OCSTAT 2024).",
       },
       taches: {
-        h2: ["Il prépare,", "vous validez."],
+        h2: ["Il prépare le dimanche,", "vous validez le lundi."],
         items: [
           {
             titre: "Accuser réception.",
@@ -1000,7 +1000,7 @@ export const METIERS: readonly Metier[] = [
           {
             titre: "Répondre au téléphone.",
             texte:
-              "Quand vous êtes en visite, l'assistant peut prendre l'appel et vous laisser une fiche écrite. Il ne promet ni date ni prix. Le téléphone fait partie du palier Complet : trois tâches dont le téléphone.",
+              "Pendant une visite, vous ne décrochez pas. L'assistant peut prendre l'appel et vous laisser une fiche écrite, sans promettre de date ni de prix. Le téléphone demande le palier Complet : trois tâches dont le téléphone.",
           },
         ],
       },
@@ -1044,7 +1044,7 @@ export const METIERS: readonly Metier[] = [
       meta: "Estate agency · Geneva",
       h1: ["AI assistant for estate", "agents in Geneva."],
       chapo:
-        "Nawa Corps, a Geneva studio, sets up for Geneva estate agents an AI assistant that already knows their trade. It can answer enquiries from the portals, prepare viewings and follow up past owner contacts. It never commits on your behalf: you approve.",
+        "Nawa Corps, a Geneva studio, sets up for Geneva estate agents an AI assistant that already knows the business, from the portals to the viewings. It can acknowledge a portal enquiry on a Sunday evening, prepare viewings and draft messages to past owner contacts. Slots and prices are yours to approve.",
       carte: {
         soirees: "Portal enquiries in the evening and at weekends, past owners never called back.",
         peut: "Acknowledge, prepare viewings, follow up past owner contacts.",
@@ -1062,7 +1062,7 @@ export const METIERS: readonly Metier[] = [
           },
           {
             titre: "Viewings to fit in.",
-            texte: "Slots, confirmations, cancellations.",
+            texte: "Finding a time that suits everyone, then handling the cancellation the day before.",
           },
           {
             titre: "Past owners.",
@@ -1073,7 +1073,7 @@ export const METIERS: readonly Metier[] = [
           "Geneva has 439 establishments classed as “estate agencies”, some of them property managers (OCSTAT 2024).",
       },
       taches: {
-        h2: ["It prepares,", "you approve."],
+        h2: ["It drafts on Sunday,", "you approve on Monday."],
         items: [
           {
             titre: "Acknowledging.",
@@ -1096,7 +1096,7 @@ export const METIERS: readonly Metier[] = [
           {
             titre: "Answering the phone.",
             texte:
-              "When you are at a viewing, the assistant can take the call and leave you a written note. It promises no date and no price. The phone is part of the Complete tier: three tasks including the phone.",
+              "During a viewing, you don't pick up. The assistant can take the call and leave you a written note, without promising a date or a price. The phone needs the Complete tier: three tasks including the phone.",
           },
         ],
       },
@@ -1143,7 +1143,7 @@ export const METIERS: readonly Metier[] = [
       meta: "Fiduciaires et comptables · Genève",
       h1: ["Assistant IA pour fiduciaires", "à Genève."],
       chapo:
-        "Nawa Corps, studio genevois, installe dans les fiduciaires de Genève un assistant IA qui connaît déjà leur métier. Il peut préparer la demande des pièces manquantes, trier ce qui arrive et vous dire chaque lundi quels dossiers attendent encore. Il ne s'engage jamais à votre place : vous validez.",
+        "Nawa Corps, studio genevois, installe dans les fiduciaires de Genève un assistant IA qui sait déjà ce qu'est un certificat de salaire ou une attestation de 3e pilier. Il peut préparer la demande des pièces manquantes, trier ce qui arrive et vous dire chaque lundi quels dossiers attendent encore. Il ne s'engage jamais à votre place : vous validez.",
       carte: {
         soirees: "Les pièces à réclamer aux clients, encore et encore, et les e-mails du soir.",
         peut: "Réclamer les pièces manquantes, trier ce qui arrive, tenir la liste des dossiers incomplets.",
@@ -1171,7 +1171,7 @@ export const METIERS: readonly Metier[] = [
         sources: "Genève compte 1 041 établissements d'activités comptables et fiduciaires (OCSTAT 2024).",
       },
       taches: {
-        h2: ["Il prépare,", "vous validez."],
+        h2: ["Il tient la liste,", "vous validez l'envoi."],
         items: [
           {
             titre: "Réclamer les pièces.",
@@ -1184,7 +1184,7 @@ export const METIERS: readonly Metier[] = [
           },
           {
             titre: "Relancer.",
-            texte: "Le client n'a pas répondu ? La relance est prête. Vous la relisez, vous l'envoyez.",
+            texte: "Toujours pas de certificat de salaire ? La relance attend dans votre liste. Vous la relisez avant l'envoi.",
           },
           {
             titre: "Accuser réception.",
@@ -1238,7 +1238,7 @@ export const METIERS: readonly Metier[] = [
       meta: "Accounting firms · Geneva",
       h1: ["AI assistant for accounting", "firms in Geneva."],
       chapo:
-        "Nawa Corps, a Geneva studio, sets up for Geneva accounting firms (fiduciaries) an AI assistant that already knows their trade. It can draft requests for missing documents, sort what comes in and tell you every Monday which files are still waiting. It never commits on your behalf: you approve.",
+        "Nawa Corps, a Geneva studio, sets up for Geneva accounting firms (fiduciaries) an AI assistant that already knows what a salary certificate or a pillar 3a statement is. It can draft requests for missing documents, sort what comes in and tell you every Monday which files are still waiting. It never commits on your behalf: you approve.",
       carte: {
         soirees: "Documents to chase from clients, again and again, and evening emails.",
         peut: "Chase missing documents, sort what comes in, keep the list of incomplete files.",
@@ -1266,7 +1266,7 @@ export const METIERS: readonly Metier[] = [
         sources: "Geneva has 1,041 accounting and fiduciary establishments (OCSTAT 2024).",
       },
       taches: {
-        h2: ["It prepares,", "you approve."],
+        h2: ["It keeps the list,", "you approve what goes."],
         items: [
           {
             titre: "Chasing documents.",
@@ -1279,7 +1279,7 @@ export const METIERS: readonly Metier[] = [
           },
           {
             titre: "Following up.",
-            texte: "The client hasn't replied? The follow-up is ready. You read it, you send it.",
+            texte: "Still no salary certificate? The follow-up waits in your list. You read it before it goes.",
           },
           {
             titre: "Acknowledging.",
@@ -1336,7 +1336,7 @@ export const METIERS: readonly Metier[] = [
       meta: "Garages et carrosseries · Genève",
       h1: ["Assistant IA pour garages", "à Genève."],
       chapo:
-        "Nawa Corps, studio genevois, installe dans les garages de Genève un assistant IA qui connaît déjà leur métier. Il peut prendre les appels et les demandes de rendez-vous, préparer les devis et les rappels de service. Le téléphone fait partie du palier Complet : trois tâches dont le téléphone. Il ne s'engage jamais à votre place : vous validez.",
+        "Nawa Corps, studio genevois, installe dans les garages de Genève un assistant IA qui connaît déjà l'atelier : le service, l'expertise, les pneus d'hiver. Il peut prendre les appels, avec le palier Complet (trois tâches dont le téléphone), noter les demandes de rendez-vous, préparer les devis et les rappels de service. Le prix d'une réparation, c'est vous qui le donnez.",
       carte: {
         soirees: "Les appels pendant qu'on a les mains dans le moteur, les rendez-vous, les devis.",
         peut: "Prendre l'appel et la demande de rendez-vous, préparer le devis et les rappels de service.",
@@ -1354,7 +1354,7 @@ export const METIERS: readonly Metier[] = [
           },
           {
             titre: "Les devis.",
-            texte: "Une réparation à chiffrer, des pièces à vérifier, un client à rappeler.",
+            texte: "Avant de chiffrer, il faut vérifier les pièces. Le client, lui, voudrait un prix tout de suite.",
           },
           {
             titre: "Les rappels oubliés.",
@@ -1364,12 +1364,12 @@ export const METIERS: readonly Metier[] = [
         sources: "Genève compte 347 garages d'entretien et de réparation et 112 carrosseries (OCSTAT 2024).",
       },
       taches: {
-        h2: ["Il prépare,", "vous validez."],
+        h2: ["Il note et prépare,", "l'atelier valide."],
         items: [
           {
             titre: "Répondre au téléphone.",
             texte:
-              "Quand personne ne peut décrocher, l'assistant peut prendre l'appel : le nom, le véhicule, ce qui ne va pas. Il ne promet ni date ni prix. Le téléphone fait partie du palier Complet : trois tâches dont le téléphone.",
+              "Personne de libre au comptoir ? L'assistant peut prendre l'appel et noter le nom, le véhicule et ce qui ne va pas. Il ne promet ni date ni prix. Cette tâche fait partie du palier Complet : trois tâches dont le téléphone.",
           },
           {
             titre: "Prendre les demandes de rendez-vous.",
@@ -1400,7 +1400,7 @@ export const METIERS: readonly Metier[] = [
       faq: [
         {
           q: "Il connaît le vocabulaire d'un garage ?",
-          r: "Nous construisons une base pour votre métier : les demandes types, le vocabulaire de l'atelier, les rappels. Puis nous la réglons sur votre garage. La démo se fait sur des demandes de votre métier.",
+          r: "Plaquettes, distribution, expertise, géométrie : la base du métier contient ces mots-là et les demandes qui reviennent. Nous l'ajustons ensuite à votre garage, et la démo se fait sur des demandes d'atelier.",
         },
         {
           q: "Il donne des prix au téléphone ?",
@@ -1416,7 +1416,7 @@ export const METIERS: readonly Metier[] = [
         },
       ],
       controle:
-        "Aucun prix de réparation, aucun rendez-vous et aucun rappel de service ne part sans votre accord. Il prépare ; l'atelier valide.",
+        "Un prix de réparation ou un rendez-vous ne part jamais sans votre accord, un rappel de service non plus. Il prépare, l'atelier valide.",
       serviceType: "Assistant IA pour garages et carrosseries",
     },
     en: {
@@ -1427,7 +1427,7 @@ export const METIERS: readonly Metier[] = [
       meta: "Garages and body shops · Geneva",
       h1: ["AI assistant for garages", "in Geneva."],
       chapo:
-        "Nawa Corps, a Geneva studio, sets up for Geneva garages an AI assistant that already knows their trade. It can take calls and appointment requests, and draft quotes and service reminders. The phone is part of the Complete tier: three tasks including the phone. It never commits on your behalf: you approve.",
+        "Nawa Corps, a Geneva studio, sets up for Geneva garages an AI assistant that already knows the workshop: the service, the inspection, the winter tyres. It can take calls, with the Complete tier (three tasks including the phone), note appointment requests, and draft quotes and service reminders. The price of a repair is yours to give.",
       carte: {
         soirees: "Calls while your hands are in the engine, appointments, quotes.",
         peut: "Take the call and the appointment request, draft the quote and the service reminders.",
@@ -1445,7 +1445,7 @@ export const METIERS: readonly Metier[] = [
           },
           {
             titre: "Quotes.",
-            texte: "A repair to price, parts to check, a client to call back.",
+            texte: "Before you can price it, the parts need checking. The client would like a price right now.",
           },
           {
             titre: "Forgotten reminders.",
@@ -1455,12 +1455,12 @@ export const METIERS: readonly Metier[] = [
         sources: "Geneva has 347 servicing and repair garages and 112 body shops (OCSTAT 2024).",
       },
       taches: {
-        h2: ["It prepares,", "you approve."],
+        h2: ["It notes and drafts,", "the workshop approves."],
         items: [
           {
             titre: "Answering the phone.",
             texte:
-              "When nobody can pick up, the assistant can take the call: the name, the vehicle, what's wrong. It promises no date and no price. The phone is part of the Complete tier: three tasks including the phone.",
+              "Nobody free at the desk? The assistant can take the call and note the name, the vehicle and what's wrong. It promises no date and no price. This task is part of the Complete tier: three tasks including the phone.",
           },
           {
             titre: "Taking appointment requests.",
@@ -1490,7 +1490,7 @@ export const METIERS: readonly Metier[] = [
       faq: [
         {
           q: "Does it know garage vocabulary?",
-          r: "We build a base for your trade: the usual requests, workshop vocabulary, reminders. Then we set it to your garage. The demo runs on requests from your trade.",
+          r: "Brake pads, timing belt, inspection, alignment: the trade base holds those words and the requests that keep coming back. We then adjust it to your garage, and the demo runs on workshop requests.",
         },
         {
           q: "Does it give prices on the phone?",
@@ -1506,7 +1506,7 @@ export const METIERS: readonly Metier[] = [
         },
       ],
       controle:
-        "No repair price, no appointment and no service reminder goes out without your approval. It prepares; the workshop approves.",
+        "A repair price or an appointment never goes out without your approval, and neither does a service reminder. It prepares, the workshop approves.",
       serviceType: "AI assistant for garages and body shops",
     },
   },
@@ -1521,7 +1521,7 @@ export const METIERS: readonly Metier[] = [
       meta: "Architecture et ingénierie · Genève",
       h1: ["Assistant IA pour architectes", "et bureaux d'études à Genève."],
       chapo:
-        "Nawa Corps, studio genevois, installe chez les architectes et les bureaux d'études de Genève un assistant IA qui connaît déjà leur métier. Il peut trier les demandes de projet, réclamer les documents aux clients et aux entreprises, préparer les relances et les rendez-vous. Il ne s'engage jamais à votre place : vous validez.",
+        "Nawa Corps, studio genevois, installe chez les architectes et les bureaux d'études de Genève un assistant IA qui connaît déjà le métier, jusqu'aux pièces du dossier d'autorisation. Il peut trier les demandes de projet, réclamer les documents aux clients comme aux entreprises, et préparer relances et rendez-vous. Honoraires et délais restent votre affaire : il ne s'engage jamais à votre place.",
       carte: {
         soirees: "Les documents à réclamer aux clients et aux entreprises, les relances, les demandes de projet.",
         peut: "Trier les demandes, réclamer les documents manquants, préparer les relances et les rendez-vous.",
@@ -1549,7 +1549,7 @@ export const METIERS: readonly Metier[] = [
         sources: "Genève compte 731 bureaux d'architecture (OCSTAT 2024).",
       },
       taches: {
-        h2: ["Il prépare,", "vous validez."],
+        h2: ["Il réunit les pièces,", "vous gardez le projet."],
         items: [
           {
             titre: "Trier les demandes de projet.",
@@ -1563,7 +1563,7 @@ export const METIERS: readonly Metier[] = [
           },
           {
             titre: "Préparer les relances.",
-            texte: "Un document toujours attendu ? La relance est prête. Vous la relisez, vous l'envoyez.",
+            texte: "L'attestation de l'ingénieur n'est toujours pas arrivée ? La relance est prête, adressée à la bonne personne. Vous la relisez avant qu'elle parte.",
           },
           {
             titre: "Prendre les rendez-vous.",
@@ -1572,7 +1572,7 @@ export const METIERS: readonly Metier[] = [
           {
             titre: "Répondre au téléphone.",
             texte:
-              "Quand vous êtes en chantier ou en séance, l'assistant peut prendre l'appel et vous laisser une fiche écrite. Il ne promet ni date ni prix. Le téléphone fait partie du palier Complet : trois tâches dont le téléphone.",
+              "En séance de chantier, vous ne répondez pas. L'assistant peut prendre l'appel et vous laisser une fiche écrite. Il ne promet ni délai ni honoraires. Pour le téléphone, il faut le palier Complet : trois tâches dont le téléphone.",
           },
         ],
       },
@@ -1590,7 +1590,7 @@ export const METIERS: readonly Metier[] = [
       faq: [
         {
           q: "Il comprend un projet d'architecture ?",
-          r: "Nous construisons une base pour votre métier : les demandes types, le vocabulaire, les pièces d'un dossier. Puis nous la réglons sur votre bureau. La démo se fait sur des demandes de votre métier.",
+          r: "Il connaît les demandes qui reviennent (agrandissement, rénovation, changement d'affectation), le vocabulaire et les pièces d'un dossier. Nous réglons cette base sur votre bureau, et la démo se fait sur des demandes de votre métier.",
         },
         {
           q: "Il écrit aux entreprises et aux clients à ma place ?",
@@ -1617,7 +1617,7 @@ export const METIERS: readonly Metier[] = [
       meta: "Architecture and engineering · Geneva",
       h1: ["AI assistant for architects", "and engineers in Geneva."],
       chapo:
-        "Nawa Corps, a Geneva studio, sets up for Geneva architects and engineering firms an AI assistant that already knows their trade. It can sort project enquiries, chase documents from clients and contractors, and draft follow-ups and appointments. It never commits on your behalf: you approve.",
+        "Nawa Corps, a Geneva studio, sets up for Geneva architects and engineering firms an AI assistant that already knows the work, down to the documents in a planning application. It can sort project enquiries, chase documents from clients and contractors alike, and draft follow-ups and appointments. Fees and deadlines stay your business: it never commits on your behalf.",
       carte: {
         soirees: "Documents to chase from clients and contractors, follow-ups, project enquiries.",
         peut: "Sort enquiries, chase missing documents, draft follow-ups and appointments.",
@@ -1645,7 +1645,7 @@ export const METIERS: readonly Metier[] = [
         sources: "Geneva has 731 architecture firms (OCSTAT 2024).",
       },
       taches: {
-        h2: ["It prepares,", "you approve."],
+        h2: ["It gathers the documents,", "you keep the project."],
         items: [
           {
             titre: "Sorting project enquiries.",
@@ -1659,7 +1659,7 @@ export const METIERS: readonly Metier[] = [
           },
           {
             titre: "Drafting follow-ups.",
-            texte: "A document still awaited? The follow-up is ready. You read it, you send it.",
+            texte: "The engineer's certificate still hasn't arrived? The follow-up is ready, addressed to the right person. You read it before it goes.",
           },
           {
             titre: "Booking appointments.",
@@ -1668,7 +1668,7 @@ export const METIERS: readonly Metier[] = [
           {
             titre: "Answering the phone.",
             texte:
-              "When you are on site or in a meeting, the assistant can take the call and leave you a written note. It promises no date and no price. The phone is part of the Complete tier: three tasks including the phone.",
+              "In a site meeting, you don't answer. The assistant can take the call and leave you a written note. It promises no deadline and no fee. For the phone, you need the Complete tier: three tasks including the phone.",
           },
         ],
       },
@@ -1685,7 +1685,7 @@ export const METIERS: readonly Metier[] = [
       faq: [
         {
           q: "Does it understand an architecture project?",
-          r: "We build a base for your trade: the usual enquiries, the vocabulary, the documents in a file. Then we set it to your firm. The demo runs on enquiries from your trade.",
+          r: "It knows the enquiries that keep coming back (extension, renovation, change of use), the vocabulary and the documents in a file. We set that base to your firm, and the demo runs on enquiries from your trade.",
         },
         {
           q: "Does it write to contractors and clients in my place?",
@@ -1716,7 +1716,7 @@ export const METIERS: readonly Metier[] = [
       meta: "Coiffure et beauté · Genève",
       h1: ["Assistant IA pour salons de", "coiffure et de beauté à Genève."],
       chapo:
-        "Nawa Corps, studio genevois, installe dans les salons de coiffure et de beauté de Genève un assistant IA qui connaît déjà leur métier. Il peut répondre aux messages WhatsApp et Instagram, préparer les rendez-vous et leurs rappels, reproposer les créneaux annulés et relancer les clientes absentes depuis longtemps. Il ne s'engage jamais à votre place : vous validez.",
+        "Nawa Corps, studio genevois, installe dans les salons de coiffure et de beauté de Genève un assistant IA qui connaît déjà le métier, de la couleur au soin du visage. Il peut répondre aux messages WhatsApp et Instagram, préparer les rendez-vous et leurs rappels, et reproposer un créneau annulé à la liste d'attente. L'agenda reste le vôtre : il ne s'engage jamais à votre place.",
       carte: {
         soirees: "Les messages du soir et des jours de congé, les annulations, les rendez-vous oubliés.",
         peut: "Répondre aux messages, préparer rendez-vous et rappels, reproposer les créneaux annulés.",
@@ -1744,7 +1744,7 @@ export const METIERS: readonly Metier[] = [
         sources: "Genève compte 776 salons de coiffure et 747 instituts de beauté (OCSTAT 2024).",
       },
       taches: {
-        h2: ["Il prépare,", "vous validez."],
+        h2: ["Entre deux clientes,", "vous validez."],
         items: [
           {
             titre: "Répondre aux messages.",
@@ -1790,7 +1790,7 @@ export const METIERS: readonly Metier[] = [
         },
         {
           q: "Il peut envoyer les rappels de rendez-vous ?",
-          r: "Il les prépare, et vous les validez avant l'envoi.",
+          r: "Il les prépare la veille, et vous validez la liste en une fois avant l'envoi.",
         },
         {
           q: "Et les réseaux sociaux ?",
@@ -1809,7 +1809,7 @@ export const METIERS: readonly Metier[] = [
       meta: "Hair and beauty · Geneva",
       h1: ["AI assistant for hair and", "beauty salons in Geneva."],
       chapo:
-        "Nawa Corps, a Geneva studio, sets up for Geneva hair and beauty salons an AI assistant that already knows their trade. It can answer WhatsApp and Instagram messages, draft appointments and their reminders, re-offer cancelled slots and follow up clients you haven't seen in a while. It never commits on your behalf: you approve.",
+        "Nawa Corps, a Geneva studio, sets up for Geneva hair and beauty salons an AI assistant that already knows the trade, from colour to facials. It can answer WhatsApp and Instagram messages, draft appointments and their reminders, and re-offer a cancelled slot to the waiting list. The diary stays yours: it never commits on your behalf.",
       carte: {
         soirees: "Messages in the evening and on days off, cancellations, forgotten appointments.",
         peut: "Answer messages, draft appointments and reminders, re-offer cancelled slots.",
@@ -1837,7 +1837,7 @@ export const METIERS: readonly Metier[] = [
         sources: "Geneva has 776 hair salons and 747 beauty salons (OCSTAT 2024).",
       },
       taches: {
-        h2: ["It prepares,", "you approve."],
+        h2: ["Between two clients,", "you approve."],
         items: [
           {
             titre: "Answering messages.",
@@ -1883,7 +1883,7 @@ export const METIERS: readonly Metier[] = [
         },
         {
           q: "Can it send appointment reminders?",
-          r: "It drafts them, and you approve them before they go out.",
+          r: "It drafts them the day before, and you approve the list in one go before they go out.",
         },
         {
           q: "What about social media?",
@@ -1906,7 +1906,7 @@ export const METIERS: readonly Metier[] = [
       meta: "Nettoyage et entretien · Genève",
       h1: ["Assistant IA pour entreprises", "de nettoyage à Genève."],
       chapo:
-        "Nawa Corps, studio genevois, installe dans les entreprises de nettoyage et d'entretien de Genève un assistant IA qui connaît déjà leur métier. Il peut demander les photos et la surface, préparer le devis, proposer les créneaux du planning et relancer les devis sans réponse. Il ne s'engage jamais à votre place : vous validez.",
+        "Nawa Corps, studio genevois, installe dans les entreprises de nettoyage et d'entretien de Genève un assistant IA qui connaît déjà le métier, de la fin de bail à l'entretien de bureaux. Il peut demander la surface et les photos, préparer le devis, proposer un créneau dans le planning et relancer les devis restés sans réponse. C'est vous qui chiffrez et qui fixez la date.",
       carte: {
         soirees: "Les demandes de devis sans surface ni photo, le planning des équipes, les relances.",
         peut: "Demander photos et surface, préparer le devis, proposer le créneau, relancer.",
@@ -1933,7 +1933,7 @@ export const METIERS: readonly Metier[] = [
         ],
       },
       taches: {
-        h2: ["Il prépare,", "vous validez."],
+        h2: ["La surface et les photos,", "avant le chiffrage."],
         items: [
           {
             titre: "Compléter la demande.",
@@ -1942,7 +1942,7 @@ export const METIERS: readonly Metier[] = [
           },
           {
             titre: "Préparer le devis.",
-            texte: "À partir des photos et de la surface, un brouillon de devis selon vos tarifs. Vous corrigez, vous envoyez.",
+            texte: "Avec la surface et les photos du four et des vitres, il prépare un brouillon selon vos tarifs. Vous le corrigez avant l'envoi.",
           },
           {
             titre: "Proposer un créneau.",
@@ -1950,12 +1950,12 @@ export const METIERS: readonly Metier[] = [
           },
           {
             titre: "Relancer.",
-            texte: "Le devis reste sans réponse ? Il prépare la relance. Vous la relisez, vous l'envoyez.",
+            texte: "Un devis de fin de bail sans réponse, à quelques jours de l'état des lieux ? Il prépare la relance, vous la relisez.",
           },
           {
             titre: "Répondre au téléphone.",
             texte:
-              "Quand vous êtes sur un chantier, l'assistant peut prendre l'appel et vous laisser une fiche écrite. Il ne promet ni date ni prix. Le téléphone fait partie du palier Complet : trois tâches dont le téléphone.",
+              "Quand toute l'équipe est sur place, personne ne répond. L'assistant peut prendre l'appel et vous laisser une fiche écrite. Il ne promet ni date ni prix. Il faut pour cela le palier Complet : trois tâches dont le téléphone.",
           },
         ],
       },
@@ -1968,7 +1968,7 @@ export const METIERS: readonly Metier[] = [
         soir:
           "Une demande complète : surface, photos, date de l'état des lieux. Un brouillon de devis et une proposition de date attendent votre accord.",
         releve:
-          "« Fin de bail : devis envoyé après votre accord, date réservée. Bureaux, nettoyage régulier : sans réponse, relance prête à valider. »",
+          "« Fin de bail : devis envoyé après votre accord, date validée par vous. Bureaux, nettoyage régulier : sans réponse, relance prête à valider. »",
       },
       faq: [
         {
@@ -1985,7 +1985,7 @@ export const METIERS: readonly Metier[] = [
         },
         {
           q: "Il peut prendre les appels ?",
-          r: "Oui, nous pouvons l'installer pour ça : le palier Complet comprend trois tâches dont le téléphone. Il prend le nom, l'adresse et le besoin, puis vous laisse une fiche écrite. Il ne donne aucun prix.",
+          r: "Oui, dans le palier Complet : trois tâches dont le téléphone. Il note le nom, l'adresse et le besoin, et vous laisse une fiche écrite. Aucun prix au téléphone.",
         },
       ],
       controle:
@@ -2000,7 +2000,7 @@ export const METIERS: readonly Metier[] = [
       meta: "Cleaning and maintenance · Geneva",
       h1: ["AI assistant for cleaning", "companies in Geneva."],
       chapo:
-        "Nawa Corps, a Geneva studio, sets up for Geneva cleaning and maintenance companies an AI assistant that already knows their trade. It can ask for photos and the surface area, draft the quote, propose schedule slots and follow up unanswered quotes. It never commits on your behalf: you approve.",
+        "Nawa Corps, a Geneva studio, sets up for Geneva cleaning and maintenance companies an AI assistant that already knows the trade, from end-of-tenancy cleans to office contracts. It can ask for the surface area and photos, draft the quote, propose a slot in the schedule and follow up quotes left unanswered. You set the price and the date.",
       carte: {
         soirees: "Quote requests with no surface area or photo, the team schedule, follow-ups.",
         peut: "Ask for photos and surface area, draft the quote, propose the slot, follow up.",
@@ -2027,7 +2027,7 @@ export const METIERS: readonly Metier[] = [
         ],
       },
       taches: {
-        h2: ["It prepares,", "you approve."],
+        h2: ["Surface area and photos,", "before the price."],
         items: [
           {
             titre: "Completing the request.",
@@ -2036,7 +2036,7 @@ export const METIERS: readonly Metier[] = [
           },
           {
             titre: "Drafting the quote.",
-            texte: "From the photos and surface area, a draft quote at your rates. You correct it, you send it.",
+            texte: "With the surface area and photos of the oven and windows, it drafts a quote at your rates. You correct it before it goes.",
           },
           {
             titre: "Proposing a slot.",
@@ -2044,12 +2044,12 @@ export const METIERS: readonly Metier[] = [
           },
           {
             titre: "Following up.",
-            texte: "A quote with no answer? It drafts the follow-up. You read it, you send it.",
+            texte: "An end-of-tenancy quote with no answer, days before the check-out inspection? It drafts the follow-up, you read it.",
           },
           {
             titre: "Answering the phone.",
             texte:
-              "When you are on a job, the assistant can take the call and leave you a written note. It promises no date and no price. The phone is part of the Complete tier: three tasks including the phone.",
+              "When the whole team is on a job, nobody answers. The assistant can take the call and leave you a written note. It promises no date and no price. For this you need the Complete tier: three tasks including the phone.",
           },
         ],
       },
@@ -2061,7 +2061,7 @@ export const METIERS: readonly Metier[] = [
         soir:
           "A complete request: surface area, photos, inspection date. A draft quote and a proposed date wait for your approval.",
         releve:
-          "“End of tenancy: quote sent after your approval, date booked. Offices, regular cleaning: no answer, follow-up ready to approve.”",
+          "“End of tenancy: quote sent after your approval, date approved by you. Offices, regular cleaning: no answer, follow-up ready to approve.”",
       },
       faq: [
         {
@@ -2078,7 +2078,7 @@ export const METIERS: readonly Metier[] = [
         },
         {
           q: "Can it take calls?",
-          r: "Yes, we can set it up for that: the Complete tier covers three tasks including the phone. It takes the name, the address and the need, then leaves you a written note. It gives no price.",
+          r: "Yes, in the Complete tier: three tasks including the phone. It notes the name, the address and the need, and leaves you a written note. No price on the phone.",
         },
       ],
       controle:
@@ -2097,7 +2097,7 @@ export const METIERS: readonly Metier[] = [
       meta: "Déménagement · Genève",
       h1: ["Assistant IA pour entreprises", "de déménagement à Genève."],
       chapo:
-        "Nawa Corps, studio genevois, installe dans les entreprises de déménagement de Genève un assistant IA qui connaît déjà leur métier. Il peut demander l'inventaire et les accès, préparer le devis, la confirmation de date et les rappels. Il ne s'engage jamais à votre place : vous validez.",
+        "Nawa Corps, studio genevois, installe dans les entreprises de déménagement de Genève un assistant IA qui connaît déjà le métier et sait quoi demander avant un devis. Il peut réclamer l'inventaire et les accès, puis préparer le devis, la confirmation de date et les rappels de la veille. La date, c'est vous qui la validez.",
       carte: {
         soirees: "Les demandes sans inventaire, les devis à chiffrer, les dates à confirmer.",
         peut: "Demander l'inventaire et les accès, préparer le devis, la confirmation et les rappels.",
@@ -2124,7 +2124,7 @@ export const METIERS: readonly Metier[] = [
         ],
       },
       taches: {
-        h2: ["Il prépare,", "vous validez."],
+        h2: ["L'inventaire d'abord,", "le devis ensuite."],
         items: [
           {
             titre: "Demander l'inventaire.",
@@ -2133,7 +2133,7 @@ export const METIERS: readonly Metier[] = [
           },
           {
             titre: "Préparer le devis.",
-            texte: "À partir de l'inventaire et des accès, un brouillon de devis selon vos tarifs. Vous corrigez, vous envoyez.",
+            texte: "L'inventaire, les étages, l'ascenseur aux deux adresses : il en tire un brouillon selon vos tarifs. Vous corrigez avant l'envoi.",
           },
           {
             titre: "Confirmer la date.",
@@ -2146,7 +2146,7 @@ export const METIERS: readonly Metier[] = [
           {
             titre: "Répondre au téléphone.",
             texte:
-              "Quand vous êtes en plein déménagement, l'assistant peut prendre l'appel et vous laisser une fiche écrite. Il ne promet ni date ni prix. Le téléphone fait partie du palier Complet : trois tâches dont le téléphone.",
+              "En plein déménagement, le téléphone reste dans la poche. L'assistant peut prendre l'appel et vous laisser une fiche écrite, sans promettre de date ni de prix. C'est le palier Complet : trois tâches dont le téléphone.",
           },
         ],
       },
@@ -2176,7 +2176,7 @@ export const METIERS: readonly Metier[] = [
         },
         {
           q: "Il peut prendre les appels ?",
-          r: "Oui, nous pouvons l'installer pour ça : le palier Complet comprend trois tâches dont le téléphone. Il prend le nom, les adresses et la date voulue, puis vous laisse une fiche écrite. Il ne donne aucun prix.",
+          r: "Oui, avec le palier Complet (trois tâches dont le téléphone). Il note le nom, les deux adresses et la date voulue, et vous laisse une fiche écrite. Il ne donne aucun prix.",
         },
       ],
       controle:
@@ -2191,7 +2191,7 @@ export const METIERS: readonly Metier[] = [
       meta: "Removals · Geneva",
       h1: ["AI assistant for removal", "companies in Geneva."],
       chapo:
-        "Nawa Corps, a Geneva studio, sets up for Geneva removal companies an AI assistant that already knows their trade. It can ask for the inventory and access details, and draft the quote, the date confirmation and the reminders. It never commits on your behalf: you approve.",
+        "Nawa Corps, a Geneva studio, sets up for Geneva removal companies an AI assistant that already knows the trade and what to ask before a quote. It can ask for the inventory and access details, then draft the quote, the date confirmation and the reminders for the day before. The date is yours to approve.",
       carte: {
         soirees: "Requests with no inventory, quotes to price, dates to confirm.",
         peut: "Ask for the inventory and access, draft the quote, the confirmation and the reminders.",
@@ -2218,7 +2218,7 @@ export const METIERS: readonly Metier[] = [
         ],
       },
       taches: {
-        h2: ["It prepares,", "you approve."],
+        h2: ["Inventory first,", "quote second."],
         items: [
           {
             titre: "Asking for the inventory.",
@@ -2227,7 +2227,7 @@ export const METIERS: readonly Metier[] = [
           },
           {
             titre: "Drafting the quote.",
-            texte: "From the inventory and access, a draft quote at your rates. You correct it, you send it.",
+            texte: "The inventory, the floors, the lift at both addresses: from these it drafts a quote at your rates. You correct it before it goes.",
           },
           {
             titre: "Confirming the date.",
@@ -2240,7 +2240,7 @@ export const METIERS: readonly Metier[] = [
           {
             titre: "Answering the phone.",
             texte:
-              "When you are in the middle of a move, the assistant can take the call and leave you a written note. It promises no date and no price. The phone is part of the Complete tier: three tasks including the phone.",
+              "In the middle of a move, the phone stays in your pocket. The assistant can take the call and leave you a written note, without promising a date or a price. That is the Complete tier: three tasks including the phone.",
           },
         ],
       },
@@ -2268,7 +2268,7 @@ export const METIERS: readonly Metier[] = [
         },
         {
           q: "Can it take calls?",
-          r: "Yes, we can set it up for that: the Complete tier covers three tasks including the phone. It takes the name, the addresses and the date wanted, then leaves you a written note. It gives no price.",
+          r: "Yes, with the Complete tier (three tasks including the phone). It notes the name, both addresses and the date wanted, and leaves you a written note. It gives no price.",
         },
       ],
       controle:
@@ -2340,7 +2340,7 @@ export const TEXTES_METIERS = {
       // « Genève » dans les 100 premiers mots (audit v4 B1, v5) : le title le
       // portait, le texte visible non.
       intro:
-        "Nous construisons, pour les PME de Genève, une base par métier : les demandes types, le vocabulaire, les documents. Puis nous la réglons sur votre entreprise : vos prestations, vos clients, vos mots. Il prépare, vous validez. Il ne s'engage jamais à votre place.",
+        "Pour les PME de Genève, nous partons d'une base par métier : les demandes qui reviennent, les mots du métier, les documents. Puis nous la réglons sur votre entreprise, vos prestations et votre façon d'écrire. L'assistant prépare, vous validez, et il ne s'engage jamais à votre place.",
       autre:
         "Votre métier n'est pas dans la liste ? Dites-le-nous : la démo se fait sur des demandes de votre métier.",
       exclus:
@@ -2422,7 +2422,7 @@ export const TEXTES_METIERS = {
       meta: "Trades",
       h1: ["An AI assistant,", "set to your trade."] as const,
       intro:
-        "We build a base for each trade: the usual enquiries, the vocabulary, the documents. Then we set it to your business: your services, your clients, your words. It prepares, you approve. It never commits on your behalf.",
+        "For Geneva small businesses, we start from a base for each trade: the enquiries that keep coming back, the trade's words, the documents. Then we set it to your business, your services and the way you write. The assistant prepares, you approve, and it never commits on your behalf.",
       autre: "Your trade isn't on the list? Tell us: the demo runs on enquiries from your trade.",
       exclus:
         "We do not set up the assistant for medical, dental or physiotherapy practices, or for lawyers: professional secrecy stands in the way.",

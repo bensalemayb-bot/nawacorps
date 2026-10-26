@@ -153,7 +153,7 @@ const fr = {
   cookies: {
     texte:
       "Ce site n'utilise que le stockage nécessaire à son fonctionnement : aucun suivi publicitaire, aucune mesure d'audience.",
-    enSavoirPlus: "En savoir plus",
+    enSavoirPlus: "Lire le détail",
     compris: "J'ai compris",
     /** aria-label de la région du bandeau. */
     region: "Information sur les cookies",
@@ -191,7 +191,7 @@ const fr = {
      * Un FAIT vérifiable — où arrive le message — et AUCUN délai : le seul
      * engagement autorisé est `MENTION_REPONSE`, affiché au-dessus.
      */
-    succes: "Message reçu — il arrive directement sur notre téléphone.",
+    succes: "Message reçu. Il arrive directement sur notre téléphone.",
     erreurEnvoi: "Envoi impossible pour le moment. Écrivez-nous sur WhatsApp en attendant.",
     erreurReseau: "Connexion interrompue. Écrivez-nous sur WhatsApp en attendant.",
     /**
@@ -279,7 +279,8 @@ const fr = {
      * suivant (components/RotationDouleurs.tsx), puis la réponse. Les mots
      * sont ceux du panel : le temps, les clients qui appellent ailleurs, les
      * soirées, les devis non relancés. La réponse garde le contrôle
-     * (« vous validez ») : jamais « à votre place ».
+     * (« le dernier mot reste à vous » ; « Vous validez » est déjà dit par
+     * le sous-titre et la sortie du hero) : jamais « à votre place ».
      */
     douleurDebut: "Vous perdez ",
     // Le point est DANS chaque mot : les mots partagent une cellule de la
@@ -287,9 +288,9 @@ const fr = {
     // courts.
     douleurs: ["du temps.", "des clients.", "vos soirées.", "des devis."],
     douleurFin: "",
-    reponse: "Mais l'assistant peut s'en charger. Vous validez.",
+    reponse: "L'assistant prépare, le dernier mot reste à vous.",
     douleurComplet:
-      "Vous perdez du temps, des clients, vos soirées, des devis. Mais l'assistant peut s'en charger. Vous validez.",
+      "Vous perdez du temps, des clients, vos soirées, des devis. L'assistant prépare, le dernier mot reste à vous.",
 
     /**
      * Temps 3 — la démo, en faits. Le prix NE MONTE PAS dans le titre ni le
@@ -427,7 +428,7 @@ const fr = {
       },
     ],
     cloture:
-      "Ces chiffres viennent d'études publiées, pas de nos clients. Le vôtre se lit dans le relevé du lundi, sur vos propres demandes.",
+      "Ce sont des moyennes d'études, pas nos résultats. Votre chiffre à vous, vous le lirez dans le relevé du lundi, sur vos propres demandes.",
   },
 
   /**
@@ -447,7 +448,7 @@ const fr = {
     /** Sous les lignes, vers le hub /metiers. */
     tous: "Tous les métiers →",
     /** La ligne sous les métiers. */
-    ordre: "Votre métier n'est pas dans la liste ? La démo se fait sur des demandes de votre métier.",
+    ordre: "Votre métier n'y est pas ? Écrivez-nous quand même : la démo se fait de toute façon sur des demandes de votre métier.",
   },
 
   /**
@@ -477,12 +478,12 @@ const fr = {
     etape03Titre: "L'essai",
     etape03Court: "Deux semaines sur vos vraies demandes. Vous lisez, vous validez.",
     etape03Texte:
-      "Pendant deux semaines, l'assistant travaille sur vos vraies demandes. Votre part : lire et valider. Il ne s'engage jamais à votre place. Chaque lundi, le relevé.",
+      "Pendant deux semaines, l'assistant travaille sur vos vraies demandes. Votre part : relire ce qu'il prépare, et dire oui ou non. Chaque lundi, le relevé.",
     etape04Moment: "Si le relevé vous convient",
     etape04Titre: "L'abonnement",
     etape04Court: "La mise en place une seule fois, puis l'abonnement sans engagement.",
     etape04Texte:
-      "Vous payez la mise en place, une seule fois. Puis l'abonnement, sans engagement. Nous suivons l'assistant chaque semaine.",
+      "Vous payez la mise en place, une fois. L'abonnement prend le relais, sans engagement, et nous gardons un œil sur l'assistant chaque semaine.",
     /** Espace final : la flèche `.ar` suit. Mène à (05), où vit le montant. */
     /** Le libellé du bloc qui déplie les quatre textes entiers. */
     detail: "Les 4 étapes en détail",
@@ -512,7 +513,7 @@ const fr = {
     paragraphe2:
       "Chaque lundi, vous recevez un relevé court. Il dit ce qui a été traité, relancé et préparé, et ce qui vous attend. S'il ne s'est rien passé, le relevé le dit.",
     paragraphe3:
-      "Nawa Corps est un studio genevois. Ayoub Bensalem fait le premier appel, la démo et le suivi. Notre méthode : une base par métier, réglée sur votre entreprise, et un assistant qui ne s'engage jamais à votre place. Vous jugez sur pièces, sur vos propres demandes, avant de payer.",
+      "Nawa Corps est un studio genevois. Ayoub Bensalem fait le premier appel, la démo et le suivi. Nous partons d'une base par métier, puis nous la réglons sur votre entreprise. Et vous voyez le travail sur vos propres demandes avant de sortir un franc.",
     /**
      * LE PREMIER FAIT EST BORNÉ À L'ASSISTANT DU CLIENT (revue A tour 2, M2 ;
      * revue de code agent-métier, n°1). « Genève / Données en Suisse » se
@@ -554,12 +555,12 @@ const fr = {
      * Les textes entiers (`demoTexte`, `essaiTexte`, `abonnementTexte`) et la
      * note sont rangés dans « Voir le détail », sous la grille.
      */
-    demoCourt: "Sur des demandes de votre métier. Rien à préparer.",
+    demoCourt: "Nous apportons des demandes de votre métier. Vous regardez.",
     essaiCourt: "Il travaille sur vos demandes. Un relevé chaque lundi.",
-    abonnementCourt: "Vous payez la mise en place. Puis l'abonnement, sans engagement.",
+    abonnementCourt: "La mise en place, puis un abonnement que vous pouvez arrêter chaque mois.",
     detail: "Voir le détail",
     demoTexte:
-      "Nous vous montrons l'assistant sur des demandes de votre métier. Vous n'avez rien à préparer, nous n'avons accès à aucun de vos outils. À la fin, le palier de l'abonnement, par écrit.",
+      "Nous vous montrons l'assistant sur des demandes de votre métier. Vous n'avez rien à sortir de vos classeurs, et nous n'accédons à aucun de vos outils. À la fin, nous mettons par écrit le palier de l'abonnement.",
     /** Espace final : la flèche `.ar` suit. */
     demoCta: "Voir la démo sur mon métier ",
     essaiTete: "Deux semaines, sur vos vraies demandes",
@@ -567,7 +568,7 @@ const fr = {
     essaiPaye: "Rien",
     essaiPayeNote: "pendant l'essai",
     essaiTexte:
-      "Pendant deux semaines, l'assistant travaille sur vos demandes. Il ne s'engage jamais à votre place. Vous recevez deux relevés, un chaque lundi.",
+      "Pendant deux semaines, l'assistant travaille sur vos demandes, et c'est vous qui validez. Deux lundis, donc deux relevés.",
     abonnementTete: "Si le relevé vous convient",
     /**
      * « APRÈS L'ESSAI », PLUS « L'ABONNEMENT » (audit CRO du 25.10.2026,
@@ -634,7 +635,7 @@ const fr = {
      */
     questionPreuve: "Comment savoir si ça marche chez moi ?",
     reponsePreuve:
-      "Vous jugez sur pièces avant de payer. La démo se fait sur des demandes de votre métier, sans rien à préparer. L'essai tourne ensuite deux semaines sur vos vraies demandes, et le relevé du lundi montre ce qui a été traité, relancé et préparé. Vous ne payez la mise en place que si ce relevé vous convient.",
+      "Vous jugez sur pièces avant de payer. La démo se fait sur des demandes de votre métier. L'essai tourne ensuite deux semaines sur vos vraies demandes, et le relevé du lundi montre ce qui a été traité, relancé et préparé. Vous ne payez la mise en place que si ce relevé vous convient.",
     questionDonnees: "Et mes données ?",
     reponseDonnees:
       "Les données de votre assistant sont hébergées en Suisse, sous la loi suisse sur la protection des données (nLPD). Pour la démo, vous n'avez rien à nous transmettre et nous n'accédons à aucun de vos outils. Pendant l'essai, l'assistant ne travaille que sur les demandes que vous lui confiez. Il n'a pas accès à vos paiements.",
@@ -644,20 +645,20 @@ const fr = {
     /** Vrai d'après le contrôle affiché : rien de fond ne part sans le patron. */
     questionErreur: "Et s'il se trompe ?",
     reponseErreur:
-      "Il prépare, vous validez. Une réponse de fond, un devis ou un prix ne part pas sans vous : vous corrigez avant. Le seul message qui part seul est l'accusé de réception, que vous avez relu une fois.",
+      "Ça arrivera. C'est pour ça que vous relisez : une erreur dans une réponse, un devis ou un prix, vous la corrigez avant l'envoi. Seul l'accusé de réception part seul, et celui-là, vous l'avez relu une fois.",
     questionBesoin: "Mon travail vient du bouche-à-oreille. Pourquoi un assistant ?",
     reponseBesoin:
       "Il ne vous amène pas de clients. Il reprend la paperasse du soir : les demandes reçues pendant la journée, les devis à préparer, les relances. Si vous n'avez pas de paperasse le soir, vous n'en avez pas besoin. Nous vous le dirons dès le premier appel.",
     /** Jamais « remplace votre secrétaire » (vocabulaire interdit, PM §8). */
     questionPersonne: "Je ne trouve personne pour le bureau.",
     reponsePersonne:
-      "L'assistant ne remplace pas une personne. Il reprend une partie de la paperasse du soir : les demandes de la journée, les devis à préparer, les relances. Vous validez le reste. Commencez par la tâche qui vous prend le plus de soirées : les autres viennent ensuite, selon votre palier.",
+      "L'assistant ne remplace pas une personne, et une secrétaire reste parfois le bon choix. Il reprend la partie du bureau du soir qui revient chaque semaine. Commencez par la tâche qui vous prend le plus de soirées ; les autres suivent, selon votre palier.",
     questionOutils: "J'ai déjà WhatsApp et un logiciel de devis.",
     reponseOutils:
       "Pour la démo, vous ne changez rien : nous vous montrons l'assistant sur des demandes de votre métier, telles qu'elles arrivent par WhatsApp, par e-mail ou au téléphone. Ce que l'assistant peut lire dans vos outils se vérifie outil par outil, avec vous. Nous ne vous promettons pas un branchement avant de l'avoir testé.",
     questionTemps: "Je n'ai pas le temps pour ça.",
     reponseTemps:
-      "Le premier appel est court. Pour la démo, vous n'avez rien à préparer. Pendant l'essai, votre part est de lire et de valider ce que l'assistant prépare. Il vous retire de la paperasse du soir, il ne vous en ajoute pas.",
+      "Le premier appel est court. La démo ne vous demande rien. Pendant l'essai, vous lisez ce que l'assistant a préparé et vous validez. Au bout du compte, c'est moins de paperasse le soir, pas plus.",
     questionPrix: "Combien ça coûte ?",
     /**
      * LA RÉPONSE SUR LE PRIX EN TROIS MORCEAUX, assemblés par Faq.tsx selon ce

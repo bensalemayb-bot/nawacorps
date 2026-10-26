@@ -230,9 +230,8 @@ export default function ContactEn() {
           </div>
 
           <p className="lede" data-reveal>
-            WhatsApp, the phone, email, the form: they all land in the same
-            place, with us. What follows says which one is for what, and what is
-            worth putting in your message.
+            WhatsApp, phone, email or the form: it all lands with us, in the
+            same place. Use whichever suits you.
           </p>
 
           <div className="facts" data-reveal>
@@ -320,7 +319,7 @@ export default function ContactEn() {
             <p>
               If you would rather not open anything else. It is just below: your
               name, your phone number, two lines. It lands in the same place as
-              the rest — on our phone.
+              the rest: on our phone.
             </p>
           </div>
 

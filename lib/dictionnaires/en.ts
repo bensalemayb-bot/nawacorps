@@ -82,7 +82,7 @@ const en: Dictionnaire = {
   cookies: {
     texte:
       "This site only uses the storage it needs to work: no advertising tracking, no audience measurement.",
-    enSavoirPlus: "Learn more",
+    enSavoirPlus: "Read the details",
     compris: "Got it",
     region: "Cookie information",
   },
@@ -101,7 +101,7 @@ const en: Dictionnaire = {
     envoiEnCours: "Sending…",
     erreurContact: "Enter a phone number or an email address.",
     /** Comme en français : un fait vérifiable, et aucun délai de réponse. */
-    succes: "Message received — it lands straight on our phone.",
+    succes: "Message received. It lands straight on our phone.",
     erreurEnvoi: "Sending failed for now. Write to us on WhatsApp in the meantime.",
     erreurReseau: "Connection lost. Write to us on WhatsApp in the meantime.",
     mentionRequis: "* Name required, plus a phone number or an email address.",
@@ -131,9 +131,9 @@ const en: Dictionnaire = {
     douleurDebut: "You're losing ",
     douleurs: ["time.", "clients.", "your evenings.", "quotes."],
     douleurFin: "",
-    reponse: "But the assistant can take it on. You approve.",
+    reponse: "The assistant prepares, you have the final say.",
     douleurComplet:
-      "You're losing time, clients, your evenings, quotes. But the assistant can take it on. You approve.",
+      "You're losing time, clients, your evenings, quotes. The assistant prepares, you have the final say.",
 
     temps3Section: "The demo",
     grandMot: "Nothing",
@@ -218,7 +218,7 @@ const en: Dictionnaire = {
       },
     ],
     cloture:
-      "These figures come from published studies, not from our clients. Yours shows up in the Monday report, on your own enquiries.",
+      "These are study averages, not our results. Your own figure is the one you'll read in the Monday report, on your own enquiries.",
   },
 
   services: {
@@ -228,7 +228,7 @@ const en: Dictionnaire = {
     peut: "What the assistant can do: ",
     lienMetier: "The assistant for this trade, in detail →",
     tous: "All trades →",
-    ordre: "Your trade isn't on the list? The demo runs on enquiries from your trade.",
+    ordre: "Your trade isn't there? Write to us anyway: the demo runs on enquiries from your trade either way.",
   },
 
   methode: {
@@ -249,12 +249,12 @@ const en: Dictionnaire = {
     etape03Titre: "The trial",
     etape03Court: "Two weeks on your real enquiries. You read, you approve.",
     etape03Texte:
-      "For two weeks, the assistant works on your real enquiries. Your part: read and approve. It never commits on your behalf. Every Monday, the report.",
+      "For two weeks, the assistant works on your real enquiries. Your part: read what it prepares, and say yes or no. Every Monday, the report.",
     etape04Moment: "If the report suits you",
     etape04Titre: "The subscription",
     etape04Court: "The set-up once, then the subscription, no commitment.",
     etape04Texte:
-      "You pay for the set-up, once. Then the subscription, with no commitment. We look after the assistant every week.",
+      "You pay for the set-up, once. The subscription takes over, with no commitment, and we keep an eye on the assistant every week.",
     detail: "The 4 steps in detail",
     cta: "See what you pay ",
   },
@@ -272,7 +272,7 @@ const en: Dictionnaire = {
     paragraphe2:
       "Every Monday, you get a short report. It says what was handled, followed up and prepared, and what is waiting for you. If nothing happened, the report says so.",
     paragraphe3:
-      "Nawa Corps is a Geneva studio. Ayoub Bensalem makes the first call, runs the demo and follows up. Our method: a base for each trade, set to your business, and an assistant that never commits on your behalf. You judge on evidence, on your own enquiries, before you pay.",
+      "Nawa Corps is a Geneva studio. Ayoub Bensalem makes the first call, runs the demo and follows up. We start from a base for each trade, then set it to your business. And you see the work on your own enquiries before you spend a franc.",
     faitDonnees: "In Switzerland",
     faitDonneesNote: "The assistant's data",
     faitReleve: "Monday",
@@ -290,19 +290,19 @@ const en: Dictionnaire = {
     demoTete: "On your trade",
     demoTitre: "The demo",
     demoPaye: "Nothing",
-    demoCourt: "On enquiries from your trade. Nothing to prepare.",
+    demoCourt: "We bring enquiries from your trade. You watch.",
     essaiCourt: "It works on your enquiries. A report every Monday.",
-    abonnementCourt: "You pay for the set-up. Then the subscription, no commitment.",
+    abonnementCourt: "The set-up, then a subscription you can stop any month.",
     detail: "See the details",
     demoTexte:
-      "We show you the assistant on enquiries from your trade. You have nothing to prepare, and we have access to none of your tools. At the end, the subscription tier, in writing.",
+      "We show you the assistant on enquiries from your trade. You have nothing to dig out of your files, and we access none of your tools. At the end, we put the subscription tier in writing.",
     demoCta: "See the demo on my trade ",
     essaiTete: "Two weeks, on your real enquiries",
     essaiTitre: "The trial",
     essaiPaye: "Nothing",
     essaiPayeNote: "during the trial",
     essaiTexte:
-      "For two weeks, the assistant works on your enquiries. It never commits on your behalf. You get two reports, one every Monday.",
+      "For two weeks, the assistant works on your enquiries, and you approve. Two Mondays, so two reports.",
     abonnementTete: "If the report suits you",
     abonnementTitre: "After the trial",
     abonnementPayeNote: "once, for the set-up, {tva}",
@@ -327,7 +327,7 @@ const en: Dictionnaire = {
     autres: "More questions",
     questionPreuve: "How do I know it works for my business?",
     reponsePreuve:
-      "You judge on evidence before you pay. The demo runs on enquiries from your trade, with nothing to prepare. The trial then runs for two weeks on your real enquiries, and the Monday report shows what was handled, followed up and prepared. You only pay for the set-up if that report suits you.",
+      "You judge on evidence before you pay. The demo runs on enquiries from your trade. The trial then runs for two weeks on your real enquiries, and the Monday report shows what was handled, followed up and prepared. You only pay for the set-up if that report suits you.",
     questionDonnees: "What about my data?",
     reponseDonnees:
       "Your assistant's data is hosted in Switzerland, under the Swiss data protection act (nFADP). For the demo, you have nothing to send us and we access none of your tools. During the trial, the assistant only works on the enquiries you give it. It has no access to your payments.",
@@ -336,19 +336,19 @@ const en: Dictionnaire = {
       "You are right to keep control. Only one message goes out without you: the acknowledgement asking for the address, a photo and the urgency, and you approve it once. After that, no real reply, no quote and no price goes out without your approval. It never commits on your behalf.",
     questionErreur: "What if it gets it wrong?",
     reponseErreur:
-      "It prepares, you approve. A real reply, a quote or a price does not go out without you: you correct it first. The only message that goes out on its own is the acknowledgement, which you read once.",
+      "It will happen. That's why you read first: a mistake in a reply, a quote or a price, you correct it before it goes out. Only the acknowledgement goes out on its own, and that one you read once.",
     questionBesoin: "My work comes by word of mouth. Why an assistant?",
     reponseBesoin:
       "It does not bring you clients. It takes over the evening paperwork: enquiries received during the day, quotes to prepare, follow-ups. If you have no paperwork in the evening, you do not need it. We will tell you so on the first call.",
     questionPersonne: "I can't find anyone for the office.",
     reponsePersonne:
-      "The assistant does not replace a person. It takes over part of the evening paperwork: the day's enquiries, quotes to prepare, follow-ups. You approve the rest. Start with the task that takes up most of your evenings: the others come later, depending on your tier.",
+      "The assistant does not replace a person, and sometimes a secretary is still the right call. It takes over the part of the evening paperwork that comes back every week. Start with the task that takes up most of your evenings; the others follow, depending on your tier.",
     questionOutils: "I already have WhatsApp and quoting software.",
     reponseOutils:
       "For the demo, you change nothing: we show you the assistant on enquiries from your trade, as they arrive by WhatsApp, email or phone. What the assistant can read in your tools is checked tool by tool, with you. We do not promise a connection before we have tested it.",
     questionTemps: "I don't have time for this.",
     reponseTemps:
-      "The first call is short. For the demo, you have nothing to prepare. During the trial, your part is to read and approve what the assistant prepares. It takes evening paperwork off you; it does not add any.",
+      "The first call is short. The demo asks nothing of you. During the trial, you read what the assistant has prepared and approve it. In the end, it means less paperwork in the evening, not more.",
     questionPrix: "How much does it cost?",
     prixDebut: "The demo and the two-week trial cost nothing.",
     prixMiseEnPlace:

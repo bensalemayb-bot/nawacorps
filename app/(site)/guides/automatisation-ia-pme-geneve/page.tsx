@@ -43,7 +43,7 @@ const TACHES = [
   },
   {
     tache: "Réclamer des pièces",
-    fait: "Il réclame les documents qui manquent au dossier, poliment, jusqu'à ce qu'il soit complet, et tient la liste à jour.",
+    fait: "Il prépare la demande des documents qui manquent au dossier, puis les relances, et tient la liste à jour jusqu'à ce que le dossier soit complet.",
     metier: "fiduciaires",
   },
   {
@@ -58,7 +58,7 @@ const TACHES = [
   },
   {
     tache: "Proposer des rendez-vous",
-    fait: "Il prépare une proposition de créneaux et les rappels. Le rendez-vous est confirmé par vous.",
+    fait: "Il propose des créneaux et prépare les rappels. C'est vous qui fixez le rendez-vous.",
     metier: "salons-coiffure-beaute",
   },
 ] as const;
@@ -111,7 +111,7 @@ export default async function GuideAutomatisation() {
     },
     {
       q: "Est-ce que l'IA remplace une secrétaire ?",
-      r: "Non. Elle reprend la paperasse répétitive : répondre, relancer, réclamer, préparer. Accueillir, négocier, régler un cas unique ou tenir la comptabilité restent un travail humain.",
+      r: "Non. Elle prend ce qui se répète, comme accuser réception ou préparer une relance. Accueillir un client, négocier, régler un cas qui ne ressemble à aucun autre ou tenir la comptabilité, c'est un travail humain.",
     },
   ];
 
@@ -119,7 +119,7 @@ export default async function GuideAutomatisation() {
     <GuidePage
       slug={SLUG}
       h1={["L'automatisation", "par l'IA dans", "une PME genevoise"]}
-      reponse="L'automatisation par l'IA, pour une PME, consiste à confier à un assistant le travail de bureau qui revient chaque jour : répondre aux demandes, relancer les devis, réclamer les pièces, trier les messages. L'assistant prépare ; le patron valide tout ce qui engage l'entreprise, prix, dates et devis. Il ne remplace personne : il reprend la paperasse répétitive."
+      reponse="L'automatisation par l'IA, pour une PME, consiste à confier à un assistant le travail de bureau qui revient chaque jour : répondre aux demandes, relancer les devis, réclamer les pièces, trier les messages. L'assistant prépare ; le patron valide tout ce qui engage l'entreprise, prix, dates et devis. Il ne remplace personne, il reprend ce qui encombre vos soirées."
       sommaire={SOMMAIRE}
       questions={questions}
       lies={["prix-assistant-ia-suisse", "assistant-ia-ou-secretaire", "ia-et-protection-des-donnees"]}
@@ -137,14 +137,13 @@ export default async function GuideAutomatisation() {
         </p>
         <div className="gd-encadre">
           <p>
-            <strong>La règle qui change tout :</strong> l&apos;assistant prépare, vous validez. Il ne
+            <strong>La règle de base :</strong> l&apos;assistant prépare, vous validez. Il ne
             s&apos;engage jamais à votre place.
           </p>
         </div>
         <p>
-          Pour une PME de 1 à 20 personnes, l&apos;intérêt n&apos;est pas technique. C&apos;est le
-          bureau du soir : les demandes reçues pendant la journée, les devis à relancer, les pièces à
-          réclamer.
+          Pour une PME de 1 à 20 personnes, la question se pose le soir, au bureau : les demandes
+          reçues pendant la journée, les devis à relancer, les pièces à réclamer.
         </p>
       </Partie>
 
@@ -205,7 +204,11 @@ export default async function GuideAutomatisation() {
       </Partie>
 
       <Partie id="etapes" titre="Comment ça se passe, étape par étape ?">
-        <p>Voici notre façon de faire. D&apos;autres prestataires commencent par un audit ou un projet.</p>
+        <p>
+          Voici comment nous travaillons. D&apos;autres prestataires commencent par un audit ; je
+          préfère que vous voyiez l&apos;assistant tourner sur votre métier avant de signer quoi que ce
+          soit.
+        </p>
         <ol>
           <li>
             <strong>Un appel.</strong> Vous nous dites ce qui vous prend vos soirées. Nous vous disons

@@ -248,8 +248,9 @@ export async function corpsMetier(locale: Locale, slug: string) {
 
   /**
    * LE CHAPO EN DEUX : la premiere phrase se lit, la suite se deplie. Chaque
-   * chapo de lib/metiers.ts ouvre sur « Nawa Corps … qui connaît déjà leur
-   * métier. » ; sans point suivi d un blanc, tout reste visible.
+   * chapo de lib/metiers.ts ouvre sur une phrase qui nomme Nawa Corps, le
+   * metier et Geneve (tournure propre a chaque metier, 26.10.2026) ; sans
+   * point suivi d un blanc, tout reste visible.
    */
   const coupe = t.chapo.match(/^(.+?[.!?])\s+([\s\S]+)$/);
   const chapoCourt = coupe ? coupe[1] : t.chapo;

@@ -221,18 +221,17 @@ export default function StudioPage() {
 
             <h3 className="sm-grp">La démo</h3>
             <p>
-              Nous vous montrons l&apos;assistant à l&apos;œuvre sur des
-              demandes de votre métier : ce qu&apos;il prépare, ce que vous
-              validez, ce que vous corrigez. Vous n&apos;avez rien à préparer,
-              nous n&apos;avons accès à aucun de vos outils. À la fin, nous fixons
+              Nous vous montrons l&apos;assistant sur des demandes de votre
+              métier : ce qu&apos;il prépare, et ce que vous auriez à corriger
+              avant de valider. Nous n&apos;avons accès à aucun de vos outils. À la fin, nous fixons
               avec vous, par écrit, le palier de l&apos;abonnement.
             </p>
 
             <h3 className="sm-grp">L&apos;essai, deux semaines</h3>
             <p>
-              Pendant deux semaines, l&apos;assistant travaille sur vos vraies demandes. Il ne
-              s&apos;engage jamais à votre place. Vous ne payez rien pendant
-              l&apos;essai.
+              Pendant deux semaines, l&apos;assistant travaille sur vos vraies demandes, et
+              chaque réponse de fond attend votre accord. Vous ne payez rien
+              pendant l&apos;essai.
             </p>
 
             <h3 className="sm-grp">Chaque lundi</h3>

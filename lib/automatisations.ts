@@ -116,7 +116,7 @@ const EXEMPLES: Record<string, DeuxExemples> = {
           "Il peut décrire ce que montre la photo (siphon, flexible, raccord) et classe la demande : urgente ou à planifier.",
           "Il prépare la fiche de la demande et une proposition de passage.",
         ],
-        valide: "Le soir, vous relisez la fiche et la proposition de passage. Vous corrigez si besoin, puis vous validez d'un geste.",
+        valide: "Le soir, vous relisez la fiche et la proposition de passage. Vous corrigez si besoin, puis vous validez.",
         part: "La proposition de passage part au client, dans vos mots.",
         schema: {
           prepare: "Fiche triée et proposition de passage",
@@ -134,7 +134,7 @@ const EXEMPLES: Record<string, DeuxExemples> = {
           "It can describe what the photo shows (trap, hose, fitting) and sorts the enquiry: urgent or to be scheduled.",
           "It drafts the enquiry sheet and a proposed visit.",
         ],
-        valide: "In the evening, you read the sheet and the proposed visit. You correct it if needed, then approve it in one step.",
+        valide: "In the evening, you read the sheet and the proposed visit. You correct it if needed, then approve it.",
         part: "The proposed visit goes to the client, in your words.",
         schema: {
           prepare: "Sorted sheet and proposed visit",
@@ -320,8 +320,7 @@ const EXEMPLES: Record<string, DeuxExemples> = {
         extrait: "« Salon 28 m², plafond fissuré, deux couches, porte à poncer. »",
         prepare: [
           "Il reprend vos notes et vos prestations habituelles pour préparer un brouillon de devis, poste par poste.",
-          "Il signale ce qui manque : la teinte, l'accès, la date.",
-          "Il prépare le message d'envoi.",
+          "Il signale ce qui manque (la teinte, l'accès, la date) et prépare le message d'envoi.",
         ],
         valide: "Vous corrigez les postes et les montants, puis vous validez.",
         part: "Le devis part au client, avec son message.",
@@ -338,8 +337,7 @@ const EXEMPLES: Record<string, DeuxExemples> = {
         extrait: "“Living room 28 m², cracked ceiling, two coats, door to sand.”",
         prepare: [
           "It uses your notes and your usual services to draft a quote, line by line.",
-          "It flags what is missing: the colour, the access, the date.",
-          "It drafts the covering message.",
+          "It flags what is missing (the colour, the access, the date) and drafts the covering message.",
         ],
         valide: "You correct the lines and the amounts, then approve.",
         part: "The quote goes to the client, with its message.",
@@ -779,10 +777,9 @@ const EXEMPLES: Record<string, DeuxExemples> = {
         extrait: "« Bonjour, il vous reste une place jeudi pour une couleur ? »",
         prepare: [
           "Un accusé de réception, validé par vous une fois, répond et demande l'heure préférée et s'il s'agit d'une première visite.",
-          "Il propose un créneau libre qui tient compte de la durée d'une couleur.",
-          "Il prépare le message de proposition.",
+          "Il cherche un créneau libre assez long pour une couleur, et prépare le message.",
         ],
-        valide: "Vous validez le créneau d'un geste, entre deux clientes.",
+        valide: "Vous validez le créneau entre deux clientes.",
         part: "La proposition part à la cliente.",
         schema: {
           prepare: "Créneau jeudi, message prêt",
@@ -797,10 +794,9 @@ const EXEMPLES: Record<string, DeuxExemples> = {
         extrait: "“Hello, do you have a slot left on Thursday for a colour?”",
         prepare: [
           "An acknowledgement, approved by you once, replies and asks for the preferred time and whether it's a first visit.",
-          "It proposes a free slot that allows for how long a colour takes.",
-          "It drafts the message with the proposal.",
+          "It looks for a free slot long enough for a colour, and drafts the message.",
         ],
-        valide: "You approve the slot in one step, between two clients.",
+        valide: "You approve the slot between two clients.",
         part: "The proposal goes to the client.",
         schema: {
           prepare: "Thursday slot, message drafted",
@@ -902,8 +898,7 @@ const EXEMPLES: Record<string, DeuxExemples> = {
         extrait: "« Nous cherchons un nettoyage deux fois par semaine, en fin de journée. »",
         prepare: [
           "Il note la surface, la fréquence voulue et les horaires d'accès.",
-          "Il propose un passage pour voir les locaux, d'après le planning de vos équipes.",
-          "Il prépare le message de proposition.",
+          "Il propose un passage pour voir les locaux, d'après le planning de vos équipes, et prépare le message.",
         ],
         valide: "Vous choisissez le passage et vous validez le message.",
         part: "La proposition de visite part au client.",
@@ -920,8 +915,7 @@ const EXEMPLES: Record<string, DeuxExemples> = {
         extrait: "“We're looking for a clean twice a week, at the end of the day.”",
         prepare: [
           "It notes the floor area, how often, and the access times.",
-          "It proposes a visit to see the premises, from your teams' schedule.",
-          "It drafts the message with the proposal.",
+          "It proposes a visit to see the premises, from your teams' schedule, and drafts the message.",
         ],
         valide: "You choose the visit and approve the message.",
         part: "The proposed visit goes to the client.",

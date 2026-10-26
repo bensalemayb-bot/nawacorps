@@ -241,7 +241,7 @@ export default async function GuidePrix() {
           d&apos;avoir vu l&apos;assistant sur vos demandes.
         </p>
         <p>
-          La bonne question est simple : combien de soirées par semaine passez-vous sur vos demandes,
+          Posez-vous plutôt cette question : combien de soirées par semaine passez-vous sur vos demandes,
           vos devis et vos relances ? Comparez avec le prix de l&apos;abonnement. Puis jugez sur pièces :
           pendant l&apos;essai, le relevé du lundi montre ce qui a été traité, relancé et préparé.
         </p>

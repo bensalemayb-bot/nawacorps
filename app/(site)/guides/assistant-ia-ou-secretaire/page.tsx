@@ -37,7 +37,7 @@ const SOMMAIRE = [
   { id: "ce-que-fait-secretaire", titre: "Que fait une secrétaire qu'un assistant IA ne fait pas ?" },
   { id: "logiciel", titre: "Un logiciel métier ne suffit-il pas ?" },
   { id: "quand-secretaire", titre: "Quand une secrétaire reste-t-elle le bon choix ?" },
-  { id: "conclusion", titre: "Notre avis, franchement" },
+  { id: "conclusion", titre: "Mon avis, franchement" },
 ] as const;
 
 export default function GuideSecretaire() {
@@ -63,7 +63,7 @@ export default function GuideSecretaire() {
     },
     {
       q: "Peut-on avoir une secrétaire et un assistant IA ?",
-      r: "Oui, et c'est souvent le meilleur cas. L'assistant prépare les réponses et les relances répétitives ; la secrétaire valide, appelle les clients et règle ce qui sort de l'ordinaire.",
+      r: "Oui. L'assistant prépare les réponses et les relances qui se répètent ; la secrétaire valide, appelle les clients et règle ce qui sort de l'ordinaire.",
     },
     {
       q: "Et si je ne fais rien ?",
@@ -75,7 +75,7 @@ export default function GuideSecretaire() {
     <GuidePage
       slug={SLUG}
       h1={["Assistant IA", "ou secrétaire ?"]}
-      reponse="Un assistant IA ne remplace pas une secrétaire. Il reprend la paperasse répétitive, répondre aux demandes, relancer, préparer des brouillons, y compris le soir et le week-end, pour quelques centaines de francs par mois. Une secrétaire reste le bon choix pour accueillir, négocier, régler les cas uniques ou tenir la comptabilité. Beaucoup de PME gagnent à combiner les deux."
+      reponse="Un assistant IA ne remplace pas une secrétaire. Il s'occupe de ce qui se répète (accuser réception, relancer, préparer des brouillons), y compris le soir et le week-end, pour quelques centaines de francs par mois. Une secrétaire reste le bon choix pour accueillir, négocier, régler les cas uniques ou tenir la comptabilité. Et rien n'empêche d'avoir les deux."
       sommaire={SOMMAIRE}
       questions={questions}
       lies={["automatisation-ia-pme-geneve", "prix-assistant-ia-suisse", "ia-et-protection-des-donnees"]}
@@ -186,7 +186,7 @@ export default function GuideSecretaire() {
           <li>Il accuse réception à toute heure, y compris le soir et le dimanche.</li>
           <li>Il ne prend pas de vacances et ne tombe pas malade.</li>
           <li>Il coûte un montant fixe par mois, quel que soit le jour de la semaine.</li>
-          <li>Il tient sans effort la liste des devis à relancer et des pièces qui manquent.</li>
+          <li>Il tient à jour la liste des devis à relancer et des pièces qui manquent.</li>
         </ul>
         <p>
           Le soir et le week-end comptent : selon le baromètre ARTIsanté de la CAPEB, 48 % des artisans
@@ -238,11 +238,11 @@ export default function GuideSecretaire() {
         </p>
       </Partie>
 
-      <Partie id="conclusion" titre="Notre avis, franchement">
+      <Partie id="conclusion" titre="Mon avis, franchement">
         <p>
-          Un assistant IA ne remplace pas une personne. Il reprend la paperasse répétitive : répondre,
-          relancer, réclamer, préparer. Vous gardez la décision. Il ne s&apos;engage jamais à votre
-          place.
+          J&apos;installe des assistants IA, et je vous le dis quand même : ils ne remplacent pas une
+          personne. Ils reprennent ce qui se répète, et la décision reste à vous ; l&apos;assistant ne
+          s&apos;engage jamais à votre place.
         </p>
         <p>
           Si vous avez une secrétaire, l&apos;assistant peut lui laisser le temps pour ce qui demande

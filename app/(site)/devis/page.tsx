@@ -127,7 +127,7 @@ export default async function DevisPage({
 
           <p className="lede" data-reveal>
             {demande.libelle
-              ? `Vous venez pour « ${demande.libelle} ». Leo s'ouvre avec cette information et pose les questions qui manquent.`
+              ? `Vous venez pour « ${demande.libelle} ». Leo le sait déjà : il ne vous pose que les questions qui manquent.`
               : "Leo, l'assistant de ce site, s'ouvre en bas de l'écran. Dites-lui votre métier : il pose les questions qui manquent. Si vous préférez écrire d'un coup, le formulaire est juste en dessous."}
           </p>
 

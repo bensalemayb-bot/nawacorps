@@ -75,8 +75,8 @@ export default function Guides() {
           </div>
           <p className="lede" data-reveal>
             Ce qu&apos;un assistant IA peut reprendre au bureau, ce qu&apos;il coûte, ce qu&apos;il ne
-            remplace pas, et ce que la loi suisse demande pour vos données. Écrit pour les patrons
-            de PME, sans jargon, avec les sources.
+            remplace pas, et ce que la loi suisse demande pour vos données. Écrits pour des patrons
+            de PME, sans jargon.
           </p>
         </div>
       </section>

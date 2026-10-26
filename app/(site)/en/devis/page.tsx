@@ -124,7 +124,7 @@ export default async function DevisEn({
 
           <p className="lede" data-reveal>
             {demande.libelle
-              ? `You're here for “${demande.libelle}”. Leo opens with that and asks the questions that are missing.`
+              ? `You're here for “${demande.libelle}”. Leo already knows, so it only asks what is missing.`
               : "Leo, this site's assistant, opens at the bottom of the screen. Tell it your trade: it asks the questions that are missing. If you would rather write it all at once, the form is just below."}
           </p>
 

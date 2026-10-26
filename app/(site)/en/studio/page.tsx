@@ -205,16 +205,16 @@ export default function StudioEn() {
 
             <h3 className="sm-grp">The demo</h3>
             <p>
-              We show you the assistant at work on enquiries from your trade:
-              what it prepares, what you approve, what you correct. You have
-              nothing to prepare, and we have access to none of your tools. At the end, we set
+              We show you the assistant on enquiries from your trade: what it
+              prepares, and what you would correct before approving. We have
+              access to none of your tools. At the end, we set
               the subscription tier with you, in writing.
             </p>
 
             <h3 className="sm-grp">The two-week trial</h3>
             <p>
-              For two weeks, the assistant works on your real enquiries. It never commits on
-              your behalf. You pay nothing during the trial.
+              For two weeks, the assistant works on your real enquiries, and every real
+              reply waits for your approval. You pay nothing during the trial.
             </p>
 
             <h3 className="sm-grp">Every Monday</h3>

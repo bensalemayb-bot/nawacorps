@@ -233,9 +233,8 @@ export default function ContactPage() {
           </div>
 
           <p className="lede" data-reveal>
-            WhatsApp, téléphone, e-mail, formulaire : tous arrivent au même
-            endroit, chez nous. Ce qui suit dit lequel sert à quoi, et ce
-            qu&apos;il est utile de mettre dans votre message.
+            WhatsApp, téléphone, e-mail ou formulaire : tout arrive chez nous,
+            au même endroit. Prenez celui qui vous arrange.
           </p>
 
           <div className="facts" data-reveal>
@@ -323,7 +322,7 @@ export default function ContactPage() {
             <p>
               Si vous préférez ne rien ouvrir d&apos;autre. Il est juste en
               dessous : votre nom, votre téléphone, deux lignes. Il arrive au
-              même endroit que le reste — sur notre téléphone.
+              même endroit que le reste : sur notre téléphone.
             </p>
           </div>
 

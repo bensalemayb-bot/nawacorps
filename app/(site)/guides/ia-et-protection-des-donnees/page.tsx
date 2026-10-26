@@ -289,16 +289,16 @@ export default function GuideDonnees() {
             <span>
               <a href={LPD} target="_blank" rel="noopener">
                 Loi fédérale sur la protection des données (LPD), RS 235.1
-              </a>{" "}
-              — fedlex.admin.ch, texte officiel.
+              </a>
+              , fedlex.admin.ch, texte officiel.
             </span>
           </li>
           <li>
             <span>
               <a href={PFPDT_IA} target="_blank" rel="noopener">
                 IA et protection des données
-              </a>{" "}
-              — Préposé fédéral à la protection des données et à la transparence.
+              </a>
+              , Préposé fédéral à la protection des données et à la transparence.
             </span>
           </li>
           <li>
@@ -306,7 +306,7 @@ export default function GuideDonnees() {
               <a href={PFPDT} target="_blank" rel="noopener">
                 Site du PFPDT
               </a>{" "}
-              — guides, annonce des violations de la sécurité des données.
+              : guides, annonce des violations de la sécurité des données.
             </span>
           </li>
         </ul>

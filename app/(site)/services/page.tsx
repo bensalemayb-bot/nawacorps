@@ -126,17 +126,17 @@ const TEXTES: Record<Locale, TextesServices> = {
   fr: {
     seoTitre: "Assistant IA en détail : devis, relances, demandes · Genève",
     seoDescription:
-      "Ce qu'il fait, métier par métier, et ce qu'il ne fait jamais seul. Il ne s'engage jamais à votre place. Données de l'assistant hébergées en Suisse.",
+      "Ce qu'il fait, métier par métier, et ce qu'il ne fait jamais seul : aucun prix ni devis sans votre accord. Données de l'assistant hébergées en Suisse.",
     meta: "L'assistant",
     h1: ["L'assistant IA,", "en détail."],
     chapo:
-      "Nawa Corps est un studio genevois. Il installe dans les PME un assistant IA qui connaît déjà leur métier. L'assistant répond aux demandes, relance les clients et prépare les documents. Il ne s'engage jamais à la place du patron. Chaque lundi, un relevé dit ce qui a été fait.",
+      "Nawa Corps est un studio genevois. Nous installons dans les PME un assistant IA qui connaît déjà leur métier. Il traite les demandes, prépare les devis et les relances. Aucun prix, aucune date, aucun devis ne part sans l'accord du patron. Chaque lundi, un relevé dit ce qui a été fait.",
     rienAPreparer:
       "Rien à préparer : nous partons de ce que vous recevez déjà.",
     mentionReponse: MENTION_REPONSE,
     gestes: {
       meta: "Ce qu'il fait",
-      h2: ["Quatre gestes,", "et vous validez."],
+      h2: ["Quatre tâches,", "et vous validez."],
       items: [
         {
           titre: "Répondre aux demandes.",
@@ -189,12 +189,12 @@ const TEXTES: Record<Locale, TextesServices> = {
       demo: {
         titre: "La démo.",
         texte:
-          "L'assistant sur des demandes de votre métier. Rien à préparer, rien à payer. À la fin, nous fixons avec vous, par écrit, le palier de l'abonnement.",
+          "Nous vous montrons l'assistant sur des demandes de votre métier. Ça ne coûte rien. À la fin, nous fixons avec vous, par écrit, le palier de l'abonnement.",
       },
       essai: {
         titre: "L'essai, deux semaines.",
         texte:
-          "Pendant deux semaines, il travaille sur vos vraies demandes, sans jamais s'engager à votre place ; le relevé arrive chaque lundi. Rien à payer pendant l'essai.",
+          "Pendant deux semaines, il travaille sur vos vraies demandes et vous validez ce qu'il prépare. Le relevé arrive chaque lundi. Vous ne payez rien pendant ce temps.",
       },
       demoCourt: "Sur des demandes de votre métier. Rien à payer.",
       essaiCourt: "Sur vos vraies demandes. Le relevé chaque lundi.",
@@ -223,11 +223,11 @@ const TEXTES: Record<Locale, TextesServices> = {
   en: {
     seoTitre: "The AI assistant in detail: quotes, follow-ups · Geneva",
     seoDescription:
-      "What it does, trade by trade, and what it never does alone. It never commits on your behalf. The assistant's data is hosted in Switzerland.",
+      "What it does, trade by trade, and what it never does alone: no price or quote without your approval. The assistant's data is hosted in Switzerland.",
     meta: "The assistant",
     h1: ["The AI assistant,", "in detail."],
     chapo:
-      "Nawa Corps is a Geneva studio. It sets up, in small businesses, an AI assistant that already knows their trade. The assistant answers enquiries, follows up clients and prepares documents. It never commits on the owner's behalf. Every Monday, a report says what was done.",
+      "Nawa Corps is a Geneva studio. We set up, in small businesses, an AI assistant that already knows their trade. It handles enquiries, prepares quotes and follow-ups. No price, no date and no quote goes out without the owner's approval. Every Monday, a report says what was done.",
     rienAPreparer: "Nothing to prepare: we start from what you already receive.",
     mentionReponse: MENTION_REPONSE_EN,
     gestes: {
@@ -285,12 +285,12 @@ const TEXTES: Record<Locale, TextesServices> = {
       demo: {
         titre: "The demo.",
         texte:
-          "The assistant on enquiries from your trade. Nothing to prepare, nothing to pay. At the end, we set the subscription tier with you, in writing.",
+          "We show you the assistant on enquiries from your trade. It costs nothing. At the end, we set the subscription tier with you, in writing.",
       },
       essai: {
         titre: "The two-week trial.",
         texte:
-          "For two weeks, it works on your real enquiries, never committing on your behalf; the report comes every Monday. Nothing to pay during the trial.",
+          "For two weeks, it works on your real enquiries and you approve what it prepares. The report comes every Monday. You pay nothing in the meantime.",
       },
       demoCourt: "On enquiries from your trade. Nothing to pay.",
       essaiCourt: "On your real enquiries. The report every Monday.",
