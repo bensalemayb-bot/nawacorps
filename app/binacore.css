@@ -27,6 +27,10 @@ body{
 }
 ::selection{background:var(--pine);color:var(--bone)}
 a{color:inherit}
+/* Le preflight de Tailwind donne `bolder` a b et strong, qui calcule
+   700 sur un texte en 400 : un troisieme poids, que layout.tsx ne charge plus.
+   Le gras du site est le 600, comme partout ailleurs (voir .meta plus bas). */
+b,strong,th{font-weight:600}
 :focus-visible{outline:2px solid var(--brass);outline-offset:4px;border-radius:2px}
 .grain{
   position:fixed;inset:0;z-index:90;pointer-events:none;opacity:.05;
@@ -35,8 +39,19 @@ a{color:inherit}
 
 /* ---------- primitives ---------- */
 .wrap{max-width:1360px;margin:0 auto;padding-left:var(--pad);padding-right:var(--pad)}
+/* PLUS DE CAPITALES ESPACEES, ET DEUX GRAISSES SEULEMENT (decision d Ayoub du
+   26.10.2026, « trop de polices differentes »). Le site n a que deux familles,
+   Hanken Grotesk et Instrument Serif, mais les etiquettes en majuscules
+   tres espacees (.meta, nav, pied, indices, chat…) et six epaisseurs se
+   lisaient comme des polices en plus. Toutes les etiquettes s ecrivent donc en
+   casse normale, sans interlettrage, en 400 ou 600, et le site n emploie plus
+   que 400 (texte) et 600 (titres, boutons, accents) — app/layout.tsx ne charge
+   que ces deux-la.
+   Les etiquettes de .6 a .68rem n etaient lisibles que grace aux capitales :
+   en bas de casse, leur oeil est plus petit. Elles gagnent .06rem (.68 → .74,
+   .66 → .72, .64 → .7, .62 → .68, .6 → .66), jamais plus de .1rem. */
 .meta{
-  font-size:.68rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);
+  font-size:.74rem;font-weight:600;letter-spacing:0;color:var(--muted);
 }
 .green .meta{color:var(--muted-g)}
 .index{color:var(--brass);font-weight:600}
@@ -88,7 +103,7 @@ section{padding:clamp(90px,11vw,160px) 0}
    Le selecteur reste qualifie par la balise, JAMAIS `.t` seul : `.stp .t` est
    un tout autre objet — le petit libelle de duree des etapes de la methode. */
 h1.t,h2.t{
-  font-weight:550;font-size:clamp(2.3rem,5.4vw,4.4rem);
+  font-weight:600;font-size:clamp(2.3rem,5.4vw,4.4rem);
   line-height:1.02;letter-spacing:-.03em;
 }
 .lede{max-width:52ch;color:var(--muted);font-size:clamp(1rem,1.35vw,1.14rem);line-height:1.7}
@@ -109,7 +124,7 @@ section.offres.green{display:flow-root}
 /* ---------- boutons & liens ---------- */
 .btn{
   display:inline-flex;align-items:center;gap:.7em;
-  font-weight:600;font-size:.85rem;letter-spacing:.04em;text-decoration:none;
+  font-weight:600;font-size:.85rem;letter-spacing:0;text-decoration:none;
   padding:1.05em 1.9em;border-radius:999px;border:1px solid var(--ink);
   background:var(--ink);color:var(--bone);
   transition:background .3s var(--ease),color .3s var(--ease),transform .3s var(--ease);
@@ -123,7 +138,7 @@ section.offres.green{display:flow-root}
 .green .btn:hover{background:transparent;color:var(--bone)}
 .green .btn-line{background:transparent;color:var(--bone)}
 .green .btn-line:hover{background:var(--bone);color:var(--pine)}
-.lnk{position:relative;text-decoration:none;font-weight:500}
+.lnk{position:relative;text-decoration:none;font-weight:400}
 .lnk::after{content:"";position:absolute;left:0;bottom:-3px;height:1px;width:100%;background:currentColor;transform:scaleX(0);transform-origin:right;transition:transform .4s var(--ease)}
 .lnk:hover::after{transform:scaleX(1);transform-origin:left}
 
@@ -135,11 +150,11 @@ section.offres.green{display:flow-root}
   transition:background .35s ease,box-shadow .35s ease,padding .35s ease;
 }
 .nav.on{background:rgba(241,238,230,.82);backdrop-filter:blur(14px);box-shadow:0 1px 0 var(--line);padding-top:14px;padding-bottom:14px}
-.wordmark{font-weight:700;font-size:1.05rem;letter-spacing:-.02em;text-decoration:none}
-.wordmark sup{font-weight:600;font-size:.55em;color:var(--brass);letter-spacing:.1em;margin-left:.3em}
-.nav-time{justify-self:center;font-size:.68rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.wordmark{font-weight:600;font-size:1.05rem;letter-spacing:-.02em;text-decoration:none}
+.wordmark sup{font-weight:600;font-size:.55em;color:var(--brass);letter-spacing:0;margin-left:.3em}
+.nav-time{justify-self:center;font-size:.74rem;font-weight:600;letter-spacing:0;color:var(--muted)}
 .nav-r{justify-self:end;display:flex;align-items:center;gap:2em}
-.nav-r a:not(.pill){font-size:.8rem;font-weight:500;text-decoration:none;color:var(--ink)}
+.nav-r a:not(.pill){font-size:.8rem;font-weight:400;text-decoration:none;color:var(--ink)}
 .pill{
   font-size:.75rem;font-weight:600;text-decoration:none;
   border:1px solid var(--ink);border-radius:999px;padding:.65em 1.3em;
@@ -166,7 +181,7 @@ section.offres.green{display:flow-root}
 .hero-in{padding-top:clamp(140px,18vh,220px)}
 .hero .kicker{display:flex;gap:2.5em;flex-wrap:wrap;margin-bottom:clamp(26px,3.5vw,44px);opacity:0;animation:fade 1s var(--ease) .15s forwards}
 .hero h1{
-  font-weight:550;letter-spacing:-.035em;line-height:.99;
+  font-weight:600;letter-spacing:-.035em;line-height:.99;
   /* Plafond 5.4rem et non plus 7.6rem : « L'assistant qui » fait 15 signes,
      et a 7.6rem son « qui » finissait, a 1440 px, sur la boule sombre du noyau
      (encre sur encre : invisible). Mesure du 25.10.2026 : 784 px de bord droit
@@ -175,7 +190,12 @@ section.offres.green{display:flow-root}
      ~800 et ~1300 px : la boule est centree et son rayon suit la hauteur, le
      titre suivait la largeur. Mesure a 853 px : bord droit 446 px a 8.2vw,
      sur la boule (qui commence vers 320 px) ; ~305 px a 5.4vw. Sous ~860 px
-     le plancher 2.9rem reprend la main, comme avant. */
+     le plancher 2.9rem reprend la main, comme avant.
+     REMESURE LE 26.10.2026, graisse passee de 550 a 600 : a 1440 px le bord
+     droit reste a 550 px avant comme apres — le 550 se resolvait deja sur la
+     fonte 600 (app/layout.tsx). Apres : 308 px a 853 (boule vers ~320-360),
+     460 px a 1280 (boule vers ~570), 550 px a 1440 (boule vers ~645).
+     Le clamp n a pas bouge. */
   font-size:clamp(2.9rem,5.4vw,5.4rem);
   max-width:16ch;
 }
@@ -241,14 +261,14 @@ section.offres.green{display:flow-root}
 @media(max-width:760px){.hero-foot{padding-bottom:88px}}
 .hero-sub{max-width:42ch;color:var(--muted);font-size:1.02rem;line-height:1.7}
 .hero-cta{display:flex;gap:12px;flex-wrap:wrap}
-.hero-scroll{font-size:.68rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:.9em}
+.hero-scroll{font-size:.74rem;font-weight:600;letter-spacing:0;color:var(--muted);display:flex;align-items:center;gap:.9em}
 .hero-scroll i{display:inline-block;width:1px;height:34px;background:var(--ink);animation:drip 2.2s var(--ease) infinite;transform-origin:top}
 @keyframes drip{0%{transform:scaleY(0)}45%{transform:scaleY(1)}100%{transform:scaleY(0);transform-origin:bottom}}
 
 /* ---------- bande défilante sobre ---------- */
 .strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;padding:16px 0;background:var(--bone)}
 .strip .tk{display:inline-flex;white-space:nowrap;animation:mq 40s linear infinite}
-.strip span{font-size:.68rem;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);padding:0 2.2em}
+.strip span{font-size:.74rem;font-weight:600;letter-spacing:0;color:var(--muted);padding:0 2.2em}
 .strip span::after{content:"·";margin-left:4.4em;color:var(--brass)}
 @keyframes mq{to{transform:translateX(-50%)}}
 
@@ -259,8 +279,8 @@ section.offres.green{display:flow-root}
    la pour servir de bloc conteneur a `.row-t::after`, dix lignes plus bas. */
 .row-h{display:grid;grid-template-columns:70px 1fr auto;align-items:center;gap:20px;padding:30px 4px;transition:padding .35s var(--ease);position:relative}
 .row:hover .row-h{padding-left:14px}
-.row .n{font-size:.72rem;font-weight:600;letter-spacing:.18em;color:var(--brass)}
-.row h3{font-weight:550;font-size:clamp(1.5rem,3.4vw,2.5rem);letter-spacing:-.02em;line-height:1.05}
+.row .n{font-size:.72rem;font-weight:600;letter-spacing:0;color:var(--brass)}
+.row h3{font-weight:600;font-size:clamp(1.5rem,3.4vw,2.5rem);letter-spacing:-.02em;line-height:1.05}
 /* LE BOUTON DE L EN-TETE VIT DANS LE <h3>, ET NON L INVERSE.
    `.row-h` etait un <button> qui contenait le <h3> : modele de contenu
    invalide, et ARIA rend les descendants d un bouton presentationnels — les six
@@ -302,12 +322,12 @@ section.offres.green{display:flow-root}
 .price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,3vw,44px)}
 @media(max-width:900px){.price-grid{grid-template-columns:1fr;max-width:520px}}
 .price{border-top:1px solid var(--line-g);padding-top:26px;display:flex;flex-direction:column}
-.price .lab{display:flex;justify-content:space-between;align-items:center;font-size:.66rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--muted-g)}
+.price .lab{display:flex;justify-content:space-between;align-items:center;font-size:.72rem;font-weight:600;letter-spacing:0;color:var(--muted-g)}
 
-.price h3{font-weight:550;font-size:1.6rem;letter-spacing:-.02em;margin:18px 0 4px}
+.price h3{font-weight:600;font-size:1.6rem;letter-spacing:-.02em;margin:18px 0 4px}
 .price .d{color:var(--muted-g);font-size:.92rem;min-height:3em}
 .price .num{margin:26px 0 4px;font-family:var(--serif);font-weight:400;font-size:clamp(2.8rem,4.5vw,3.8rem);line-height:1}
-.price .num small{font-family:var(--sans);font-size:.8rem;color:var(--muted-g);letter-spacing:.02em}
+.price .num small{font-family:var(--sans);font-size:.8rem;color:var(--muted-g);letter-spacing:0}
 .price .was{font-size:.76rem;color:var(--muted-g)}
 .price .was s{opacity:.75}
 /* « TVA comprise » COLLE AU MONTANT, et pas au bas de la grille.
@@ -324,7 +344,7 @@ section.offres.green{display:flow-root}
    n y a volontairement pas de variante claire. Le jour ou une carte de prix
    sortira du vert, il faudra en ajouter une, comme le font deja .lede et .btn.
    Une regle qui ne sert rien aujourd hui est une regle qu on ne relit plus. */
-.price .num-tva{margin-top:8px;font-size:.72rem;letter-spacing:.02em;color:var(--muted-g)}
+.price .num-tva{margin-top:8px;font-size:.72rem;letter-spacing:0;color:var(--muted-g)}
 /* La ligne de tete ne numerote plus, elle nomme : « Recevoir les demandes »
    est plus long que « N° 02 » et doit pouvoir passer a la ligne sans pousser
    la pastille « Recommandé » hors de la carte.
@@ -354,10 +374,10 @@ section.offres.green{display:flow-root}
 @media(max-width:900px){.steps{grid-template-columns:1fr 1fr}}
 @media(max-width:560px){.steps{grid-template-columns:1fr}}
 .stp{border-top:1px solid var(--line);padding-top:22px}
-.stp .n{font-size:.7rem;font-weight:600;letter-spacing:.2em;color:var(--brass)}
-.stp h3{font-weight:550;font-size:1.25rem;letter-spacing:-.01em;margin:14px 0 8px}
+.stp .n{font-size:.7rem;font-weight:600;letter-spacing:0;color:var(--brass)}
+.stp h3{font-weight:600;font-size:1.25rem;letter-spacing:-.01em;margin:14px 0 8px}
 .stp p{font-size:.9rem;color:var(--muted)}
-.stp .t{float:right;font-size:.66rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.stp .t{float:right;font-size:.72rem;font-weight:600;letter-spacing:0;color:var(--muted)}
 /* (01) Les chiffres de l accueil (components/Chiffres.tsx) : la carte `.stp`
    de la methode, plus un grand chiffre au serif de `.price .num` et une ligne
    de source. Le contexte `.t` n y flotte pas : a cote d un chiffre de 3,8rem
@@ -375,13 +395,13 @@ section.offres.green{display:flow-root}
 .studio-quote em{color:var(--brass)}
 .studio-txt p{color:var(--muted);margin-bottom:1.1em;max-width:56ch}
 .facts{display:flex;flex-wrap:wrap;gap:34px;margin-top:2rem;border-top:1px solid var(--line);padding-top:22px}
-.facts div b{display:block;font-weight:550;font-size:1.05rem;letter-spacing:-.01em}
-.facts div span{font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.facts div b{display:block;font-weight:600;font-size:1.05rem;letter-spacing:-.01em}
+.facts div span{font-size:.74rem;font-weight:600;letter-spacing:0;color:var(--muted)}
 
 /* ---------- faq ---------- */
 .faq details{border-top:1px solid var(--line)}
 .faq details:last-of-type{border-bottom:1px solid var(--line)}
-.faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:24px;padding:26px 4px;font-weight:550;font-size:clamp(1.05rem,2vw,1.3rem);letter-spacing:-.01em}
+.faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:24px;padding:26px 4px;font-weight:600;font-size:clamp(1.05rem,2vw,1.3rem);letter-spacing:-.01em}
 .faq summary::-webkit-details-marker{display:none}
 .faq summary .pl2{color:var(--brass);font-weight:400;font-size:1.3rem;transition:transform .35s var(--ease);flex:none}
 .faq details[open] .pl2{transform:rotate(45deg)}
@@ -390,7 +410,7 @@ section.offres.green{display:flow-root}
 /* ---------- contact / footer ---------- */
 .contact{padding-bottom:0;overflow:hidden}
 .contact h2{
-  font-weight:550;letter-spacing:-.035em;line-height:1;
+  font-weight:600;letter-spacing:-.035em;line-height:1;
   font-size:clamp(3rem,9vw,8rem);
 }
 .contact h2 .serif-i{color:var(--brass-l)}
@@ -399,20 +419,20 @@ section.offres.green{display:flow-root}
 .c-cols a{color:var(--bone)}
 .giant{
   margin-top:clamp(40px,6vw,80px);
-  font-weight:700;letter-spacing:-.045em;line-height:.76;
+  font-weight:600;letter-spacing:-.045em;line-height:.76;
   font-size:clamp(24vw,25vw,26vw);
   color:rgba(241,238,230,.07);
   text-align:center;user-select:none;
   transform:translateY(.14em);
 }
-.legal{display:flex;justify-content:space-between;gap:1.5em;flex-wrap:wrap;padding:18px var(--pad);border-top:1px solid var(--line-g);font-size:.64rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(241,238,230,.4)}
+.legal{display:flex;justify-content:space-between;gap:1.5em;flex-wrap:wrap;padding:18px var(--pad);border-top:1px solid var(--line-g);font-size:.7rem;letter-spacing:0;color:rgba(241,238,230,.4)}
 /* La bande des liens legaux des pages SANS pied complet (components/
    LiensLegaux.tsx, posee par le layout public apres <main>). Meme typographie
    que .legal, couleurs du fond clair. Le layout ne la rend plus la ou le pied
    complet porte deja les memes liens (lib/i18n.ts, CHEMINS_AVEC_PIED) ; la
    regle `:has` ci-dessous n est plus qu un filet. Le fond de 96px degage la bulle
    du chat (position:fixed en bas d ecran), qui sinon couvrait les liens. */
-.liens-legaux{padding:18px 0 96px;border-top:1px solid var(--line);font-size:.64rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.liens-legaux{padding:18px 0 96px;border-top:1px solid var(--line);font-size:.7rem;letter-spacing:0;color:var(--muted)}
 .liens-legaux .wrap{display:flex;gap:1.5em 2.5em;flex-wrap:wrap}
 main:has(footer.contact) + .liens-legaux{display:none}
 /* LE BANDEAU COOKIES (components/BandeauCookies.tsx), position:fixed, monte
@@ -469,14 +489,14 @@ main:has(footer.contact) + .liens-legaux{display:none}
   transition:transform .7s cubic-bezier(.76,0,.24,1);}
 html.loaded .loader{transform:translateY(-100.5%)}
 .loader .lw{overflow:hidden}
-.loader .lw span{display:inline-block;font-weight:700;font-size:clamp(2rem,6vw,4rem);letter-spacing:-.03em;
+.loader .lw span{display:inline-block;font-weight:600;font-size:clamp(2rem,6vw,4rem);letter-spacing:-.03em;
   transform:translateY(120%);transition:transform .9s var(--ease)}
 html.intro .loader .lw span{transform:translateY(0)}
-.loader .lw sup{font-weight:600;font-size:.4em;color:var(--brass-l);margin-left:.25em;letter-spacing:.08em}
+.loader .lw sup{font-weight:600;font-size:.4em;color:var(--brass-l);margin-left:.25em;letter-spacing:0}
 .loader .pct{position:absolute;right:var(--pad);bottom:26px;font-family:var(--serif);font-style:italic;
   font-size:clamp(2.4rem,7vw,5rem);color:var(--brass-l);line-height:1}
-.loader .lmeta{position:absolute;left:var(--pad);bottom:34px;font-size:.66rem;font-weight:600;
-  letter-spacing:.24em;text-transform:uppercase;color:var(--muted-g)}
+.loader .lmeta{position:absolute;left:var(--pad);bottom:34px;font-size:.72rem;font-weight:600;
+  letter-spacing:0;color:var(--muted-g)}
 
 /* les animations du hero attendent la fin du loader */
 html.has-intro:not(.loaded) .hero h1 .l span,
@@ -502,7 +522,7 @@ html.smooth #smooth{will-change:transform}
 html.cursor-on .cursor{opacity:1}
 .cursor.grow{width:56px;height:56px}
 
-.cursor .cl{font-size:.6rem;font-weight:600;letter-spacing:.14em;opacity:0;transition:opacity .2s;color:#fff}
+.cursor .cl{font-size:.6rem;font-weight:600;letter-spacing:0;opacity:0;transition:opacity .2s;color:#fff}
 
 html.cursor-on a,html.cursor-on button,html.cursor-on .row-h,html.cursor-on summary{cursor:none}
 html.cursor-on body{cursor:none}
@@ -531,8 +551,8 @@ html.menu-open{overflow:hidden}
    compte TOUS les freres. Le rang est donc pose par components/MenuOverlay.tsx,
    sur l entree elle-meme, et il survit a toute insertion. */
 html.menu-open .menu .m-lnk{opacity:1;transform:none;transition-delay:calc(.22s + var(--i,0) * .08s)}
-.menu .mi{font-size:.7rem;font-weight:600;letter-spacing:.18em;color:var(--brass-l)}
-.menu .mt{font-weight:550;font-size:clamp(2rem,7.5vw,4.2rem);letter-spacing:-.03em;line-height:1.15;transition:color .3s}
+.menu .mi{font-size:.7rem;font-weight:600;letter-spacing:0;color:var(--brass-l)}
+.menu .mt{font-weight:600;font-size:clamp(2rem,7.5vw,4.2rem);letter-spacing:-.03em;line-height:1.15;transition:color .3s}
 .menu .m-lnk:hover .mt{color:var(--brass-l)}
 
 /* Filet de securite, jamais visible tant que le menu tient dans l ecran :
@@ -546,7 +566,7 @@ html.menu-open .menu .m-lnk{opacity:1;transform:none;transition-delay:calc(.22s 
 .menu nav{max-height:calc(100svh - 170px);overflow-y:auto;overscroll-behavior:contain;padding-bottom:28px}
 .menu .m-foot{position:absolute;left:var(--pad);right:var(--pad);bottom:30px;
   display:flex;justify-content:space-between;gap:1.5em;flex-wrap:wrap;
-  font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-g)}
+  font-size:.74rem;font-weight:600;letter-spacing:0;color:var(--muted-g)}
 .menu .m-foot a{color:var(--bone);text-decoration:none}
 
 /* nav au-dessus du menu ouvert */
@@ -567,7 +587,7 @@ html.menu-open .nav-time,html.menu-open .nav-r a{opacity:0;pointer-events:none}
 }
 
 /* L intitule de groupe (laiton, filet a droite) : les <h3> de /contact. */
-.sm-grp{font-size:.62rem;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:var(--brass);
+.sm-grp{font-size:.68rem;font-weight:600;letter-spacing:0;color:var(--brass);
   margin:26px 0 10px;display:flex;align-items:center;gap:1em}
 .sm-grp::after{content:"";flex:1;height:1px;background:var(--line)}
 
@@ -611,7 +631,7 @@ html.menu-open .nav-time,html.menu-open .nav-r a{opacity:0;pointer-events:none}
    promettrait un clic qui n arrive pas. */
 a.cat-it:hover{border-color:var(--ink);background:var(--bone-2);transform:translateY(-3px)}
 .green a.cat-it:hover{border-color:var(--bone);background:rgba(241,238,230,.06)}
-.cat-it h3{font-weight:550;font-size:1.05rem;letter-spacing:-.01em;line-height:1.32}
+.cat-it h3{font-weight:600;font-size:1.05rem;letter-spacing:-.01em;line-height:1.32}
 .cat-it .d{font-size:.85rem;line-height:1.55;color:var(--muted);margin-top:8px}
 .green .cat-it .d{color:var(--muted-g)}
 /* `margin-top:auto` POUSSE LE PRIX EN PIED DE CARTE. Sur une rangee, les
@@ -619,17 +639,17 @@ a.cat-it:hover{border-color:var(--ink);background:var(--bone-2);transform:transl
    le texte se poserait a une hauteur differente dans chaque carte et l oeil
    perdrait la ligne horizontale qui lui sert a comparer. */
 .cat-it .px{margin-top:auto;padding-top:18px;font-family:var(--serif);font-size:1.3rem;line-height:1}
-.cat-it .px small{font-family:var(--sans);font-size:.62rem;font-weight:600;color:var(--muted);
-  letter-spacing:.06em;margin-right:.4em;text-transform:uppercase}
+.cat-it .px small{font-family:var(--sans);font-size:.68rem;font-weight:600;color:var(--muted);
+  letter-spacing:0;margin-right:.4em}
 .green .cat-it .px small{color:var(--muted-g)}
-.cat-it .px small.per{margin-right:0;margin-left:.15em;text-transform:none;letter-spacing:0}
+.cat-it .px small.per{margin-right:0;margin-left:.15em}
 
 /* LA FAMILLE EST NOMMEE AU PIED DE LA CARTE, et ce n est pas decoratif : la
    carte entiere est un lien, et un lien doit dire ou il mene. Sans ce libelle,
    cliquer « Cartes de visite » ouvrait « Imprimés » sans
    prevenir. Il n apparait que sur les cartes qui sont des liens. */
-.cat-it .go{margin-top:14px;font-size:.68rem;font-weight:600;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--brass)}
+.cat-it .go{margin-top:14px;font-size:.74rem;font-weight:600;letter-spacing:0;
+  color:var(--brass)}
 .green .cat-it .go{color:var(--brass-l)}
 .cat-it .go .ar{display:inline-block;transition:transform .3s var(--ease)}
 a.cat-it:hover .go .ar{transform:translateX(4px)}

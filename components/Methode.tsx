@@ -1,3 +1,4 @@
+import Detail from "@/components/Detail";
 import { dictionnaire } from "@/lib/dictionnaires";
 import { lien, type Locale } from "@/lib/i18n";
 
@@ -5,6 +6,8 @@ import { lien, type Locale } from "@/lib/i18n";
 //
 // Contenu editorial pur : l appel, la demo, l essai, l abonnement
 // (.agents/product-marketing.md §5, parcours). Composant serveur synchrone.
+// Chaque carte porte une ligne (`etape0nCourt`) ; le texte entier
+// (`etape0nTexte`) est range dans « Les 4 étapes en détail ».
 //
 // UNE SEULE DUREE, DANS LES DEUX LANGUES : l essai, deux semaines (decision
 // d Ayoub du 25.10.2026). Ni la demo ni la mise en place n ont de delai
@@ -31,10 +34,20 @@ export default function Methode({ locale = "fr" }: { locale?: Locale }) {
           <div data-reveal><h2 className="t">{t.methode.titreLigne1}<br />{t.methode.titreLigne2}</h2></div>
         </div>
         <div className="steps">
-          <div className="stp" data-reveal><span className="t">{t.methode.etape01Moment}</span><span className="n">01</span><h3>{t.methode.etape01Titre}</h3><p>{t.methode.etape01Texte}</p></div>
-          <div className="stp" data-reveal><span className="t">{t.methode.etape02Moment}</span><span className="n">02</span><h3>{t.methode.etape02Titre}</h3><p>{t.methode.etape02Texte}</p></div>
-          <div className="stp" data-reveal><span className="t">{t.methode.etape03Moment}</span><span className="n">03</span><h3>{t.methode.etape03Titre}</h3><p>{t.methode.etape03Texte}</p></div>
-          <div className="stp" data-reveal><span className="t">{t.methode.etape04Moment}</span><span className="n">04</span><h3>{t.methode.etape04Titre}</h3><p>{t.methode.etape04Texte}</p></div>
+          <div className="stp" data-reveal><span className="t">{t.methode.etape01Moment}</span><span className="n">01</span><h3>{t.methode.etape01Titre}</h3><p>{t.methode.etape01Court}</p></div>
+          <div className="stp" data-reveal><span className="t">{t.methode.etape02Moment}</span><span className="n">02</span><h3>{t.methode.etape02Titre}</h3><p>{t.methode.etape02Court}</p></div>
+          <div className="stp" data-reveal><span className="t">{t.methode.etape03Moment}</span><span className="n">03</span><h3>{t.methode.etape03Titre}</h3><p>{t.methode.etape03Court}</p></div>
+          <div className="stp" data-reveal><span className="t">{t.methode.etape04Moment}</span><span className="n">04</span><h3>{t.methode.etape04Titre}</h3><p>{t.methode.etape04Court}</p></div>
+        </div>
+        {/* LE TEXTE ENTIER DE CHAQUE ETAPE, ferme par defaut (26.10.2026) :
+            les cartes n en gardent qu une ligne. Rien n est retire. */}
+        <div data-reveal>
+          <Detail libelle={t.methode.detail}>
+            <p><strong>{t.methode.etape01Titre}.</strong>{` ${t.methode.etape01Texte}`}</p>
+            <p><strong>{t.methode.etape02Titre}.</strong>{` ${t.methode.etape02Texte}`}</p>
+            <p><strong>{t.methode.etape03Titre}.</strong>{` ${t.methode.etape03Texte}`}</p>
+            <p><strong>{t.methode.etape04Titre}.</strong>{` ${t.methode.etape04Texte}`}</p>
+          </Detail>
         </div>
         {/* LE LIEN MENE A (05), « Voir ce que vous payez » : a ce point de la
             page le lecteur veut savoir combien et quand. Une ancre pure n est

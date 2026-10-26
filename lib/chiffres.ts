@@ -14,6 +14,12 @@
  * n'est un résultat de Nawa Corps ; le site ne le laisse jamais croire.
  */
 export const SOURCES_CHIFFRES = {
+  /**
+   * « Analyse de l'impact de l'IA sur l'économie genevoise », PwC Suisse pour
+   * le DEE / OCEI, communiqué de l'État de Genève du 5.12.2024 : 54 % des
+   * plus de 200 PME répondantes utilisent l'IA. Relu à la source le 26.10.2026.
+   */
+  geneve: "https://www.ge.ch/document/moitie-pme-genevoises-utilisent-ia-etude-inedite",
   /** Baromètre ARTIsanté CAPEB / IRIS-ST, communiqué du 26.5.2026 (PDF). */
   capeb:
     "https://www.capeb.fr/www/capeb/media/national/cp-capeb-barometre-artisante-2025-sante-conditions-de-travail-et-realite-des-artisans-du-btp-et-du-paysage.pdf",

@@ -86,7 +86,7 @@ export default function Guides() {
           <div className="cat-grid">
             {GUIDES.map((g) => (
               <article className="cat-it" data-reveal key={g.slug}>
-                <h2 style={{ fontWeight: 550, fontSize: "1.05rem", lineHeight: 1.32 }}>
+                <h2 style={{ fontWeight: 600, fontSize: "1.05rem", lineHeight: 1.32 }}>
                   <a href={cheminGuide(g.slug)}>{g.titre}</a>
                 </h2>
                 <p className="d">{g.resume}</p>

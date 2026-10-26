@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Detail from "@/components/Detail";
 import FooterContact from "@/components/FooterContact";
 import GrilleAbonnement from "@/components/GrilleAbonnement";
 import SchemaPage from "@/components/SchemaPage";
@@ -83,17 +84,29 @@ type TextesServices = {
      */
     etudes: string;
     etudesLien: string;
+    /** Le libellé du bloc qui range « pas promis », les études et le guide. */
+    detail: string;
   };
   parcours: {
     meta: string;
     h2: readonly [string, string];
     demo: Item;
     essai: Item;
+    /**
+     * LES LIGNES COURTES DES TROIS CARTES (26.10.2026, « moins d info, aussi
+     * complet ») ; les textes entiers (`demo`, `essai`, `abonnementAvecPrix`)
+     * et la note sont dans « Voir le détail ».
+     */
+    demoCourt: string;
+    essaiCourt: string;
     abonnementTitre: string;
-    /** Gabarit avec `{montant}` et `{tva}` (voir `avecPrix`). */
+    /** Gabarits avec `{montant}` et `{tva}` (voir `avecPrix`). */
+    abonnementCourtAvecPrix: string;
+    abonnementCourtSansPrix: string;
     abonnementAvecPrix: string;
     abonnementSansPrix: string;
     note: string;
+    detail: string;
   };
   cta: string;
   /**
@@ -119,7 +132,7 @@ const TEXTES: Record<Locale, TextesServices> = {
     chapo:
       "Nawa Corps est un studio genevois. Il installe dans les PME un assistant IA qui connaît déjà leur métier. L'assistant répond aux demandes, relance les clients et prépare les documents. Il ne s'engage jamais à la place du patron. Chaque lundi, un relevé dit ce qui a été fait.",
     rienAPreparer:
-      "Vous n'avez rien à préparer : nous partons de ce que vous recevez déjà.",
+      "Rien à préparer : nous partons de ce que vous recevez déjà.",
     mentionReponse: MENTION_REPONSE,
     gestes: {
       meta: "Ce qu'il fait",
@@ -128,7 +141,7 @@ const TEXTES: Record<Locale, TextesServices> = {
         {
           titre: "Répondre aux demandes.",
           texte:
-            "Un accusé de réception, validé par vous une fois, demande l'adresse, une photo et l'urgence. Vous trouvez une liste triée, et vous validez chaque réponse de fond.",
+            "Un accusé de réception, validé par vous une fois, demande l'adresse, une photo et l'urgence. Vous validez chaque réponse de fond.",
         },
         {
           titre: "Relancer.",
@@ -148,7 +161,7 @@ const TEXTES: Record<Locale, TextesServices> = {
     metiers: {
       meta: "Par métier",
       h2: ["Il connaît déjà", "votre métier."],
-      lede: "Nous partons d'une base par métier : le vocabulaire, les demandes types, les documents. Puis nous la réglons sur votre entreprise : vos prestations, vos clients, vos mots. Chaque métier a sa page, avec un exemple de démonstration.",
+      lede: "Une base par métier, réglée sur votre entreprise.",
       lienCarte: "L'assistant pour ce métier →",
       tous: "Tous les métiers →",
     },
@@ -168,6 +181,7 @@ const TEXTES: Record<Locale, TextesServices> = {
       etudes:
         "Des études publiées mesurent des gains nets quand l'IA aide à rédiger et à répondre aux clients. Ce sont leurs chiffres, pas une promesse pour vous : ce que l'assistant fait chez vous, le relevé du lundi le montre. ",
       etudesLien: "Les chiffres et leurs sources →",
+      detail: "Ce que nous ne promettons pas",
     },
     parcours: {
       meta: "Le parcours",
@@ -182,12 +196,19 @@ const TEXTES: Record<Locale, TextesServices> = {
         texte:
           "Pendant deux semaines, il travaille sur vos vraies demandes, sans jamais s'engager à votre place ; le relevé arrive chaque lundi. Rien à payer pendant l'essai.",
       },
+      demoCourt: "Sur des demandes de votre métier. Rien à payer.",
+      essaiCourt: "Sur vos vraies demandes. Le relevé chaque lundi.",
       abonnementTitre: "L'abonnement.",
+      abonnementCourtAvecPrix:
+        "Mise en place {montant}, {tva}, une seule fois. Puis l'abonnement, sans engagement.",
+      abonnementCourtSansPrix:
+        "La mise en place, une seule fois. Puis l'abonnement, sans engagement.",
       abonnementAvecPrix:
         "Si le relevé vous convient, vous payez la mise en place, {montant}, {tva}, une seule fois. Puis l'abonnement mensuel continue, selon votre palier. Sans engagement, résiliable chaque mois.",
       abonnementSansPrix:
         "Si le relevé vous convient, vous payez la mise en place, une seule fois. Puis l'abonnement mensuel continue, selon votre volume. Sans engagement, résiliable chaque mois.",
       note: "L'abonnement, selon votre volume : le palier se fixe par écrit à la fin de la démo, avant l'essai.",
+      detail: "Le parcours en détail",
     },
     cta: "Voir la démo sur mon métier ",
     guides: {
@@ -207,7 +228,7 @@ const TEXTES: Record<Locale, TextesServices> = {
     h1: ["The AI assistant,", "in detail."],
     chapo:
       "Nawa Corps is a Geneva studio. It sets up, in small businesses, an AI assistant that already knows their trade. The assistant answers enquiries, follows up clients and prepares documents. It never commits on the owner's behalf. Every Monday, a report says what was done.",
-    rienAPreparer: "You have nothing to prepare: we start from what you already receive.",
+    rienAPreparer: "Nothing to prepare: we start from what you already receive.",
     mentionReponse: MENTION_REPONSE_EN,
     gestes: {
       meta: "What it does",
@@ -216,7 +237,7 @@ const TEXTES: Record<Locale, TextesServices> = {
         {
           titre: "Answering enquiries.",
           texte:
-            "An acknowledgement, approved by you once, asks for the address, a photo and the urgency. You find a sorted list, and you approve every real reply.",
+            "An acknowledgement, approved by you once, asks for the address, a photo and the urgency. You approve every real reply.",
         },
         {
           titre: "Following up.",
@@ -236,7 +257,7 @@ const TEXTES: Record<Locale, TextesServices> = {
     metiers: {
       meta: "By trade",
       h2: ["It already knows", "your trade."],
-      lede: "We start from a base for each trade: the vocabulary, the usual enquiries, the documents. Then we set it to your business: your services, your clients, your words. Each trade has its page, with a demo example.",
+      lede: "A base for each trade, set to your business.",
       lienCarte: "The assistant for this trade →",
       tous: "All trades →",
     },
@@ -256,6 +277,7 @@ const TEXTES: Record<Locale, TextesServices> = {
       etudes:
         "Published studies measure clear gains when AI helps write and reply to customers. Those are their figures, not a promise to you: what the assistant does for you shows in the Monday report. ",
       etudesLien: "The figures and their sources →",
+      detail: "What we do not promise",
     },
     parcours: {
       meta: "The process",
@@ -270,12 +292,19 @@ const TEXTES: Record<Locale, TextesServices> = {
         texte:
           "For two weeks, it works on your real enquiries, never committing on your behalf; the report comes every Monday. Nothing to pay during the trial.",
       },
+      demoCourt: "On enquiries from your trade. Nothing to pay.",
+      essaiCourt: "On your real enquiries. The report every Monday.",
       abonnementTitre: "The subscription.",
+      abonnementCourtAvecPrix:
+        "Set-up {montant}, {tva}, once. Then the subscription, no commitment.",
+      abonnementCourtSansPrix:
+        "The set-up, once. Then the subscription, no commitment.",
       abonnementAvecPrix:
         "If the report suits you, you pay for the set-up, {montant}, {tva}, once. Then the monthly subscription carries on, based on your tier. No commitment, cancellable every month.",
       abonnementSansPrix:
         "If the report suits you, you pay for the set-up, once. Then the monthly subscription carries on, based on your volume. No commitment, cancellable every month.",
       note: "The subscription, based on your volume: the tier is set in writing at the end of the demo, before the trial.",
+      detail: "The process in detail",
     },
     cta: "See the demo on my trade ",
     guides: null,
@@ -358,6 +387,9 @@ export async function corpsServices(locale: Locale) {
   const abonnement = montant
     ? avecPrix(t.parcours.abonnementAvecPrix, montant, locale)
     : t.parcours.abonnementSansPrix;
+  const abonnementCourt = montant
+    ? avecPrix(t.parcours.abonnementCourtAvecPrix, montant, locale)
+    : t.parcours.abonnementCourtSansPrix;
 
   /**
    * LE SERVICE EN DONNEE STRUCTUREE, rattache au studio (`/#studio`, emis par
@@ -448,7 +480,9 @@ export async function corpsServices(locale: Locale) {
 
       {/* ---------- (02) Par metier ----------
           Les cartes sont lues dans lib/metiers.ts, comme le hub /metiers :
-          chacune mene a sa page. */}
+          chacune mene a sa page. DEPUIS LE 26.10.2026 UNE CARTE = LE NOM ET
+          LE LIEN : ce que l assistant peut faire (`carte.peut`) est sur la
+          carte du hub et sur la page du metier, a un clic. */}
       <section>
         <div className="wrap">
           <Entete rang="02" meta={t.metiers.meta} h2={t.metiers.h2} />
@@ -459,7 +493,6 @@ export async function corpsServices(locale: Locale) {
             {METIERS.map((m) => (
               <article className="cat-it" data-reveal key={m.slug}>
                 <h3>{m[locale].nom}</h3>
-                <p className="d">{m[locale].carte.peut}</p>
                 <a className="go" href={lien(locale, cheminMetier(m.slug))}>
                   {t.metiers.lienCarte}
                 </a>
@@ -489,22 +522,26 @@ export async function corpsServices(locale: Locale) {
                 </li>
               ))}
             </ul>
-            <p style={{ marginTop: "1.2em" }}>
-              <strong>{t.controle.pasPromisTitre}</strong>
-              {t.controle.pasPromis}
-            </p>
-            {/* Vers (01) Les chiffres de l accueil. <a> classique (B7). */}
-            <p style={{ marginTop: "1.2em" }}>
-              {t.controle.etudes}
-              <a className="lnk" href={lien(locale, "/#chiffres")}>{t.controle.etudesLien}</a>
-            </p>
-            {t.guides && (
-              <p style={{ marginTop: "0.6em" }}>
-                <a className="lnk" href={cheminGuide("ia-et-protection-des-donnees")}>
-                  {t.guides.donnees}
-                </a>
+            {/* « Pas promis », les etudes et le guide nLPD, fermes par defaut
+                (26.10.2026) : les cinq points disent l essentiel. */}
+            <Detail libelle={t.controle.detail}>
+              <p>
+                <strong>{t.controle.pasPromisTitre}</strong>
+                {t.controle.pasPromis}
               </p>
-            )}
+              {/* Vers (01) Les chiffres de l accueil. <a> classique (B7). */}
+              <p>
+                {t.controle.etudes}
+                <a className="lnk" href={lien(locale, "/#chiffres")}>{t.controle.etudesLien}</a>
+              </p>
+              {t.guides && (
+                <p>
+                  <a className="lnk" href={cheminGuide("ia-et-protection-des-donnees")}>
+                    {t.guides.donnees}
+                  </a>
+                </p>
+              )}
+            </Detail>
           </div>
         </div>
       </section>
@@ -520,28 +557,36 @@ export async function corpsServices(locale: Locale) {
             <div className="stp" data-reveal>
               <span className="n">01</span>
               <h3>{t.parcours.demo.titre}</h3>
-              <p>{t.parcours.demo.texte}</p>
+              <p>{t.parcours.demoCourt}</p>
             </div>
             <div className="stp" data-reveal>
               <span className="n">02</span>
               <h3>{t.parcours.essai.titre}</h3>
-              <p>{t.parcours.essai.texte}</p>
+              <p>{t.parcours.essaiCourt}</p>
             </div>
             <div className="stp" data-reveal>
               <span className="n">03</span>
               <h3>{t.parcours.abonnementTitre}</h3>
-              <p>{abonnement}</p>
+              <p>{abonnementCourt}</p>
             </div>
           </div>
+          {/* Les textes entiers des trois etapes, la note et le guide du prix,
+              fermes par defaut (26.10.2026). Le montant de l etape 3 y garde
+              sa mention de TVA dans la meme phrase (`avecPrix`). */}
           <div className="sm-devis" data-reveal>
-            <p>{t.parcours.note}</p>
-            {t.guides && (
-              <p style={{ marginTop: "0.6em" }}>
-                <a className="lnk" href={cheminGuide("prix-assistant-ia-suisse")}>
-                  {t.guides.prix}
-                </a>
-              </p>
-            )}
+            <Detail libelle={t.parcours.detail}>
+              <p><strong>{t.parcours.demo.titre}</strong>{` ${t.parcours.demo.texte}`}</p>
+              <p><strong>{t.parcours.essai.titre}</strong>{` ${t.parcours.essai.texte}`}</p>
+              <p><strong>{t.parcours.abonnementTitre}</strong>{` ${abonnement}`}</p>
+              <p>{t.parcours.note}</p>
+              {t.guides && (
+                <p>
+                  <a className="lnk" href={cheminGuide("prix-assistant-ia-suisse")}>
+                    {t.guides.prix}
+                  </a>
+                </p>
+              )}
+            </Detail>
           </div>
           <div style={{ marginTop: 34 }}>
             <GrilleAbonnement locale={locale} forme="cat" />

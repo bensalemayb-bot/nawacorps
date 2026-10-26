@@ -11,10 +11,13 @@ import { CHEMIN_METIERS, METIERS, cheminMetier } from "@/lib/metiers";
 //
 // DEPUIS LE 25 OCTOBRE 2026 LA SECTION EST GENERALE (decision d Ayoub : le
 // site parle a toutes les PME qui veulent l assistant). Une ligne par metier,
-// LUE DANS lib/metiers.ts — le meme texte que la carte du hub /metiers : ce
-// qui prend les soirees du patron, ce que l assistant PEUT faire —, chacune
-// liee a sa page /metiers/<slug>. Sous les lignes, « Tous les métiers » mene
-// au hub. Aucun montant ici.
+// LUE DANS lib/metiers.ts, chacune liee a sa page /metiers/<slug>. Sous les
+// lignes, « Tous les métiers » mene au hub. Aucun montant ici.
+//
+// UNE LIGNE = LE NOM + UNE PHRASE (26.10.2026, demande d Ayoub : moins a
+// lire). La phrase est ce que l assistant PEUT faire (`carte.peut`). Ce qui
+// prend les soirees du patron (`carte.soirees`) n est plus repris ici : il
+// reste sur la carte du hub /metiers et sur chaque page metier, a un clic.
 //
 // LA FORME EST <h3><button>titre</button></h3> : le titre reste dans le plan
 // de titres d un lecteur d ecran, et le bouton le rend atteignable au clavier.
@@ -51,7 +54,6 @@ export default function ServicesRows({ locale = "fr" }: { locale?: Locale }) {
               <div className={i === 0 ? "row open" : "row"} data-row key={metier.slug}>
                 <div className="row-h"><span className="n">{n}</span><h3><button type="button" className="row-t" aria-expanded={i === 0}>{m.nom}</button></h3><span className="pl">+</span></div>
                 <div className="row-b" inert={i !== 0}><div>
-                  <p>{`${t.services.soirees}${m.carte.soirees}`}</p>
                   <p>{`${t.services.peut}${m.carte.peut}`}</p>
                   <p><a className="lnk" style={STYLE_RENVOI} href={lien(locale, cheminMetier(metier.slug))}>{t.services.lienMetier}</a></p>
                 </div></div>

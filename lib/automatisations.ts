@@ -40,6 +40,10 @@ import type { Locale } from "@/lib/i18n";
  * schema (`schema`) se lit d un coup d oeil, a droite : des libelles de
  * quelques mots, sans quoi le dessin redevient un paragraphe et ne montre
  * plus rien. Les deux disent la meme chose ; le texte est la reference.
+ * Depuis le 26.10.2026 (« trop long à lire »), seul `arrive` reste visible a
+ * cote du schema : `prepare`, `valide` et `part` sont dans « Voir le détail »,
+ * ferme par defaut. `arrive` est donc LA phrase de l exemple : une ou deux
+ * phrases courtes, pas plus.
  *
  * L ANGLAIS suit docs/agents/brand/glossaire-anglais.md : anglais britannique,
  * « enquiry », « quote », « appointment », « property manager » et « work
@@ -1048,8 +1052,9 @@ export const TEXTES_DEMONSTRATIONS = {
       "Onze métiers, deux exemples chacun : ce qui arrive, ce que l'assistant IA prépare, ce que vous validez. Demandes fictives, PME de Genève.",
     meta: "Démonstrations",
     h1: ["Ce que l'assistant peut faire,", "métier par métier."] as const,
+    /** Deux phrases au plus (26.10.2026) : le schema de chaque exemple dit le reste. */
     intro:
-      "Deux exemples par métier de ce que fait l'assistant IA que nous installons dans les PME de Genève, chacun en quatre temps : ce qui arrive, ce que l'assistant prépare, ce que vous validez, ce qui part. Il prépare et il propose ; c'est vous qui validez. Seul l'accusé de réception, validé par vous une fois, part seul.",
+      "Deux exemples par métier de ce que l'assistant IA peut préparer pour une PME de Genève, chacun en quatre temps. Il prépare et il propose, vous validez ; seul l'accusé de réception, validé par vous une fois, part seul.",
     mention: "Exemples de démonstration — demandes fictives",
     /** La demonstration filmee en tete de page (components/VideoDemo.tsx). */
     videoLegende:
@@ -1059,6 +1064,8 @@ export const TEXTES_DEMONSTRATIONS = {
     /** aria-label de la rangee d ancres. */
     ancres: "Aller à un métier",
     etapes: ["Ce qui arrive", "L'assistant prépare", "Vous validez", "Ce qui part"] as const,
+    /** Le bouton qui deplie le texte d un exemple (components/Detail.tsx). */
+    detail: "Voir le détail",
     /** Le bouton dessine dans le schema : un dessin, pas un controle. */
     bouton: "Valider",
     telephone: "Palier Complet",
@@ -1082,7 +1089,7 @@ export const TEXTES_DEMONSTRATIONS = {
     meta: "Demos",
     h1: ["What the assistant can do,", "trade by trade."] as const,
     intro:
-      "Two examples per trade of what the AI assistant we set up for Geneva small businesses does, each in four steps: what arrives, what the assistant prepares, what you approve, what goes out. It prepares and it proposes; you approve. Only the acknowledgement, approved by you once, goes out on its own.",
+      "Two examples per trade of what the AI assistant can prepare for a Geneva small business, each in four steps. It prepares and it proposes, you approve; only the acknowledgement, approved by you once, goes out on its own.",
     mention: "Demo examples — fictitious enquiries",
     videoLegende:
       "In 40 seconds: an enquiry comes in, the assistant sorts it and drafts the reply; you read it, you send it. Filmed demo, fictitious enquiries, names and addresses blurred.",
@@ -1090,6 +1097,7 @@ export const TEXTES_DEMONSTRATIONS = {
       "Filmed demo: an inbox sorted by category, a client email opened, the assistant drafts a reply that the owner reads and then sends.",
     ancres: "Go to a trade",
     etapes: ["What arrives", "The assistant prepares", "You approve", "What goes out"] as const,
+    detail: "See the details",
     bouton: "Approve",
     telephone: "Complete tier",
     telephoneNote: "The phone is part of the Complete tier: three tasks including the phone.",

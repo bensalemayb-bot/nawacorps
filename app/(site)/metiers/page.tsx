@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import DemoMetier from "@/components/DemoMetier";
+import Detail from "@/components/Detail";
 import FooterContact from "@/components/FooterContact";
 import SchemaPage from "@/components/SchemaPage";
 import { LANGUE_HTML, type Locale, lien } from "@/lib/i18n";
@@ -12,10 +13,11 @@ import { SITE_NAME, SITE_URL, alternatesPage, jsonLd, openGraphPage } from "@/li
  * parle a toutes les PME qui veulent l assistant, pas seulement aux
  * sanitaires).
  *
- * Une carte par metier, lue dans lib/metiers.ts : ce qui lui prend ses
- * soirees, ce que l assistant PEUT faire, l apercu de sa demonstration
- * (fictive, et dite comme telle par components/DemoMetier.tsx), et le lien
- * vers sa page. Puis la phrase « votre métier n'y est pas », et les metiers
+ * Une carte par metier, lue dans lib/metiers.ts : ce que l assistant PEUT
+ * faire, puis dans « Voir le détail » (ferme par defaut, 26.10.2026 : « trop
+ * long à lire ») ce qui lui prend ses soirees et l apercu de sa
+ * demonstration (fictive, et dite comme telle par components/DemoMetier.tsx
+ * dans le meme bloc), et le lien vers sa page. Puis la phrase « votre métier n'y est pas », et les metiers
  * exclus (secret professionnel), comme le prompt de Leo. Le bouton du bas
  * est double d un lien vers /demonstrations (25.10.2026) : deux exemples
  * d automatisation par metier, chacun avec son schema.
@@ -118,18 +120,20 @@ export function corpsMetiers(locale: Locale) {
               const tm = m[locale];
               return (
                 <article className="cat-it" data-reveal key={m.slug} id={m.slug}>
-                  <h2 style={{ fontWeight: 550, fontSize: "1.05rem", lineHeight: 1.32 }}>
+                  <h2 style={{ fontWeight: 600, fontSize: "1.05rem", lineHeight: 1.32 }}>
                     <a href={lien(locale, cheminMetier(m.slug))}>{tm.nom}</a>
                   </h2>
-                  <p className="d">
-                    <strong>{`${t.soirees} : `}</strong>
-                    {tm.carte.soirees}
-                  </p>
                   <p className="d">
                     <strong>{`${t.peut} : `}</strong>
                     {tm.carte.peut}
                   </p>
-                  <DemoMetier demo={tm.demo} locale={locale} court />
+                  <Detail libelle={TEXTES_METIERS[locale].page.detail} className="d">
+                    <p className="d">
+                      <strong>{`${t.soirees} : `}</strong>
+                      {tm.carte.soirees}
+                    </p>
+                    <DemoMetier demo={tm.demo} locale={locale} court />
+                  </Detail>
                   <a className="go" href={lien(locale, cheminMetier(m.slug))}>
                     {t.lienCarte}
                   </a>

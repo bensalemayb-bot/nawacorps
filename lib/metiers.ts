@@ -2355,6 +2355,10 @@ export const TEXTES_METIERS = {
       tachesMeta: "Ce que l'assistant peut faire",
       uneTache:
         "Commencez par la tâche qui vous prend le plus de soirées. Les autres viennent ensuite, selon votre palier.",
+      /** Les boutons qui deplient (components/Detail.tsx, 26.10.2026). */
+      detail: "Voir le détail",
+      demoDetail: "Les 4 étapes en détail",
+      autresQuestions: "Autres questions",
       demoMeta: "Exemple de démonstration",
       demoH2: ["Une demande,", "du début à la fin."] as const,
       controleMeta: "Le contrôle",
@@ -2393,7 +2397,11 @@ export const TEXTES_METIERS = {
       fil: { accueil: "Accueil", metiers: "Métiers" },
     },
     demo: {
-      /** OBLIGATOIRE (LCD art. 3) : visible sur chaque demo, page et carte. */
+      /**
+       * OBLIGATOIRE (LCD art. 3) : sur chaque demo, page et carte, rendu par
+       * components/DemoMetier.tsx avec la demande — visible des que la demande
+       * l est, y compris dans un « Voir le détail » deplie.
+       */
       libelle: "Exemple de démonstration — demande fictive",
       etapes: [
         "La demande arrive",
@@ -2428,6 +2436,9 @@ export const TEXTES_METIERS = {
       tachesMeta: "What the assistant can do",
       uneTache:
         "Start with the task that takes up most of your evenings. The others come later, depending on your tier.",
+      detail: "See the details",
+      demoDetail: "The 4 steps in detail",
+      autresQuestions: "More questions",
       demoMeta: "Demo example",
       demoH2: ["One enquiry,", "from start to finish."] as const,
       controleMeta: "Control",

@@ -7,6 +7,7 @@ import {
   phrasePaliers,
   type PalierAbonnement,
 } from "@/lib/catalogue";
+import Detail from "@/components/Detail";
 import { jsonLd } from "@/lib/site";
 import { dictionnaire, type Dictionnaire } from "@/lib/dictionnaires";
 import { LANGUE_HTML, lien, type Locale } from "@/lib/i18n";
@@ -22,11 +23,13 @@ import { LANGUE_HTML, lien, type Locale } from "@/lib/i18n";
 // un moteur de reponse. `inLanguage` distingue les deux FAQPage FR et EN.
 
 /**
- * LES NEUF OBJECTIONS, dans l ordre du panel de 100 PME (revue A tour 2, m1) :
- * la confiance d abord (est-ce que ca marche chez moi, donnees, l IA qui
- * ecrit, l erreur), le
- * besoin ensuite (dont la penurie d embauche — ces deux questions sont
- * arrivees le 25.10.2026), l habitude, le prix en dernier.
+ * LES NEUF OBJECTIONS. LES CINQ PREMIERES SONT VISIBLES (26.10.2026, « moins
+ * d info, aussi complet ») : la confiance (est-ce que ca marche chez moi,
+ * donnees, l IA qui ecrit, l erreur), puis le prix — remonte de la derniere
+ * place pour rester visible. Les quatre suivantes — le besoin (dont la
+ * penurie d embauche, arrivees le 25.10.2026), l habitude, le temps — sont
+ * rangees dans « Autres questions », toujours rendues dans le HTML : le
+ * JSON-LD declare donc bien les neuf, et rien que ce que la page porte.
  *
  * « VOUS AVEZ DES REFERENCES ? » EST DEVENUE « COMMENT SAVOIR SI CA MARCHE
  * CHEZ MOI ? » le 25.10.2026 : la reponse est la demo et l essai, que le
@@ -61,12 +64,24 @@ function construireQuestions(
     { q: t.faq.questionDonnees, r: t.faq.reponseDonnees },
     { q: t.faq.questionIa, r: t.faq.reponseIa },
     { q: t.faq.questionErreur, r: t.faq.reponseErreur },
+    { q: t.faq.questionPrix, r: prix },
     { q: t.faq.questionBesoin, r: t.faq.reponseBesoin },
     { q: t.faq.questionPersonne, r: t.faq.reponsePersonne },
     { q: t.faq.questionOutils, r: t.faq.reponseOutils },
     { q: t.faq.questionTemps, r: t.faq.reponseTemps },
-    { q: t.faq.questionPrix, r: prix },
   ];
+}
+
+/** Combien de questions restent visibles ; les suivantes vont dans le Detail. */
+const VISIBLES = 5;
+
+function Question({ q, r }: { q: string; r: string }) {
+  return (
+    <details>
+      <summary>{q}<span className="pl2">+</span></summary>
+      <p className="a">{r}</p>
+    </details>
+  );
 }
 
 export default async function Faq({ locale = "fr" }: { locale?: Locale }) {
@@ -99,12 +114,21 @@ export default async function Faq({ locale = "fr" }: { locale?: Locale }) {
           <h2 className="sr-only">{t.faq.titreCache}</h2>
         </div>
         <div data-reveal>
-          {QUESTIONS.map((item) => (
-            <details key={item.q}>
-              <summary>{item.q}<span className="pl2">+</span></summary>
-              <p className="a">{item.r}</p>
-            </details>
+          {QUESTIONS.slice(0, VISIBLES).map((item) => (
+            <Question key={item.q} q={item.q} r={item.r} />
           ))}
+        </div>
+        {/* Les autres questions, fermees par defaut (26.10.2026). Hors du
+            bloc revele : un data-reveal sous un <details> ferme ne
+            s initialiserait jamais. */}
+        <div data-reveal>
+          <Detail libelle={t.faq.autres}>
+            <div>
+              {QUESTIONS.slice(VISIBLES).map((item) => (
+                <Question key={item.q} q={item.q} r={item.r} />
+              ))}
+            </div>
+          </Detail>
         </div>
 
         {/* LA SECTION NE SE TERMINE PAS SUR UNE PORTE FERMEE : la demande de

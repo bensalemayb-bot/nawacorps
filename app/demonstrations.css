@@ -32,7 +32,7 @@
    note de bas de page — elle doit se voir avant le premier exemple. */
 .dm-mention{display:inline-block;margin-top:28px;padding:.55em 1.1em;
   border:1px solid var(--brass);border-radius:999px;
-  font-size:.68rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--ink)}
+  font-size:.74rem;font-weight:600;letter-spacing:0;color:var(--ink)}
 
 /* Les ancres vers les metiers : la pastille de la nav (.pill), une taille en
    dessous. Elles passent a la ligne ; aucun defilement horizontal. */
@@ -44,7 +44,7 @@
 .dm-video figcaption{margin-top:12px;font-size:.82rem;line-height:1.5;color:var(--ink-2, #5d594f);max-width:70ch}
 .dm-ancres{margin-top:clamp(30px,4vw,48px)}
 .dm-ancres ul{list-style:none;display:flex;flex-wrap:wrap;gap:10px}
-.dm-ancres a{display:inline-block;font-size:.78rem;font-weight:500;text-decoration:none;
+.dm-ancres a{display:inline-block;font-size:.78rem;font-weight:400;text-decoration:none;
   border:1px solid var(--line);border-radius:999px;padding:.55em 1.1em;
   transition:border-color .3s var(--ease),background .3s var(--ease)}
 .dm-ancres a:hover{border-color:var(--ink);background:var(--bone-2)}
@@ -54,12 +54,12 @@
   gap:clamp(28px,4.5vw,72px);align-items:start;
   padding:clamp(28px,3.5vw,44px) 0;border-top:1px solid var(--line)}
 @media(max-width:900px){.dm-ex{grid-template-columns:1fr}}
-.dm-txt h3{font-weight:550;font-size:clamp(1.2rem,1.8vw,1.45rem);letter-spacing:-.01em;line-height:1.25;max-width:30ch}
+.dm-txt h3{font-weight:600;font-size:clamp(1.2rem,1.8vw,1.45rem);letter-spacing:-.01em;line-height:1.25;max-width:30ch}
 .dm-tel{margin-top:12px;font-size:.85rem;color:var(--muted);display:flex;flex-wrap:wrap;align-items:center;gap:.6em}
 .dm-temps{margin-top:22px;display:grid;gap:16px}
 .dm-temps dt{display:flex;align-items:baseline;gap:.7em;
-  font-size:.68rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
-.dm-temps dt .n{color:var(--brass);letter-spacing:.2em}
+  font-size:.74rem;font-weight:600;letter-spacing:0;color:var(--muted)}
+.dm-temps dt .n{color:var(--brass)}
 .dm-temps dd{margin-top:4px;font-size:.95rem;line-height:1.6;max-width:58ch}
 .dm-temps ul{list-style:none;display:grid;gap:6px}
 .dm-temps li{display:flex;gap:.8em}
@@ -70,7 +70,7 @@
 .sa{background:var(--bone-2);border:1px solid var(--line);border-radius:var(--r);
   padding:clamp(18px,2.4vw,28px)}
 .sa-cap{margin-bottom:18px}
-.sa-mention{font-size:.62rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.sa-mention{font-size:.68rem;font-weight:600;letter-spacing:0;color:var(--muted)}
 
 /* LE FIL : une ligne verticale qui relie les quatre noeuds, tracee derriere
    eux. Elle part du centre du premier noeud et s arrete a celui du dernier
@@ -84,11 +84,11 @@
 /* Le seul noeud plein : c est le patron qui decide. */
 .sa-pas-valide .sa-noeud{background:var(--pine);border-color:var(--pine);color:var(--bone)}
 .sa-corps{padding-top:5px;display:grid;gap:8px;justify-items:start}
-.sa-et{font-size:.62rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--brass)}
-.sa-canal{display:flex;flex-wrap:wrap;align-items:center;gap:.6em;font-weight:550;font-size:.9rem}
+.sa-et{font-size:.68rem;font-weight:600;letter-spacing:0;color:var(--brass)}
+.sa-canal{display:flex;flex-wrap:wrap;align-items:center;gap:.6em;font-weight:600;font-size:.9rem}
 
 /* L etiquette « Palier Complet » : partagee par le schema et le texte. */
-.sa-tag{display:inline-block;font-size:.6rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+.sa-tag{display:inline-block;font-size:.66rem;font-weight:600;letter-spacing:0;
   color:var(--pine);border:1px solid var(--pine);border-radius:999px;padding:.3em .8em;line-height:1.3}
 
 /* L extrait fictif : une bulle de message, en serif italique comme les
@@ -96,7 +96,7 @@
 .sa-bulle{background:var(--bone);border:1px solid var(--line);border-radius:14px 14px 14px 4px;
   padding:.7em 1em;font-family:var(--serif);font-style:italic;font-size:1.05rem;line-height:1.35;max-width:40ch}
 .sa-carte{background:var(--bone);border:1px solid var(--line);border-radius:10px;
-  padding:.65em .95em;font-size:.88rem;line-height:1.45;font-weight:500;
+  padding:.65em .95em;font-size:.88rem;line-height:1.45;font-weight:400;
   display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.6em 1em;width:100%}
 /* Ce que prepare l assistant est un brouillon : pointilles. */
 .sa-brouillon{border-style:dashed;border-color:var(--brass)}
@@ -104,7 +104,7 @@
 /* Le bouton dessine — un dessin, jamais un controle (aria-hidden). */
 .sa-bouton{display:inline-flex;align-items:center;gap:.45em;flex:none;
   background:var(--pine);color:var(--bone);border-radius:999px;padding:.4em .95em .4em .75em;
-  font-size:.72rem;font-weight:600;letter-spacing:.04em}
+  font-size:.72rem;font-weight:600;letter-spacing:0}
 .sa-bouton svg{width:14px;height:14px}
 
 /* ---------- l animation, a l entree a l ecran ----------
@@ -119,3 +119,10 @@
 @media(prefers-reduced-motion:reduce){
   .sa.in .sa-pas,.sa.in .sa-flux::before{animation:none}
 }
+
+/* ---------- la phrase et le detail d un exemple (26.10.2026) ----------
+   Ce qui se lit sans cliquer a cote du schema : une phrase, puis
+   « Voir le détail » (components/Detail.tsx, app/details.css) qui deplie le
+   texte en quatre temps. La phrase reprend le corps du texte (.dm-temps dd). */
+.dm-phrase{margin-top:14px;font-size:.95rem;line-height:1.6;max-width:58ch;color:var(--muted)}
+.dm-txt .detail-corps .dm-temps{margin-top:0}

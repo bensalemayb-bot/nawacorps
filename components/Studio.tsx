@@ -1,8 +1,10 @@
+import Detail from "@/components/Detail";
 import { dictionnaire } from "@/lib/dictionnaires";
 import { lien, type Locale } from "@/lib/i18n";
 
 // Section (04) Le controle — reference/binacore.html lignes 1084-1102 pour la
-// structure (citation, trois paragraphes, bande de faits, un lien).
+// structure (citation, une phrase, bande de faits, puis les trois paragraphes
+// dans « Voir le détail » depuis le 26.10.2026, et un lien).
 //
 // LA REGLE DU CONTROLE, MOT POUR MOT (.agents/product-marketing.md, « Le
 // controle ») : l assistant ne s engage jamais a la place du patron. Seule
@@ -32,14 +34,20 @@ export default function Studio({ locale = "fr" }: { locale?: Locale }) {
         <div className="studio-grid">
           <p className="studio-quote" data-reveal>{t.studio.citationDebut}<em>{t.studio.citationItalique}</em>{t.studio.citationFin}</p>
           <div className="studio-txt" data-reveal>
-            <p>{t.studio.paragraphe1}</p>
-            <p>{t.studio.paragraphe2}</p>
-            <p>{t.studio.paragraphe3}</p>
+            <p>{t.studio.phrase}</p>
             <div className="facts">
               <div><b>{t.studio.faitDonnees}</b><span>{t.studio.faitDonneesNote}</span></div>
               <div><b>{t.studio.faitReleve}</b><span>{t.studio.faitReleveNote}</span></div>
               <div><b>{t.studio.faitPaiements}</b><span>{t.studio.faitPaiementsNote}</span></div>
             </div>
+            {/* LES TROIS PARAGRAPHES, fermes par defaut (26.10.2026) : la
+                phrase et les trois faits disent l essentiel ; le detail du
+                controle, le releve et qui nous sommes restent a un clic. */}
+            <Detail libelle={t.studio.detail}>
+              <p>{t.studio.paragraphe1}</p>
+              <p>{t.studio.paragraphe2}</p>
+              <p>{t.studio.paragraphe3}</p>
+            </Detail>
             {/* Un seul renvoi, sobre, vers /studio : c est une section de
                 confiance, pas une section de vente. <a> classique (B7). */}
             <p style={{ marginTop: "1.8rem", marginBottom: 0 }}>

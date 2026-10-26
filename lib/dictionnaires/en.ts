@@ -168,23 +168,23 @@ const en: Dictionnaire = {
     section: "The figures",
     titreLigne1: "What the studies",
     titreLigne2: "measure.",
-    lede: "Owners' evenings and weekends, then what AI changes when there is writing and replying to do. Every figure links to its source.",
+    lede: "Published studies, not our clients. Every figure links to its source.",
     source: "Source: ",
+    detail: "Two more figures",
     items: [
       {
-        contexte: "Building trades · France",
-        valeur: "48%",
-        texte:
-          "of building trades owners regularly work weekends, and 63% check their email every day on holiday.",
-        source: "CAPEB, ARTIsanté survey 2026",
-        perimetre: "2,491 building trades owners, France",
-        url: SOURCES_CHIFFRES.capeb,
+        contexte: "Small businesses · Geneva",
+        valeur: "54%",
+        texte: "of the Geneva small businesses surveyed already use AI, in one form or another.",
+        source: "PwC Switzerland for the State of Geneva, 2024",
+        perimetre: "more than 200 Geneva small businesses",
+        url: SOURCES_CHIFFRES.geneve,
       },
       {
         contexte: "Companies · Switzerland",
         valeur: "60%",
         texte:
-          "of more than 1,500 Swiss companies surveyed rate the administrative burden placed on them by regulation as high or fairly high.",
+          "of the Swiss companies surveyed rate the administrative burden placed on them by regulation as high or fairly high.",
         source: "SECO, Bureaucracy Monitor 2023",
         perimetre: "regulatory burden, more than 1,500 companies",
         url: SOURCES_CHIFFRES.seco,
@@ -197,6 +197,15 @@ const en: Dictionnaire = {
         source: "Noy & Zhang, Science, 2023",
         perimetre: "MIT experiment, 453 professionals",
         url: SOURCES_CHIFFRES.noyZhang,
+      },
+      {
+        contexte: "Building trades · France",
+        valeur: "48%",
+        texte:
+          "of building trades owners regularly work weekends, and 63% check their email every day on holiday.",
+        source: "CAPEB, ARTIsanté survey 2026",
+        perimetre: "2,491 building trades owners, France",
+        url: SOURCES_CHIFFRES.capeb,
       },
       {
         contexte: "Customer service",
@@ -216,12 +225,10 @@ const en: Dictionnaire = {
     section: "By trade",
     titreLigne1: "It speaks",
     titreLigne2: "your trade.",
-    soirees: "What takes up your evenings: ",
     peut: "What the assistant can do: ",
     lienMetier: "The assistant for this trade, in detail →",
     tous: "All trades →",
-    ordre:
-      "A base for each trade, set to your business. Your trade isn't on the list? The demo runs on enquiries from your trade.",
+    ordre: "Your trade isn't on the list? The demo runs on enquiries from your trade.",
   },
 
   methode: {
@@ -230,20 +237,25 @@ const en: Dictionnaire = {
     titreLigne2: "your signature after.",
     etape01Moment: "First",
     etape01Titre: "The call",
+    etape01Court: "A short call about what takes up your evenings.",
     etape01Texte:
       "A short call. You tell us what takes up your evenings. We sell you nothing that day.",
     etape02Moment: "Free of charge",
     etape02Titre: "The demo",
+    etape02Court: "The assistant on enquiries from your trade. Nothing to prepare.",
     etape02Texte:
       "We show you the assistant on enquiries from your trade. You have nothing to prepare. At the end, we set the subscription tier with you, in writing.",
     etape03Moment: "Two weeks, free of charge",
     etape03Titre: "The trial",
+    etape03Court: "Two weeks on your real enquiries. You read, you approve.",
     etape03Texte:
       "For two weeks, the assistant works on your real enquiries. Your part: read and approve. It never commits on your behalf. Every Monday, the report.",
     etape04Moment: "If the report suits you",
     etape04Titre: "The subscription",
+    etape04Court: "The set-up once, then the subscription, no commitment.",
     etape04Texte:
       "You pay for the set-up, once. Then the subscription, with no commitment. We look after the assistant every week.",
+    detail: "The 4 steps in detail",
     cta: "See what you pay ",
   },
 
@@ -253,6 +265,8 @@ const en: Dictionnaire = {
     citationDebut: "“It ",
     citationItalique: "never",
     citationFin: " commits on your behalf.”",
+    phrase: "It prepares, you approve. Only the acknowledgement, read once by you, goes out on its own.",
+    detail: "Control in detail, and who we are",
     paragraphe1:
       "No price, no date, no quote and no real reply goes out without your approval. Only one message goes out on its own: the acknowledgement asking for the address, a photo and the urgency. You read and approved it once. The assistant has no access to your payments. Your assistant's data is hosted in Switzerland.",
     paragraphe2:
@@ -276,6 +290,10 @@ const en: Dictionnaire = {
     demoTete: "On your trade",
     demoTitre: "The demo",
     demoPaye: "Nothing",
+    demoCourt: "On enquiries from your trade. Nothing to prepare.",
+    essaiCourt: "It works on your enquiries. A report every Monday.",
+    abonnementCourt: "You pay for the set-up. Then the subscription, no commitment.",
+    detail: "See the details",
     demoTexte:
       "We show you the assistant on enquiries from your trade. You have nothing to prepare, and we have access to none of your tools. At the end, the subscription tier, in writing.",
     demoCta: "See the demo on my trade ",
@@ -288,7 +306,6 @@ const en: Dictionnaire = {
     abonnementTete: "If the report suits you",
     abonnementTitre: "After the trial",
     abonnementPayeNote: "once, for the set-up, {tva}",
-    abonnementPayeSuite: "Then the monthly subscription, based on your volume, no commitment.",
     abonnementPayeSansMontant: "The set-up, once, then a monthly subscription based on your volume.",
     abonnementTexte:
       "If the report suits you, you pay for the set-up. The subscription follows, based on your volume. No commitment, cancellable every month.",
@@ -307,6 +324,7 @@ const en: Dictionnaire = {
   faq: {
     section: "Questions",
     titreCache: "Frequently asked questions",
+    autres: "More questions",
     questionPreuve: "How do I know it works for my business?",
     reponsePreuve:
       "You judge on evidence before you pay. The demo runs on enquiries from your trade, with nothing to prepare. The trial then runs for two weeks on your real enquiries, and the Monday report shows what was handled, followed up and prepared. You only pay for the set-up if that report suits you.",

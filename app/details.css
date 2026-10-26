@@ -1,0 +1,34 @@
+/* « Voir le détail » (components/Detail.tsx) : un lien discret qui déplie la
+   suite. Il hérite de la couleur de sa section (fond clair ou vert). */
+.detail{margin-top:18px}
+.detail>summary{list-style:none;display:inline-flex;align-items:center;gap:10px;cursor:pointer;
+  font-size:.86rem;font-weight:600;color:inherit;padding:6px 0;border-bottom:1px solid currentColor}
+.detail>summary::-webkit-details-marker{display:none}
+.detail>summary i{width:9px;height:9px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;
+  transform:rotate(45deg) translateY(-2px);transition:transform .25s ease}
+.detail[open]>summary i{transform:rotate(-135deg) translateY(-2px)}
+.detail>summary:focus-visible{outline:2px solid var(--brass);outline-offset:4px}
+.detail-corps{margin-top:16px}
+.detail-corps>*+*{margin-top:.8em}
+@media (prefers-reduced-motion:reduce){.detail>summary i{transition:none}}
+
+/* (01) Les chiffres de l accueil : trois chiffres visibles depuis le
+   26.10.2026 (components/Chiffres.tsx). Dans les quatre colonnes de `.steps`,
+   la quatrieme restait vide ; au-dessus de 900 px la grille passe a trois.
+   En dessous, les regles de `.steps` (deux, puis une colonne) s appliquent. */
+@media(min-width:901px){#chiffres .steps{grid-template-columns:repeat(3,1fr)}}
+
+/* (06) Questions : « Autres questions » est un <details> DANS `.faq`, dont
+   les regles `.faq details` / `.faq summary` (app/binacore.css) dessinent les
+   questions — filet, grand corps, flex espace. Le bloc depliant garde ici
+   l allure de tous les « Voir le détail » ; les questions qu il contient
+   gardent la leur. */
+.faq details.detail,.faq details.detail:last-of-type{border:0}
+.faq details.detail>summary{display:inline-flex;justify-content:flex-start;gap:10px;padding:6px 0;
+  font-size:.86rem;font-weight:600;letter-spacing:0}
+
+/* (03) Comment ca se passe : les quatre textes entiers, sous les cartes,
+   prennent le gris et la mesure de texte des cartes `.stp` au lieu de
+   s etaler sur toute la largeur en encre pleine. */
+#methode .detail-corps p{max-width:62ch;color:var(--muted);font-size:.95rem}
+#methode .detail-corps strong{color:var(--ink);font-weight:600}

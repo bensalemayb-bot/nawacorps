@@ -351,14 +351,17 @@ const fr = {
   },
 
   /**
-   * components/Chiffres.tsx — (01) Les chiffres. Quatre chiffres PUBLIÉS,
-   * chacun attribué à sa source dans la même unité de lecture : deux sur la
-   * douleur (CAPEB, SECO), deux sur le gain mesuré par des études (Noy &
-   * Zhang, Brynjolfsson et al.). Formulations reprises de
+   * components/Chiffres.tsx — (01) Les chiffres. Cinq chiffres PUBLIÉS,
+   * chacun attribué à sa source dans la même unité de lecture. L'ORDRE EST
+   * CELUI DE L'AFFICHAGE (26.10.2026, « moins d'info, aussi complet ») : les
+   * trois premiers sont visibles — Genève (PwC pour l'État, relu à la source
+   * le 26.10.2026), la Suisse (SECO), le gain mesuré (Noy & Zhang) —, les deux
+   * suivants (CAPEB, chiffre français ; Brynjolfsson et al.) sont rangés dans
+   * « Voir le détail ». Formulations reprises de
    * founder/research/chiffres-cles.md §3, sans rien arrondir de plus.
    *
-   * AUCUN N'EST UN RÉSULTAT DE NAWA CORPS, et la clôture le dit en toutes
-   * lettres. /services promet d'ailleurs l'inverse d'« un nombre d'heures
+   * AUCUN N'EST UN RÉSULTAT DE NAWA CORPS : le chapeau le dit, visible, et la
+   * clôture le redit. /services promet d'ailleurs l'inverse d'« un nombre d'heures
    * gagnées » : ne jamais transformer ces pourcentages en gain pour le client.
    *
    * LE SECO MESURE LA CHARGE RÉGLEMENTAIRE (Bürokratiemonitor), pas le
@@ -372,24 +375,25 @@ const fr = {
     section: "Les chiffres",
     titreLigne1: "Ce que mesurent",
     titreLigne2: "les études.",
-    lede: "Le soir et le week-end des patrons, puis ce que l'IA change quand il faut écrire et répondre. Chaque chiffre renvoie à sa source.",
+    lede: "Des études publiées, pas nos clients. Chaque chiffre renvoie à sa source.",
     /** Devant le nom de la source, qui est le lien. */
     source: "Source : ",
+    /** Le libellé du bloc qui range les deux derniers chiffres et la clôture. */
+    detail: "Deux autres chiffres",
     items: [
       {
-        contexte: "Bâtiment · France",
-        valeur: "48 %",
-        texte:
-          "des artisans du bâtiment travaillent régulièrement le week-end, et 63 % lisent leurs e-mails chaque jour pendant leurs congés.",
-        source: "CAPEB, baromètre ARTIsanté 2026",
-        perimetre: "2 491 chefs d'entreprise du bâtiment, France",
-        url: SOURCES_CHIFFRES.capeb,
+        contexte: "PME · Genève",
+        valeur: "54 %",
+        texte: "des PME genevoises interrogées utilisent déjà l'IA, sous une forme ou une autre.",
+        source: "PwC Suisse pour l'État de Genève, 2024",
+        perimetre: "plus de 200 PME genevoises",
+        url: SOURCES_CHIFFRES.geneve,
       },
       {
         contexte: "Entreprises · Suisse",
         valeur: "60 %",
         texte:
-          "des plus de 1 500 entreprises suisses interrogées jugent élevée ou plutôt élevée la charge administrative que leur impose la réglementation.",
+          "des entreprises suisses interrogées jugent élevée ou plutôt élevée la charge administrative que leur impose la réglementation.",
         source: "SECO, Bürokratiemonitor 2023",
         perimetre: "charge réglementaire, plus de 1 500 entreprises",
         url: SOURCES_CHIFFRES.seco,
@@ -402,6 +406,15 @@ const fr = {
         source: "Noy & Zhang, Science, 2023",
         perimetre: "expérience du MIT, 453 professionnels",
         url: SOURCES_CHIFFRES.noyZhang,
+      },
+      {
+        contexte: "Bâtiment · France",
+        valeur: "48 %",
+        texte:
+          "des artisans du bâtiment travaillent régulièrement le week-end, et 63 % lisent leurs e-mails chaque jour pendant leurs congés.",
+        source: "CAPEB, baromètre ARTIsanté 2026",
+        perimetre: "2 491 chefs d'entreprise du bâtiment, France",
+        url: SOURCES_CHIFFRES.capeb,
       },
       {
         contexte: "Service client",
@@ -427,8 +440,6 @@ const fr = {
     section: "Par métier",
     titreLigne1: "Il parle",
     titreLigne2: "votre métier.",
-    /** Devant le texte de la carte : ce qui prend les soirées du patron. */
-    soirees: "Ce qui vous prend vos soirées : ",
     /** Devant ce que l'assistant peut faire (une capacité, jamais un résultat). */
     peut: "Ce que l'assistant peut faire : ",
     /** Le renvoi de chaque ligne vers sa page métier. */
@@ -436,14 +447,17 @@ const fr = {
     /** Sous les lignes, vers le hub /metiers. */
     tous: "Tous les métiers →",
     /** La ligne sous les métiers. */
-    ordre:
-      "Une base par métier, réglée sur votre entreprise. Votre métier n'est pas dans la liste ? La démo se fait sur des demandes de votre métier.",
+    ordre: "Votre métier n'est pas dans la liste ? La démo se fait sur des demandes de votre métier.",
   },
 
   /**
    * components/Methode.tsx — (03) Comment ça se passe. Une seule durée :
    * l'essai, deux semaines (décision d'Ayoub du 25.10.2026). Ni la démo ni
    * la mise en place n'ont de délai décidé.
+   *
+   * DEUX TEXTES PAR ÉTAPE (26.10.2026, « moins d'info, aussi complet ») :
+   * `etape0nCourt`, une ligne, sur la carte ; `etape0nTexte`, le texte entier,
+   * rangé dans « Voir le détail » sous les quatre cartes.
    */
   methode: {
     section: "Comment ça se passe",
@@ -451,21 +465,27 @@ const fr = {
     titreLigne2: "votre signature après.",
     etape01Moment: "Au départ",
     etape01Titre: "L'appel",
+    etape01Court: "Un appel court sur ce qui vous prend vos soirées.",
     etape01Texte:
       "Un appel court. Vous nous dites ce qui vous prend vos soirées. Nous ne vous vendons rien ce jour-là.",
     etape02Moment: "Sans rien payer",
     etape02Titre: "La démo",
+    etape02Court: "L'assistant sur des demandes de votre métier. Rien à préparer.",
     etape02Texte:
       "Nous vous montrons l'assistant sur des demandes de votre métier. Vous n'avez rien à préparer. À la fin, nous fixons avec vous, par écrit, le palier de l'abonnement.",
     etape03Moment: "Deux semaines, sans rien payer",
     etape03Titre: "L'essai",
+    etape03Court: "Deux semaines sur vos vraies demandes. Vous lisez, vous validez.",
     etape03Texte:
       "Pendant deux semaines, l'assistant travaille sur vos vraies demandes. Votre part : lire et valider. Il ne s'engage jamais à votre place. Chaque lundi, le relevé.",
     etape04Moment: "Si le relevé vous convient",
     etape04Titre: "L'abonnement",
+    etape04Court: "La mise en place une seule fois, puis l'abonnement sans engagement.",
     etape04Texte:
       "Vous payez la mise en place, une seule fois. Puis l'abonnement, sans engagement. Nous suivons l'assistant chaque semaine.",
     /** Espace final : la flèche `.ar` suit. Mène à (05), où vit le montant. */
+    /** Le libellé du bloc qui déplie les quatre textes entiers. */
+    detail: "Les 4 étapes en détail",
     cta: "Voir ce que vous payez ",
   },
 
@@ -480,6 +500,13 @@ const fr = {
     citationDebut: "« Il ne s'engage ",
     citationItalique: "jamais",
     citationFin: " à votre place. »",
+    /**
+     * LA SEULE PHRASE VISIBLE sous la citation (26.10.2026) : la règle et son
+     * exception, dite en toutes lettres. Les trois paragraphes suivent dans
+     * « Voir le détail ».
+     */
+    phrase: "Il prépare, vous validez. Seul l'accusé de réception, relu une fois par vous, part seul.",
+    detail: "Le contrôle en détail, et qui nous sommes",
     paragraphe1:
       "Aucun prix, aucune date, aucun devis, aucune réponse de fond ne part sans votre accord. Un seul message part seul : l'accusé de réception qui demande l'adresse, une photo et l'urgence. Vous l'avez relu et validé une fois. L'assistant n'a pas accès à vos paiements. Les données de votre assistant sont hébergées en Suisse.",
     paragraphe2:
@@ -521,6 +548,16 @@ const fr = {
     demoTete: "Sur votre métier",
     demoTitre: "La démo",
     demoPaye: "Rien",
+    /**
+     * LES TEXTES COURTS DES CARTES (26.10.2026, « moins d'info, aussi
+     * complet ») : une phrase par carte, pour lire les prix d'un coup d'œil.
+     * Les textes entiers (`demoTexte`, `essaiTexte`, `abonnementTexte`) et la
+     * note sont rangés dans « Voir le détail », sous la grille.
+     */
+    demoCourt: "Sur des demandes de votre métier. Rien à préparer.",
+    essaiCourt: "Il travaille sur vos demandes. Un relevé chaque lundi.",
+    abonnementCourt: "Vous payez la mise en place. Puis l'abonnement, sans engagement.",
+    detail: "Voir le détail",
     demoTexte:
       "Nous vous montrons l'assistant sur des demandes de votre métier. Vous n'avez rien à préparer, nous n'avons accès à aucun de vos outils. À la fin, le palier de l'abonnement, par écrit.",
     /** Espace final : la flèche `.ar` suit. */
@@ -545,7 +582,6 @@ const fr = {
      * montant n'est jamais mensuel.
      */
     abonnementPayeNote: "une seule fois, la mise en place, {tva}",
-    abonnementPayeSuite: "Puis l'abonnement mensuel, selon votre volume, sans engagement.",
     /** Sans ligne en base : la carte se lit sans montant, jamais avec un trou. */
     abonnementPayeSansMontant: "La mise en place, une seule fois, puis un abonnement mensuel selon votre volume.",
     abonnementTexte:
@@ -572,7 +608,9 @@ const fr = {
 
   /**
    * components/Faq.tsx — (06) Questions. Neuf objections, dans l'ordre du
-   * panel (revue A tour 2, m1) : la confiance d'abord, le prix en dernier.
+   * panel (revue A tour 2, m1) : la confiance d'abord. Depuis le 26.10.2026,
+   * le prix est la cinquième et dernière question visible ; les quatre autres
+   * sont dans « Autres questions » (l'ordre est fixé dans Faq.tsx).
    * « Et s'il se trompe ? » et « Je ne trouve personne pour le bureau. »
    * s'y sont ajoutées le 25.10.2026 (audit CRO §2.10) : la peur derrière
    * « je ne veux pas d'IA », et la pénurie d'embauche.
@@ -586,6 +624,8 @@ const fr = {
   faq: {
     section: "Questions",
     titreCache: "Questions fréquentes",
+    /** Le libellé du bloc qui range les quatre dernières questions. */
+    autres: "Autres questions",
     /**
      * « COMMENT SAVOIR SI ÇA MARCHE CHEZ MOI ? » remplace « Vous avez des
      * références ? » (décision d'Ayoub du 25.10.2026) : la réponse est la

@@ -155,7 +155,7 @@ export default function SelecteurLangue({
            est ce qu un lecteur d ecran doit annoncer. */
         aria-label={nom}
         aria-current={actif ? "page" : undefined}
-        style={actif ? { fontWeight: 700 } : undefined}
+        style={actif ? { fontWeight: 600 } : undefined}
       >
         {code}
       </a>

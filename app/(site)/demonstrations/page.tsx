@@ -8,6 +8,7 @@ import {
   exemplesDe,
   type Exemple,
 } from "@/lib/automatisations";
+import Detail from "@/components/Detail";
 import VideoDemo from "@/components/VideoDemo";
 import { dictionnaire } from "@/lib/dictionnaires";
 import { LANGUE_HTML, type Locale, lien } from "@/lib/i18n";
@@ -27,12 +28,17 @@ import { SITE_NAME, SITE_URL, alternatesPage, jsonLd, openGraphPage } from "@/li
  * que l assistant peut faire, metier par metier. next.config.ts ne la
  * redirige plus, et elle est revenue au sitemap.
  *
- * L ORDRE : un en-tete court (h1, la regle du controle en une phrase, la
- * mention « demandes fictives »), une rangee d ancres vers les onze metiers,
- * puis une section par metier — dans l ordre et avec les slugs de
+ * L ORDRE : un en-tete court (h1, deux phrases au plus, la mention
+ * « demandes fictives », la demo filmee), une rangee d ancres vers les onze
+ * metiers, puis une section par metier — dans l ordre et avec les slugs de
  * lib/metiers.ts, qui reste la source des noms —, deux exemples chacun, le
  * texte a gauche et le schema a droite (dessous sur telephone), et le lien
  * vers la page du metier. Enfin un seul bouton, vers /devis.
+ *
+ * CE QUI SE LIT SANS CLIQUER (26.10.2026, « trop long à lire ») : pour chaque
+ * exemple, le titre, une phrase et le schema. Le texte en quatre temps est
+ * dans un « Voir le détail » ferme (components/Detail.tsx) : il reste dans le
+ * HTML, donc lu par les moteurs, et s ouvre d un clic.
  *
  * AUCUN MONTANT, AUCUN DELAI, donc aucune lecture en base : la page passe le
  * build sans Postgres. Les textes vivent dans lib/automatisations.ts, le
@@ -70,7 +76,17 @@ export function metadataDemonstrations(locale: Locale): Metadata {
 
 export const metadata: Metadata = metadataDemonstrations("fr");
 
-/** Un exemple : le texte en quatre temps a gauche, son schema a droite. */
+/**
+ * Un exemple : a gauche le titre, UNE phrase (ce qui arrive) et le texte en
+ * detail replie ; a droite son schema, qui dit deja tout en quatre temps.
+ *
+ * POURQUOI REPLIE (demande d Ayoub du 26.10.2026, « trop long à lire ») : la
+ * page affichait vingt-deux fois quatre blocs de texte a cote d un schema qui
+ * disait la meme chose. Le schema reste visible ; le texte (ce que
+ * l assistant prepare, ce que vous validez, ce qui part) passe dans
+ * « Voir le détail », ferme par defaut, rien n est supprime. Le premier temps
+ * n y est pas repete : c est la phrase visible.
+ */
 function ExempleAutomatisation({ exemple, locale }: { exemple: Exemple; locale: Locale }) {
   const t = TEXTES_DEMONSTRATIONS[locale];
   const e = exemple[locale];
@@ -84,42 +100,38 @@ function ExempleAutomatisation({ exemple, locale }: { exemple: Exemple; locale: 
             {t.telephoneNote}
           </p>
         )}
-        <dl className="dm-temps">
-          <div>
-            <dt>
-              <span className="n">01</span>
-              {t.etapes[0]}
-            </dt>
-            <dd>{e.arrive}</dd>
-          </div>
-          <div>
-            <dt>
-              <span className="n">02</span>
-              {t.etapes[1]}
-            </dt>
-            <dd>
-              <ul>
-                {e.prepare.map((p) => (
-                  <li key={p}>{p}</li>
-                ))}
-              </ul>
-            </dd>
-          </div>
-          <div>
-            <dt>
-              <span className="n">03</span>
-              {t.etapes[2]}
-            </dt>
-            <dd>{e.valide}</dd>
-          </div>
-          <div>
-            <dt>
-              <span className="n">04</span>
-              {t.etapes[3]}
-            </dt>
-            <dd>{e.part}</dd>
-          </div>
-        </dl>
+        <p className="dm-phrase">{e.arrive}</p>
+        <Detail libelle={t.detail}>
+          <dl className="dm-temps">
+            <div>
+              <dt>
+                <span className="n">02</span>
+                {t.etapes[1]}
+              </dt>
+              <dd>
+                <ul>
+                  {e.prepare.map((p) => (
+                    <li key={p}>{p}</li>
+                  ))}
+                </ul>
+              </dd>
+            </div>
+            <div>
+              <dt>
+                <span className="n">03</span>
+                {t.etapes[2]}
+              </dt>
+              <dd>{e.valide}</dd>
+            </div>
+            <div>
+              <dt>
+                <span className="n">04</span>
+                {t.etapes[3]}
+              </dt>
+              <dd>{e.part}</dd>
+            </div>
+          </dl>
+        </Detail>
       </div>
       <SchemaAutomatisation exemple={exemple} locale={locale} />
     </article>

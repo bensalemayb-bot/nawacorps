@@ -1,3 +1,4 @@
+import Detail from "@/components/Detail";
 import GrilleAbonnement from "@/components/GrilleAbonnement";
 import { avecPrix, lireMiseEnPlace } from "@/lib/catalogue";
 import { dictionnaire } from "@/lib/dictionnaires";
@@ -19,6 +20,9 @@ import { lien, type Locale } from "@/lib/i18n";
  * le suit dans la meme unite de lecture : sous le chiffre, et dans la phrase de
  * la note, via `mentionTva()` / `avecPrix()`, jamais recopiee. Sans ligne en
  * base, la carte et la note se lisent sans montant.
+ *
+ * UNE PHRASE PAR CARTE (26.10.2026) : les textes entiers et la note sont
+ * ranges dans « Voir le détail », sous la grille — rien n est retire.
  *
  * PUIS LA GRILLE DE L ABONNEMENT (decision du 25.10.2026) : trois paliers lus
  * en base et l offre d introduction, rendus par components/GrilleAbonnement
@@ -44,7 +48,7 @@ export default async function Offres({ locale = "fr" }: { locale?: Locale }) {
           <article className="price" data-reveal>
             <div className="lab"><span>{t.offres.demoTete}</span></div>
             <h3>{t.offres.demoTitre}</h3>
-            <p className="d">{t.offres.demoTexte}</p>
+            <p className="d">{t.offres.demoCourt}</p>
             <p className="num">{t.offres.demoPaye}</p>
             {/* La demo est la premiere marche : c est la seule carte qui porte
                 un bouton, vers la demande de demo ; `.price .btn` le pousse en
@@ -57,7 +61,7 @@ export default async function Offres({ locale = "fr" }: { locale?: Locale }) {
           <article className="price" data-reveal>
             <div className="lab"><span>{t.offres.essaiTete}</span></div>
             <h3>{t.offres.essaiTitre}</h3>
-            <p className="d">{t.offres.essaiTexte}</p>
+            <p className="d">{t.offres.essaiCourt}</p>
             <p className="num">{t.offres.essaiPaye}</p>
             <p className="num-tva">{t.offres.essaiPayeNote}</p>
           </article>
@@ -65,12 +69,11 @@ export default async function Offres({ locale = "fr" }: { locale?: Locale }) {
           <article className="price" data-reveal>
             <div className="lab"><span>{t.offres.abonnementTete}</span></div>
             <h3>{t.offres.abonnementTitre}</h3>
-            <p className="d">{t.offres.abonnementTexte}</p>
+            <p className="d">{t.offres.abonnementCourt}</p>
             {montant ? (
               <>
                 <p className="num">{montant}</p>
                 <p className="num-tva">{avecPrix(t.offres.abonnementPayeNote, montant, locale)}</p>
-                <p className="num-tva">{t.offres.abonnementPayeSuite}</p>
               </>
             ) : (
               <p className="num-tva">{t.offres.abonnementPayeSansMontant}</p>
@@ -80,12 +83,21 @@ export default async function Offres({ locale = "fr" }: { locale?: Locale }) {
 
         <GrilleAbonnement locale={locale} forme="price" />
 
+        {/* LES TEXTES ENTIERS DES TROIS CARTES ET LA NOTE, fermes par defaut
+            (26.10.2026) : les cartes n en gardent qu une phrase, pour que les
+            prix se lisent d un coup d oeil. La note porte le montant : sa
+            mention de TVA reste dans la meme phrase (`avecPrix`). */}
         <div className="p-note" data-reveal>
-          <span>
-            {montant
-              ? avecPrix(t.offres.note, montant, locale)
-              : t.offres.noteSansMontant}
-          </span>
+          <Detail libelle={t.offres.detail}>
+            <p>{t.offres.demoTexte}</p>
+            <p>{t.offres.essaiTexte}</p>
+            <p>{t.offres.abonnementTexte}</p>
+            <p>
+              {montant
+                ? avecPrix(t.offres.note, montant, locale)
+                : t.offres.noteSansMontant}
+            </p>
+          </Detail>
         </div>
       </div>
     </section>

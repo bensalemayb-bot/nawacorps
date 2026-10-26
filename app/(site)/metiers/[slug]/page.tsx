@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import DemoMetier from "@/components/DemoMetier";
+import Detail from "@/components/Detail";
 import FooterContact from "@/components/FooterContact";
 import SchemaPage from "@/components/SchemaPage";
 import {
@@ -48,6 +49,14 @@ import {
  * (06) portent chacun un lien vers le guide qui repond a leur question
  * (nLPD, prix, automatisation) : les guides n etaient lies que depuis
  * /guides et l accueil (audit SEO v5).
+ *
+ * CE QUI SE LIT SANS CLIQUER (26.10.2026, « trop long à lire ») : en tete la
+ * premiere phrase du chapo, la suite dans un detail ; en (01) et
+ * (02) les titres seuls, leur texte dans « Voir le détail » (la tache du
+ * telephone garde visible son etiquette « Palier Complet ») ; en (03) la
+ * demande fictive, ses quatre etapes dans un detail ; en (06) quatre
+ * questions, les autres dans « Autres questions ». Rien n est supprime : les
+ * blocs fermes restent dans le HTML (components/Detail.tsx).
  *
  * PAS DE generateStaticParams, ET C EST VOULU. La page lit le montant de la
  * mise en place dans Postgres (lib/catalogue.ts) : elle est donc rendue a la
@@ -127,18 +136,75 @@ function Entete({
   );
 }
 
-/** Une grille d etapes, le gabarit `.steps` de /services. */
-function Etapes({ items }: { items: readonly { titre: string; texte: string }[] }) {
+/**
+ * Une grille d etapes, le gabarit `.steps` de /services — LES TITRES SEULS,
+ * le texte de chaque etape dans « Voir le détail » (26.10.2026, « trop long à
+ * lire ») : les titres font la liste courte, le detail reste dans le HTML et
+ * s ouvre d un clic. `phrase` : la phrase qui reste visible sous la grille,
+ * au-dessus du bouton. `suite` : un dernier paragraphe range dans le detail
+ * (les chiffres sources des douleurs).
+ */
+function Etapes({
+  items,
+  libelle,
+  phrase,
+  suite,
+  telephone,
+}: {
+  items: readonly { titre: string; texte: string }[];
+  libelle: string;
+  phrase?: string;
+  suite?: string;
+  telephone?: { tag: string; note: string };
+}) {
   return (
-    <div className="steps">
-      {items.map((item, i) => (
-        <div className="stp" data-reveal key={item.titre}>
-          <span className="n">{String(i + 1).padStart(2, "0")}</span>
-          <h3>{item.titre}</h3>
-          <p>{item.texte}</p>
-        </div>
-      ))}
-    </div>
+    <>
+      <div className="steps">
+        {items.map((item, i) => (
+          <div className="stp" data-reveal key={item.titre}>
+            <span className="n">{String(i + 1).padStart(2, "0")}</span>
+            {/* LE TELEPHONE DIT SON PALIER, MEME REPLIE : la tache dont le
+                texte cite le palier Complet porte l etiquette a cote de son
+                titre (comme le schema de /demonstrations), la phrase entiere
+                pour le lecteur d ecran et au survol. */}
+            {telephone && item.texte.toLowerCase().includes(telephone.tag.toLowerCase()) && (
+              <span className="t" title={telephone.note}>
+                {telephone.tag}
+                <span className="sr-only">{` — ${telephone.note}`}</span>
+              </span>
+            )}
+            <h3>{item.titre}</h3>
+          </div>
+        ))}
+      </div>
+      <div className="sm-devis" data-reveal>
+        {phrase && <p>{phrase}</p>}
+        <Detail libelle={libelle}>
+          {items.map((item) => (
+            <p key={item.titre}>
+              <strong>{item.titre}</strong> {item.texte}
+            </p>
+          ))}
+          {suite && <p>{suite}</p>}
+        </Detail>
+      </div>
+    </>
+  );
+}
+
+/** Le nombre de questions du metier visibles sans cliquer (26.10.2026). */
+const FAQ_VISIBLES = 4;
+
+/** Une question du metier : le <details> natif de la FAQ de l accueil. */
+function Question({ q, r }: { q: string; r: string }) {
+  return (
+    <details>
+      <summary>
+        {q}
+        <span className="pl2">+</span>
+      </summary>
+      <p className="a">{r}</p>
+    </details>
   );
 }
 
@@ -179,6 +245,15 @@ export async function corpsMetier(locale: Locale, slug: string) {
   const prix = montant ? avecPrix(c.prixAvec, montant, locale) : c.prixSans;
   const voisins = metiersVoisins(slug);
   const offre = offreMiseEnPlace(cents, locale, c.offreNom);
+
+  /**
+   * LE CHAPO EN DEUX : la premiere phrase se lit, la suite se deplie. Chaque
+   * chapo de lib/metiers.ts ouvre sur « Nawa Corps … qui connaît déjà leur
+   * métier. » ; sans point suivi d un blanc, tout reste visible.
+   */
+  const coupe = t.chapo.match(/^(.+?[.!?])\s+([\s\S]+)$/);
+  const chapoCourt = coupe ? coupe[1] : t.chapo;
+  const chapoSuite = coupe ? coupe[2] : null;
 
   /**
    * LE SERVICE EN DONNEE STRUCTUREE, rattache au studio (`/#studio`), zone
@@ -231,9 +306,18 @@ export async function corpsMetier(locale: Locale, slug: string) {
               </h1>
             </div>
           </div>
+          {/* Le chapo entier reste la description du Service JSON-LD ; a l ecran,
+              sa premiere phrase (qui, quoi, ou), la suite dans le detail. */}
           <p className="lede" data-reveal>
-            {t.chapo}
+            {chapoCourt}
           </p>
+          {chapoSuite && (
+            <div data-reveal>
+              <Detail libelle={c.detail}>
+                <p className="lede">{chapoSuite}</p>
+              </Detail>
+            </div>
+          )}
           <BoutonDemo locale={locale} slug={metier.slug} style={{ marginTop: 34 }} />
           <p className="meta" data-reveal style={{ marginTop: "1.6em" }}>
             {locale === "en" ? MENTION_REPONSE_EN : MENTION_REPONSE}
@@ -245,13 +329,9 @@ export async function corpsMetier(locale: Locale, slug: string) {
       <section>
         <div className="wrap">
           <Entete rang="01" meta={c.douleursMeta} h2={t.douleurs.h2} />
-          <Etapes items={t.douleurs.items} />
-          {/* Chiffres sources, chacun avec sa source ; absents s il n y en a pas. */}
-          {t.douleurs.sources && (
-            <div className="sm-devis" data-reveal>
-              <p>{t.douleurs.sources}</p>
-            </div>
-          )}
+          {/* Les chiffres sources, chacun avec sa source, ranges dans le
+              detail ; absents s il n y en a pas. */}
+          <Etapes items={t.douleurs.items} libelle={c.detail} suite={t.douleurs.sources} />
         </div>
       </section>
 
@@ -259,20 +339,35 @@ export async function corpsMetier(locale: Locale, slug: string) {
       <section>
         <div className="wrap">
           <Entete rang="02" meta={c.tachesMeta} h2={t.taches.h2} />
-          <Etapes items={t.taches.items} />
-          <div className="sm-devis" data-reveal>
-            <p>{c.uneTache}</p>
-          </div>
+          <Etapes
+            items={t.taches.items}
+            libelle={c.detail}
+            phrase={c.uneTache}
+            telephone={{
+              tag: TEXTES_DEMONSTRATIONS[locale].telephone,
+              note: TEXTES_DEMONSTRATIONS[locale].telephoneNote,
+            }}
+          />
         </div>
       </section>
 
       {/* ---------- (03) L exemple de demonstration ----------
-          Fictif, et dit comme tel par components/DemoMetier.tsx. */}
+          Fictif, et dit comme tel par components/DemoMetier.tsx, dans ses
+          deux formes : la courte se lit (le libelle, le canal, la demande),
+          les quatre etapes sont dans le detail. */}
       <section>
         <div className="wrap">
           <Entete rang="03" meta={c.demoMeta} h2={c.demoH2} />
-          <DemoMetier demo={t.demo} locale={locale} />
-          <BoutonDemo locale={locale} slug={metier.slug} style={{ marginTop: 34 }} />
+          <div className="sm-devis" data-reveal>
+            <DemoMetier demo={t.demo} locale={locale} court />
+          </div>
+          {/* Hors de `.sm-devis` (74ch) : la grille des quatre etapes garde
+              toute la largeur de la page. */}
+          <div data-reveal>
+            <Detail libelle={c.demoDetail}>
+              <DemoMetier demo={t.demo} locale={locale} />
+            </Detail>
+          </div>
           {/* Deux autres exemples de ce metier, avec leur schema, sur
               /demonstrations : l ancre est le slug, l id de sa section. */}
           <p data-reveal style={{ marginTop: 22 }}>
@@ -346,16 +441,21 @@ export async function corpsMetier(locale: Locale, slug: string) {
             </span>
             <h2 className="sr-only">{c.faqTitreCache}</h2>
           </div>
+          {/* QUATRE QUESTIONS EN VUE, les autres dans « Autres questions »
+              (26.10.2026). Toutes restent dans la page, et `t.faq` entier part
+              dans le FAQPage : le balisage decrit exactement ce que la page
+              contient (components/SchemaPage.tsx). */}
           <div data-reveal>
-            {t.faq.map((item) => (
-              <details key={item.q}>
-                <summary>
-                  {item.q}
-                  <span className="pl2">+</span>
-                </summary>
-                <p className="a">{item.r}</p>
-              </details>
+            {t.faq.slice(0, FAQ_VISIBLES).map((item) => (
+              <Question key={item.q} q={item.q} r={item.r} />
             ))}
+            {t.faq.length > FAQ_VISIBLES && (
+              <Detail libelle={c.autresQuestions}>
+                {t.faq.slice(FAQ_VISIBLES).map((item) => (
+                  <Question key={item.q} q={item.q} r={item.r} />
+                ))}
+              </Detail>
+            )}
           </div>
           <div className="c-row" data-reveal>
             <a className="btn" href={lien(locale, `/demonstrations#${slug}`)}>

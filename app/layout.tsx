@@ -9,6 +9,7 @@ import "./fonts.css";
 // Les exemples d automatisation et leur schema (/demonstrations) : une
 // feuille a part, chargee ici comme les autres feuilles maison.
 import "./demonstrations.css";
+import "./details.css";
 // Les guides (/guides) : titres a taille de lecture, listes et tableaux.
 import "./guides.css";
 
@@ -28,21 +29,27 @@ import "./guides.css";
  * decrivent le studio, pas l administration.
  */
 
+// DEUX POIDS, ET DEUX SEULEMENT : 400 pour le texte, 600 pour les titres, les
+// boutons et les accents. Decision d Ayoub du 26.10.2026 (« trop de polices
+// differentes ») : le site n a que deux familles, mais six epaisseurs (400,
+// 500, 550, 600, 700) et des etiquettes en capitales espacees se lisaient
+// comme autant de polices en plus. Toutes les regles de app/*.css et les
+// `fontWeight` en ligne du JSX ont ete ramenees a 400 ou 600 ; un 500 ou un
+// 700 ajoute plus tard retomberait sur le voisin le plus proche (600) — mieux
+// vaut ecrire directement 400 ou 600.
+//
 // Poids DECLARES un par un, volontairement pas `weight: "variable"` : chaque
-// @font-face n annonce alors qu UN poids, et font-weight:550 (11 occurrences en
-// CSS) se resout sur le voisin le plus proche au-dessus, soit 600. Declarer
-// l axe variable rendrait un vrai 550, plus leger — donc un autre dessin.
+// @font-face n annonce alors qu UN poids. L ancien 550 se resolvait deja sur
+// 600 de cette facon ; l ecrire 600 n a donc change aucun dessin.
 //
 // CE QUE CE TABLEAU NE COUTE PAS, mesure et non suppose : Google sert Hanken
-// Grotesk en fichier VARIABLE. Les cinq poids pointaient tous vers les memes
-// quatre .woff2 (un par unicode-range), aux memes octets. Retirer le 300 n a
-// donc retire AUCUN fichier ni AUCUN octet de police — seulement quatre regles
-// @font-face. Il est retire quand meme parce qu il ne servait a rien : aucune
-// regle du site n emploie un poids inferieur a 400 (verifie sur app/*.css et
-// sur le JSX). La resolution du 550 est inchangee, 300 present ou non.
+// Grotesk en fichier VARIABLE. Tous les poids pointent vers les memes quatre
+// .woff2 (un par unicode-range), aux memes octets. Retirer 500 et 700 (comme
+// le 300 avant eux) ne retire donc aucun octet de police — seulement des
+// regles @font-face qui ne servaient plus.
 const hanken = Hanken_Grotesk({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "600"],
   display: "swap",
   variable: "--font-hanken",
 });

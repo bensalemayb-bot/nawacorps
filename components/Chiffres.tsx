@@ -1,7 +1,15 @@
+import Detail from "@/components/Detail";
 import { dictionnaire } from "@/lib/dictionnaires";
 import type { Locale } from "@/lib/i18n";
 
-// Section (01) Les chiffres — quatre chiffres publies, chacun avec sa source.
+// Section (01) Les chiffres — cinq chiffres publies, chacun avec sa source.
+//
+// TROIS VISIBLES, DEUX DANS « VOIR LE DETAIL » (26.10.2026, demande d Ayoub :
+// moins a lire, rien de supprime). Les trois premiers de la liste sont les
+// plus parlants pour un patron genevois : Geneve, la Suisse, le gain mesure.
+// Le chiffre francais (CAPEB), le service client et la phrase de cloture
+// sont ranges dans le <details>, toujours dans le HTML. Le chapeau, visible,
+// dit deja que ce sont des etudes et pas nos clients (LCD art. 3).
 //
 // POURQUOI ICI, ENTRE LA BANDE ET (02) PAR METIER : la bande defilante nomme
 // la douleur dans les mots du patron (« La paperasse du soir », « Les devis
@@ -20,8 +28,30 @@ import type { Locale } from "@/lib/i18n";
 // `rel="noopener"` comme les liens WhatsApp du site.
 //
 // LA MISE EN FORME REPREND `.steps` / `.stp` de (03) Comment ca se passe
-// (quatre colonnes, deux sous 900 px, une sous 560 px) ; seuls le grand
-// chiffre et la ligne de source ont leur regle (`.chiffre`, app/binacore.css).
+// (deux colonnes sous 900 px, une sous 560 px ; au-dessus, trois ici au lieu
+// de quatre, regle `#chiffres .steps` en fin d app/details.css) ; seuls le
+// grand chiffre et la ligne de source ont leur regle (`.chiffre`,
+// app/binacore.css).
+
+/** Combien de chiffres restent visibles ; les suivants vont dans le Detail. */
+const VISIBLES = 3;
+
+type Chiffre = ReturnType<typeof dictionnaire>["chiffres"]["items"][number];
+
+function Carte({ chiffre, source, reveler }: { chiffre: Chiffre; source: string; reveler: boolean }) {
+  return (
+    <div className="stp chiffre" data-reveal={reveler ? "" : undefined}>
+      <span className="t">{chiffre.contexte}</span>
+      <p className="v">{chiffre.valeur}</p>
+      <p>{chiffre.texte}</p>
+      <p className="src">
+        {source}
+        <a className="lnk" href={chiffre.url} target="_blank" rel="noopener">{chiffre.source}</a>
+        {` — ${chiffre.perimetre}`}
+      </p>
+    </div>
+  );
+}
 export default function Chiffres({ locale = "fr" }: { locale?: Locale }) {
   const t = dictionnaire(locale).chiffres;
 
@@ -34,20 +64,22 @@ export default function Chiffres({ locale = "fr" }: { locale?: Locale }) {
         </div>
         <p className="lede" data-reveal style={{ marginBottom: 34 }}>{t.lede}</p>
         <div className="steps">
-          {t.items.map((chiffre) => (
-            <div className="stp chiffre" data-reveal key={chiffre.url}>
-              <span className="t">{chiffre.contexte}</span>
-              <p className="v">{chiffre.valeur}</p>
-              <p>{chiffre.texte}</p>
-              <p className="src">
-                {t.source}
-                <a className="lnk" href={chiffre.url} target="_blank" rel="noopener">{chiffre.source}</a>
-                {` — ${chiffre.perimetre}`}
-              </p>
-            </div>
+          {t.items.slice(0, VISIBLES).map((chiffre) => (
+            <Carte chiffre={chiffre} source={t.source} reveler key={chiffre.url} />
           ))}
         </div>
-        <p className="lede" data-reveal style={{ marginTop: 34 }}>{t.cloture}</p>
+        {/* Dans le <details>, pas de data-reveal : la revelation au scroll
+            ne s initialise qu une fois, sur un contenu ferme et invisible. */}
+        <div data-reveal>
+          <Detail libelle={t.detail}>
+            <div className="steps">
+              {t.items.slice(VISIBLES).map((chiffre) => (
+                <Carte chiffre={chiffre} source={t.source} reveler={false} key={chiffre.url} />
+              ))}
+            </div>
+            <p className="lede">{t.cloture}</p>
+          </Detail>
+        </div>
       </div>
     </section>
   );

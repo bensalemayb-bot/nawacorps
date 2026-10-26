@@ -150,7 +150,7 @@ html.has-intro:not(.loaded) .noyau-enter{animation-play-state:paused}
 .noyau-beat-2{justify-content:center}
 .noyau-say{max-width:30ch;margin-top:18px}
 .noyau-say p{
-  font-weight:550;letter-spacing:-.025em;line-height:1.12;
+  font-weight:600;letter-spacing:-.025em;line-height:1.12;
   font-size:clamp(1.7rem,3.6vw,3.1rem);
 }
 .noyau-say .serif-i{font-size:1.06em}
@@ -166,7 +166,7 @@ html.has-intro:not(.loaded) .noyau-enter{animation-play-state:paused}
 .noyau-say .douleur.is-off{opacity:0;transform:none}
 .noyau-say .douleur.is-off::after{width:100%}
 .noyau-say .noyau-reponse{margin-top:.5em;font-size:clamp(1.1rem,2vw,1.6rem);
-  font-weight:500;color:var(--pine)}
+  font-weight:400;color:var(--pine)}
 @media (prefers-reduced-motion:reduce){.noyau-say .douleur,.noyau-say .douleur::after{transition:none}}
 
 /* Temps 3 — la plongee. Le noyau remplit l'ecran : le texte passe en clair.
@@ -204,7 +204,7 @@ html.has-intro:not(.loaded) .noyau-enter{animation-play-state:paused}
   text-shadow:0 2px 28px rgba(23,22,19,.55), 0 1px 4px rgba(23,22,19,.35);
 }
 .noyau-unit{
-  font-size:.7rem;font-weight:600;letter-spacing:.24em;text-transform:uppercase;
+  font-size:.76rem;font-weight:600;letter-spacing:0;
   color:var(--muted-g);
   text-shadow:0 1px 12px rgba(23,22,19,.5);
 }
@@ -224,7 +224,7 @@ html.has-intro:not(.loaded) .noyau-enter{animation-play-state:paused}
 }
 .noyau-specs li:first-child{border-top:1px solid var(--line-g)}
 .noyau-specs .k{
-  font-size:.66rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;
+  font-size:.72rem;font-weight:600;letter-spacing:0;
   color:var(--muted-g);flex:0 0 auto;min-width:9em;
 }
 /* Contre l etiquette, pas contre le bord : voir le commentaire de .noyau-spec. */
