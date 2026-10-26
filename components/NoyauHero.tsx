@@ -3,7 +3,7 @@ import RotationDouleurs from "@/components/RotationDouleurs";
 import { avecPrix, lireMiseEnPlace } from "@/lib/catalogue";
 import { dictionnaire } from "@/lib/dictionnaires";
 import { lien, type Locale } from "@/lib/i18n";
-import { CONTACT } from "@/lib/site";
+import { whatsappHref } from "@/lib/site";
 
 /**
  * LE NOYAU — le texte du hero, en flux normal.
@@ -163,11 +163,12 @@ export default async function NoyauHero({
                   reste. » La plus grande phrase du hero dit le controle. */}
               <p>{t.hero.sortie}</p>
               {/* DEUX SORTIES AU DERNIER ECRAN : les exemples (/demonstrations)
-                  et l appel (`tel:`, numero de lib/site.ts) — pour un
+                  et WhatsApp (decision d Ayoub du 26.10.2026 : « Appeler »
+                  ouvrait le telephone ; il veut etre joint sur WhatsApp) — pour un
                   artisan, le geste naturel (audit CRO du 25.10.2026, §2.4). */}
               <div className="noyau-out-cta">
                 <a className="btn" href={lien(locale, "/demonstrations")}>{t.hero.sortieCtaPrincipal}<span className="ar">→</span></a>
-                <a className="btn btn-line" href={`tel:${CONTACT.telephone}`}>{t.hero.sortieCtaSecondaire}</a>
+                <a className="btn btn-line" href={whatsappHref(locale)} target="_blank" rel="noopener">{t.hero.sortieCtaSecondaire}</a>
               </div>
             </div>
           </div>

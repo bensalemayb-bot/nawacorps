@@ -790,3 +790,16 @@ html.menu-open .wordmark img { filter: brightness(0) invert(1); }
     translate:0 -50%;height:44px;
   }
 }
+
+/* PLUS DE NUMÉROS DÉCORATIFS (décision d'Ayoub du 26.10.2026 : « je ne
+   comprends pas à quoi ils servent »). Les indices de section « (01) »,
+   « (001) », les numéros du menu et ceux des listes et cartes (« 01 ») sont
+   masqués d'un seul endroit, plutôt que retirés de 40 gabarits : les remettre
+   ne demanderait que d'effacer ce bloc. display:none les retire aussi des
+   lecteurs d'écran, qui les lisaient sans qu'ils disent rien.
+   Les étapes des schémas de /demonstrations (« 01 · Ce qui arrive ») restent :
+   là, le numéro dit l'ordre du geste. */
+.meta .index,.menu .mi,.row .n,.stp .n,.dm-temps dt .n{display:none}
+.row-h{grid-template-columns:1fr auto}
+.row-b p{padding-left:4px}
+@media(max-width:700px){.row-h{grid-template-columns:1fr auto}.row-b p{padding-left:4px}}

@@ -118,7 +118,7 @@ const fr = {
      * lib/site.ts. Espaces signifiants en bord de morceau.
      */
     ouParEcritDebut: "ou ",
-    ouParEcritAppel: "appelez-nous",
+    ouParEcritAppel: "écrivez-nous sur WhatsApp",
     ouParEcritFin: ", ou dites-nous en deux lignes ce qui vous prend vos soirées",
     /** Le lien vers le hub /metiers, dans la bande du bas. */
     metiers: "Métiers",
@@ -329,7 +329,7 @@ const fr = {
      * Mène à `tel:` (le numéro vient de lib/site.ts) : pour un artisan,
      * l'appel est le geste naturel (audit CRO §2.4).
      */
-    sortieCtaSecondaire: "Appeler",
+    sortieCtaSecondaire: "Écrire sur WhatsApp",
   },
 
   /**

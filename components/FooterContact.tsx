@@ -79,9 +79,9 @@ export default function FooterContact({
             Les deux CTA ci-dessus sont inchanges — le formulaire s ajoute a cote
             d eux, il ne les remplace pas. */}
         <div data-reveal>
-          {/* « ou appelez-nous » EST UN LIEN tel: (audit CRO/SEO v2 §3.5) : le
-              texte invitait a appeler sans en donner le moyen. */}
-          <p className="meta" style={{ marginTop: 34 }}>{t.pied.ouParEcritDebut}<a className="lnk" href={`tel:${CONTACT.telephone}`}>{t.pied.ouParEcritAppel}</a>{t.pied.ouParEcritFin}</p>
+          {/* « ou écrivez-nous sur WhatsApp » : le lien d appel ouvre WhatsApp
+              depuis le 26.10.2026 (decision d Ayoub : il veut etre joint la). */}
+          <p className="meta" style={{ marginTop: 34 }}>{t.pied.ouParEcritDebut}<a className="lnk" href={whatsappHref(locale)} target="_blank" rel="noopener">{t.pied.ouParEcritAppel}</a>{t.pied.ouParEcritFin}</p>
           {/* « Réponse le jour ouvrable suivant » : formulation unique au
               caractere pres (guide de voix §8), importee de lib/mentions.ts,
               jamais recopiee. */}

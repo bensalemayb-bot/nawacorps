@@ -5,12 +5,15 @@ import { useEffect, useRef } from "react";
 /**
  * LA DÉMONSTRATION FILMÉE, en tête de /demonstrations (26.10.2026).
  *
- * Une vraie boîte mail triée par l'assistant : une demande arrive, il la
+ * C'EST UN VRAI AGENT MAIL, UTILISABLE (précision d'Ayoub, 26.10.2026) :
+ * l'outil filmé tourne réellement. La légende ne mentionne plus la boîte de
+ * test (Ayoub, 26.10.2026 : « pas une info pertinente ») ; elle garde
+ * « noms et adresses floutés », qui explique le flou à l'écran. Une vraie boîte mail triée par l'assistant : une demande arrive, il la
  * classe, prépare la réponse, le patron la relit et l'envoie. 38 secondes,
  * sans son. Les noms, adresses et la marque de l'outil sont FLOUTÉS dans le
  * fichier lui-même (public/video/agent-mail.*) : la vidéo vient d'un compte
  * de test, mais une adresse e-mail reste une donnée personnelle (nLPD), et la
- * mention « demandes fictives » l'annonce (LCD art. 3).
+ * légende dit que les noms et adresses sont floutés.
  *
  * POURQUOI UN COMPOSANT CLIENT. La vidéo ne joue que quand elle est à
  * l'écran (IntersectionObserver) : en boucle hors champ, elle mangerait de la

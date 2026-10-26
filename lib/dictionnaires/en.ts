@@ -61,7 +61,7 @@ const en: Dictionnaire = {
     titreLigne2Italique: "the assistant at work.",
     ecrireWhatsapp: "Message us on WhatsApp",
     ouParEcritDebut: "or ",
-    ouParEcritAppel: "call us",
+    ouParEcritAppel: "message us on WhatsApp",
     ouParEcritFin: ", or tell us in two lines what takes up your evenings",
     metiers: "Trades",
     /** /guides exists in French only: the label says so. */
@@ -152,7 +152,7 @@ const en: Dictionnaire = {
 
     sortie: "You approve. It handles the rest.",
     sortieCtaPrincipal: "See the demo on my trade ",
-    sortieCtaSecondaire: "Call us",
+    sortieCtaSecondaire: "Message us on WhatsApp",
   },
 
   strip: {

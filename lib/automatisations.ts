@@ -1058,9 +1058,9 @@ export const TEXTES_DEMONSTRATIONS = {
     mention: "Exemples de démonstration — demandes fictives",
     /** La demonstration filmee en tete de page (components/VideoDemo.tsx). */
     videoLegende:
-      "En 40 secondes : une demande arrive, l'assistant la classe et prépare la réponse ; vous la relisez, vous l'envoyez. Démonstration filmée, demandes fictives, noms et adresses floutés.",
+      "Un vrai agent mail, utilisable dès aujourd'hui. En 40 secondes : une demande arrive, il la classe et prépare la réponse ; vous la relisez, vous l'envoyez. Noms et adresses floutés.",
     videoLibelle:
-      "Démonstration filmée : une boîte mail triée par catégories, un e-mail de client ouvert, l'assistant prépare un brouillon de réponse que le patron relit puis envoie.",
+      "Agent mail en service : une boîte mail triée par catégories, un e-mail de client ouvert, l'assistant prépare un brouillon de réponse que le patron relit puis envoie.",
     /** aria-label de la rangee d ancres. */
     ancres: "Aller à un métier",
     etapes: ["Ce qui arrive", "L'assistant prépare", "Vous validez", "Ce qui part"] as const,
@@ -1092,9 +1092,9 @@ export const TEXTES_DEMONSTRATIONS = {
       "Two examples per trade of what the AI assistant can prepare for a Geneva small business, each in four steps. It prepares and it proposes, you approve; only the acknowledgement, approved by you once, goes out on its own.",
     mention: "Demo examples — fictitious enquiries",
     videoLegende:
-      "In 40 seconds: an enquiry comes in, the assistant sorts it and drafts the reply; you read it, you send it. Filmed demo, fictitious enquiries, names and addresses blurred.",
+      "A real email agent, ready to use today. In 40 seconds: an enquiry comes in, it sorts it and drafts the reply; you read it, you send it. Names and addresses blurred.",
     videoLibelle:
-      "Filmed demo: an inbox sorted by category, a client email opened, the assistant drafts a reply that the owner reads and then sends.",
+      "Email agent at work: an inbox sorted by category, a client email opened, the assistant drafts a reply that the owner reads and then sends.",
     ancres: "Go to a trade",
     etapes: ["What arrives", "The assistant prepares", "You approve", "What goes out"] as const,
     detail: "See the details",
